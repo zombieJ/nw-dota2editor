@@ -2,12 +2,6 @@
 	padding-top: 60px;
 }
 
-.group-inner {
-	border: 1px solid #333;
-	padding: 5px;
-	margin: 5px 0;
-}
-
 .table.table-tiny td {
 	padding: 0;
 }
@@ -28,7 +22,8 @@
 	margin: 3px 0;
 }
 
-.table.table-tiny .group-event {
+.table.table-tiny .group-event,
+.table.table-tiny .group-modifier {
 	padding: 5px 10px;
 	border-bottom: 1px solid #999;
 	margin-bottom: 5px;

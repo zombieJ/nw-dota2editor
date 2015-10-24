@@ -12,8 +12,9 @@ app.config(function($routeProvider) {
 	});
 });
 
-app.controller('main', function($scope, $http, Ability, Event, Operation) {
+app.controller('main', function($scope, $http, Ability, Event, Operation, Modifier) {
 	$scope.Ability = Ability;
 	$scope.Event = Event;
 	$scope.Operation = Operation;
+	$scope.Modifier = Modifier;
 });
