@@ -12,10 +12,12 @@
 
 		<!-- 事件 -->
 		<tr>
-			<th>
+			<th colspan="2" class="success">
 				Events 【事件】
 			</th>
-			<td>
+		</tr>
+		<tr>
+			<td colspan="2">
 				<!-- 事件 -->
 				<div ng-repeat="(event_index,event) in ability._events" class="group-event">
 					<label>Event {{event_index + 1}}</label>
@@ -32,14 +34,16 @@
 
 		<!-- 修饰器 -->
 		<tr>
-			<th>
+			<th colspan="2" class="success">
 				Modifiers 【修饰器】
 			</th>
-			<td>
+		</tr>
+		<tr>
+			<td colspan="2">
 				<!-- 修饰器 -->
 				<div ng-repeat="(modifier_index,modifier) in ability._modifiers" class="group-modifier">
 					<label>Modifier {{modifier_index + 1}}</label>
-					<table class="table table-condensed">
+					<table class="table table-condensed table-bordered">
 						<tbody>
 							<tr ng-repeat="unit in modifier._requireList">
 								<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
@@ -48,8 +52,8 @@
 									<div groupselect ng-show="getType(unit.attr, modifier) === 'object'" data-ability="modifier" data-attr="{{unit.attr}}" data-base="Modifier"></div>
 									<div groupselect ng-show="getType(unit.attr, modifier) === 'string' && Modifier[unit.attr]" data-ability="modifier" data-attr="{{unit.attr}}" data-base="Modifier" data-single="true"></div>
 									<input ng-show="getType(unit.attr, modifier) === 'boolean'"
-										type="checkbox" ng-checked="modifier[unit.attr]"'+
-										ng-click="modifier[unit.attr] != modifier[unit.attr]" />
+										type="checkbox" ng-checked="modifier[unit.attr]"
+										ng-click="modifier[unit.attr] = !modifier[unit.attr]" />
 								</td>
 							</tr>
 						</tbody>

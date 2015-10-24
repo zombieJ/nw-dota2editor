@@ -67,7 +67,7 @@ app.factory("Ability", function() {
 		fillAttr(_my, "AbilityCastPoint","0")("施法前摇");
 
 		// 施法动作
-		fillAttr(_my, "AbilityCastAnimation","ACT_DOTA_CAST_ABILITY_1")("施法动作");
+		fillAttr(_my, "AbilityCastAnimation","")("施法动作");
 
 		// 魔法消耗
 		fillAttr(_my, "AbilityManaCost","0")("魔法消耗");
@@ -190,6 +190,7 @@ app.factory("Ability", function() {
 	];
 
 	_ability.AbilityCastAnimation = [
+		["","默认",true],
 		["ACT_DOTA_ATTACK","攻击",true],
 		["ACT_DOTA_CAST_ABILITY_1","施法",true],
 		["ACT_DOTA_CHANNEL_ABILITY_1","持续施法"],

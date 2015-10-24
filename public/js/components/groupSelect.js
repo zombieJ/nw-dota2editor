@@ -24,7 +24,7 @@ components.directive('groupselect', function($compile) {
 
 					'<label ng-show="single" ng-class="{\'text-primary\': item[2]}">'+
 						'<input ng-show="single" type="radio" name="{{attr}}" ng-checked="ability[attr] === item[0]" ng-click="ability[attr] = item[0]">'+
-						'{{item[0]}} 【{{item[1]}}】'+
+						'{{item[0] || "-"}} 【{{item[1]}}】'+
 						
 					'</label>'+
 				'</div>'+

@@ -68,11 +68,11 @@ components.directive('eventoperation', function($compile) {
 
 									// Bool
 									'<input ng-show="Operation.EventOperationMap[opCol].type === \'bool\'"'+
-									'	ng-init="operation.attrs[opCol] = Operation.EventOperationMap[opCol].type === \'bool\' && operation.attrs[opCol] === undefined ? 0 : operation.attrs[opCol]"'+
-									'	type="checkbox" ng-checked="operation.attrs[opCol]"'+
-									'	ng-click="operation.attrs[opCol] = !operation.attrs[opCol] ? 1 : 0" />'+
+									'	ng-init="operation.attrs[opCol] = Operation.EventOperationMap[opCol].type === \'bool\' && operation.attrs[opCol] === undefined ? false : operation.attrs[opCol]"'+
+									'   type="checkbox" ng-checked="operation.attrs[opCol]"'+
+									'   ng-click="operation.attrs[opCol] = !operation.attrs[opCol]" />'+
 
-									// 
+									// Operation List
 									'<div ng-if="Operation.EventOperationMap[opCol].type === \'operation\'"'+
 									'	ng-init="validateColOperation(operation, opCol)"'+
 									'>'+

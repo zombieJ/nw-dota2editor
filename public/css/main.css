@@ -6,6 +6,10 @@
 	padding: 0;
 }
 
+.table.table-tiny td > input[type='checkbox'] {
+    margin: 5px 0 0 10px;
+}
+
 .table.table-tiny .form-control {
 	border-radius: 0;
 	padding: 3px 8px;
