@@ -15,6 +15,24 @@ components.directive('eventoperation', function($compile) {
 				var op = common.array.find(operation, Operation.EventOperation, "0");
 				return op ? op[3] : [];
 			};
+
+			$scope.validateColOperation = function(operation, opCol) {
+				if(Operation.EventOperationMap[opCol].type === "operation" && operation.attrs[opCol] === undefined) {
+					operation.attrs[opCol] = new Operation();
+				}
+			}
+		},
+		compile: function(tElement, tAttr) {
+			var contents = tElement.contents().remove();
+			var compiledContents;
+			return function(scope, iElement, iAttr) {
+				if(!compiledContents) {
+					compiledContents = $compile(contents);
+				}
+				compiledContents(scope, function(clone, scope) {
+					iElement.append(clone); 
+				});
+			};
 		},
 		template : 
 			'<div class="group-operationAttr">'+
@@ -23,25 +41,32 @@ components.directive('eventoperation', function($compile) {
 						'<tr ng-repeat="opCol in getOperationColumn(operation.name)">'+
 							'<td width="25%">{{opCol}}</td>'+
 							'<td>'+
-								'<!-- Single -->'+
+								// Single
 								'<select ng-show="Operation.EventOperationMap[opCol].type === \'single\'"'+
 								'	class="form-control" ng-model="operation.attrs[opCol]">'+
 								'	<option ng-repeat="opVal in Operation.EventOperationMap[opCol].value">{{opVal}}</option>'+
 								'</select>'+
 
-								'<!-- Text -->'+
+								// Text
 								'<input ng-show="Operation.EventOperationMap[opCol].type === \'text\'"'+
 								'	type="text" class="form-control" ng-model="operation.attrs[opCol]" />'+
 
-								'<!-- Blob -->'+
+								// Blob
 								'<textarea ng-show="Operation.EventOperationMap[opCol].type === \'blob\'"'+
 								'	class="form-control" ng-model="operation.attrs[opCol]" rows="5"></textarea>'+
 
-								'<!-- Bool -->'+
+								// Bool
 								'<input ng-show="Operation.EventOperationMap[opCol].type === \'bool\'"'+
 								'	ng-init="operation.attrs[opCol] = Operation.EventOperationMap[opCol].type === \'bool\' && operation.attrs[opCol] === undefined ? 0 : operation.attrs[opCol]"'+
 								'	type="checkbox" ng-checked="operation.attrs[opCol]"'+
 								'	ng-click="operation.attrs[opCol] = !operation.attrs[opCol] ? 1 : 0" />'+
+
+								// 
+								'<div ng-if="Operation.EventOperationMap[opCol].type === \'operation\'"'+
+								'	ng-init="validateColOperation(operation, opCol)"'+
+								'>'+
+									'<div eventoperation data-operation="operation.attrs[opCol]"></div>'+
+								'</div>'+
 							'</td>'+
 						'</tr>'+
 					'</tbody>'+
