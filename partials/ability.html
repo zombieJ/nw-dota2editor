@@ -1,0 +1,50 @@
+﻿<table class="table table-bordered">
+	<tbody>
+		<!-- 属性 -->
+		<tr ng-repeat="unit in ability._requireList">
+			<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
+			<td>
+				<input ng-show="getType(unit.attr) === 'string' && !Ability[unit.attr]" class="form-control" ng-model="ability[unit.attr]" />
+				<div groupselect ng-show="getType(unit.attr) === 'object'" data-ability="ability" data-attr="{{unit.attr}}"></div>
+				<div groupselect ng-show="getType(unit.attr) === 'string' && Ability[unit.attr]" data-ability="ability" data-attr="{{unit.attr}}" data-single="true"></div>
+			</td>
+		</tr>
+
+		<!-- 事件 -->
+		<tr>
+			<th>
+				Events 【事件】
+			</th>
+			<td>
+				<!-- 事件 -->
+				<div ng-repeat="event in ability._events" class="group-inner">
+					<select class="form-control" ng-model="event.name">
+						<option ng-repeat="_event in Event.EventList" value="{{_event[0]}}">{{_event[0]}} 【{{_event[1]}}】</option>
+					</select>
+
+					<!-- 操作 -->
+					<div ng-repeat="operation in event._operationList" class="group-inner">
+						<select class="form-control" ng-model="operation.name">
+							<option ng-repeat="_operation in Operation.EventOperation" value="{{_operation[0]}}">{{_operation[0]}} 【{{_operation[1]}}】</option>
+						</select>
+
+						<!-- 操作细节 -->
+						<div ng-repeat="opCol in getOperationColumn(operation.name)">
+							<!-- Single -->
+							<select ng-show="Operation.EventOperationMap[opCol].type === 'single'"
+								class="form-control" ng-model="operation.attrs[opCol]">
+								<option ng-repeat="opVal in Operation.EventOperationMap[opCol].value">{{opVal}}</option>
+							</select>
+
+							<!-- Text -->
+							<input ng-show="Operation.EventOperationMap[opCol].type === 'text'"
+								type="text" class="form-control" ng-model="operation.attrs[opCol]" />
+						</div>
+					</div>
+					<a class="btn btn-link" ng-click="addOperation(event)" href="javascript:void(0);">+ new operation 【新建操作】</a>
+				</div>
+				<button class="btn btn-primary" ng-click="addEvent()">+ new event 【新建事件】</button>
+			</td>
+		</tr>
+	</tbody>
+</table>

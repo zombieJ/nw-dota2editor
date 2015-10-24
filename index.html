@@ -1,0 +1,67 @@
+﻿<!doctype html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+	<!-- jQuery -->
+	<script src="public/assets/jquery/jquery-1.11.3.min.js"></script>
+	<script src="public/assets/jquery/jquery.form.js"></script>
+
+	<!-- Moment -->
+	<script src="public/assets/moment/moment.min.js"></script>
+
+	<!-- Angular -->
+	<script src="public/assets/angular/angular.min.js"></script>
+	<script src="public/assets/angular/angular-resource.min.js"></script>
+	<script src="public/assets/angular/angular-route.min.js"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="public/assets/bootstrap/css/bootstrap.min.css">
+	<script src="public/assets/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- Bootstrap Components -->
+	<link rel="stylesheet" href="public/assets/bootstrap-components/css/bootstrap-components.min.css">
+	<script src="public/assets/bootstrap-components/js/bootstrap-components.min.js"></script>
+
+	<link rel="stylesheet" href="public/css/main.css">
+
+	<script src="public/js/components/groupSelect.js"></script>
+
+	<script src="public/js/common.js"></script>
+	<script src="public/js/app.js"></script>
+	<script src="public/js/app.ability.js"></script>
+	<script src="public/js/app.event.js"></script>
+	<script src="public/js/app.operation.js"></script>
+
+	<script src="public/js/hammer.js"></script>
+</head>
+<body ng-controller="main">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+			        aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#/">Dota2 Editor</a>
+		</div>
+		<div id="navbar" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="#/">Home</a></li>
+			</ul>
+			<ul class="nav navbar-nav pull-right">
+			</ul>
+		</div>
+		<!--/.nav-collapse -->
+	</div>
+</nav>
+<div id="content" class="container">
+	<div ng-view></div>
+</div>
+</body>
+</html>
