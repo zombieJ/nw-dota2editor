@@ -3,13 +3,13 @@
 // ======================================================
 // =                        技能                        =
 // ======================================================
-app.factory("Event", function() {
+app.factory("Event", function(Operation) {
 	var _event = function() {
 		var _my = this;
 
 		_my.name = "OnSpellStart";
 
-		_my._operationList = [{}];
+		_my._operationList = [new Operation()];
 
 		return _my;
 	};

@@ -16,10 +16,5 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, $routeParam
 		event._operationList.push(new Operation());
 	};
 
-	$scope.getOperationColumn = function(operation) {
-		var op = common.array.find(operation, Operation.EventOperation, "0");
-		return op ? op[3] : [];
-	};
-
 	console.log($scope.ability);
 });
