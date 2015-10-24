@@ -17,7 +17,8 @@
 	height: 30px;
 }
 
-.table.table-tiny [groupselect] {
+.table.table-tiny [groupselect] .radio,
+.table.table-tiny [groupselect] .checkbox {
 	margin: 0 0 0 10px;
 }
 

@@ -46,17 +46,17 @@ app.factory("Modifier", function() {
 		fillAttr(_my, "TextureName", "")("图标");
 
 
-		fillAttr(_my, "IsBuff", "")("正面效果");
-		fillAttr(_my, "IsDebuff", "")("负面效果");
+		fillAttr(_my, "IsBuff", "-")("正面效果");
+		fillAttr(_my, "IsDebuff", "-")("负面效果");
 		fillAttr(_my, "IsHidden", false)("隐藏图标");
 		fillAttr(_my, "IsPurgable", true)("可净化");
 
 		fillAttr(_my, "EffectName", "")("特效名");
-		fillAttr(_my, "EffectAttachType", "")("特效绑定位置");
+		fillAttr(_my, "EffectAttachType", "-")("特效绑定位置");
 
 		fillAttr(_my, "StatusEffectName", "")("状态特效");
 		fillAttr(_my, "StatusEffectPriority", "")("状态特效优先级");
-		fillAttr(_my, "OverrideAnimation", "")("覆盖动画");
+		fillAttr(_my, "OverrideAnimation", "-")("覆盖动画");
 
 		fillAttr(_my, "Properties", "")("属性");
 
@@ -72,13 +72,13 @@ app.factory("Modifier", function() {
 	];
 
 	_modifier.IsBuff =_modifier.IsDebuff = [
-		["","默认",true],
+		["-","默认",true],
 		["0","不是",false],
 		["1","是",false],
 	];
 
 	_modifier.EffectAttachType = [
-		["","默认",true],
+		["-","默认",true],
 		["attach_hitloc","受伤点",true],
 		["follow_origin","位置",true],
 		["follow_overhead","头顶",false],
@@ -89,7 +89,7 @@ app.factory("Modifier", function() {
 	];
 
 	_modifier.OverrideAnimation = [
-		["","默认",true],
+		["-","默认",true],
 		["ACT_DOTA_ATTACK","攻击",true],
 		["ACT_DOTA_CAST_ABILITY_1","施法",true],
 		["ACT_DOTA_CHANNEL_ABILITY_1","持续施法"],

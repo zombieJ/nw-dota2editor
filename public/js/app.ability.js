@@ -49,7 +49,7 @@ app.factory("Ability", function() {
 		fillAttr(_my, "AbilityUnitTargetFlags")("目标标记");
 
 		// 伤害类型
-		fillAttr(_my, "AbilityUnitDamageType","")("伤害类型");
+		fillAttr(_my, "AbilityUnitDamageType","-")("伤害类型");
 
 		// 技能类型
 		fillAttr(_my, "AbilityType", "DOTA_ABILITY_TYPE_BASIC")("技能类型");
@@ -176,7 +176,7 @@ app.factory("Ability", function() {
 	];
 
 	_ability.AbilityUnitDamageType = [
-		["","无",true],
+		["-","无",true],
 		["DAMAGE_TYPE_MAGICAL","魔法伤害",true],
 		["DAMAGE_TYPE_PHYSICAL","物理伤害",true],
 		["DAMAGE_TYPE_PURE","纯粹伤害",true],
