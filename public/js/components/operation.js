@@ -7,6 +7,7 @@ components.directive('eventoperation', function($compile) {
 		restrict : 'AE',
 		scope : {
 			operation: "=",
+			index: "=",
 		},
 		controller: function($scope, $element, $attrs, Operation) {
 			$scope.Operation = Operation;
@@ -36,6 +37,11 @@ components.directive('eventoperation', function($compile) {
 		},
 		template : 
 			'<div class="group-operationAttr">'+
+				'<label>Operation {{index + 1}}</label>'+
+				'<select class="form-control" ng-model="operation.name">'+
+					'<option ng-repeat="_operation in Operation.EventOperation" value="{{_operation[0]}}">{{_operation[0]}} 【{{_operation[1]}}】</option>'+
+				'</select>'+
+
 				'<table class="table table-condensed">'+
 					'<tbody>'+
 						'<tr ng-repeat="opCol in getOperationColumn(operation.name)">'+

@@ -25,13 +25,7 @@
 
 					<!-- 操作 -->
 					<div ng-repeat="(operation_index, operation) in event._operationList" class="group-operation">
-						<label>Operation {{operation_index + 1}}</label>
-						<select class="form-control" ng-model="operation.name">
-							<option ng-repeat="_operation in Operation.EventOperation" value="{{_operation[0]}}">{{_operation[0]}} 【{{_operation[1]}}】</option>
-						</select>
-
-						<!-- 操作细节 -->
-						<div eventoperation data-operation="operation"></div>
+						<div eventoperation data-operation="operation" data-index="operation_index"></div>
 					</div>
 					<a class="btn btn-link" ng-click="addOperation(event)" href="javascript:void(0);">+ new operation 【新建操作】</a>
 				</div>
