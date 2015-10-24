@@ -1,7 +1,5 @@
 ﻿'use strict';
 
-var components = angular.module('app.components', []);
-
 components.directive('eventoperation', function($compile) {
 	return {
 		restrict : 'AE',
@@ -45,7 +43,7 @@ components.directive('eventoperation', function($compile) {
 				'<table class="table table-condensed">'+
 					'<tbody>'+
 						'<tr ng-repeat="opCol in getOperationColumn(operation.name)">'+
-							'<td width="25%">{{opCol}}</td>'+
+							'<td width="20%">{{opCol}}</td>'+
 							'<td>'+
 								// Single
 								'<select ng-show="Operation.EventOperationMap[opCol].type === \'single\'"'+
