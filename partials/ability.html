@@ -45,6 +45,7 @@
 					<label>Modifier {{modifier_index + 1}}</label>
 					<table class="table table-condensed table-bordered">
 						<tbody>
+							<!-- 属性 -->
 							<tr ng-repeat="unit in modifier._requireList">
 								<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
 								<td>
@@ -56,6 +57,35 @@
 										ng-click="modifier[unit.attr] = !modifier[unit.attr]" />
 								</td>
 							</tr>
+
+							<!-- 属性 -->
+							<tr>
+								<th colspan="2" class="warning">
+									Properties 【属性】
+								</th>
+							</tr>
+							<!--tr>
+								<th>
+									Properties 【属性】
+									<a href="javascript:void(0);" ng-click="modifier._showProperties = !modifier._showProperties">show/hide</a>
+								</th>
+								<td>
+									<a ng-show="!modifier._showProperties" ng-click="modifier._showProperties = true">Show All</a>
+									<table ng-show="modifier._showProperties" class="table table-condensed table-bordered">
+										<tbody>
+											<tr ng-repeat="item in Modifier.Properties">
+												<th>
+													{{item[0].replace("MODIFIER_PROPERTY_", "")}}
+													【{{item[1]}}】
+												</th>
+												<td>
+													<input type="text" class="form-control" ng-model="modifier._properties[item[0]]" />
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr-->
 						</tbody>
 					</table>
 				</div>
