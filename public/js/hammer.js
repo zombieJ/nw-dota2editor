@@ -4,8 +4,9 @@ var hammerControllers = angular.module('hammerControllers', ['ngRoute', 'app.com
 hammerControllers.controller('abilityCtrl', function ($scope, $http, $routeParams, Ability, Event, Operation, Modifier) {
 	$scope.ability = new Ability();
 
-	$scope.getType = function(attr) {
-		return typeof $scope.ability[attr];
+	$scope.getType = function(attr, src) {
+		src = src || $scope.ability;
+		return typeof src[attr];
 	};
 
 	$scope.addEvent = function() {

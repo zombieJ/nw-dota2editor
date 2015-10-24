@@ -5,8 +5,8 @@
 			<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
 			<td>
 				<input ng-show="getType(unit.attr) === 'string' && !Ability[unit.attr]" class="form-control" ng-model="ability[unit.attr]" />
-				<div groupselect ng-show="getType(unit.attr) === 'object'" data-ability="ability" data-attr="{{unit.attr}}"></div>
-				<div groupselect ng-show="getType(unit.attr) === 'string' && Ability[unit.attr]" data-ability="ability" data-attr="{{unit.attr}}" data-single="true"></div>
+				<div groupselect ng-show="getType(unit.attr) === 'object'" data-ability="ability" data-attr="{{unit.attr}}" data-base="Ability"></div>
+				<div groupselect ng-show="getType(unit.attr) === 'string' && Ability[unit.attr]" data-ability="ability" data-attr="{{unit.attr}}" data-base="Ability" data-single="true"></div>
 			</td>
 		</tr>
 
@@ -38,12 +38,18 @@
 			<td>
 				<!-- 修饰器 -->
 				<div ng-repeat="(modifier_index,modifier) in ability._modifiers" class="group-modifier">
+					<label>Modifier {{modifier_index + 1}}</label>
 					<table class="table table-condensed">
 						<tbody>
-							<tr>
-								<td width="20%">Name 【名称】</td>
+							<tr ng-repeat="unit in modifier._requireList">
+								<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
 								<td>
-									<input type="text" class="form-control" ng-model="modifier._name" />
+									<input ng-show="getType(unit.attr, modifier) === 'string' && !Modifier[unit.attr]" class="form-control" ng-model="modifier[unit.attr]" />
+									<div groupselect ng-show="getType(unit.attr, modifier) === 'object'" data-ability="modifier" data-attr="{{unit.attr}}" data-base="Modifier"></div>
+									<div groupselect ng-show="getType(unit.attr, modifier) === 'string' && Modifier[unit.attr]" data-ability="modifier" data-attr="{{unit.attr}}" data-base="Modifier" data-single="true"></div>
+									<input ng-show="getType(unit.attr, modifier) === 'boolean'"
+										type="checkbox" ng-checked="modifier[unit.attr]"'+
+										ng-click="modifier[unit.attr] != modifier[unit.attr]" />
 								</td>
 							</tr>
 						</tbody>

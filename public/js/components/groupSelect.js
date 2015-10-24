@@ -7,15 +7,15 @@ components.directive('groupselect', function($compile) {
 		restrict : 'AE',
 		scope : {
 			ability: "=",
+			base: "=",
 			attr: "@",
 			single: "=?single"
 		},
-		controller: function($scope, $element, $attrs, Ability) {
-			$scope.Ability = Ability;
+		controller: function($scope, $element, $attrs) {
 		},
 		template : 
 			'<div>'+
-				'<div ng-class="{checkbox: !single, radio: single}" ng-repeat="(i, item) in Ability[attr]">'+
+				'<div ng-class="{checkbox: !single, radio: single}" ng-repeat="(i, item) in base[attr]">'+
 					'<label ng-show="!single" ng-class="{\'text-primary\': item[2]}">'+
 						'<input type="checkbox" ng-checked="ability[attr][item[0]]" ng-click="ability[attr][item[0]] = !ability[attr][item[0]]">'+
 						'{{item[0]}} 【{{item[1]}}】'+
