@@ -1,4 +1,4 @@
-﻿<table class="table table-bordered">
+﻿<table class="table table-condensed table-bordered table-tiny">
 	<tbody>
 		<!-- 属性 -->
 		<tr ng-repeat="unit in ability._requireList">
@@ -17,28 +17,49 @@
 			</th>
 			<td>
 				<!-- 事件 -->
-				<div ng-repeat="event in ability._events" class="group-inner">
+				<div ng-repeat="(event_index,event) in ability._events" class="group-event">
+					<label>Event {{event_index + 1}}</label>
 					<select class="form-control" ng-model="event.name">
 						<option ng-repeat="_event in Event.EventList" value="{{_event[0]}}">{{_event[0]}} 【{{_event[1]}}】</option>
 					</select>
 
 					<!-- 操作 -->
-					<div ng-repeat="operation in event._operationList" class="group-inner">
+					<div ng-repeat="(operation_index, operation) in event._operationList" class="group-operation">
+						<label>Operation {{operation_index + 1}}</label>
 						<select class="form-control" ng-model="operation.name">
 							<option ng-repeat="_operation in Operation.EventOperation" value="{{_operation[0]}}">{{_operation[0]}} 【{{_operation[1]}}】</option>
 						</select>
 
 						<!-- 操作细节 -->
-						<div ng-repeat="opCol in getOperationColumn(operation.name)">
-							<!-- Single -->
-							<select ng-show="Operation.EventOperationMap[opCol].type === 'single'"
-								class="form-control" ng-model="operation.attrs[opCol]">
-								<option ng-repeat="opVal in Operation.EventOperationMap[opCol].value">{{opVal}}</option>
-							</select>
+						<div class="group-operationAttr">
+							<table class="table table-condensed">
+								<tbody>
+									<tr ng-repeat="opCol in getOperationColumn(operation.name)">
+										<td width="25%">{{opCol}}</td>
+										<td>
+											<!-- Single -->
+											<select ng-show="Operation.EventOperationMap[opCol].type === 'single'"
+												class="form-control" ng-model="operation.attrs[opCol]">
+												<option ng-repeat="opVal in Operation.EventOperationMap[opCol].value">{{opVal}}</option>
+											</select>
 
-							<!-- Text -->
-							<input ng-show="Operation.EventOperationMap[opCol].type === 'text'"
-								type="text" class="form-control" ng-model="operation.attrs[opCol]" />
+											<!-- Text -->
+											<input ng-show="Operation.EventOperationMap[opCol].type === 'text'"
+												type="text" class="form-control" ng-model="operation.attrs[opCol]" />
+
+											<!-- Blob -->
+											<textarea ng-show="Operation.EventOperationMap[opCol].type === 'blob'"
+												class="form-control" ng-model="operation.attrs[opCol]" rows="5"></textarea>
+
+											<!-- Bool -->
+											<input ng-show="Operation.EventOperationMap[opCol].type === 'bool'"
+												ng-init="operation.attrs[opCol] = Operation.EventOperationMap[opCol].type === 'bool' && operation.attrs[opCol] === undefined ? 0 : operation.attrs[opCol]"
+												type="checkbox" ng-checked="operation.attrs[opCol]"
+												ng-click="operation.attrs[opCol] = !operation.attrs[opCol] ? 1 : 0" />
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 					<a class="btn btn-link" ng-click="addOperation(event)" href="javascript:void(0);">+ new operation 【新建操作】</a>
