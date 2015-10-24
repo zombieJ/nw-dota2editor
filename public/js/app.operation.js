@@ -32,6 +32,7 @@ app.factory("Operation", function() {
 		["RemoveAbility","删除技能",false,["Target","AbilityName"]],
 		["Blink", "闪烁", false, ["Target"]],
 		["DestroyTrees","摧毁树木", false, ["Target","Radius"]],
+		["Lifesteal", "生命偷取", false, ["Target", "LifestealPercent"]],
 		/*
 		["ActOnTargets
 		Target, Action
@@ -42,8 +43,6 @@ app.factory("Operation", function() {
 		["DelayedAction
 		Delay, Action
 
-		["Lifesteal
-		Target, LifestealPercent
 		["LinearProjectile
 		Target, EffectName, MoveSpeed, StartRadius, EndRadius, FixedDistance, StartPosition, TargetTeams, TargetTypes, TargetFlags, HasFrontalCone, ProvidesVision, VisionRadius
 		*/

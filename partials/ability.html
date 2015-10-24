@@ -24,10 +24,7 @@
 					</select>
 
 					<!-- 操作 -->
-					<div ng-repeat="(operation_index, operation) in event._operationList" class="group-operation">
-						<div eventoperation data-operation="operation" data-index="operation_index"></div>
-					</div>
-					<a class="btn btn-link" ng-click="addOperation(event)" href="javascript:void(0);">+ new operation 【新建操作】</a>
+					<div eventoperation data-container="event" data-path="_operationList"></div>
 				</div>
 				<button class="btn btn-primary" ng-click="addEvent()">+ new event 【新建事件】</button>
 			</td>

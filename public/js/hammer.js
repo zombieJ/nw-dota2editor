@@ -12,9 +12,5 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, $routeParam
 		$scope.ability._events.push(new Event());
 	};
 
-	$scope.addOperation = function(event) {
-		event._operationList.push(new Operation());
-	};
-
 	console.log($scope.ability);
 });
