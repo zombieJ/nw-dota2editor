@@ -1,4 +1,10 @@
 {
-	"name": "nw-demo",
-	"main": "index.html"
+  "name": "dota2editor",
+  "main": "index.html",
+  "node-main": "srv/node.js",
+
+  "window": {
+    "width": 1024,
+    "height": 768
+  }
 }

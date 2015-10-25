@@ -63,7 +63,14 @@
 	</div>
 </nav>
 <div id="content" class="container">
-	<div ng-view></div>
+	<div ng-show="!globalContent.isOpen">
+		<h1>Project Folder 【项目路径】</h1>
+		<input type="text" class="form-control" ng-model="globalContent.project"
+		       placeholder="项目路径，例如：C:\Steam\steamapps\common\dota 2 beta\game\dota_addons\sampleGame" />
+		<br/>
+		<button class="btn btn-primary" ng-click="loadProject()">Open【载入】</button>
+	</div>
+	<div ng-show="globalContent.isOpen" ng-view></div>
 </div>
 </body>
 </html>
