@@ -10,6 +10,7 @@ components.directive('eventoperation', function($compile) {
 		controller: function($scope, $element, $attrs, Event, Operation) {
 			$scope.Event = Event;
 			$scope.Operation = Operation;
+			$scope.common = common;
 
 			$scope.getOperationColumn = function(operation) {
 				var op = common.array.find(operation, Operation.EventOperation, "0");
@@ -42,7 +43,10 @@ components.directive('eventoperation', function($compile) {
 			'<div>'+
 			'<div ng-repeat="(operation_index, operation) in container[path]" class="group-operation">'+
 				'<div class="group-operationAttr">'+
-					'<label>Operation {{operation_index + 1}}</label>'+
+					'<label>' +
+						'Operation {{operation_index + 1}}' +
+						'<a href="javascript:void(0)" ng-click="common.array.remove(operation, container[path])">[X]</a>'+
+					'</label>'+
 					'<select class="form-control" ng-model="operation.name">'+
 						'<option ng-repeat="_operation in Operation.EventOperation" value="{{_operation[0]}}">{{_operation[0]}} 【{{_operation[1]}}】</option>'+
 					'</select>'+

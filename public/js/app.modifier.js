@@ -58,7 +58,7 @@ app.factory("Modifier", function() {
 		fillAttr(_my, "StatusEffectPriority", "")("状态特效优先级");
 		fillAttr(_my, "OverrideAnimation", "-")("覆盖动画");
 
-		_my._properties = {};
+		_my._propertyList = [];
 
 
 		return _my;

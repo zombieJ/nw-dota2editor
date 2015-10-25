@@ -20,7 +20,10 @@
 			<td colspan="2">
 				<!-- 事件 -->
 				<div ng-repeat="(event_index,event) in ability._events" class="group-event">
-					<label>Event {{event_index + 1}}</label>
+					<label>
+						<a href="javascript:void(0)" ng-click="common.array.remove(event, ability._events)">[X]</a>
+						Event {{event_index + 1}}
+					</label>
 					<select class="form-control" ng-model="event.name">
 						<option ng-repeat="_event in Event.EventList" value="{{_event[0]}}">{{_event[0]}} 【{{_event[1]}}】</option>
 					</select>
@@ -64,28 +67,35 @@
 									Properties 【属性】
 								</th>
 							</tr>
-							<!--tr>
-								<th>
-									Properties 【属性】
-									<a href="javascript:void(0);" ng-click="modifier._showProperties = !modifier._showProperties">show/hide</a>
-								</th>
-								<td>
-									<a ng-show="!modifier._showProperties" ng-click="modifier._showProperties = true">Show All</a>
-									<table ng-show="modifier._showProperties" class="table table-condensed table-bordered">
+							<tr>
+								<td colspan="2">
+									<table class="table table-bordered table-condensed">
 										<tbody>
-											<tr ng-repeat="item in Modifier.Properties">
+											<tr ng-repeat="_prop in modifier._propertyList">
 												<th>
-													{{item[0].replace("MODIFIER_PROPERTY_", "")}}
-													【{{item[1]}}】
+													<a href="javascript:void(0)" ng-click="common.array.remove(_prop, modifier._propertyList)">[X]</a>
+													{{_prop[0].replace("MODIFIER_PROPERTY_", "")}}
+													【{{common.array.find(_prop[0], Modifier.Properties, "0")[1]}}】
 												</th>
 												<td>
-													<input type="text" class="form-control" ng-model="modifier._properties[item[0]]" />
+													<input type="text" class="form-control" ng-model="_prop[1]" />
 												</td>
 											</tr>
 										</tbody>
 									</table>
 								</td>
-							</tr-->
+							</tr>
+							<tr>
+								<td colspan="2">
+									<select class="form-control" ng-init="modifierProp = Modifier.Properties[0][0]" ng-model="modifierProp">
+										<option ng-repeat="item in Modifier.Properties" value="{{item[0]}}">
+											{{item[0].replace("MODIFIER_PROPERTY_", "")}}
+											【{{item[1]}}】
+										</option>
+									</select>
+									<button class="btn btn-warning" ng-click="modifier._propertyList.push([modifierProp, ''])">+ new Property 【添加属性】</button>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>

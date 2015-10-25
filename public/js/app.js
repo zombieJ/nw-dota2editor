@@ -17,4 +17,5 @@ app.controller('main', function($scope, $http, Ability, Event, Operation, Modifi
 	$scope.Event = Event;
 	$scope.Operation = Operation;
 	$scope.Modifier = Modifier;
+	$scope.common = common;
 });

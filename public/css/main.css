@@ -31,6 +31,10 @@
     margin: 0;
 }
 
+.table.table-tiny td {
+    vertical-align: middle;
+}
+
 .table.table-tiny .group-event,
 .table.table-tiny .group-modifier {
 	padding: 5px 10px;
