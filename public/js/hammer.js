@@ -9,8 +9,8 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, $routeParam
 		return typeof src[attr];
 	};
 
-	$scope.addEvent = function() {
-		$scope.ability._eventList.push(new Event());
+	$scope.addEvent = function(unit) {
+		(unit || $scope.ability)._eventList.push(new Event());
 	};
 
 	$scope.addModifier = function() {
