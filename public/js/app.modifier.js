@@ -51,6 +51,8 @@ app.factory("Modifier", function() {
 		fillAttr(_my, "IsHidden", false)("隐藏图标");
 		fillAttr(_my, "IsPurgable", true)("可净化");
 
+		fillAttr(_my, "AllowIllusionDuplicate", "-")("幻象可继承");
+
 		fillAttr(_my, "EffectName", "")("特效名");
 		fillAttr(_my, "EffectAttachType", "-")("特效绑定位置");
 
@@ -59,6 +61,8 @@ app.factory("Modifier", function() {
 		fillAttr(_my, "OverrideAnimation", "-")("覆盖动画");
 
 		_my._propertyList = [];
+		_my._stateList = [];
+		_my._eventList = [];
 
 
 		return _my;
@@ -71,7 +75,7 @@ app.factory("Modifier", function() {
 		["MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE","无敌保持",false],
 	];
 
-	_modifier.IsBuff =_modifier.IsDebuff = [
+	_modifier.AllowIllusionDuplicate = _modifier.IsBuff =_modifier.IsDebuff = [
 		["-","默认",true],
 		["0","不是",false],
 		["1","是",false],
@@ -196,6 +200,47 @@ app.factory("Modifier", function() {
 		["MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS","动作修改？"],
 		["MODIFIER_PROPERTY_TRANSLATE_ATTACK_SOUND","攻击音效修改？"],
 		["MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE","百分比修改转向速度"],
+	];
+
+	_modifier.States = [
+		["MODIFIER_STATE_ATTACK_IMMUNE","攻击免疫"],
+		["MODIFIER_STATE_BLIND","致盲？"],
+		["MODIFIER_STATE_BLOCK_DISABLED","禁用伤害减免？"],
+		["MODIFIER_STATE_CANNOT_MISS","无法闪避？"],
+		["MODIFIER_STATE_COMMAND_RESTRICTED","不能执行命令"],
+		["MODIFIER_STATE_DISARMED","缴械"],
+		["MODIFIER_STATE_DOMINATED","支配？"],
+		["MODIFIER_STATE_EVADE_DISABLED","无法躲避？"],
+		["MODIFIER_STATE_FLYING","飞行"],
+		["MODIFIER_STATE_FROZEN","冰冻"],
+		["MODIFIER_STATE_HEXED","妖术"],
+		["MODIFIER_STATE_INVISIBLE","隐身"],
+		["MODIFIER_STATE_INVULNERABLE","无敌"],
+		["MODIFIER_STATE_LOW_ATTACK_PRIORITY","低攻击优先级"],
+		["MODIFIER_STATE_MAGIC_IMMUNE","魔免"],
+		["MODIFIER_STATE_MUTED","静音"],
+		["MODIFIER_STATE_NIGHTMARED","催眠"],
+		["MODIFIER_STATE_NO_HEALTH_BAR","无生命条"],
+		["MODIFIER_STATE_NO_TEAM_MOVE_TO","没有移动到队伍"],
+		["MODIFIER_STATE_NO_TEAM_SELECT","没有选择队伍"],
+		["MODIFIER_STATE_NOT_ON_MINIMAP","无小地图"],
+		["MODIFIER_STATE_NOT_ON_MINIMAP_FOR_ENEMIES","对敌方无小地图"],
+		["MODIFIER_STATE_NO_UNIT_COLLISION","无碰撞"],
+		["MODIFIER_STATE_OUT_OF_GAME","离开游戏"],
+		["MODIFIER_STATE_PASSIVES_DISABLED","禁用被动"],
+		["MODIFIER_STATE_PROVIDES_VISION","提供视野"],
+		["MODIFIER_STATE_ROOTED","被缠绕"],
+		["MODIFIER_STATE_SILENCED","沉默"],
+		["MODIFIER_STATE_SOFT_DISARMED","解除武器"],
+		["MODIFIER_STATE_SPECIALLY_DENIABLE","？"],
+		["MODIFIER_STATE_STUNNED","眩晕"],
+		["MODIFIER_STATE_UNSELECTABLE","不可选"],
+	];
+
+	_modifier.StateValues = [
+		//["MODIFIER_STATE_VALUE_NO_ACTION", "无"],
+		["MODIFIER_STATE_VALUE_ENABLED", "启用"],
+		["MODIFIER_STATE_VALUE_DISABLED", "禁用"],
 	];
 
 	return _modifier;

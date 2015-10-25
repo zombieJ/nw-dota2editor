@@ -10,11 +10,11 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, $routeParam
 	};
 
 	$scope.addEvent = function() {
-		$scope.ability._events.push(new Event());
+		$scope.ability._eventList.push(new Event());
 	};
 
 	$scope.addModifier = function() {
-		$scope.ability._modifiers.push(new Modifier());
+		$scope.ability._modifierList.push(new Modifier());
 	};
 
 	console.log($scope.ability);
