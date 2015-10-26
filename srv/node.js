@@ -12,17 +12,24 @@
 	console.log("End");
 }*/
 
-var fileSystem = require("fs");
+var $q, content;
+var FS = require("fs");
+var PATH = require('path');
 
-exports.loadProject = function($q, projectPath) {
-	//C:\softwares\Steam\steamapps\common\dota 2 beta\game\dota_addons\gameofsurvivor
+exports.init = function(globalContent, _q) {
+	content = globalContent;
+	$q = _q;
+};
+
+
+exports.loadProject = function(projectPath) {
 	var _deferred = $q.defer();
 
 	projectPath = (projectPath || "").replace(/[\\\/]$/, "") + "/";
 	if(projectPath.length <= 1) {
 		_deferred.reject();
 	} else {
-		fileSystem.exists(projectPath, function (exist) {
+		FS.exists(projectPath, function (exist) {
 			if (exist) {
 				_deferred.resolve();
 			} else {
@@ -30,6 +37,21 @@ exports.loadProject = function($q, projectPath) {
 			}
 		});
 	}
+
+	return _deferred.promise;
+};
+
+exports.loadFile = function(path, encoding) {
+	var _deferred = $q.defer();
+
+	path = PATH.normalize(content.project + "/" + path);
+	FS.readFile(path, encoding || "ucs2", function (err, data) {
+		if(err) {
+			_deferred.reject(err);
+		} else {
+			_deferred.resolve(data);
+		}
+	});
 
 	return _deferred.promise;
 };

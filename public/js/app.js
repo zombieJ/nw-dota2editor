@@ -4,11 +4,14 @@
 var app = angular.module('app', ['ngRoute', 'hammerControllers', 'app.components']);
 
 app.config(function($routeProvider) {
-	$routeProvider.when('/ability', {
+	$routeProvider.when('/index', {
+		templateUrl: 'partials/index.html',
+		controller: 'indexCtrl'
+	}).when('/ability', {
 		templateUrl: 'partials/ability.html',
 		controller: 'abilityCtrl'
 	}).otherwise({
-		redirectTo : '/ability'
+		redirectTo : '/index'
 	});
 });
 
@@ -22,10 +25,10 @@ app.factory("globalContent", function() {
 });
 
 app.factory("NODE", function() {
-	return process.mainModule.exports;
+	return window.process ? window.process.mainModule.exports : null;
 });
 
-app.controller('main', function($scope, $q, Ability, Event, Operation, Modifier, globalContent, NODE) {
+app.controller('main', function($scope, $route, $q, Ability, Event, Operation, Modifier, KV, globalContent, NODE) {
 	$scope.Ability = Ability;
 	$scope.Event = Event;
 	$scope.Operation = Operation;
@@ -34,12 +37,16 @@ app.controller('main', function($scope, $q, Ability, Event, Operation, Modifier,
 
 	$scope.globalContent = globalContent;
 
+	NODE && NODE.init(globalContent, $q);
+
 	$scope.loadProject = function() {
-		var _promise = NODE.loadProject($q, globalContent.project);
+		var _promise = NODE.loadProject(globalContent.project);
 
 		_promise.then(function() {
 			localStorage.setItem("project", globalContent.project);
 			globalContent.isOpen = true;
+
+			$route.reload();
 		}, function () {
 			$.dialog({
 				title: "OPS!",
@@ -47,4 +54,6 @@ app.controller('main', function($scope, $q, Ability, Event, Operation, Modifier,
 			});
 		});
 	};
+
+	console.log(new KV($("#test").html()));
 });
