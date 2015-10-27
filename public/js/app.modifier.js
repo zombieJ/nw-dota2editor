@@ -7,7 +7,7 @@ app.factory("Modifier", function() {
 	function fillAttr(modifier, attr, defaultValue) {
 		if(defaultValue === undefined) {
 			modifier[attr] = {};
-			$.each(_modifier[attr], function(i, item) {
+			$.each(Modifier[attr], function(i, item) {
 				modifier[attr][item[0]] = false;
 			});
 		} else {
@@ -23,7 +23,7 @@ app.factory("Modifier", function() {
 		};
 	}
 
-	var _modifier = function() {
+	var Modifier = function() {
 		var _my = this;
 		_my._requireList = [];
 
@@ -32,6 +32,9 @@ app.factory("Modifier", function() {
 		// ========================================
 		// 名字
 		fillAttr(_my, "_name", "undefined")("修饰器名", "Name");
+
+		// 备注
+		fillAttr(_my, "_comment", "")("备注", "Comment");
 
 		// 属性
 		fillAttr(_my, "Attributes", "MODIFIER_ATTRIBUTE_NONE")("属性");
@@ -64,24 +67,82 @@ app.factory("Modifier", function() {
 		_my._stateList = [];
 		_my._eventList = [];
 
-
 		return _my;
 	};
 
-	_modifier.Attributes = [
+	Modifier.parse = function(kvUnit) {
+		console.log("[KV]      └ 修饰器：", kvUnit.value.title,kvUnit);
+
+		var _modifier = new Modifier();
+		_modifier._name = kvUnit.value.title;
+		_modifier._comment = kvUnit.value.comment;
+
+		$.each(kvUnit.value.kvList, function(i, unit) {
+			var _attr = common.array.find(unit.key, _modifier._requireList, "attr");
+
+			// 匹配 _requireList
+			if (_attr) {
+				switch (typeof _modifier[unit.key]) {
+					case "boolean":
+						_modifier[unit.key] = unit.value === "1" || unit.value === "true" || unit.value === "MODIFIER_STATE_VALUE_ENABLED";
+						break;
+					case "string":
+						_modifier[unit.key] = unit.value;
+						break;
+					case "object":
+						$.each(unit.value.split("|"), function (i, _value) {
+							_value = _value.trim();
+							if (_value in _modifier[unit.key]) {
+								_modifier[unit.key][_value] = true;
+							} else {
+								console.warn("Modifier value not match:", unit.key, _value);
+							}
+						});
+						break;
+					default :
+						console.warn("Unmatched Modifier type:", unit.key, _modifier[unit.key]);
+				}
+			}
+
+			// 匹配 Properties
+			else if(unit.key === "Properties") {
+				console.log("[KV]        └ 修饰器属性", unit.value);
+				$.each(unit.value.kvList, function(i, _prop) {
+					_modifier._propertyList.push([_prop.key, _prop.value]);
+				});
+			}
+
+			// 匹配 States
+			else if(unit.key === "States") {
+				console.log("[KV]        └ 修饰器状态", unit.value);
+				$.each(unit.value.kvList, function(i, _state) {
+					_modifier._stateList.push([_state.key, _state.value]);
+				});
+			}
+
+			// 不匹配
+			else {
+				console.warn("Unmatched Modifier key:", unit.key);
+			}
+		});
+
+		return _modifier;
+	};
+
+	Modifier.Attributes = [
 		["MODIFIER_ATTRIBUTE_NONE","无",true],
 		["MODIFIER_ATTRIBUTE_MULTIPLE","可重复",true],
 		["MODIFIER_ATTRIBUTE_PERMANENT","死亡保持",false],
 		["MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE","无敌保持",false],
 	];
 
-	_modifier.AllowIllusionDuplicate = _modifier.IsBuff =_modifier.IsDebuff = [
+	Modifier.AllowIllusionDuplicate = Modifier.IsBuff =Modifier.IsDebuff = [
 		["-","默认",true],
 		["0","不是",false],
 		["1","是",false],
 	];
 
-	_modifier.EffectAttachType = [
+	Modifier.EffectAttachType = [
 		["-","默认",true],
 		["attach_hitloc","受伤点",true],
 		["follow_origin","位置",true],
@@ -92,7 +153,7 @@ app.factory("Modifier", function() {
 		["world_origin","世界中心",false],
 	];
 
-	_modifier.OverrideAnimation = [
+	Modifier.OverrideAnimation = [
 		["-","默认",true],
 		["ACT_DOTA_ATTACK","攻击",true],
 		["ACT_DOTA_CAST_ABILITY_1","施法",true],
@@ -104,7 +165,7 @@ app.factory("Modifier", function() {
 		["ACT_DOTA_VICTORY","胜利"],
 	];
 
-	_modifier.Properties = [
+	Modifier.Properties = [
 		["MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL","魔法攻击无效"],
 		["MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PHYSICAL","物理攻击无效"],
 		["MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PURE","纯粹攻击无效"],
@@ -202,7 +263,7 @@ app.factory("Modifier", function() {
 		["MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE","百分比修改转向速度"],
 	];
 
-	_modifier.States = [
+	Modifier.States = [
 		["MODIFIER_STATE_ATTACK_IMMUNE","攻击免疫"],
 		["MODIFIER_STATE_BLIND","致盲？"],
 		["MODIFIER_STATE_BLOCK_DISABLED","禁用伤害减免？"],
@@ -237,11 +298,11 @@ app.factory("Modifier", function() {
 		["MODIFIER_STATE_UNSELECTABLE","不可选"],
 	];
 
-	_modifier.StateValues = [
+	Modifier.StateValues = [
 		//["MODIFIER_STATE_VALUE_NO_ACTION", "无"],
 		["MODIFIER_STATE_VALUE_ENABLED", "启用"],
 		["MODIFIER_STATE_VALUE_DISABLED", "禁用"],
 	];
 
-	return _modifier;
+	return Modifier;
 });

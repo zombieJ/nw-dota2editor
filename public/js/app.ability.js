@@ -3,11 +3,11 @@
 // ======================================================
 // =                        技能                        =
 // ======================================================
-app.factory("Ability", function() {
+app.factory("Ability", function(Modifier) {
 	function fillAttr(ability, attr, defaultValue) {
 		if(defaultValue === undefined) {
 			ability[attr] = {};
-			$.each(_ability[attr], function(i, item) {
+			$.each(Ability[attr], function(i, item) {
 				ability[attr][item[0]] = false;
 			});
 		} else {
@@ -23,7 +23,7 @@ app.factory("Ability", function() {
 		};
 	}
 
-	var _ability = function() {
+	var Ability = function() {
 		var _my = this;
 		_my._requireList = [];
 
@@ -32,7 +32,10 @@ app.factory("Ability", function() {
 		// ========================================
 		// 名字
 		fillAttr(_my, "_name", "undefined")("技能名", "Name");
-		
+
+		// 备注
+		fillAttr(_my, "_comment", "")("备注", "Comment");
+
 		// 图标
 		fillAttr(_my, "AbilityTextureName", "")("图标");
 
@@ -69,6 +72,9 @@ app.factory("Ability", function() {
 		// 施法动作
 		fillAttr(_my, "AbilityCastAnimation","")("施法动作");
 
+		// 冷却时间
+		fillAttr(_my, "AbilityCooldown","0")("冷却时间");
+
 		// 魔法消耗
 		fillAttr(_my, "AbilityManaCost","0")("魔法消耗");
 
@@ -85,7 +91,7 @@ app.factory("Ability", function() {
 		fillAttr(_my, "AbilityChannelledManaCostPerSecond","0")("持续施法每秒耗魔");
 
 		// AOE范围
-		fillAttr(_my, "AoERadius","0")("AOE范围");
+		fillAttr(_my, "AOERadius","0")("AOE范围");
 
 		// ========================================
 		// =                 事件                 =
@@ -100,7 +106,58 @@ app.factory("Ability", function() {
 		return this;
 	};
 
-	_ability.AbilityBehavior = [
+	Ability.parse = function(kvUnit) {
+		console.log("[KV]  └ 技能：",kvUnit.value.title, kvUnit);
+
+		var _ability = new Ability();
+		_ability._name = kvUnit.value.title;
+		_ability._comment = kvUnit.value.comment;
+
+		$.each(kvUnit.value.kvList, function(i, unit) {
+			var _attr = common.array.find(unit.key, _ability._requireList, "attr");
+
+			// 匹配 _requireList
+			if(_attr) {
+				switch (typeof _ability[unit.key]) {
+					case "string":
+						_ability[unit.key] = unit.value;
+						break;
+					case "object":
+						$.each(unit.value.split("|"), function (i, _value) {
+							_value = _value.trim();
+							if (_value in _ability[unit.key]) {
+								_ability[unit.key][_value] = true;
+							} else {
+								console.warn("Ability value not match:", unit.key, _value);
+							}
+						});
+						break;
+					default :
+						console.warn("Unmatched Ability type:", unit.key, _ability[unit.key]);
+				}
+			}
+
+			// 匹配 Modifiers
+			else if(unit.key === "Modifiers") {
+				console.log("[KV]    └ 修饰器列表", unit.value);
+				$.each(unit.value.kvList, function(i, _modifier) {
+					_ability._modifierList.push(Modifier.parse(_modifier));
+				});
+			}
+
+			// 匹配 BaseClass
+			else if(unit.key === "BaseClass") {
+				// 不作为
+			}
+			// 不匹配
+			else {
+				console.warn("Unmatched Ability key:", unit.key);
+			}
+		});
+		return _ability;
+	};
+
+	Ability.AbilityBehavior = [
 		["DOTA_ABILITY_BEHAVIOR_IMMEDIATE","立即",true],
 		["DOTA_ABILITY_BEHAVIOR_HIDDEN","隐藏", true],
 		["DOTA_ABILITY_BEHAVIOR_PASSIVE","被动", true],
@@ -130,7 +187,7 @@ app.factory("Ability", function() {
 		["DOTA_ABILITY_BEHAVIOR_RUNE_TARGET","神符目标"],
 	];
 
-	_ability.AbilityUnitTargetType = [
+	Ability.AbilityUnitTargetType = [
 		["DOTA_UNIT_TARGET_HERO","英雄", true],
 		["DOTA_UNIT_TARGET_BASIC","基本", true],
 		["DOTA_UNIT_TARGET_ALL","所有"],
@@ -143,16 +200,16 @@ app.factory("Ability", function() {
 		["DOTA_UNIT_TARGET_OTHER","其他"],
 		["DOTA_UNIT_TARGET_TREE","树木"],
 	];
-	
-	_ability.AbilityUnitTargetTeam = [
+
+	Ability.AbilityUnitTargetTeam = [
 		["DOTA_UNIT_TARGET_TEAM_BOTH","双方队伍", true],
 		["DOTA_UNIT_TARGET_TEAM_ENEMY","敌方队伍", true],
 		["DOTA_UNIT_TARGET_TEAM_FRIENDLY","友方队伍", true],
 		["DOTA_UNIT_TARGET_TEAM_CUSTOM","普通队伍"],
 		["DOTA_UNIT_TARGET_TEAM_NONE","无"],
 	];
-	
-	_ability.AbilityUnitTargetFlags = [
+
+	Ability.AbilityUnitTargetFlags = [
 		["DOTA_UNIT_TARGET_FLAG_CHECK_DISABLE_HELP","检测玩家'禁用帮助'选项"],
 		["DOTA_UNIT_TARGET_FLAG_DEAD","已死亡"],
 		["DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE","*暂无说明*"],
@@ -175,21 +232,21 @@ app.factory("Ability", function() {
 		["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY","范围唯一的"],
 	];
 
-	_ability.AbilityUnitDamageType = [
+	Ability.AbilityUnitDamageType = [
 		["-","无",true],
 		["DAMAGE_TYPE_MAGICAL","魔法伤害",true],
 		["DAMAGE_TYPE_PHYSICAL","物理伤害",true],
 		["DAMAGE_TYPE_PURE","纯粹伤害",true],
 	];
 
-	_ability.AbilityType = [
+	Ability.AbilityType = [
 		["DOTA_ABILITY_TYPE_BASIC","普通技能",true],
 		["DOTA_ABILITY_TYPE_ULTIMATE","终极技能"],
 		["DOTA_ABILITY_TYPE_ATTRIBUTES","用于属性奖励"],
 		["DOTA_ABILITY_TYPE_HIDDEN","干啥的?"],
 	];
 
-	_ability.AbilityCastAnimation = [
+	Ability.AbilityCastAnimation = [
 		["","默认",true],
 		["ACT_DOTA_ATTACK","攻击",true],
 		["ACT_DOTA_CAST_ABILITY_1","施法",true],
@@ -201,5 +258,5 @@ app.factory("Ability", function() {
 		["ACT_DOTA_VICTORY","胜利"],
 	];
 
-	return _ability;
+	return Ability;
 });
