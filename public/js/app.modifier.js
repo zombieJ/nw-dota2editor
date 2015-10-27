@@ -87,6 +87,8 @@ app.factory("Modifier", function(Event) {
 		_modifier._name = kvUnit.value.title;
 		_modifier._comment = kvUnit.value.comment;
 
+		var _ThinkIntervalList = [];
+
 		$.each(kvUnit.value.kvList, function(i, unit) {
 			var _attr = common.array.find(unit.key, _modifier._requireList, "attr");
 
@@ -135,10 +137,22 @@ app.factory("Modifier", function(Event) {
 				_LOG("KV", lvl + 1, "└ 修饰器事件", unit.value);
 				_modifier._eventList.push(Event.parse(unit, lvl + 1));
 			}
+			// 匹配 ThinkInterval
+			else if(unit.key === "ThinkInterval") {
+				_LOG("KV", lvl + 1, "└ 修饰器计时器", unit.value);
+				_ThinkIntervalList.push(unit.value);
+			}
 
 			// 不匹配
 			else {
 				console.warn("Unmatched Modifier key:", unit.key);
+			}
+		});
+
+		// 计时器赋值
+		$.each(_modifier._eventList, function(i, event) {
+			if(event._name === "OnIntervalThink") {
+				event.ThinkInterval = _ThinkIntervalList.shift();
 			}
 		});
 
