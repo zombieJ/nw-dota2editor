@@ -9,9 +9,10 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 	if(!globalContent.isOpen) return;
 
 	NODE.loadFile("scripts/npc/npc_abilities_custom.txt", "utf8").then(function(data) {
-		console.log(data);
+		//console.log(data);
 
 		$scope.ability = new Ability();
+		console.log($scope.ability);
 
 		$scope.getType = function(attr, src) {
 			src = src || $scope.ability;

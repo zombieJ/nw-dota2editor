@@ -56,10 +56,10 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 	};
 
 	var _kv = new KV($("#test").html(), true);
-	console.log("[KV] 技能列表",_kv);
+	_LOG("KV", 0, "技能列表",_kv);
 	$.each(_kv.kvList, function(i, unit) {
 		if(typeof  unit.value !== "string") {
-			var _ability = Ability.parse(unit);
+			var _ability = Ability.parse(unit, 1);
 			console.log("[Ability] 实体：",_ability);
 			//return false;
 		}

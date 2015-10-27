@@ -103,14 +103,20 @@ app.factory("Ability", function(Event, Modifier) {
 		// ========================================
 		_my._modifierList = [];
 
+		// ========================================
+		// =                自定义                =
+		// ========================================
+		_my._abilitySpecialList = [];
+
 		return this;
 	};
 
 	// ================================================
 	// =                     解析                     =
 	// ================================================
-	Ability.parse = function(kvUnit) {
-		console.log("[KV]  └ 技能：",kvUnit.value.title, kvUnit);
+	Ability.parse = function(kvUnit, lvl) {
+		lvl = lvl || 0;
+		_LOG("KV", lvl, "└ 技能：",kvUnit.value.title, kvUnit);
 
 		var _ability = new Ability();
 		_ability._name = kvUnit.value.title;
@@ -142,14 +148,22 @@ app.factory("Ability", function(Event, Modifier) {
 
 			// 匹配 Event
 			else if(common.array.find(unit.key, Event.EventList, "0")) {
-				_ability._eventList.push(Event.parse(unit));
+				_ability._eventList.push(Event.parse(unit, lvl + 1));
 			}
 
 			// 匹配 Modifiers
 			else if(unit.key === "Modifiers") {
-				console.log("[KV]    └ 修饰器列表", unit.value);
+				_LOG("KV", lvl + 1, "└ 修饰器列表", unit.value);
 				$.each(unit.value.kvList, function(i, _modifier) {
-					_ability._modifierList.push(Modifier.parse(_modifier));
+					_ability._modifierList.push(Modifier.parse(_modifier, lvl + 2));
+				});
+			}
+
+			// 匹配 Modifiers
+			else if(unit.key === "AbilitySpecial") {
+				_LOG("KV", lvl + 1, "└ 自定义值列表", unit.value);
+				_ability._abilitySpecialList = $.map(unit.value.kvList, function(asUnit) {
+					return [[asUnit.value.kvList[1].key, asUnit.value.kvList[0].value, asUnit.value.kvList[1].value]];
 				});
 			}
 
@@ -267,6 +281,11 @@ app.factory("Ability", function(Event, Modifier) {
 		["ACT_DOTA_SPAWN","出生"],
 		["ACT_DOTA_TELEPORT","传送"],
 		["ACT_DOTA_VICTORY","胜利"],
+	];
+
+	Ability.AbilitySpecialType = [
+		["FIELD_INTEGER", "int", true],
+		["FIELD_FLOAT", "float", true],
 	];
 
 	return Ability;

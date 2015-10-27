@@ -32,7 +32,8 @@ common.setValueByPath = function(unit, path, value) {
 	if(!unit || path == null || path === "") throw "Unit or path can't be empty!";
 
 	var _inArray = false;
-	var _end = _start = 0;
+	var _end = 0;
+	var _start = 0;
 	var _unit = unit;
 
 	function _nextPath(array) {
@@ -84,6 +85,30 @@ common.isEmpty = function(val) {
 	} else {
 		return val === null || val === undefined;
 	}
+};
+
+// ======================= Log ========================
+window._LOG = function (type, lvl) {
+	var _args = Array.prototype.slice.call(arguments, 2);
+	_args.unshift("["+type+"]" + common.text.repeat("  ", lvl));
+	console.log.apply(console, _args);
+};
+
+window._WARN = function (type, lvl) {
+	var _args = Array.prototype.slice.call(arguments, 2);
+	_args.unshift("["+type+"]" + common.text.repeat("  ", lvl));
+	console.warn.apply(console, _args);
+};
+
+// ======================= Text =======================
+common.text = {};
+
+common.text.repeat = function(text, times) {
+	var _str = "";
+	for(var i = 0 ; i < (times || 0) ; i += 1) {
+		_str += text;
+	}
+	return _str;
 };
 
 // ====================== Format ======================

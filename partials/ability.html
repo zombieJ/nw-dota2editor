@@ -186,6 +186,49 @@
 						<button class="btn btn-primary" ng-click="addModifier()">+ new Modifier 【新建修饰器】</button>
 					</td>
 				</tr>
+
+				<!-- 自定义值 -->
+				<tr>
+					<th colspan="2" class="success">
+						AbilitySpecial 【自定义值】
+					</th>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<table class="table table-bordered table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Key 【变量名】</th>
+									<th>type 【类型】</th>
+									<th>Value 【变量值】</th>
+								</tr>
+							</thead>
+							<tbody>
+							<tr ng-repeat="_abilitySpecial in ability._abilitySpecialList">
+								<th>
+									<a href="javascript:void(0)" ng-click="common.array.remove(_abilitySpecial, ability._abilitySpecialList)">[X]</a>
+								</th>
+								<td>
+									<input type="text" class="form-control" ng-model="_abilitySpecial[0]" />
+								</td>
+								<td>
+									<select class="form-control" ng-model="_abilitySpecial[1]">
+										<option ng-repeat="type in Ability.AbilitySpecialType" value="{{type[0]}}">
+											{{type[0]}}
+											【{{type[1]}}】
+										</option>
+									</select>
+								</td>
+								<td>
+									<input type="text" class="form-control" ng-model="_abilitySpecial[2]" />
+								</td>
+							</tr>
+							</tbody>
+						</table>
+						<button class="btn btn-primary" ng-click="ability._abilitySpecialList.push([])">+ new Key Value 【新建键值】</button>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>

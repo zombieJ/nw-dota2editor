@@ -16,8 +16,8 @@ app.factory("Operation", function() {
 	// ================================================
 	// =                     解析                     =
 	// ================================================
-	Operation.parse = function(kvUnit) {
-		console.log("[KV]      └ 操作：", kvUnit.value.title, kvUnit);
+	Operation.parse = function(kvUnit, lvl) {
+		_LOG("KV", lvl + 1, "└ 操作：", kvUnit.value.title, kvUnit);
 
 		var _operation = new Operation();
 		_operation.name = kvUnit.key;
@@ -27,6 +27,17 @@ app.factory("Operation", function() {
 			switch(typeof unit.value) {
 				case "string":
 					_operation.attrs[unit.key] = unit.value;
+					break;
+				case "object":
+					var _meta = Operation.EventOperationMap[unit.key];
+					if(_meta && _meta.type === "operation") {
+						_operation.attrs[unit.key] = $.map(unit.value.kvList, function(_opUnit) {
+							return Operation.parse(_opUnit, lvl + 1);
+						});
+					} else {
+						console.warn("Operation Object not match:", unit.key, unit.value);
+					}
+
 					break;
 				default :
 					console.warn("Unmatched Operation type:", unit.key, unit.value);
@@ -48,23 +59,21 @@ app.factory("Operation", function() {
 		["TrackingProjectile","跟踪投射物", true, ["Target", "EffectName", "Dodgeable", "ProvidesVision", "VisionRadius", "MoveSpeed", "SourceAttachment"]],
 		["Random", "随机", true,["Chance", "PseudoRandom", "OnSuccess", "OnFailure"]],
 
-		["SpawnUnit","召唤单位", false, ["UnitName", "UnitCount", "Target", "UnitLimit", "SpawnRadius", "Duration", "GrantsGold", "GrantsXP"]],
+		["SpawnUnit","召唤单位", false, ["UnitName", "UnitCount", "Target", "UnitLimit", "SpawnRadius", "Duration", "GrantsGold", "GrantsXP", "OnSpawn"]],
+		["ActOnTargets", "让目标行动", false, ["Target", "Action"]],
 		["LevelUpAbility","技能升级",false,["Target", "AbilityName"]],
 		["Knockback","击退",false,["Target","Center", "Duration", "Distance", "Height", "IsFixedDistance", "ShouldStun"]],
 		["AddAbility","添加技能",false,["Target","AbilityName"]],
 		["RemoveAbility","删除技能",false,["Target","AbilityName"]],
 		["Blink", "闪烁", false, ["Target"]],
 		["DestroyTrees","摧毁树木", false, ["Target","Radius"]],
+		["DelayedAction", "延迟动作", false, ["Delay", "Action"]],
 		["Lifesteal", "生命偷取", false, ["Target", "LifestealPercent"]],
 		/*
-		["ActOnTargets
-		Target, Action
 		["CleaveAttack
 		CleavePercent, CleaveRadius
 		["CreateThinker
 		Target, ModifierName
-		["DelayedAction
-		Delay, Action
 
 		["LinearProjectile
 		Target, EffectName, MoveSpeed, StartRadius, EndRadius, FixedDistance, StartPosition, TargetTeams, TargetTypes, TargetFlags, HasFrontalCone, ProvidesVision, VisionRadius
@@ -88,6 +97,7 @@ app.factory("Operation", function() {
 		HealAmount: {type: "text"},
 		Center: {type: "single", value: ["CASTER","TARGET","POINT","ATTACKER","UNIT", "PROJECTILE"]},
 		Duration: {type: "text"},
+		Delay: {type: "text"},
 		Distance: {type: "text"},
 		Height: {type: "text"},
 		IsFixedDistance: {type: "bool"},
@@ -110,6 +120,8 @@ app.factory("Operation", function() {
 		PseudoRandom: {type: "bool"},
 		OnSuccess: {type: "operation"},
 		OnFailure: {type: "operation"},
+		Action: {type: "operation"},
+		OnSpawn: {type: "operation"},
 	};
 
 	return Operation;

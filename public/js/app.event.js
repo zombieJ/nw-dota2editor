@@ -18,8 +18,8 @@ app.factory("Event", function(Operation) {
 	// ================================================
 	// =                     解析                     =
 	// ================================================
-	Event.parse = function(kvUnit) {
-		console.log("[KV]    └ 事件：", kvUnit.value.title, kvUnit);
+	Event.parse = function(kvUnit, lvl) {
+		_LOG("KV", lvl, "└ 事件：", kvUnit.value.title, kvUnit);
 
 		var _event = new Event();
 		_event._name = kvUnit.value.title;
@@ -27,7 +27,7 @@ app.factory("Event", function(Operation) {
 		_event._operationList = [];
 
 		$.each(kvUnit.value.kvList, function (i, unit) {
-			_event._operationList.push(Operation.parse(unit));
+			_event._operationList.push(Operation.parse(unit, lvl + 1));
 		});
 
 		return _event;
