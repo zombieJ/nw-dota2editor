@@ -4,17 +4,39 @@
 // =                        事件                        =
 // ======================================================
 app.factory("Event", function(Operation) {
-	var _event = function() {
+	var Event = function() {
 		var _my = this;
 
 		_my.name = "OnSpellStart";
+		_my._comment = "";
 
 		_my._operationList = [new Operation()];
 
 		return _my;
 	};
 
-	_event.EventList = [
+	// ================================================
+	// =                     解析                     =
+	// ================================================
+	Event.parse = function(kvUnit) {
+		console.log("[KV]    └ 事件：", kvUnit.value.title, kvUnit);
+
+		var _event = new Event();
+		_event._name = kvUnit.value.title;
+		_event._comment = kvUnit.value.comment;
+		_event._operationList = [];
+
+		$.each(kvUnit.value.kvList, function (i, unit) {
+			_event._operationList.push(Operation.parse(unit));
+		});
+
+		return _event;
+	};
+
+	// ================================================
+	// =                     属性                     =
+	// ================================================
+	Event.EventList = [
 		["OnSpellStart","开始施法"],
 		["OnAbilityEndChannel","停止施法"],
 		["OnAbilityPhaseStart","开始阶段（转身之前）"],
@@ -48,7 +70,7 @@ app.factory("Event", function(Operation) {
 		["OnUpgrade","技能升级"],
 	];
 
-	_event.ModifierEventList = [
+	Event.ModifierEventList = [
 		["OnCreated","Modifier创建"],
 		["OnDestroy","Modifier移除"],
 		["OnIntervalThink","定时器"],
@@ -84,5 +106,5 @@ app.factory("Event", function(Operation) {
 		["OnKill","杀死单位"],
 	];
 
-	return _event;
+	return Event;
 });

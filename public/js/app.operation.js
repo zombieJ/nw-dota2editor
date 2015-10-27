@@ -4,7 +4,7 @@
 // =                        操作                        =
 // ======================================================
 app.factory("Operation", function() {
-	var _operation = function() {
+	var Operation = function() {
 		var _my = this;
 
 		_my.name = "";
@@ -13,7 +13,30 @@ app.factory("Operation", function() {
 		return _my;
 	};
 
-	_operation.EventOperation = [
+	// ================================================
+	// =                     解析                     =
+	// ================================================
+	Operation.parse = function(kvUnit) {
+		console.log("[KV]      └ 操作：", kvUnit.value.title, kvUnit);
+
+		var _operation = new Operation();
+		_operation.name = kvUnit.key;
+
+		// 属性
+		$.each(kvUnit.value.kvList, function(i, unit) {
+			switch(typeof unit.value) {
+				case "string":
+					_operation.attrs[unit.key] = unit.value;
+					break;
+				default :
+					console.warn("Unmatched Operation type:", unit.key, unit.value);
+			}
+		});
+
+		return _operation;
+	};
+
+	Operation.EventOperation = [
 		["ApplyModifier", "添加修饰器", true, ["Target", "ModifierName"]],
 		["AttachEffect", "添加特效", true, ["EffectName","EffectAttachType","Target","ControlPoints"]],
 		["FireEffect", "触发特效", true, ["EffectName", "EffectAttachType", "Target", "ControlPoints"]],
@@ -48,7 +71,7 @@ app.factory("Operation", function() {
 		*/
 	];
 
-	_operation.EventOperationMap = {
+	Operation.EventOperationMap = {
 		Target: {type: "single", value: ["CASTER","TARGET","POINT","ATTACKER","UNIT"]},
 		AbilityName: {type: "text"},
 		ModifierName: {type: "text"},
@@ -89,5 +112,5 @@ app.factory("Operation", function() {
 		OnFailure: {type: "operation"},
 	};
 
-	return _operation;
+	return Operation;
 });

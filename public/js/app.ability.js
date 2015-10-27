@@ -3,7 +3,7 @@
 // ======================================================
 // =                        技能                        =
 // ======================================================
-app.factory("Ability", function(Modifier) {
+app.factory("Ability", function(Event, Modifier) {
 	function fillAttr(ability, attr, defaultValue) {
 		if(defaultValue === undefined) {
 			ability[attr] = {};
@@ -106,6 +106,9 @@ app.factory("Ability", function(Modifier) {
 		return this;
 	};
 
+	// ================================================
+	// =                     解析                     =
+	// ================================================
 	Ability.parse = function(kvUnit) {
 		console.log("[KV]  └ 技能：",kvUnit.value.title, kvUnit);
 
@@ -137,6 +140,11 @@ app.factory("Ability", function(Modifier) {
 				}
 			}
 
+			// 匹配 Event
+			else if(common.array.find(unit.key, Event.EventList, "0")) {
+				_ability._eventList.push(Event.parse(unit));
+			}
+
 			// 匹配 Modifiers
 			else if(unit.key === "Modifiers") {
 				console.log("[KV]    └ 修饰器列表", unit.value);
@@ -157,6 +165,9 @@ app.factory("Ability", function(Modifier) {
 		return _ability;
 	};
 
+	// ================================================
+	// =                     属性                     =
+	// ================================================
 	Ability.AbilityBehavior = [
 		["DOTA_ABILITY_BEHAVIOR_IMMEDIATE","立即",true],
 		["DOTA_ABILITY_BEHAVIOR_HIDDEN","隐藏", true],
