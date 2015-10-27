@@ -92,5 +92,13 @@ app.factory("KV", function() {
 
 		return this;
 	};
+
+	_KV.prototype.kvToString = function() {
+		var _str = $.map(this.kvList, function(kv) {
+			return '"'+kv.key+'"    "'+kv.value+'"';
+		}).join("\n");
+		return _str;
+	};
+
 	return _KV;
 });

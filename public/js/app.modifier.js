@@ -3,7 +3,7 @@
 // ======================================================
 // =                        操作                        =
 // ======================================================
-app.factory("Modifier", function() {
+app.factory("Modifier", function(Event) {
 	function fillAttr(modifier, attr, defaultValue) {
 		if(defaultValue === undefined) {
 			modifier[attr] = {};
@@ -56,9 +56,19 @@ app.factory("Modifier", function() {
 
 		fillAttr(_my, "AllowIllusionDuplicate", "-")("幻象可继承");
 
+		// 光环
+		fillAttr(_my, "Aura", "")("光环赋予的修饰器");
+		fillAttr(_my, "Aura_Radius", "")("光环影响半径");
+		fillAttr(_my, "Aura_Teams")("光环影响队伍");
+		fillAttr(_my, "Aura_Types")("光环影响类型");
+		fillAttr(_my, "Aura_Flags")("光环影响标记");
+		fillAttr(_my, "Aura_ApplyToCaster", "-")("光环影响拥有者");
+
+		// 特效
 		fillAttr(_my, "EffectName", "")("特效名");
 		fillAttr(_my, "EffectAttachType", "-")("特效绑定位置");
 
+		// 状态特效
 		fillAttr(_my, "StatusEffectName", "")("状态特效");
 		fillAttr(_my, "StatusEffectPriority", "")("状态特效优先级");
 		fillAttr(_my, "OverrideAnimation", "-")("覆盖动画");
@@ -120,6 +130,12 @@ app.factory("Modifier", function() {
 				});
 			}
 
+			// 匹配 Event
+			else if(common.array.find(unit.key, Event.ModifierEventList, "0")) {
+				_LOG("KV", lvl + 1, "└ 修饰器事件", unit.value);
+				_modifier._eventList.push(Event.parse(unit, lvl + 1));
+			}
+
 			// 不匹配
 			else {
 				console.warn("Unmatched Modifier key:", unit.key);
@@ -129,6 +145,51 @@ app.factory("Modifier", function() {
 		return _modifier;
 	};
 
+	Modifier.Aura_Teams = [
+		["DOTA_UNIT_TARGET_TEAM_BOTH","双方队伍", true],
+		["DOTA_UNIT_TARGET_TEAM_ENEMY","敌方队伍", true],
+		["DOTA_UNIT_TARGET_TEAM_FRIENDLY","友方队伍", true],
+		["DOTA_UNIT_TARGET_TEAM_CUSTOM","普通队伍"],
+		["DOTA_UNIT_TARGET_TEAM_NONE","无"],
+	];
+
+	Modifier.Aura_Types = [
+		["DOTA_UNIT_TARGET_HERO","英雄", true],
+		["DOTA_UNIT_TARGET_BASIC","基本", true],
+		["DOTA_UNIT_TARGET_ALL","所有"],
+		["DOTA_UNIT_TARGET_BUILDING","建筑"],
+		["DOTA_UNIT_TARGET_COURIER","信使"],
+		["DOTA_UNIT_TARGET_CREEP","野怪"],
+		["DOTA_UNIT_TARGET_CUSTOM","普通"],
+		["DOTA_UNIT_TARGET_MECHANICAL","机械"],
+		["DOTA_UNIT_TARGET_NONE","无"],
+		["DOTA_UNIT_TARGET_OTHER","其他"],
+		["DOTA_UNIT_TARGET_TREE","树木"],
+	];
+
+	Modifier.Aura_Flags = [
+		["DOTA_UNIT_TARGET_FLAG_CHECK_DISABLE_HELP","检测玩家'禁用帮助'选项"],
+		["DOTA_UNIT_TARGET_FLAG_DEAD","已死亡"],
+		["DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE","*暂无说明*"],
+		["DOTA_UNIT_TARGET_FLAG_INVULNERABLE","无敌"],
+		["DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES","魔法免疫的敌人"],
+		["DOTA_UNIT_TARGET_FLAG_MANA_ONLY","*暂无说明*"],
+		["DOTA_UNIT_TARGET_FLAG_MELEE_ONLY","*暂无说明*"],
+		["DOTA_UNIT_TARGET_FLAG_NO_INVIS","不是隐形的"],
+		["DOTA_UNIT_TARGET_FLAG_NONE","无"],
+		["DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS","不是远古"],
+		["DOTA_UNIT_TARGET_FLAG_NOT_ATTACK_IMMUNE","不是攻击免疫"],
+		["DOTA_UNIT_TARGET_FLAG_NOT_CREEP_HERO","不是野怪"],
+		["DOTA_UNIT_TARGET_FLAG_NOT_DOMINATED","不可控制的"],
+		["DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS","不是幻象"],
+		["DOTA_UNIT_TARGET_FLAG_NOT_MAGIC_IMMUNE_ALLIES","不是魔法免疫的盟友"],
+		["DOTA_UNIT_TARGET_FLAG_NOT_NIGHTMARED","非被催眠的"],
+		["DOTA_UNIT_TARGET_FLAG_NOT_SUMMONED","非召唤的"],
+		["DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD","被放逐出世界的"],
+		["DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED","玩家控制的"],
+		["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY","范围唯一的"],
+	];
+
 	Modifier.Attributes = [
 		["MODIFIER_ATTRIBUTE_NONE","无",true],
 		["MODIFIER_ATTRIBUTE_MULTIPLE","可重复",true],
@@ -136,7 +197,7 @@ app.factory("Modifier", function() {
 		["MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE","无敌保持",false],
 	];
 
-	Modifier.AllowIllusionDuplicate = Modifier.IsBuff =Modifier.IsDebuff = [
+	Modifier.AllowIllusionDuplicate = Modifier.IsBuff =Modifier.IsDebuff = Modifier.Aura_ApplyToCaster = [
 		["-","默认",true],
 		["0","不是",false],
 		["1","是",false],

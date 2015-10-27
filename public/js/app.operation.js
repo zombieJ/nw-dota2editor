@@ -31,9 +31,13 @@ app.factory("Operation", function() {
 				case "object":
 					var _meta = Operation.EventOperationMap[unit.key];
 					if(_meta && _meta.type === "operation") {
-						_operation.attrs[unit.key] = $.map(unit.value.kvList, function(_opUnit) {
+						// 操作
+						_operation.attrs[unit.key] = $.map(unit.value.kvList, function (_opUnit) {
 							return Operation.parse(_opUnit, lvl + 1);
 						});
+					} else if(_meta && _meta.type === "blob") {
+						// Blob块
+						_operation.attrs[unit.key] = unit.value.kvToString();
 					} else {
 						console.warn("Operation Object not match:", unit.key, unit.value);
 					}
@@ -49,8 +53,8 @@ app.factory("Operation", function() {
 
 	Operation.EventOperation = [
 		["ApplyModifier", "添加修饰器", true, ["Target", "ModifierName"]],
-		["AttachEffect", "添加特效", true, ["EffectName","EffectAttachType","Target","ControlPoints"]],
-		["FireEffect", "触发特效", true, ["EffectName", "EffectAttachType", "Target", "ControlPoints"]],
+		["AttachEffect", "添加特效", true, ["EffectName","EffectAttachType","Target","ControlPoints", "ControlPointEntities"]],
+		["FireEffect", "触发特效", true, ["EffectName", "EffectAttachType", "Target", "ControlPoints", "ControlPointEntities"]],
 		["Damage", "伤害", true, ["Target", "Type","Damage", "MinDamage", "MaxDamage", "CurrentHealthPercentBasedDamage", "MaxHealthPercentBasedDamage"]],
 		["Heal","治疗",true,["HealAmount","Target"]],
 		["FireSound", "触发声音",true,["EffectName", "Target"]],
@@ -87,6 +91,7 @@ app.factory("Operation", function() {
 		EffectName: {type: "text"},
 		EffectAttachType: {type: "single", value: ["follow_origin", "follow_overhead", "start_at_customorigin", "world_origin"]},
 		ControlPoints: {type: "blob"},
+		ControlPointEntities: {type: "blob"},
 		Type: {type: "single", value: ["DAMAGE_TYPE_MAGICAL","DAMAGE_TYPE_PHYSICAL","DAMAGE_TYPE_PURE"]},
 		MinDamage: {type: "text"},
 		MaxDamage: {type: "text"},

@@ -171,6 +171,11 @@ app.factory("Ability", function(Event, Modifier) {
 			else if(unit.key === "BaseClass") {
 				// 不作为
 			}
+			// 匹配 precache
+			else if(unit.key === "precache") {
+				// 不作为
+			}
+
 			// 不匹配
 			else {
 				console.warn("Unmatched Ability key:", unit.key);
