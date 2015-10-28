@@ -46,7 +46,7 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 		$scope.ability = $scope.abilityList[0];
 
 		//$scope.ability = new Ability();
-		//console.log($scope.ability);
+		console.log("Scope >>>",$scope);
 	}, function(){
 		$.dialog({
 			title: "OPS!",
