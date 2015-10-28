@@ -2,6 +2,30 @@
 	padding-top: 60px;
 }
 
+.listCntr {
+    font-size: 12px;
+}
+
+.listCntr .listItem {
+    border: 1px solid #999999;
+    border-top: none;
+}
+
+.listCntr .listItem:first-child {
+    border-top: 1px solid #999999;
+}
+
+.listCntr .listItem.active {
+    background: #eb9316;
+    color: #FFFFFF;
+}
+
+.listCntr .listItem p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .table.table-tiny td {
 	padding: 0;
 }
@@ -53,6 +77,6 @@
 	height: 26px;
 }
 
-.table.table-tiny .group-operation textarea.form-control {
+.table.table-tiny textarea.form-control {
 	height: auto;
 }

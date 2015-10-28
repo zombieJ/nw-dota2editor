@@ -14,11 +14,12 @@ app.factory("Ability", function(Event, Modifier) {
 			ability[attr] = defaultValue;
 		}
 
-		return function(desc, title) {
+		return function(desc, title, type) {
 			ability._requireList.push({
 				attr: attr,
 				title: title,
 				desc: desc,
+				type: type,
 			});
 		};
 	}
@@ -34,7 +35,7 @@ app.factory("Ability", function(Event, Modifier) {
 		fillAttr(_my, "_name", "undefined")("技能名", "Name");
 
 		// 备注
-		fillAttr(_my, "_comment", "")("备注", "Comment");
+		fillAttr(_my, "_comment", "")("备注", "Comment", "blob");
 
 		// 图标
 		fillAttr(_my, "AbilityTextureName", "")("图标");

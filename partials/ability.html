@@ -1,19 +1,23 @@
 ﻿<div class="row">
-	<div class="col-md-1">
-		<div>
-
+	<div class="col-md-2">
+		<div class="listCntr">
+			<div ng-repeat="_ability in abilityList" class="listItem"
+			     ng-class="{active: ability == _ability}" ng-click="setAbility(_ability);">
+				<p>{{_ability._name}}</p>
+			</div>
 		</div>
 	</div>
-	<div class="col-md-11">
+	<div class="col-md-10">
 		<table class="table table-condensed table-bordered table-tiny">
 			<tbody>
 				<!-- 属性 -->
 				<tr ng-repeat="unit in ability._requireList">
 					<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
 					<td>
-						<input ng-show="getType(unit.attr) === 'string' && !Ability[unit.attr]" class="form-control" ng-model="ability[unit.attr]" />
-						<div groupselect ng-show="getType(unit.attr) === 'object'" data-ability="ability" data-attr="{{unit.attr}}" data-base="Ability"></div>
-						<div groupselect ng-show="getType(unit.attr) === 'string' && Ability[unit.attr]" data-ability="ability" data-attr="{{unit.attr}}" data-base="Ability" data-single="true"></div>
+						<input ng-show="getType(unit) === 'string' && !Ability[unit.attr]" class="form-control" ng-model="ability[unit.attr]" />
+						<div groupselect ng-show="getType(unit) === 'object'" data-ability="ability" data-attr="{{unit.attr}}" data-base="Ability"></div>
+						<div groupselect ng-show="getType(unit) === 'string' && Ability[unit.attr]" data-ability="ability" data-attr="{{unit.attr}}" data-base="Ability" data-single="true"></div>
+						<textarea ng-show="getType(unit) === 'blob'" class="form-control" ng-model="ability[unit.attr]" rows="5"></textarea>
 					</td>
 				</tr>
 
