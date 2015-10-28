@@ -24,6 +24,11 @@ components.directive('attrfield', function($compile) {
 						_field = $('<div groupselect data-ability="srcunit" data-attr="{{attrunit.attr}}" data-base="srctmpl"></div>');
 					} else if(_type === "string" && scope.srctmpl[scope.attrunit.attr]) {
 						_field = $('<div groupselect data-ability="srcunit" data-attr="{{attrunit.attr}}" data-base="srctmpl" data-single="true"></div>');
+					} else if(_type === "boolean") {
+						_field = $(
+							'<input type="checkbox" ng-checked="[attrunit.attr]" '+
+							'ng-click="srcunit[attrunit.attr] = !srcunit[attrunit.attr]" />'
+						);
 					} else {
 						console.warn("No match!", _type, scope.srcunit, scope.attrunit.attr);
 					}

@@ -64,12 +64,7 @@
 								<tr ng-repeat="unit in modifier._requireList">
 									<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
 									<td>
-										<input ng-show="getType(unit.attr, modifier) === 'string' && !Modifier[unit.attr]" class="form-control" ng-model="modifier[unit.attr]" />
-										<div groupselect ng-show="getType(unit.attr, modifier) === 'object'" data-ability="modifier" data-attr="{{unit.attr}}" data-base="Modifier"></div>
-										<div groupselect ng-show="getType(unit.attr, modifier) === 'string' && Modifier[unit.attr]" data-ability="modifier" data-attr="{{unit.attr}}" data-base="Modifier" data-single="true"></div>
-										<input ng-show="getType(unit.attr, modifier) === 'boolean'"
-										       type="checkbox" ng-checked="modifier[unit.attr]"
-										       ng-click="modifier[unit.attr] = !modifier[unit.attr]" />
+										<div attrfield data-attrunit="unit" data-srcunit="modifier" data-srctmpl="Modifier"></div>
 									</td>
 								</tr>
 
