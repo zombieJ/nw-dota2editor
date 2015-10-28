@@ -14,11 +14,12 @@ app.factory("Modifier", function(Event) {
 			modifier[attr] = defaultValue;
 		}
 
-		return function(desc, title) {
+		return function(desc, title, type) {
 			modifier._requireList.push({
 				attr: attr,
 				title: title,
 				desc: desc,
+				type: type,
 			});
 		};
 	}
@@ -34,7 +35,7 @@ app.factory("Modifier", function(Event) {
 		fillAttr(_my, "_name", "undefined")("修饰器名", "Name");
 
 		// 备注
-		fillAttr(_my, "_comment", "")("备注", "Comment");
+		fillAttr(_my, "_comment", "")("备注", "Comment", "blob");
 
 		// 属性
 		fillAttr(_my, "Attributes", "MODIFIER_ATTRIBUTE_NONE")("属性");

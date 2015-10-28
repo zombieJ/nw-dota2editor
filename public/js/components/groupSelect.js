@@ -27,6 +27,13 @@ components.directive('groupselect', function($compile) {
 								'</label>'+
 							'</div>'
 						);
+						/*_field = $(
+							'<div>' +
+								'<ul class="list-inline">'+
+									'<li ng-repeat="(unitName, unitValue) in ability[attr]" ng-if="unitValue">{{unitName}}</li>'+
+								'</ul>'+
+							'</div>'
+						);*/
 					} else {
 						_field = $(
 							'<select ng-model="ability[attr]" class="form-control">'+
