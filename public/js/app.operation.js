@@ -38,13 +38,47 @@ app.factory("Operation", function() {
 					} else if(_meta && _meta.type === "blob") {
 						// Blob块
 						_operation.attrs[unit.key] = unit.value.kvToString();
+					} else if(_meta && _meta.type === "unitGroup") {
+						// 单位选择组
+						_operation.attrs[unit.key] = {};
+						if(typeof unit.value === "string") {
+							// 如果是单个目标
+							_operation.attrs[unit.key].target = unit.value;
+						} else {
+							// 如果是单位组
+							_operation.attrs[unit.key].target = "[Group Units]";
+							$.each(unit.value.kvList, function(i, _tgtUnit) {
+								// 遍历属性赋值
+								var _tmplUnit = common.array.find(_tgtUnit.key, Operation.UnitGroupColumns, "0");
+
+								if(_tmplUnit) {
+									switch (_tmplUnit[3]) {
+										case "text":
+										case "single":
+											_operation.attrs[unit.key][_tgtUnit.key] = _tgtUnit.value;
+											break;
+										case "group":
+											_operation.attrs[unit.key][_tgtUnit.key] = {};
+											$.each(_tgtUnit.value.split("|"), function (i, _value) {
+												_value = _value.trim();
+												_operation.attrs[unit.key][_tgtUnit.key][_value] = true;
+											});
+											break;
+										default:
+											_WARN("KV", lvl + 2, "Operation Unit Group Type not match:", _tmplUnit[3], _tgtUnit.key, _tgtUnit.value);
+									}
+								} else {
+									_WARN("KV", lvl + 2, "Operation Unit Group not match:", _tgtUnit.key, _tgtUnit.value);
+								}
+							});
+						}
 					} else {
-						console.warn("Operation Object not match:", unit.key, unit.value);
+						_WARN("KV", lvl + 2, "Operation Object not match:", unit.key, unit.value);
 					}
 
 					break;
 				default :
-					console.warn("Unmatched Operation type:", unit.key, unit.value);
+					_WARN("KV", lvl + 2, "Unmatched Operation type:", unit.key, unit.value);
 			}
 		});
 
@@ -128,6 +162,14 @@ app.factory("Operation", function() {
 		Action: {type: "operation"},
 		OnSpawn: {type: "operation"},
 	};
+
+	Operation.UnitGroupColumns = [
+		["Types", "", [], "group"],
+		["Teams", "", [], "group"],
+		["Flags", "", [], "group"],
+		["Center", "", [], "single"],
+		["Radius", "", [], "text"],
+	];
 
 	return Operation;
 });
