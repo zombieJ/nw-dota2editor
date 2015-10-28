@@ -8,7 +8,7 @@ hammerControllers.controller('indexCtrl', function ($scope) {
 hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globalContent, Ability, Event, Operation, Modifier) {
 	if(!globalContent.isOpen) return;
 
-	NODE.loadFile("scripts/npc/npc_abilities_custom.txt", "utf8").then(function(data) {
+	//NODE.loadFile("scripts/npc/npc_abilities_custom.txt", "utf8").then(function(data) {
 		//console.log(data);
 
 		$scope.ability = new Ability();
@@ -26,7 +26,7 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 		$scope.addModifier = function() {
 			$scope.ability._modifierList.push(new Modifier());
 		};
-	});
+	//});
 
 	//console.log($scope.ability);
 });

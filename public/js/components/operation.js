@@ -7,7 +7,8 @@ components.directive('eventoperation', function($compile) {
 			container: "=",
 			path: "@",
 		},
-		controller: function($scope, $element, $attrs, Event, Operation) {
+		controller: function($scope, $element, $attrs, Ability, Event, Operation) {
+			$scope.Ability = Ability;
 			$scope.Event = Event;
 			$scope.Operation = Operation;
 			$scope.common = common;
@@ -75,6 +76,43 @@ components.directive('eventoperation', function($compile) {
 									'	ng-init="operation.attrs[opCol] = Operation.EventOperationMap[opCol].type === \'bool\' && operation.attrs[opCol] === undefined ? false : operation.attrs[opCol]"'+
 									'   type="checkbox" ng-checked="operation.attrs[opCol]"'+
 									'   ng-click="operation.attrs[opCol] = !operation.attrs[opCol]" />'+
+
+									// Target
+									'<div ng-show="Operation.EventOperationMap[opCol].type === \'unitGroup\'">'+
+										'<select class="form-control" ng-model="operation.attrs[opCol].target">'+
+										'	<option ng-repeat="opVal in Operation.EventOperationMap[opCol].value">{{opVal}}</option>'+
+										'</select>'+
+										'<table class="table" ng-show="operation.attrs[opCol].target === \'[Group Units]\'">'+
+											'<tbody>'+
+												'<tr>'+
+													'<td>Types 【类型】</td>'+
+													'<td><div groupselect data-ability="operation.attrs[opCol]" data-attr="AbilityUnitTargetType" data-base="Ability"></div></td>'+
+												'</tr>'+
+												'<tr>'+
+													'<td>Teams 【队伍】</td>'+
+													'<td><div groupselect data-ability="operation.attrs[opCol]" data-attr="AbilityUnitTargetTeam" data-base="Ability"></div></td>'+
+												'</tr>'+
+												'<tr>'+
+													'<td>Flags 【标记】</td>'+
+													'<td><div groupselect data-ability="operation.attrs[opCol]" data-attr="AbilityUnitTargetFlags" data-base="Ability"></div></td>'+
+												'</tr>'+
+												'<tr>'+
+													'<td>Center 【中点】</td>'+
+													'<td>' +
+														'<select class="form-control" ng-model="operation.attrs[opCol].Center">'+
+														'	<option ng-repeat="opVal in Operation.EventOperationMap.Center.value">{{opVal}}</option>'+
+														'</select>'+
+													'</td>'+
+												'</tr>'+
+												'<tr>'+
+													'<td>Radius 【半径】</td>'+
+													'<td>' +
+														'<input type="text" class="form-control" ng-model="operation.attrs[opCol].Radius" />'+
+													'</td>'+
+												'</tr>'+
+											'</tbody>'+
+										'</table>'+
+									'</div>'+
 
 									// Operation List
 									'<div ng-if="Operation.EventOperationMap[opCol].type === \'operation\'"'+

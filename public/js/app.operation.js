@@ -85,7 +85,7 @@ app.factory("Operation", function() {
 	];
 
 	Operation.EventOperationMap = {
-		Target: {type: "single", value: ["CASTER","TARGET","POINT","ATTACKER","UNIT"]},
+		Target: {type: "unitGroup", value: ["CASTER","TARGET","POINT","ATTACKER","UNIT", "[Group Units]"]},
 		AbilityName: {type: "text"},
 		ModifierName: {type: "text"},
 		EffectName: {type: "text"},

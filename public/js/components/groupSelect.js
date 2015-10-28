@@ -18,7 +18,7 @@ components.directive('groupselect', function($compile) {
 				'<div ng-show="!single" ng-class="{checkbox: !single, radio: single}" ng-repeat="(i, item) in base[attr]">'+
 					'<label ng-show="!single" ng-class="{\'text-primary\': item[2]}">'+
 						'<input type="checkbox" ng-checked="ability[attr][item[0]]" ng-click="ability[attr][item[0]] = !ability[attr][item[0]]">'+
-						'{{item[0]}} 【{{item[1]}}】'+
+						'{{item[0].replace("DOTA_UNIT_TARGET_", "")}} 【{{item[1]}}】'+
 					'</label>'+
 
 					/*'<label ng-show="single" ng-class="{\'text-primary\': item[2]}">'+
