@@ -28,11 +28,12 @@ app.factory("NODE", function() {
 	return window.process ? window.process.mainModule.exports : null;
 });
 
-app.controller('main', function($scope, $route, $q, Ability, Event, Operation, Modifier, KV, globalContent, NODE) {
+app.controller('main', function($scope, $route, $q, Ability, Event, Operation, Modifier, Language, KV, globalContent, NODE) {
 	$scope.Ability = Ability;
 	$scope.Event = Event;
 	$scope.Operation = Operation;
 	$scope.Modifier = Modifier;
+	$scope.Language = Language;
 	$scope.common = common;
 
 	$scope.globalContent = globalContent;

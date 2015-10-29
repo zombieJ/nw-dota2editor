@@ -100,5 +100,16 @@ app.factory("KV", function() {
 		return _str;
 	};
 
+	_KV.prototype.kvToMap = function() {
+		if(!this._map) {
+			var _map = this._map = {};
+			$.each(this.kvList, function(i, kvUnit) {
+				_map[kvUnit.key] = kvUnit.value;
+			});
+		}
+
+		return this._map;
+	};
+
 	return _KV;
 });

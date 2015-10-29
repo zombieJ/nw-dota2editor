@@ -29,6 +29,9 @@ app.factory("Operation", function() {
 			if(_meta && (_meta.type === "text" || _meta.type === "single")) {
 				// 文本
 				_operation.attrs[unit.key] = unit.value;
+			} else if(_meta && _meta.type === "bool") {
+				// 布尔值
+				_operation.attrs[unit.key] = unit.value === "1" || unit.value === "MODIFIER_STATE_VALUE_ENABLED";
 			} else if(_meta && _meta.type === "operation") {
 				// 操作
 				_operation.attrs[unit.key] = $.map(unit.value.kvList, function (_opUnit) {

@@ -5,7 +5,7 @@ var hammerControllers = angular.module('hammerControllers', ['ngRoute', 'app.com
 hammerControllers.controller('indexCtrl', function ($scope) {
 });
 
-hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globalContent, KV, Ability, Event, Operation, Modifier) {
+hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globalContent, KV, Ability, Event, Operation, Modifier, Language) {
 	if(!globalContent.isOpen) return;
 
 	$scope.abilityList = [];
@@ -31,6 +31,7 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 		$scope.ability._modifierList.push(new Modifier());
 	};
 
+	// 读取技能文件
 	NODE.loadFile("scripts/npc/npc_abilities_custom.txt", "utf8").then(function(data) {
 		var _kv = new KV(data, true);
 		$.each(_kv.kvList, function(i, unit) {
@@ -45,7 +46,6 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 		console.log($scope.abilityList);
 		$scope.ability = $scope.abilityList[0];
 
-		//$scope.ability = new Ability();
 		console.log("Scope >>>",$scope);
 	}, function(){
 		$.dialog({
@@ -54,5 +54,15 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 		});
 	});
 
-	//console.log($scope.ability);
+	$scope.setLanguage = function(language) {
+		$scope.language = language;
+	};
+
+	// 读取技能文件
+	NODE.listFiles(Language.folderPath, /^addon_\w+\.txt$/i).then(function(fileList) {
+		$scope.languageList = $.map(fileList, function(fileName) {
+			return new Language(fileName);
+		});
+		$scope.language = $scope.languageList[0];
+	});
 });

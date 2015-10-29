@@ -56,7 +56,7 @@ components.directive('groupselect', function($compile) {
 					if(!scope.single) {
 						_field = $(
 							'<a href="javascript: void(0);" ng-click="editGroup()">' +
-								'<span class="label label-default" ng-repeat="(unitName, unitValue) in ability[tgtattr]" ng-if="unitValue">' +
+								'<span class="label label-default" ng-repeat="(unitName, unitValue) in ability[tgtattr || attr]" ng-if="unitValue">' +
 									'{{::unitName.replace("DOTA_UNIT_TARGET_", "").replace("DOTA_ABILITY_BEHAVIOR_", "")}}' +
 									' 【{{common.array.find(unitName, base[attr], "0")[1]}}】' +
 								'</span>'+

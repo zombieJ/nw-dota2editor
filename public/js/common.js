@@ -88,16 +88,22 @@ common.isEmpty = function(val) {
 };
 
 // ======================= Log ========================
+var _DEBUG_KV = false;
+
 window._LOG = function (type, lvl) {
 	var _args = Array.prototype.slice.call(arguments, 2);
 	_args.unshift("["+type+"]" + common.text.repeat("  ", lvl));
-	console.log.apply(console, _args);
+	if(_DEBUG_KV || type !== "KV") {
+		console.log.apply(console, _args);
+	}
 };
 
 window._WARN = function (type, lvl) {
 	var _args = Array.prototype.slice.call(arguments, 2);
 	_args.unshift("["+type+"]" + common.text.repeat("  ", lvl));
-	console.warn.apply(console, _args);
+	if(_DEBUG_KV || type !== "KV") {
+		console.warn.apply(console, _args);
+	}
 };
 
 // ======================= Text =======================

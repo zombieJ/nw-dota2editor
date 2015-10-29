@@ -108,12 +108,12 @@ app.factory("Modifier", function(Event) {
 							if (_value in _modifier[unit.key]) {
 								_modifier[unit.key][_value] = true;
 							} else {
-								console.warn("Modifier value not match:", unit.key, _value);
+								_WARN("KV", lvl + 1, "Modifier value not match:", unit.key, _value);
 							}
 						});
 						break;
 					default :
-						console.warn("Unmatched Modifier type:", unit.key, _modifier[unit.key]);
+						_WARN("KV", lvl + 1, "Unmatched Modifier type:", unit.key, _modifier[unit.key]);
 				}
 			}
 
@@ -146,7 +146,7 @@ app.factory("Modifier", function(Event) {
 
 			// 不匹配
 			else {
-				console.warn("Unmatched Modifier key:", unit.key);
+				_WARN("KV", lvl + 1, "Unmatched Modifier key:", unit.key);
 			}
 		});
 

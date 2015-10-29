@@ -3,7 +3,7 @@
 // ======================================================
 // =                        技能                        =
 // ======================================================
-app.factory("Ability", function(Event, Modifier) {
+app.factory("Ability", function(Event, Modifier, Language) {
 	function fillAttr(ability, attr, defaultValue) {
 		if(defaultValue === undefined) {
 			ability[attr] = {};
@@ -109,7 +109,24 @@ app.factory("Ability", function(Event, Modifier) {
 		// ========================================
 		_my._abilitySpecialList = [];
 
+		// ========================================
+		// =                 语言                 =
+		// ========================================
+		_my._languages = {};
+
 		return this;
+	};
+
+	// ================================================
+	// =                     语言                     =
+	// ================================================
+	Ability.prototype.getLang = function(language) {
+		var _lang = this._languages[language.name];
+		if(!_lang) {
+			_lang = language.getAbilityLang(this);
+			this._languages[language.name] = _lang;
+		}
+		return _lang;
 	};
 
 	// ================================================
@@ -138,12 +155,12 @@ app.factory("Ability", function(Event, Modifier) {
 							if (_value in _ability[unit.key]) {
 								_ability[unit.key][_value] = true;
 							} else {
-								console.warn("Ability value not match:", unit.key, _value);
+								_WARN("KV", lvl + 1, "Ability value not match:", unit.key, _value);
 							}
 						});
 						break;
 					default :
-						console.warn("Unmatched Ability type:", unit.key, _ability[unit.key]);
+						_WARN("KV", lvl + 1, "Unmatched Ability type:", unit.key, _ability[unit.key]);
 				}
 			}
 
@@ -179,7 +196,7 @@ app.factory("Ability", function(Event, Modifier) {
 
 			// 不匹配
 			else {
-				console.warn("Unmatched Ability key:", unit.key);
+				_WARN("KV", lvl + 1, "Unmatched Ability key:", unit.key, unit.value);
 			}
 		});
 		return _ability;

@@ -55,3 +55,20 @@ exports.loadFile = function(path, encoding) {
 
 	return _deferred.promise;
 };
+
+exports.listFiles = function(path, regex) {
+	regex = regex || /.*/;
+
+	var _deferred = $q.defer();
+	path = PATH.normalize(content.project + "/" + path);
+	FS.readdir(path, function (err, data) {
+		if(err) {
+			_deferred.reject(err);
+		} else {
+			_deferred.resolve(data.filter(function(fileName) {
+				return regex.test(fileName);
+			}));
+		}
+	});
+	return _deferred.promise;
+}
