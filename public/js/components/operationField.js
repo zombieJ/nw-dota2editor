@@ -28,7 +28,7 @@ components.directive('operationfield', function($compile, Operation) {
 						case "single":
 							_field = $(
 								'<select class="form-control" ng-model="operation.attrs[opcol]">' +
-								'	<option ng-repeat="opVal in Operation.EventOperationMap[opcol].value">{{opVal}}</option>' +
+								'	<option ng-repeat="opVal in Operation.EventOperationMap[opcol].value track by $index">{{::opVal}}</option>' +
 								'</select>'
 							);
 							break;
@@ -53,27 +53,27 @@ components.directive('operationfield', function($compile, Operation) {
 							_field = $(
 								'<div>' +
 								'<select class="form-control" ng-model="operation.attrs[opcol].target">' +
-								'	<option ng-repeat="opVal in Operation.EventOperationMap[opcol].value">{{opVal}}</option>' +
+								'	<option ng-repeat="opVal in Operation.EventOperationMap[opcol].value track by $index">{{::opVal}}</option>' +
 								'</select>' +
 								'<table class="table" ng-show="operation.attrs[opcol].target === \'[Group Units]\'">' +
 								'<tbody>' +
 								'<tr>' +
 								'<td>Types 【类型】</td>' +
-								'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetType" data-base="Ability"></div></td>' +
+								'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetType" data-tgtattr="Types" data-base="Ability"></div></td>' +
 								'</tr>' +
 								'<tr>' +
 								'<td>Teams 【队伍】</td>' +
-								'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetTeam" data-base="Ability"></div></td>' +
+								'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetTeam" data-tgtattr="Teams" data-base="Ability" data-single="true"></div></td>' +
 								'</tr>' +
 								'<tr>' +
 								'<td>Flags 【标记】</td>' +
-								'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetFlags" data-base="Ability"></div></td>' +
+								'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetFlags" data-tgtattr="Flags" data-base="Ability"></div></td>' +
 								'</tr>' +
 								'<tr>' +
 								'<td>Center 【中点】</td>' +
 								'<td>' +
 								'<select class="form-control" ng-model="operation.attrs[opcol].Center">' +
-								'	<option ng-repeat="opVal in Operation.EventOperationMap.Center.value">{{opVal}}</option>' +
+								'	<option ng-repeat="opVal in Operation.EventOperationMap.Center.value track by $index">{{::opVal}}</option>' +
 								'</select>' +
 								'</td>' +
 								'</tr>' +
@@ -91,7 +91,7 @@ components.directive('operationfield', function($compile, Operation) {
 						case "operation":
 							_field = $(
 								'<div ng-init="validateColOperation(operation, opcol)">' +
-								'<div eventoperation data-container="operation.attrs" data-path="{{opcol}}"></div>' +
+								'<div eventoperation data-container="operation.attrs" data-path="{{::opcol}}"></div>' +
 								'</div>'
 							);
 							break;

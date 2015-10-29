@@ -24,61 +24,55 @@ app.factory("Operation", function() {
 
 		// 属性
 		$.each(kvUnit.value.kvList, function(i, unit) {
-			switch(typeof unit.value) {
-				case "string":
-					_operation.attrs[unit.key] = unit.value;
-					break;
-				case "object":
-					var _meta = Operation.EventOperationMap[unit.key];
-					if(_meta && _meta.type === "operation") {
-						// 操作
-						_operation.attrs[unit.key] = $.map(unit.value.kvList, function (_opUnit) {
-							return Operation.parse(_opUnit, lvl + 1);
-						});
-					} else if(_meta && _meta.type === "blob") {
-						// Blob块
-						_operation.attrs[unit.key] = unit.value.kvToString();
-					} else if(_meta && _meta.type === "unitGroup") {
-						// 单位选择组
-						_operation.attrs[unit.key] = {};
-						if(typeof unit.value === "string") {
-							// 如果是单个目标
-							_operation.attrs[unit.key].target = unit.value;
+			var _meta = Operation.EventOperationMap[unit.key];
+
+			if(_meta && (_meta.type === "text" || _meta.type === "single")) {
+				// 文本
+				_operation.attrs[unit.key] = unit.value;
+			} else if(_meta && _meta.type === "operation") {
+				// 操作
+				_operation.attrs[unit.key] = $.map(unit.value.kvList, function (_opUnit) {
+					return Operation.parse(_opUnit, lvl + 1);
+				});
+			} else if(_meta && _meta.type === "blob") {
+				// Blob块
+				_operation.attrs[unit.key] = unit.value.kvToString();
+			} else if(_meta && _meta.type === "unitGroup") {
+				// 单位选择组
+				_operation.attrs[unit.key] = {};
+				if(typeof unit.value === "string") {
+					// 如果是单个目标
+					_operation.attrs[unit.key].target = unit.value;
+				} else {
+					// 如果是单位组
+					_operation.attrs[unit.key].target = "[Group Units]";
+					$.each(unit.value.kvList, function(i, _tgtUnit) {
+						// 遍历属性赋值
+						var _tmplUnit = common.array.find(_tgtUnit.key, Operation.UnitGroupColumns, "0");
+
+						if(_tmplUnit) {
+							switch (_tmplUnit[3]) {
+								case "text":
+								case "single":
+									_operation.attrs[unit.key][_tgtUnit.key] = _tgtUnit.value;
+									break;
+								case "group":
+									_operation.attrs[unit.key][_tgtUnit.key] = {};
+									$.each(_tgtUnit.value.split("|"), function (i, _value) {
+										_value = _value.trim();
+										_operation.attrs[unit.key][_tgtUnit.key][_value] = true;
+									});
+									break;
+								default:
+									_WARN("KV", lvl + 2, "Operation Unit Group Type not match:", _tmplUnit[3], _tgtUnit.key, _tgtUnit.value);
+							}
 						} else {
-							// 如果是单位组
-							_operation.attrs[unit.key].target = "[Group Units]";
-							$.each(unit.value.kvList, function(i, _tgtUnit) {
-								// 遍历属性赋值
-								var _tmplUnit = common.array.find(_tgtUnit.key, Operation.UnitGroupColumns, "0");
-
-								if(_tmplUnit) {
-									switch (_tmplUnit[3]) {
-										case "text":
-										case "single":
-											_operation.attrs[unit.key][_tgtUnit.key] = _tgtUnit.value;
-											break;
-										case "group":
-											_operation.attrs[unit.key][_tgtUnit.key] = {};
-											$.each(_tgtUnit.value.split("|"), function (i, _value) {
-												_value = _value.trim();
-												_operation.attrs[unit.key][_tgtUnit.key][_value] = true;
-											});
-											break;
-										default:
-											_WARN("KV", lvl + 2, "Operation Unit Group Type not match:", _tmplUnit[3], _tgtUnit.key, _tgtUnit.value);
-									}
-								} else {
-									_WARN("KV", lvl + 2, "Operation Unit Group not match:", _tgtUnit.key, _tgtUnit.value);
-								}
-							});
+							_WARN("KV", lvl + 2, "Operation Unit Group not match:", _tgtUnit.key, _tgtUnit.value);
 						}
-					} else {
-						_WARN("KV", lvl + 2, "Operation Object not match:", unit.key, unit.value);
-					}
-
-					break;
-				default :
-					_WARN("KV", lvl + 2, "Unmatched Operation type:", unit.key, unit.value);
+					});
+				}
+			} else {
+				_WARN("KV", lvl + 2, "Operation Object not match:", unit.key, unit.value);
 			}
 		});
 
@@ -119,7 +113,7 @@ app.factory("Operation", function() {
 	];
 
 	Operation.EventOperationMap = {
-		Target: {type: "unitGroup", value: ["CASTER","TARGET","POINT","ATTACKER","UNIT", "[Group Units]"]},
+		Target: {type: "unitGroup", value: ["","CASTER","TARGET","POINT","ATTACKER","UNIT", "[Group Units]"]},
 		AbilityName: {type: "text"},
 		ModifierName: {type: "text"},
 		EffectName: {type: "text"},

@@ -36,7 +36,7 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 		$.each(_kv.kvList, function(i, unit) {
 			if(typeof  unit.value !== "string") {
 				var _ability = Ability.parse(unit, 1);
-				_LOG("Ability",0 ,"实体：",_ability);
+				_LOG("Ability",0 ,"实体：",_ability._name ,_ability);
 
 				$scope.abilityList.push(_ability);
 			}

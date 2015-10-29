@@ -21,9 +21,9 @@ components.directive('attrfield', function($compile) {
 					} else if(_type === "blob") {
 						_field = $('<textarea class="form-control" rows="5" ng-model="srcunit[attrunit.attr]"></textarea>');
 					} else if(_type === "object") {
-						_field = $('<div groupselect data-ability="srcunit" data-attr="{{attrunit.attr}}" data-base="srctmpl"></div>');
+						_field = $('<div groupselect data-ability="srcunit" data-attr="{{::attrunit.attr}}" data-base="srctmpl"></div>');
 					} else if(_type === "string" && scope.srctmpl[scope.attrunit.attr]) {
-						_field = $('<div groupselect data-ability="srcunit" data-attr="{{attrunit.attr}}" data-base="srctmpl" data-single="true"></div>');
+						_field = $('<div groupselect data-ability="srcunit" data-attr="{{::attrunit.attr}}" data-base="srctmpl" data-single="true"></div>');
 					} else if(_type === "boolean") {
 						_field = $(
 							'<input type="checkbox" ng-checked="[attrunit.attr]" '+

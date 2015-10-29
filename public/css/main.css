@@ -41,6 +41,22 @@
 	height: 30px;
 }
 
+.table.table-tiny .label {
+	margin-right: 5px;
+}
+
+label.checkbox {
+	display: inline-block;
+}
+label.checkbox input[type="checkbox"] {
+	margin: 0 5px 0 0;
+	position: relative;
+}
+
+.table.table-tiny {
+	font-size: 12px;
+}
+
 .table.table-tiny [groupselect] .radio,
 .table.table-tiny [groupselect] .checkbox {
 	margin: 0 0 0 10px;
@@ -71,10 +87,11 @@
 	margin: 5px 0 0 15px;
 }
 
-.table.table-tiny .group-operation .form-control {
+.table.table-tiny .form-control {
 	font-size: 12px;
 	padding: 0px 3px;
-	height: 26px;
+	height: 28px;
+	box-shadow: none;
 }
 
 .table.table-tiny .group-operation textarea.form-control,

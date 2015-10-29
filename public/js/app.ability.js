@@ -47,7 +47,7 @@ app.factory("Ability", function(Event, Modifier) {
 		fillAttr(_my, "AbilityUnitTargetType")("目标类型");
 
 		// 目标队伍
-		fillAttr(_my, "AbilityUnitTargetTeam")("目标队伍");
+		fillAttr(_my, "AbilityUnitTargetTeam", "DOTA_UNIT_TARGET_TEAM_NONE")("目标队伍");
 
 		// 目标标记
 		fillAttr(_my, "AbilityUnitTargetFlags")("目标标记");
@@ -208,7 +208,7 @@ app.factory("Ability", function(Event, Modifier) {
 		["DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT","不恢复移动"],
 		["DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES","定身无法释放"],
 		["DOTA_ABILITY_BEHAVIOR_UNRESTRICTED","无视限制"],
-		["DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE","强制有效（限自动施法）"],
+		["DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE","总有效-自动施法"],
 		["DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL","施法打断有效"],
 		["DOTA_ABILITY_BEHAVIOR_DONT_CANCEL_MOVEMENT","信使？"],
 		["DOTA_ABILITY_BEHAVIOR_DONT_ALERT_TARGET","不惊醒目标"],
