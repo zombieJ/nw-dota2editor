@@ -27,6 +27,7 @@ app.factory("KV", function() {
 			var _commentPos = _line.indexOf("//");
 			_content = _commentPos != -1 ? _line.slice(0, _commentPos) : _line;
 			_comment = _commentPos != -1 ? _line.slice(_commentPos + 2) : "";
+			_comment = _comment.replace(/^ /, "");
 
 			_content = _content.trim();
 

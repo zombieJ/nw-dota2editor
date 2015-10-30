@@ -1,6 +1,10 @@
 ﻿'use strict';
 
 /* App Module */
+var APP_APP_NAME = "Dota2 Editor";
+var APP_APP_AUTHOR = "zombieJ";
+var APP_APP_GITHUB = "https://github.com/zombieJ/nw-dota2editor";
+
 var app = angular.module('app', ['ngRoute', 'hammerControllers', 'app.components']);
 
 app.config(function($routeProvider) {

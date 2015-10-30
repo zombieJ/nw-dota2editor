@@ -37,6 +37,9 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		// 备注
 		fillAttr(_my, "_comment", "")("备注", "Comment", "blob");
 
+		// 基类
+		fillAttr(_my, "BaseClass", "ability_datadriven")("基类");
+
 		// 图标
 		fillAttr(_my, "AbilityTextureName", "")("图标");
 
@@ -187,10 +190,6 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 				});
 			}
 
-			// 匹配 BaseClass
-			else if(unit.key === "BaseClass") {
-				// 不作为
-			}
 			// 匹配 precache
 			else if(unit.key === "precache") {
 				// 不作为
@@ -209,12 +208,66 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 	// ================================================
 	Ability.saveAll = function(list) {
 		var _deferred = $q.defer();
+		var _data = "";
+
+		function write() {
+			var text = Array.prototype.join.call(arguments, "");
+			_data += text + "\n";
+		}
+
+		function writeComment(text, prefix) {
+			text = (text || "").trim();
+			if(text) {
+				$.each(text.split("\n"), function(i, line) {
+					write((prefix ? prefix : "")+ "// " + line);
+				});
+			}
+		}
 
 		if(!list) {
 			_deferred.resolve();
 		} else {
-			Ability.folderPath
-			NODE.saveFile(Ability.folderPath + ".txt", "utf8", "FUCK ME!").then(function() {
+			// 编辑文件
+			writeComment(APP_APP_NAME);
+			writeComment("Get latest version: ", APP_APP_GITHUB);
+			write('');
+			write('"DOTAAbilities"');
+			write('{');
+			write('	"Version"		"1"');
+
+
+			$.each(list, function(i, ability) {
+				writeComment(ability._comment, "	");
+
+				// 技能头
+				write('	"', ability._name, '"');
+				write('	{');
+
+				// 技能常规属性
+				$.each(ability._requireList, function(i, requestUnit) {
+					if(/^_/.test(requestUnit.attr)) return;
+
+					var _content = ability[requestUnit.attr];
+					if(typeof _content === "object") {
+						_content = $.map(_content, function(value, key) {
+							if(value) return key;
+						}).join(" | ");
+					}
+
+					if(_content && _content !== "-") {
+						write('		"', requestUnit.attr, '"					"', _content, '"');
+					}
+				});
+
+				write('	}');
+
+				return false;
+			});
+
+			write('}');
+
+			// 写文件
+			NODE.saveFile(Ability.folderPath + ".txt", "utf8", _data).then(function() {
 				_deferred.resolve();
 			}, function(err) {
 				_deferred.reject(err);
