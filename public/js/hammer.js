@@ -64,5 +64,7 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 			return new Language(fileName);
 		});
 		$scope.language = $scope.languageList[0];
+	}, function(){
+		$scope.languageList = [];
 	});
 });

@@ -27,8 +27,8 @@ components.directive('eventoperation', function($compile) {
 			'<div ng-repeat="(operation_index, operation) in container[path] track by $index" class="group-operation">'+
 				'<div class="group-operationAttr">'+
 					'<label>' +
-						'Operation {{::operation_index + 1}}' +
 						'<a href="javascript:void(0)" ng-click="common.array.remove(operation, container[path])">[X]</a>'+
+						'Operation {{::operation_index + 1}}' +
 					'</label>'+
 					'<select class="form-control" ng-model="operation.name">'+
 						'<option ng-repeat="_operation in Operation.EventOperation track by $index" value="{{::_operation[0]}}">{{::_operation[0]}} 【{{::_operation[1]}}】</option>'+

@@ -98,3 +98,71 @@ label.checkbox input[type="checkbox"] {
 .table.table-tiny textarea.form-control {
 	height: auto;
 }
+
+.tab-content .tab-pane {
+	position: relative;
+}
+
+.fastPin {
+	position: fixed;
+	z-index: 10;
+	width: 20px;
+	height: 200px;
+	background: rgba(0,0,0,0.8);
+	margin: 0 0 0 -20px;
+}
+.fastPin > .glyphicon {
+	position: absolute;
+	left: 3px;
+	top: 3px;
+	color: #FFFFFF;
+}
+
+.fastPin > .subPanel {
+	display: none;
+	position: absolute;
+	left: 20px;
+	top: 0;
+	background: rgba(0,0,0,0.8);
+	padding: 10px 15px;
+	border-radius: 0 5px 5px 0;
+	color: #FFFFFF;
+}
+
+.fastPin:hover > .subPanel {
+	display: block;
+}
+
+.fastPin > .subPanel h3 {
+	margin: 0 0 10px 0;
+	padding: 0 0 10px 0;
+	font-size: 20px;
+	font-weight: bolder;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+.fastPin > .subPanel ul {
+	margin: 0;
+	padding: 0 0 0 20px;
+	list-style: none;
+	white-space:nowrap;
+}
+
+.fastPin > .subPanel > ul {
+	padding: 0;
+}
+
+.fastPin > .subPanel ul li:before {
+	content: "•";
+	margin-right: 10px;
+	color: #FFFFFF;
+}
+
+.fastPin > .subPanel ul li a.glyphicon {
+	font-size: 10px;
+}
+
+.fastPin > .subPanel a {
+	cursor: pointer;
+	color: #FFFFFF;
+}

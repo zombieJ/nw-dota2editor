@@ -35,6 +35,7 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 	$scope.Modifier = Modifier;
 	$scope.Language = Language;
 	$scope.common = common;
+	$scope.jQuery = $;
 
 	$scope.globalContent = globalContent;
 

@@ -16,6 +16,37 @@
 		<div class="tab-content">
 			<!-- 技能 -->
 			<div data-id="ability" class="tab-pane fade in active">
+				<!-- 快速定位 -->
+				<div class="fastPin">
+					<a class="glyphicon glyphicon-th-list" ng-click="common.ui.scrollTo(0);"></a>
+					<div class="subPanel">
+						<h3>{{ability._name}}</h3>
+						<ul>
+							<li><a ng-click="common.ui.scrollTo(0);">Common 【常规】</a></li>
+							<li>
+								<a ng-click="common.ui.scrollTo('.abilityEventTitle');">Event 【事件】</a>
+								<ul>
+									<li ng-repeat="event in ability._eventList track by $index">
+										<a ng-click="common.ui.scrollTo('.abilityEvent_' + event._name);">{{::event._name}}</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a ng-click="common.ui.scrollTo('.abilityModifierTitle');">Modifier 【修饰器】</a>
+								<ul>
+									<li ng-repeat="modifier in ability._modifierList track by $index">
+										<a ng-click="common.ui.scrollTo('.abilityModifier_' + modifier._name);">{{::modifier._name}}</a>
+										<a ng-click="common.ui.scrollTo('.abilityModifier_' + modifier._name + '__PROP');">[P]</a>
+										<a ng-click="common.ui.scrollTo('.abilityModifier_' + modifier._name + '__STATE');">[S]</a>
+										<a ng-click="common.ui.scrollTo('.abilityModifier_' + modifier._name + '__EVENT');">[E]</a>
+									</li>
+								</ul>
+							</li>
+							<li><a ng-click="common.ui.scrollTo('.abilitySpecialTitle');">Ability Special 【自定义值】</a></li>
+						</ul>
+					</div>
+				</div>
+
 				<table class="table table-condensed table-bordered table-tiny">
 					<tbody>
 						<!-- 属性 -->
@@ -27,7 +58,7 @@
 						</tr>
 
 						<!-- 事件 -->
-						<tr>
+						<tr class="abilityEventTitle">
 							<th colspan="2" class="success">
 								Events 【事件】
 							</th>
@@ -35,7 +66,8 @@
 						<tr>
 							<td colspan="2">
 								<!-- 事件 -->
-								<div ng-repeat="(event_index,event) in ability._eventList track by $index" class="group-event">
+								<div ng-repeat="(event_index,event) in ability._eventList track by $index" class="group-event abilityEvent_{{event._name}}">
+									<!-- 事件类型 -->
 									<label>
 										<a href="javascript:void(0)" ng-click="common.array.remove(event, ability._eventList)">[X]</a>
 										Event {{::event_index + 1}}
@@ -43,6 +75,9 @@
 									<select class="form-control" ng-model="event.name">
 										<option ng-repeat="_event in Event.EventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>
 									</select>
+
+									<!-- 事件备注 -->
+									<textarea class="form-control" ng-model="event._comment" rows="5" placeholder="备注"></textarea>
 
 									<!-- 操作 -->
 									<div eventoperation data-container="event" data-path="_operationList"></div>
@@ -53,7 +88,7 @@
 
 
 						<!-- 修饰器 -->
-						<tr>
+						<tr class="abilityModifierTitle">
 							<th colspan="2" class="success">
 								Modifiers 【修饰器】
 							</th>
@@ -61,14 +96,14 @@
 						<tr>
 							<td colspan="2">
 								<!-- 修饰器 -->
-								<div ng-repeat="(modifier_index,modifier) in ability._modifierList track by $index" class="group-modifier">
+								<div ng-repeat="(modifier_index,modifier) in ability._modifierList track by $index" class="group-modifier abilityModifier_{{modifier._name}}">
 									<label>
 										<a href="javascript:void(0)" ng-click="common.array.remove(modifier, ability._modifierList)">[X]</a>
 										Modifier {{::modifier_index + 1}}
 									</label>
 									<table class="table table-condensed table-bordered">
 										<tbody>
-										<!-- 属性 -->
+										<!-- 常规 -->
 										<tr ng-repeat="unit in modifier._requireList track by $index">
 											<th>{{::unit.title || unit.attr}} 【{{::unit.desc}}】</th>
 											<td>
@@ -77,7 +112,7 @@
 										</tr>
 
 										<!-- 属性 -->
-										<tr>
+										<tr class="abilityModifier_{{modifier._name}}__PROP">
 											<th colspan="2" class="warning">
 												Properties 【属性】
 											</th>
@@ -113,7 +148,7 @@
 										</tr>
 
 										<!-- 状态 -->
-										<tr>
+										<tr class="abilityModifier_{{modifier._name}}__STATE">
 											<th colspan="2" class="warning">
 												States 【状态】
 											</th>
@@ -154,7 +189,7 @@
 										</tr>
 
 										<!-- 事件 -->
-										<tr>
+										<tr class="abilityModifier_{{modifier._name}}__EVENT">
 											<th colspan="2" class="warning">
 												Events 【事件】
 											</th>
@@ -193,7 +228,7 @@
 						</tr>
 
 						<!-- 自定义值 -->
-						<tr>
+						<tr class="abilitySpecialTitle">
 							<th colspan="2" class="success">
 								AbilitySpecial 【自定义值】
 							</th>
@@ -240,7 +275,14 @@
 
 			<!-- 描述 -->
 			<div data-id="description" class="tab-pane fade">
-				<div class="row">
+				<div ng-show="languageList.length === 0">
+					<h3>No Language File find</h3>
+					<h3>【没有找到语言文件】</h3>
+					<p>Please check your language file in {{::Language.folderPath}} folder.</p>
+					<p>【请检查{{::Language.folderPath}}目录下的语言文件】</p>
+				</div>
+
+				<div class="row" ng-show="languageList.length !== 0">
 					<div class="col-md-2">
 						<div class="listCntr">
 							<div ng-repeat="_lang in languageList track by $index" class="listItem"

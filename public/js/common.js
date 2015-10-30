@@ -223,3 +223,56 @@ common.map.toArray = function(map) {
 		return unit;
 	});
 };
+
+// ======================== UI ========================
+common.ui = {};
+
+common.ui.scrollTo = function(element, animate) {
+	var $win = $(window);
+
+	if(common.ui.scrollTo.tid != null) {
+		clearInterval(common.ui.scrollTo.tid);
+		common.ui.scrollTo.tid = null;
+	}
+
+	if(animate === false) {
+		var _top = typeof element == "number" ? element : $(element).offset().top;
+		$win.scrollTop(_top);
+	} else {
+		common.ui.scrollTo.scrolling = true;
+		common.ui.scrollTo.tid = setInterval(function() {
+			var _top;
+			switch (typeof element) {
+				case "number":
+					_top = element;
+					break;
+				default:
+					var _ele =  $(element);
+					if(_ele.length === 0) {
+						clearInterval(common.ui.scrollTo.tid);
+						common.ui.scrollTo.scrolling = false;
+					}
+					_top = _ele.offset().top - 50;
+			}
+
+			var w_top = $win.scrollTop();
+			if(w_top != _top) {
+				$win.scrollTop((w_top + _top) / 2);
+			}
+
+			var w_top_now = $win.scrollTop();
+			if(Math.abs(w_top_now - _top) < 3 ||
+				Math.abs(w_top_now - w_top) < 3) {
+				$win.scrollTop(_top);
+				clearInterval(common.ui.scrollTo.tid);
+				common.ui.scrollTo.tid = null;
+
+				setTimeout(function() {
+					common.ui.scrollTo.scrolling = false;
+				}, 100);
+			}
+		}, 30);
+	}
+};
+common.ui.scrollTo.tid = null;
+common.ui.scrollTo.scrolling = false;

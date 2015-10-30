@@ -121,6 +121,8 @@ app.factory("Ability", function(Event, Modifier, Language) {
 	// =                     语言                     =
 	// ================================================
 	Ability.prototype.getLang = function(language) {
+		if(!language) return null;
+
 		var _lang = this._languages[language.name];
 		if(!_lang) {
 			_lang = language.getAbilityLang(this);
