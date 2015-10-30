@@ -56,6 +56,21 @@ exports.loadFile = function(path, encoding) {
 	return _deferred.promise;
 };
 
+exports.saveFile = function(path, encoding, data) {
+	var _deferred = $q.defer();
+
+	path = PATH.normalize(content.project + "/" + path);
+	FS.writeFile(path, data, encoding || "ucs2", function (err) {
+		if(err) {
+			_deferred.reject(err);
+		} else {
+			_deferred.resolve();
+		}
+	});
+
+	return _deferred.promise;
+};
+
 exports.listFiles = function(path, regex) {
 	regex = regex || /.*/;
 

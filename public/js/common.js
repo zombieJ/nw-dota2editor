@@ -101,9 +101,7 @@ window._LOG = function (type, lvl) {
 window._WARN = function (type, lvl) {
 	var _args = Array.prototype.slice.call(arguments, 2);
 	_args.unshift("["+type+"]" + common.text.repeat("  ", lvl));
-	if(_DEBUG_KV || type !== "KV") {
-		console.warn.apply(console, _args);
-	}
+	console.warn.apply(console, _args);
 };
 
 // ======================= Text =======================

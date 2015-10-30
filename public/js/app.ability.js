@@ -3,7 +3,7 @@
 // ======================================================
 // =                        技能                        =
 // ======================================================
-app.factory("Ability", function(Event, Modifier, Language) {
+app.factory("Ability", function($q, Event, Modifier, NODE) {
 	function fillAttr(ability, attr, defaultValue) {
 		if(defaultValue === undefined) {
 			ability[attr] = {};
@@ -203,6 +203,31 @@ app.factory("Ability", function(Event, Modifier, Language) {
 		});
 		return _ability;
 	};
+
+	// ================================================
+	// =                     保存                     =
+	// ================================================
+	Ability.saveAll = function(list) {
+		var _deferred = $q.defer();
+
+		if(!list) {
+			_deferred.resolve();
+		} else {
+			Ability.folderPath
+			NODE.saveFile(Ability.folderPath + ".txt", "utf8", "FUCK ME!").then(function() {
+				_deferred.resolve();
+			}, function(err) {
+				_deferred.reject(err);
+			});
+		}
+
+		return _deferred.promise;
+	};
+
+	// ================================================
+	// =                     常量                     =
+	// ================================================
+	Ability.folderPath = "scripts/npc/npc_abilities_custom.txt";
 
 	// ================================================
 	// =                     属性                     =

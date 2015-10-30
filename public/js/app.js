@@ -19,6 +19,7 @@ app.factory("globalContent", function() {
 	var _globalContent = {
 		project: localStorage.getItem("project"),
 		isOpen: false,
+		abilityList: null,
 	};
 
 	return _globalContent;
@@ -41,6 +42,7 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 
 	NODE && NODE.init(globalContent, $q);
 
+	// 载入项目
 	$scope.loadProject = function() {
 		var _promise = NODE.loadProject(globalContent.project);
 
@@ -66,4 +68,45 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 			//return false;
 		}
 	});*/
+
+	// 保存项目
+	$scope.saveMSG = "";
+	$scope.saveLock = false;
+	$scope.saveFileList = [
+		{name: "Ability", desc: "技能", selected: true, saveFunc: function() {
+			return Ability.saveAll(globalContent.abilityList);
+		}},
+		{name: "Language", desc: "语言", selected: false, ready: false},
+	];
+	$scope.showSaveMDL = function() {
+		$("#saveMDL").modal();
+
+		$scope.saveMSG = "";
+		$.each($scope.saveFileList, function(i, saveItem) {
+			saveItem.status = 0;
+		});
+	};
+	$scope.saveFiles = function() {
+		$scope.saveLock = true;
+		var _promiseList = [];
+
+		$.each($scope.saveFileList, function(i, saveItem) {
+			if(!saveItem.selected || !saveItem.saveFunc) return;
+
+			saveItem.status = 1;
+			var _promise = saveItem.saveFunc();
+			_promiseList.push(_promise);
+
+			_promise.then(function() {
+				saveItem.status = 2;
+			},function() {
+				saveItem.status = 3;
+			});
+		});
+
+		$q.all(_promiseList).finally(function() {
+			$scope.saveMSG = "Finished! 【完成】";
+			$scope.saveLock = false;
+		});
+	};
 });

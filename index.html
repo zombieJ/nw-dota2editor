@@ -61,6 +61,9 @@
 				<li><a href="#/">Home</a></li>
 			</ul>
 			<ul class="nav navbar-nav pull-right">
+				<li ng-show="globalContent.isOpen">
+					<button type="button" class="btn btn-warning navbar-btn" ng-click="showSaveMDL()">Save 【保存】</button>
+				</li>
 			</ul>
 		</div>
 		<!--/.nav-collapse -->
@@ -1908,5 +1911,35 @@
 }
 </pre>
 </div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="saveMDL" tabindex="-1" data-backdrop="static">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Select Save File 【选择要保存的文件】</h4>
+				</div>
+				<div class="modal-body">
+					<div class="checkbox" ng-repeat="saveItem in saveFileList">
+						<label ng-class="{'text-muted': saveItem.ready === false}">
+							<input type="checkbox" ng-disabled="saveItem.ready === false"
+								   ng-checked="saveItem.selected" ng-click="saveItem.selected = !saveItem.selected" />
+							{{::saveItem.name}} 【{{::saveItem.desc}}】
+							<span ng-if="saveItem.ready === false">（无效）</span>
+							<span class="label label-info" ng-if="saveItem.status === 1">saving 【保存中】</span>
+							<span class="label label-success" ng-if="saveItem.status === 2">success 【成功】</span>
+							<span class="label label-danger" ng-if="saveItem.status === 3">failed 【失败】</span>
+						</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<p class="pull-left">{{saveMSG}}</p>
+
+					<button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="saveLock">Close</button>
+					<button type="button" class="btn btn-primary" ng-click="saveFiles()" ng-disabled="saveLock">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

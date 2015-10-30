@@ -31,32 +31,40 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 		$scope.ability._modifierList.push(new Modifier());
 	};
 
-	// 读取技能文件
-	NODE.loadFile("scripts/npc/npc_abilities_custom.txt", "utf8").then(function(data) {
-		var _kv = new KV(data, true);
-		$.each(_kv.kvList, function(i, unit) {
-			if(typeof  unit.value !== "string") {
-				var _ability = Ability.parse(unit, 1);
-				_LOG("Ability",0 ,"实体：",_ability._name ,_ability);
-
-				$scope.abilityList.push(_ability);
-			}
-		});
-
-		console.log($scope.abilityList);
-		$scope.ability = $scope.abilityList[0];
-
-		console.log("Scope >>>",$scope);
-	}, function(){
-		$.dialog({
-			title: "OPS!",
-			content: "Can't find npc_abilities_custom.txt <br/> 【打开npc_abilities_custom.txt失败】",
-		});
-	});
-
 	$scope.setLanguage = function(language) {
 		$scope.language = language;
 	};
+
+	// ================================================================
+	// =                           文件操作                           =
+	// ================================================================
+	// 读取技能文件
+	if(!globalContent.abilityList) {
+		NODE.loadFile(Ability.folderPath, "utf8").then(function(data) {
+			var _kv = new KV(data, true);
+			$.each(_kv.kvList, function(i, unit) {
+				if(typeof  unit.value !== "string") {
+					var _ability = Ability.parse(unit, 1);
+					_LOG("Ability",0 ,"实体：",_ability._name ,_ability);
+
+					$scope.abilityList.push(_ability);
+				}
+			});
+
+			globalContent.abilityList = $scope.abilityList;
+			$scope.ability = $scope.abilityList[0];
+
+			console.log("Scope >>>",$scope);
+		}, function(){
+			$.dialog({
+				title: "OPS!",
+				content: "Can't find npc_abilities_custom.txt <br/> 【打开npc_abilities_custom.txt失败】",
+			});
+		});
+	} else {
+		$scope.abilityList = globalContent.abilityList;
+		$scope.ability = $scope.abilityList[0];
+	}
 
 	// 读取技能文件
 	NODE.listFiles(Language.folderPath, /^addon_\w+\.txt$/i).then(function(fileList) {
