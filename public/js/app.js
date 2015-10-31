@@ -90,7 +90,7 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 					_writer.write('');
 					ability.doWriter(_writer);
 
-					return false;
+					//return false;
 				});
 				_writer.withEnd();
 

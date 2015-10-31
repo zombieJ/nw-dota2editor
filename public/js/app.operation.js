@@ -155,6 +155,16 @@ app.factory("Operation", function() {
 							writer.write('}');
 						}
 						return;
+					case "operation":
+						writer.write('"$1"', key);
+						writer.write('{');
+						$.each(value, function (i, _subOpeartion) {
+							if(i !== 0) writer.write('');
+
+							_subOpeartion.doWriter(writer);
+						});
+						writer.write('}');
+						return;
 					default :
 						_WARN("SAVE", 0, "Can't match Operation meta:", _meta, key, value);
 						break;
