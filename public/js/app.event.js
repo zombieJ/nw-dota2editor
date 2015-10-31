@@ -34,6 +34,28 @@ app.factory("Event", function(Operation) {
 	};
 
 	// ================================================
+	// =                    格式化                    =
+	// ================================================
+	Event.prototype.doWriter = function(writer) {
+		writer.writeComment(this._comment);
+
+		// 名称
+		writer.write('"$1"', this.name);
+		writer.write('{');
+
+		// 操作
+		if(this._operationList.length) {
+			$.each(this._operationList, function (i, operation) {
+				if(i !== 0) writer.write('');
+
+				operation.doWriter(writer);
+			});
+		}
+
+		writer.write('}');
+	};
+
+	// ================================================
 	// =                     属性                     =
 	// ================================================
 	Event.EventList = [

@@ -77,9 +77,29 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 	$scope.saveMSG = "";
 	$scope.saveLock = false;
 	$scope.saveFileList = [
+		// 保存 【技能】
 		{name: "Ability", desc: "技能", selected: true, saveFunc: function() {
-			return Ability.saveAll(globalContent.abilityList);
+			var _deferred = $q.defer();
+
+			if(!globalContent.abilityList) {
+				_deferred.resolve();
+			} else {
+				var _writer = new KV.Writer();
+				_writer.withHeader("DOTAAbilities");
+				$.each(globalContent.abilityList, function(i, ability) {
+					_writer.write('');
+					ability.doWriter(_writer);
+
+					return false;
+				});
+				_writer.withEnd();
+
+				_writer.save(Ability.folderPath + ".txt", "utf8",_deferred);
+			}
+			return _deferred.promise;
 		}},
+
+		// 保存 【语言】
 		{name: "Language", desc: "语言", selected: false, ready: false},
 	];
 	$scope.showSaveMDL = function() {

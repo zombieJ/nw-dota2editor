@@ -204,124 +204,48 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 	};
 
 	// ================================================
-	// =                     保存                     =
+	// =                    格式化                    =
 	// ================================================
-	Ability.saveAll = function(list) {
-		var _deferred = $q.defer();
-		var _data = "";
+	Ability.prototype.doWriter = function(writer) {
+		writer.writeComment(this._comment);
 
-		var _writeTabIndex = 0;
-		function write(template) {
-			var text = template;
-			for(var i = 1 ; i < arguments.length ; i += 1) {
-				text = text.replace("$" + i, arguments[i]);
-			}
+		// 名称
+		writer.write('"$1"', this._name);
+		writer.write('{');
 
-			if(text.trim() === "}") _writeTabIndex -= 1;
+		// 常规属性
+		writer.withKVList(this, this._requireList);
 
-			_data += (text ? common.text.repeat("	", _writeTabIndex) : "") + text + "\n";
+		// 事件
+		if(this._eventList.length) {
+			writer.write('');
 
-			if(text.trim() === "{") _writeTabIndex += 1;
-		}
+			$.each(this._eventList, function (i, event) {
+				if(i !== 0) writer.write('');
 
-		function writeComment(text) {
-			text = (text || "").trim();
-			if(text) {
-				$.each(text.split("\n"), function(i, line) {
-					write("// " + line);
-				});
-			}
-		}
-
-		function writeKVList(entity, list) {
-			$.each(list, function(i, requestUnit) {
-				if(/^_/.test(requestUnit.attr)) return;
-
-				var _content = entity[requestUnit.attr];
-				switch(typeof _content) {
-					case "boolean":
-						_content = _content ? "1" : "0";
-						break;
-					case "object":
-						_content = $.map(_content, function(value, key) {
-							if(value) return key;
-						}).join(" | ");
-						break;
-				}
-
-				if(_content && _content !== "-") {
-					write('"$1"					"$2"', requestUnit.attr, _content);
-				}
-			});
-		}
-
-		if(!list) {
-			_deferred.resolve();
-		} else {
-			// 编辑文件
-			writeComment(APP_APP_NAME);
-			writeComment("Get latest version: " + APP_APP_GITHUB);
-			write('');
-			write('"DOTAAbilities"');
-			write('{');
-			write('"Version"		"1"');
-
-
-			$.each(list, function(i, ability) {
-				writeComment(ability._comment);
-
-				// 技能头
-				write('"$1"', ability._name);
-				write('{');
-
-				// 技能常规属性
-				writeKVList(ability, ability._requireList);
-
-				// 技能修饰器
-				if(ability._modifierList.length) {
-					write('');
-					write('"Modifiers"');
-					write('{');
-
-					$.each(ability._modifierList, function(i, modifier) {
-						writeComment(modifier._comment);
-						write('"$1"', modifier._name);
-						write("{");
-
-						// 修饰器常规属性
-						writeKVList(modifier, modifier._requireList);
-
-						// 修饰器属性
-						if(modifier._propertyList.length) {
-							write("{");
-
-							
-
-							write("}");
-						}
-
-						write("}");
-					});
-
-					write('}');
-				}
-
-				write('}');
-
-				return false;
+				event.doWriter(writer);
 			});
 
-			write('}');
-
-			// 写文件
-			NODE.saveFile(Ability.folderPath + ".txt", "utf8", _data).then(function() {
-				_deferred.resolve();
-			}, function(err) {
-				_deferred.reject(err);
-			});
+			writer.write('}');
 		}
 
-		return _deferred.promise;
+		// 修饰器
+		if(this._modifierList.length) {
+			writer.write('');
+			writer.write('"Modifiers"');
+			writer.write('{');
+
+			$.each(this._modifierList, function (i, modifier) {
+				if(i !== 0) writer.write('');
+
+				modifier.doWriter(writer);
+			});
+
+			writer.write('}');
+		}
+
+		writer.write('}');
+		return writer;
 	};
 
 	// ================================================

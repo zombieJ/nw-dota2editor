@@ -160,6 +160,43 @@ app.factory("Modifier", function(Event) {
 		return _modifier;
 	};
 
+	// ================================================
+	// =                    格式化                    =
+	// ================================================
+	Modifier.prototype.doWriter = function(writer) {
+		writer.writeComment(this._comment);
+
+		// 名称
+		writer.write('"$1"', this._name);
+		writer.write('{');
+
+		// 常规属性
+		writer.withKVList(this, this._requireList);
+
+		// 修饰器属性
+		if(this._propertyList.length) {
+			writer.write('"Properties"');
+			writer.write("{");
+			$.each(this._propertyList, function(i, _propUnit) {
+				writer.write('"$1"		"$2"', _propUnit[0], _propUnit[1]);
+			});
+			writer.write("}");
+		}
+
+		// 修饰器状态
+		if(this._stateList.length) {
+			writer.write('"States"');
+			writer.write("{");
+			$.each(this._stateList, function(i, _stateUnit) {
+				writer.write('"$1"		"$2"', _stateUnit[0], _stateUnit[1]);
+			});
+			writer.write("}");
+		}
+
+		writer.write('}');
+		return writer;
+	};
+
 	Modifier.Aura_Teams = [
 		["DOTA_UNIT_TARGET_TEAM_BOTH","双方队伍", true],
 		["DOTA_UNIT_TARGET_TEAM_ENEMY","敌方队伍", true],

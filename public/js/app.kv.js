@@ -3,7 +3,7 @@
 // ======================================================
 // =                        键值                        =
 // ======================================================
-app.factory("KV", function() {
+app.factory("KV", function(NODE, $q) {
 	var _KV = function(list, keepValObjContent) {
 		var _lines = typeof list === "string" ? list.split(/\n/) : list;
 
@@ -110,6 +110,87 @@ app.factory("KV", function() {
 		}
 
 		return this._map;
+	};
+
+	// ================================================
+	// =                    格式化                    =
+	// ================================================
+	_KV.Writer = function() {
+		this._writeTabIndex = 0;
+		this._data = "";
+
+		return this;
+	};
+
+	_KV.Writer.prototype.withHeader = function(title) {
+		this.writeComment(APP_APP_NAME);
+		this.writeComment("Get latest version: " + APP_APP_GITHUB);
+		this.write('');
+		this.write('"$1"', title);
+		this.write('{');
+		this.write('"Version"		"1"');
+	};
+
+	_KV.Writer.prototype.withEnd = function() {
+		this.write('}');
+	};
+
+	_KV.Writer.prototype.withKVList = function(entity, list) {
+		var _my = this;
+
+		$.each(list, function(i, requestUnit) {
+			if(/^_/.test(requestUnit.attr)) return;
+
+			var _content = entity[requestUnit.attr];
+			switch(typeof _content) {
+				case "boolean":
+					_content = _content ? "1" : "0";
+					break;
+				case "object":
+					_content = $.map(_content, function(value, key) {
+						if(value) return key;
+					}).join(" | ");
+					break;
+			}
+
+			if(_content && _content !== "-") {
+				_my.write('"$1"					"$2"', requestUnit.attr, _content);
+			}
+		});
+	}
+
+	_KV.Writer.prototype.write = function(template) {
+		var text = template;
+		for(var i = 1 ; i < arguments.length ; i += 1) {
+			text = text.replace("$" + i, arguments[i]);
+		}
+
+		if(text.trim() === "}") this._writeTabIndex -= 1;
+
+		this._data += (text ? common.text.repeat("	", this._writeTabIndex) : "") + text + "\n";
+
+		if(text.trim() === "{") this._writeTabIndex += 1;
+	}
+
+	_KV.Writer.prototype.writeComment = function(text) {
+		var _my = this;
+		text = (text || "").trim();
+
+		if(text) {
+			$.each(text.split("\n"), function(i, line) {
+				_my.write("// " + line);
+			});
+		}
+	};
+
+	_KV.Writer.prototype.save = function(path, encoding, _deferred) {
+		_deferred = _deferred || $q.defer();
+		NODE.saveFile(path, encoding, this._data).then(function() {
+			_deferred.resolve();
+		}, function(err) {
+			_deferred.reject(err);
+		});
+		return _deferred;
 	};
 
 	return _KV;

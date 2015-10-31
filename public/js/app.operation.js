@@ -82,6 +82,32 @@ app.factory("Operation", function() {
 		return _operation;
 	};
 
+	// ================================================
+	// =                    格式化                    =
+	// ================================================
+	Operation.prototype.doWriter = function(writer) {
+		// 名称
+		writer.write('"$1"', this.name);
+		writer.write('{');
+
+		// 操作属性
+		$.each(this.attrs, function(key, value) {
+			switch (typeof value) {
+				case "string":
+					break;
+				case "boolean":
+					value = value ? "1" : "0";
+					break;
+			}
+
+			if(value && value !== "-") {
+				writer.write('"$1"			"$2"', key, value);
+			}
+		});
+
+		writer.write('}');
+	};
+
 	Operation.EventOperation = [
 		["ApplyModifier", "添加修饰器", true, ["Target", "ModifierName"]],
 		["AttachEffect", "添加特效", true, ["EffectName","EffectAttachType","Target","ControlPoints", "ControlPointEntities"]],
