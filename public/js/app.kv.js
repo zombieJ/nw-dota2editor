@@ -147,9 +147,7 @@ app.factory("KV", function(NODE, $q) {
 					_content = _content ? "1" : "0";
 					break;
 				case "object":
-					_content = $.map(_content, function(value, key) {
-						if(value) return key;
-					}).join(" | ");
+					_content = common.map.join(_content, " | ");
 					break;
 			}
 
@@ -157,7 +155,7 @@ app.factory("KV", function(NODE, $q) {
 				_my.write('"$1"					"$2"', requestUnit.attr, _content);
 			}
 		});
-	}
+	};
 
 	_KV.Writer.prototype.write = function(template) {
 		var text = template;

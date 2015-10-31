@@ -49,6 +49,11 @@ components.directive('operationfield', function($compile, Operation) {
 								'   ng-click="operation.attrs[opcol] = !operation.attrs[opcol]" />'
 							);
 							break;
+						case "group":
+							_field = $(
+								'<div groupselect data-ability="operation.attrs" data-attr="{{opcol}}" data-base="Operation.EventOperationMap"></div>'
+							);
+							break;
 						case "unitGroup":
 							_field = $(
 								'<div>' +

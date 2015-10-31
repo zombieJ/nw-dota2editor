@@ -98,6 +98,31 @@ app.factory("Operation", function() {
 				case "boolean":
 					value = value ? "1" : "0";
 					break;
+				case "object":
+					var _meta = Operation.EventOperationMap[key];
+					if(_meta && _meta.type === "unitGroup") {
+						// 单位组
+						if(value.target !== "[Group Units]") {
+							// 单个单位
+							value = value.target;
+						} else {
+							writer.write('"$1"', key);
+							writer.write('{');
+							// 一组单位：覆盖写法
+							$.each(value, function(key, value) {
+								if(key === "target") return;
+
+								writer.write('"$1"		"$2"', key, typeof value === "object" ? common.map.join(value, " | ") : value);
+							});
+							writer.write('}');
+							return;
+						}
+					} else if(_meta && _meta.type === "group") {
+						value = common.map.join(value, " | ");
+					} else {
+						_WARN("SAVE", 0, "Can't match Operation meta:", _meta, key, value);
+					}
+					break;
 			}
 
 			if(value && value !== "-") {
@@ -130,16 +155,11 @@ app.factory("Operation", function() {
 		["DestroyTrees","摧毁树木", false, ["Target","Radius"]],
 		["DelayedAction", "延迟动作", false, ["Delay", "Action"]],
 		["Lifesteal", "生命偷取", false, ["Target", "LifestealPercent"]],
-		/*
-		["CleaveAttack
-		CleavePercent, CleaveRadius
-		["CreateThinker
-		Target, ModifierName
-
-		["LinearProjectile
-		Target, EffectName, MoveSpeed, StartRadius, EndRadius, FixedDistance, StartPosition, TargetTeams, TargetTypes, TargetFlags, HasFrontalCone, ProvidesVision, VisionRadius
-		*/
-	];
+		["CleaveAttack", "分裂攻击", false, ["CleavePercent", "CleaveRadius"]],
+		["CreateThinker", "创建计时器", false, ["Target", "ModifierName"]],
+		["LinearProjectile", "线性投射物", false, ["Target","EffectName","MoveSpeed","StartRadius","EndRadius","FixedDistance","StartPosition",
+													"TargetTeams","TargetTypes","TargetFlags","HasFrontalCone","ProvidesVision","VisionRadius"]],
+		];
 
 	Operation.EventOperationMap = {
 		Target: {type: "unitGroup", value: ["","CASTER","TARGET","POINT","ATTACKER","UNIT", "[Group Units]"]},
@@ -184,6 +204,49 @@ app.factory("Operation", function() {
 		OnFailure: {type: "operation"},
 		Action: {type: "operation"},
 		OnSpawn: {type: "operation"},
+		CleavePercent: {type: "text"},
+		CleaveRadius: {type: "text"},
+		StartRadius: {type: "text"},
+		EndRadius: {type: "text"},
+		FixedDistance: {type: "text"},
+		StartPosition: {type: "text"},// TODO: hitloc? attach_attack1? attach_origin?
+		TargetTeams: {type: "single", value: ["DOTA_UNIT_TARGET_TEAM_BOTH","DOTA_UNIT_TARGET_TEAM_ENEMY","DOTA_UNIT_TARGET_TEAM_FRIENDLY","DOTA_UNIT_TARGET_TEAM_CUSTOM","DOTA_UNIT_TARGET_TEAM_NONE"]},
+		TargetTypes: {type: "group", value: [
+			["DOTA_UNIT_TARGET_HERO","英雄", true],
+			["DOTA_UNIT_TARGET_BASIC","基本", true],
+			["DOTA_UNIT_TARGET_ALL","所有"],
+			["DOTA_UNIT_TARGET_BUILDING","建筑"],
+			["DOTA_UNIT_TARGET_COURIER","信使"],
+			["DOTA_UNIT_TARGET_CREEP","野怪"],
+			["DOTA_UNIT_TARGET_CUSTOM","普通"],
+			["DOTA_UNIT_TARGET_MECHANICAL","机械"],
+			["DOTA_UNIT_TARGET_NONE","无"],
+			["DOTA_UNIT_TARGET_OTHER","其他"],
+			["DOTA_UNIT_TARGET_TREE","树木"],
+		]},
+		TargetFlags: {type: "group", value: [
+			["DOTA_UNIT_TARGET_FLAG_CHECK_DISABLE_HELP","检测玩家'禁用帮助'选项"],
+			["DOTA_UNIT_TARGET_FLAG_DEAD","已死亡"],
+			["DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE","*暂无说明*"],
+			["DOTA_UNIT_TARGET_FLAG_INVULNERABLE","无敌"],
+			["DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES","魔法免疫的敌人"],
+			["DOTA_UNIT_TARGET_FLAG_MANA_ONLY","*暂无说明*"],
+			["DOTA_UNIT_TARGET_FLAG_MELEE_ONLY","*暂无说明*"],
+			["DOTA_UNIT_TARGET_FLAG_NO_INVIS","不是隐形的"],
+			["DOTA_UNIT_TARGET_FLAG_NONE","无"],
+			["DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS","不是远古"],
+			["DOTA_UNIT_TARGET_FLAG_NOT_ATTACK_IMMUNE","不是攻击免疫"],
+			["DOTA_UNIT_TARGET_FLAG_NOT_CREEP_HERO","不是野怪"],
+			["DOTA_UNIT_TARGET_FLAG_NOT_DOMINATED","不可控制的"],
+			["DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS","不是幻象"],
+			["DOTA_UNIT_TARGET_FLAG_NOT_MAGIC_IMMUNE_ALLIES","不是魔法免疫的盟友"],
+			["DOTA_UNIT_TARGET_FLAG_NOT_NIGHTMARED","非被催眠的"],
+			["DOTA_UNIT_TARGET_FLAG_NOT_SUMMONED","非召唤的"],
+			["DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD","被放逐出世界的"],
+			["DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED","玩家控制的"],
+			["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY","范围唯一的"],
+		]},
+		HasFrontalCone:{type: "bool"},
 	};
 
 	Operation.UnitGroupColumns = [

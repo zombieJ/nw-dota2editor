@@ -7,7 +7,7 @@ app.factory("Event", function(Operation) {
 	var Event = function() {
 		var _my = this;
 
-		_my.name = "OnSpellStart";
+		_my._name = "OnSpellStart";
 		_my._comment = "";
 
 		_my._operationList = [new Operation()];
@@ -40,7 +40,7 @@ app.factory("Event", function(Operation) {
 		writer.writeComment(this._comment);
 
 		// 名称
-		writer.write('"$1"', this.name);
+		writer.write('"$1"', this._name);
 		writer.write('{');
 
 		// 操作

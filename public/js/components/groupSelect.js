@@ -15,6 +15,14 @@ components.directive('groupselect', function($compile) {
 		controller: function($scope, $element, $attrs) {
 			$scope.common = common;
 
+			$scope.getItemList = function() {
+				var _list = $scope.base[$scope.attr];
+				if(!$.isArray(_list)) {
+					_list = _list.value;
+				}
+				return _list;
+			};
+
 			$scope.editGroup = function() {
 				var attr = $scope.attr;
 				var tgtattr = $scope.tgtattr || attr;
@@ -22,7 +30,7 @@ components.directive('groupselect', function($compile) {
 				$scope.ability[attr] = $scope.ability[attr] || {};
 
 				var cntr = $("<div>");
-				$.each($scope.base[attr], function(i, item) {
+				$.each($scope.getItemList(), function(i, item) {
 					cntr.append($(
 							'<label class="'+ (item[2] ? "text-primary": "") +  ' checkbox" style="width: 360px;">'+
 								'<input type="checkbox" ' + ($scope.ability[tgtattr][item[0]] ? 'checked' : '') + ' data-name="' + item[0] + '">'+
@@ -57,8 +65,8 @@ components.directive('groupselect', function($compile) {
 						_field = $(
 							'<a href="javascript: void(0);" ng-click="editGroup()">' +
 								'<span class="label label-default" ng-repeat="(unitName, unitValue) in ability[tgtattr || attr]" ng-if="unitValue">' +
-									'{{::unitName.replace("DOTA_UNIT_TARGET_", "").replace("DOTA_ABILITY_BEHAVIOR_", "")}}' +
-									' 【{{common.array.find(unitName, base[attr], "0")[1]}}】' +
+									'{{::unitName.replace("DOTA_UNIT_TARGET_", "").replace("DOTA_ABILITY_BEHAVIOR_", "")}} ' +
+									'【{{common.array.find(unitName, getItemList(), "0")[1]}}】' +
 								'</span>'+
 								' <span class="glyphicon glyphicon-pencil"></span>'+
 							'</a>'
@@ -66,7 +74,7 @@ components.directive('groupselect', function($compile) {
 					} else {
 						_field = $(
 							'<select ng-model="ability[attr]" class="form-control">'+
-								'<option ng-repeat="(i, item) in base[attr] track by $index" value="{{::item[0]}}">{{::item[0]}} 【{{::item[1]}}】</option>'+
+								'<option ng-repeat="(i, item) in getItemList() track by $index" value="{{::item[0]}}">{{::item[0]}} 【{{::item[1]}}】</option>'+
 							'</select>'
 						);
 					}

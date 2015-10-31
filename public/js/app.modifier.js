@@ -193,6 +193,17 @@ app.factory("Modifier", function(Event) {
 			writer.write("}");
 		}
 
+		// 修饰器事件
+		if(this._eventList.length) {
+			writer.write('');
+
+			$.each(this._eventList, function (i, event) {
+				if(i !== 0) writer.write('');
+
+				event.doWriter(writer);
+			});
+		}
+
 		writer.write('}');
 		return writer;
 	};

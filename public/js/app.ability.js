@@ -225,8 +225,6 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 
 				event.doWriter(writer);
 			});
-
-			writer.write('}');
 		}
 
 		// 修饰器
@@ -239,6 +237,23 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 				if(i !== 0) writer.write('');
 
 				modifier.doWriter(writer);
+			});
+
+			writer.write('}');
+		}
+
+		// 自定义值
+		if(this._abilitySpecialList.length) {
+			writer.write('');
+			writer.write('"AbilitySpecial"');
+			writer.write('{');
+
+			$.each(this._abilitySpecialList, function (i, _specialUnit) {
+				writer.write('"$1"', common.text.preFill(i+1, "0", 2));
+				writer.write('{');
+				writer.write('"var_type"		"$1"', _specialUnit[1]);
+				writer.write('"$1"		"$2"', _specialUnit[0], _specialUnit[2]);
+				writer.write('}');
 			});
 
 			writer.write('}');

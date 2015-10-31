@@ -72,7 +72,7 @@
 										<a href="javascript:void(0)" ng-click="common.array.remove(event, ability._eventList)">[X]</a>
 										Event {{::event_index + 1}}
 									</label>
-									<select class="form-control" ng-model="event.name">
+									<select class="form-control" ng-model="event._name">
 										<option ng-repeat="_event in Event.EventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>
 									</select>
 
@@ -202,10 +202,10 @@
 														<a href="javascript:void(0)" ng-click="common.array.remove(event, modifier._eventList)">[X]</a>
 														Event {{::event_index + 1}}
 													</label>
-													<select class="form-control" ng-model="event.name">
+													<select class="form-control" ng-model="event._name">
 														<option ng-repeat="_event in Event.ModifierEventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>
 													</select>
-													<table ng-if="event.name === 'OnIntervalThink'" class="table">
+													<table ng-if="event._name === 'OnIntervalThink'" class="table">
 														<tbody>
 														<tr>
 															<td width="200">ThinkInterval 【间隔】</td>

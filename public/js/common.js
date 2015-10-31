@@ -115,22 +115,12 @@ common.text.repeat = function(text, times) {
 	return _str;
 };
 
-// ====================== Format ======================
-common.format = {};
-
-/*
- * Format date to string. Support number, string, Date instance. Will auto convert time zone offset(Moment instance will keep time zone).
- */
-common.format.date = function(val, type) {
-	if(val === undefined || val === null) return "";
-
-	if(typeof val === "number" || typeof val === "string" || val instanceof Date) {
-		val = app.time.offset(val);
+common.text.preFill = function(text, fillChar, length) {
+	text = text + "";
+	while(text.length < length) {
+		text = fillChar + text;
 	}
-	switch(type) {
-	default:
-		return val.format("YYYY-MM-DD HH:mm:ss") + (val.utcOffset() === 0 ? '[UTC]' : '');
-	}
+	return text;
 };
 
 // ====================== Array =======================
@@ -220,6 +210,12 @@ common.map.toArray = function(map) {
 	return $.map(map, function(unit) {
 		return unit;
 	});
+};
+
+common.map.join = function(obj, spliter) {
+	return $.map(obj, function(value, key) {
+		if(value) return key;
+	}).join(spliter);
 };
 
 // ======================== UI ========================
