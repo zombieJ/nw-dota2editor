@@ -210,18 +210,49 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		var _deferred = $q.defer();
 		var _data = "";
 
-		function write() {
-			var text = Array.prototype.join.call(arguments, "");
-			_data += text + "\n";
+		var _writeTabIndex = 0;
+		function write(template) {
+			var text = template;
+			for(var i = 1 ; i < arguments.length ; i += 1) {
+				text = text.replace("$" + i, arguments[i]);
+			}
+
+			if(text.trim() === "}") _writeTabIndex -= 1;
+
+			_data += (text ? common.text.repeat("	", _writeTabIndex) : "") + text + "\n";
+
+			if(text.trim() === "{") _writeTabIndex += 1;
 		}
 
-		function writeComment(text, prefix) {
+		function writeComment(text) {
 			text = (text || "").trim();
 			if(text) {
 				$.each(text.split("\n"), function(i, line) {
-					write((prefix ? prefix : "")+ "// " + line);
+					write("// " + line);
 				});
 			}
+		}
+
+		function writeKVList(entity, list) {
+			$.each(list, function(i, requestUnit) {
+				if(/^_/.test(requestUnit.attr)) return;
+
+				var _content = entity[requestUnit.attr];
+				switch(typeof _content) {
+					case "boolean":
+						_content = _content ? "1" : "0";
+						break;
+					case "object":
+						_content = $.map(_content, function(value, key) {
+							if(value) return key;
+						}).join(" | ");
+						break;
+				}
+
+				if(_content && _content !== "-") {
+					write('"$1"					"$2"', requestUnit.attr, _content);
+				}
+			});
 		}
 
 		if(!list) {
@@ -229,37 +260,53 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		} else {
 			// 编辑文件
 			writeComment(APP_APP_NAME);
-			writeComment("Get latest version: ", APP_APP_GITHUB);
+			writeComment("Get latest version: " + APP_APP_GITHUB);
 			write('');
 			write('"DOTAAbilities"');
 			write('{');
-			write('	"Version"		"1"');
+			write('"Version"		"1"');
 
 
 			$.each(list, function(i, ability) {
-				writeComment(ability._comment, "	");
+				writeComment(ability._comment);
 
 				// 技能头
-				write('	"', ability._name, '"');
-				write('	{');
+				write('"$1"', ability._name);
+				write('{');
 
 				// 技能常规属性
-				$.each(ability._requireList, function(i, requestUnit) {
-					if(/^_/.test(requestUnit.attr)) return;
+				writeKVList(ability, ability._requireList);
 
-					var _content = ability[requestUnit.attr];
-					if(typeof _content === "object") {
-						_content = $.map(_content, function(value, key) {
-							if(value) return key;
-						}).join(" | ");
-					}
+				// 技能修饰器
+				if(ability._modifierList.length) {
+					write('');
+					write('"Modifiers"');
+					write('{');
 
-					if(_content && _content !== "-") {
-						write('		"', requestUnit.attr, '"					"', _content, '"');
-					}
-				});
+					$.each(ability._modifierList, function(i, modifier) {
+						writeComment(modifier._comment);
+						write('"$1"', modifier._name);
+						write("{");
 
-				write('	}');
+						// 修饰器常规属性
+						writeKVList(modifier, modifier._requireList);
+
+						// 修饰器属性
+						if(modifier._propertyList.length) {
+							write("{");
+
+							
+
+							write("}");
+						}
+
+						write("}");
+					});
+
+					write('}');
+				}
+
+				write('}');
 
 				return false;
 			});

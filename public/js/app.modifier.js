@@ -52,8 +52,8 @@ app.factory("Modifier", function(Event) {
 
 		fillAttr(_my, "IsBuff", "-")("正面效果");
 		fillAttr(_my, "IsDebuff", "-")("负面效果");
-		fillAttr(_my, "IsHidden", false)("隐藏图标");
-		fillAttr(_my, "IsPurgable", true)("可净化");
+		fillAttr(_my, "IsHidden", "-")("隐藏图标");
+		fillAttr(_my, "IsPurgable", "-")("可净化");
 
 		fillAttr(_my, "AllowIllusionDuplicate", "-")("幻象可继承");
 
@@ -212,7 +212,7 @@ app.factory("Modifier", function(Event) {
 		["MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE","无敌保持",false],
 	];
 
-	Modifier.AllowIllusionDuplicate = Modifier.IsBuff =Modifier.IsDebuff = Modifier.Aura_ApplyToCaster = [
+	Modifier.AllowIllusionDuplicate = Modifier.IsBuff = Modifier.IsDebuff = Modifier.IsHidden = Modifier.IsPurgable = Modifier.Aura_ApplyToCaster = [
 		["-","默认",true],
 		["0","不是",false],
 		["1","是",false],
