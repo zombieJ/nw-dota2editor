@@ -158,6 +158,7 @@ app.factory("KV", function(NODE, $q) {
 	};
 
 	_KV.Writer.prototype.write = function(template) {
+		var _my = this;
 		var text = template;
 		for(var i = 1 ; i < arguments.length ; i += 1) {
 			text = text.replace("$" + i, arguments[i]);
@@ -165,7 +166,9 @@ app.factory("KV", function(NODE, $q) {
 
 		if(text.trim() === "}") this._writeTabIndex -= 1;
 
-		this._data += (text ? common.text.repeat("	", this._writeTabIndex) : "") + text + "\n";
+		$.each(text.split("\n"), function(i, line) {
+			_my._data += (text ? common.text.repeat("	", _my._writeTabIndex) : "") + line + "\n";
+		});
 
 		if(text.trim() === "{") this._writeTabIndex += 1;
 	}

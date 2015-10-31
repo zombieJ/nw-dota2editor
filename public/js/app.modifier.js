@@ -81,6 +81,21 @@ app.factory("Modifier", function(Event) {
 		return _my;
 	};
 
+	Modifier.prototype.getPrecacheList = function() {
+		var _list = [];
+
+		$.each(this._eventList, function(i, event) {
+			_list = _list.concat(event.getPrecacheList());
+		});
+
+		if(this.EffectName) _list.push(["particle", this.EffectName]);
+
+		return _list;
+	};
+
+	// ================================================
+	// =                     解析                     =
+	// ================================================
 	Modifier.parse = function(kvUnit, lvl) {
 		_LOG("KV", lvl, "└ 修饰器：", kvUnit.value.title,kvUnit);
 

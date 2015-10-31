@@ -13,6 +13,27 @@ app.factory("Operation", function() {
 		return _my;
 	};
 
+	Operation.prototype.getPrecache = function() {
+		if(this.name === "AttachEffect" || this.name === "FireEffect") {
+			return this.attrs["EffectName"] ? ["particle", this.attrs["EffectName"]] : null;
+		} else if(this.name === "FireSound") {
+			return this.attrs["EffectName"] ? ["soundfile", this.attrs["EffectName"]] : null;
+		}
+		// TODO: Model
+	}
+
+	Operation.prototype.getEventOperation = function() {
+		return common.array.find(this.name, Operation.EventOperation, "0");
+	};
+
+	Operation.prototype.getAttr = function(attr) {
+		var _eventOperation = this.getEventOperation();
+		if($.inArray(attr, _eventOperation[3]) !== -1) {
+			return this.attrs[attr];
+		}
+		return null;
+	};
+
 	// ================================================
 	// =                     解析                     =
 	// ================================================
@@ -92,15 +113,18 @@ app.factory("Operation", function() {
 
 		// 操作属性
 		$.each(this.attrs, function(key, value) {
-			switch (typeof value) {
-				case "string":
-					break;
-				case "boolean":
-					value = value ? "1" : "0";
-					break;
-				case "object":
-					var _meta = Operation.EventOperationMap[key];
-					if(_meta && _meta.type === "unitGroup") {
+			var _meta = Operation.EventOperationMap[key];
+			if(!_meta) {
+				_WARN("SAVE", 0, "Operation meta not exist:", key, value);
+			} else {
+				switch (_meta.type) {
+					case "text":
+					case "single":
+						break;
+					case "bool":
+						value = value ? "1" : "0";
+						break;
+					case "unitGroup":
 						// 单位组
 						if(value.target !== "[Group Units]") {
 							// 单个单位
@@ -117,12 +141,24 @@ app.factory("Operation", function() {
 							writer.write('}');
 							return;
 						}
-					} else if(_meta && _meta.type === "group") {
+						break;
+					case "group":
 						value = common.map.join(value, " | ");
-					} else {
+						break;
+					case "blob":
+						if(_meta.append) {
+							writer.write(value);
+						} else {
+							writer.write('"$1"', key);
+							writer.write('{');
+							writer.write(value);
+							writer.write('}');
+						}
+						return;
+					default :
 						_WARN("SAVE", 0, "Can't match Operation meta:", _meta, key, value);
-					}
-					break;
+						break;
+				}
 			}
 
 			if(value && value !== "-") {
@@ -186,7 +222,7 @@ app.factory("Operation", function() {
 		ShouldStun: {type: "bool"},
 		ScriptFile: {type: "text"},
 		Function: {type: "text"},
-		CustomizeKV: {type: "blob"},
+		CustomizeKV: {type: "blob", append: true},
 		UnitName: {type: "text"},
 		UnitCount: {type: "text"},
 		UnitLimit: {type: "text"},

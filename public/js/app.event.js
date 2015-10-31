@@ -15,6 +15,17 @@ app.factory("Event", function(Operation) {
 		return _my;
 	};
 
+	Event.prototype.getPrecacheList = function() {
+		var _list = [];
+
+		$.each(this._operationList, function(i, operation) {
+			var _effect = operation.getPrecache();
+			if(_effect) _list.push(_effect);
+		});
+
+		return _list;
+	};
+
 	// ================================================
 	// =                     解析                     =
 	// ================================================

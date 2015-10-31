@@ -121,6 +121,27 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 	};
 
 	// ================================================
+	// =                     特效                     =
+	// ================================================
+	Ability.prototype.getPrecacheList = function() {
+		var _list = [];
+
+		// Particle File
+		// TODO: Sound File
+		// TODO: model File
+
+		$.each(this._eventList, function(i, event) {
+			_list = _list.concat(event.getPrecacheList());
+		});
+
+		$.each(this._modifierList, function(i, modifier) {
+			_list = _list.concat(modifier.getPrecacheList());
+		});
+
+		return _list;
+	};
+
+	// ================================================
 	// =                     语言                     =
 	// ================================================
 	Ability.prototype.getLang = function(language) {
@@ -215,6 +236,18 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 
 		// 常规属性
 		writer.withKVList(this, this._requireList);
+
+		// 预载入特效
+		var _precacheList = this.getPrecacheList();
+		if(_precacheList.length) {
+			writer.write('');
+			writer.write('"precache"');
+			writer.write('{');
+			$.each(_precacheList, function (i, _effectUnit) {
+				writer.write('"$1"		"$2"', _effectUnit[0], _effectUnit[1]);
+			});
+			writer.write('}');
+		}
 
 		// 事件
 		if(this._eventList.length) {
