@@ -51,6 +51,8 @@ app.factory("Language", function(KV, NODE) {
 	// ================================================
 	// =                     常量                     =
 	// ================================================
+	// TODO: Remove _
+	Language.fileNameRegex = /^_addon_\w+\.txt$/i;
 	Language.folderPath = "resource";
 
 	// ================================================

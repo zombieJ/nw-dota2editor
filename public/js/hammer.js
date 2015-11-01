@@ -67,7 +67,7 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 	}
 
 	// 读取技能文件
-	NODE.listFiles(Language.folderPath, /^addon_\w+\.txt$/i).then(function(fileList) {
+	NODE.listFiles(Language.folderPath, Language.fileNameRegex).then(function(fileList) {
 		$scope.languageList = $.map(fileList, function(fileName) {
 			return new Language(fileName);
 		});

@@ -1925,7 +1925,7 @@
 							<input type="checkbox" ng-disabled="saveItem.ready === false"
 								   ng-checked="saveItem.selected" ng-click="saveItem.selected = !saveItem.selected" />
 							{{::saveItem.name}} 【{{::saveItem.desc}}】
-							<span ng-if="saveItem.ready === false">（无效）</span>
+							<span ng-if="saveItem.ready === false">（开发中）</span>
 							<span class="label label-info" ng-if="saveItem.status === 1">saving 【保存中】</span>
 							<span class="label label-success" ng-if="saveItem.status === 2">success 【成功】</span>
 							<span class="label label-danger" ng-if="saveItem.status === 3">failed 【失败】</span>
