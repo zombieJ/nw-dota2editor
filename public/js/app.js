@@ -24,6 +24,7 @@ app.factory("globalContent", function() {
 		project: localStorage.getItem("project"),
 		isOpen: false,
 		abilityList: null,
+		languageList: [],
 	};
 
 	return _globalContent;
@@ -54,6 +55,17 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 			localStorage.setItem("project", globalContent.project);
 			globalContent.isOpen = true;
 
+			// 总是读取多语言文件
+			var _listFilesPromise = NODE.listFiles(Language.folderPath, Language.fileNameRegex);
+			globalContent.languageList._promise = _listFilesPromise;
+			_listFilesPromise.then(function(fileList) {
+				common.array.replace(globalContent.languageList, $.map(fileList, function(fileName) {
+					return new Language(fileName);
+				}));
+			}, function(){
+				common.array.replace(globalContent.languageList, []);
+			});
+
 			$route.reload();
 		}, function () {
 			$.dialog({
@@ -77,20 +89,20 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 	$scope.saveMSG = "";
 	$scope.saveLock = false;
 	$scope.saveFileList = [
-		// 保存 【技能】
+		// ===================================================================
+		// =                          保存 【技能】                          =
+		// ===================================================================
 		{name: "Ability", desc: "技能", selected: true, saveFunc: function() {
 			var _deferred = $q.defer();
 
 			if(!globalContent.abilityList) {
-				_deferred.resolve();
+				_deferred.resolve(4);
 			} else {
 				var _writer = new KV.Writer();
-				_writer.withHeader("DOTAAbilities");
+				_writer.withHeader("DOTAAbilities", {Version: 1});
 				$.each(globalContent.abilityList, function(i, ability) {
 					_writer.write('');
 					ability.doWriter(_writer);
-
-					//return false;
 				});
 				_writer.withEnd();
 
@@ -99,17 +111,47 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 			return _deferred.promise;
 		}},
 
-		// 保存 【语言】
-		{name: "Language", desc: "语言", selected: false, ready: false},
-	];
-	$scope.showSaveMDL = function() {
-		$("#saveMDL").modal();
+		// ===================================================================
+		// =                          保存 【语言】                          =
+		// ===================================================================
+		{name: "Language", desc: "语言", selected: true, saveFunc: function() {
+			var _deferred = $q.defer();
 
-		$scope.saveMSG = "";
-		$.each($scope.saveFileList, function(i, saveItem) {
-			saveItem.status = 0;
-		});
-	};
+			if(!globalContent.languageList) {
+				_deferred.resolve(4);
+			} else {
+				var _promiseList = [];
+
+				$.each(globalContent.languageList, function(i, language) {
+					var _writer = new KV.Writer();
+					_writer.withHeader("lang", {Language: language.name});
+					_writer.write('"Tokens"');
+					_writer.write('{');
+
+					$.each(language.map, function(key, value) {
+						_writer.write('"$1"		"$2"', key, value);
+					});
+
+					_writer.write('}');
+					_writer.withEnd();
+
+					_promiseList.push(_writer.save(Language.folderPath + "/" + language.fileName.replace(/^_/, "").replace(/\.bac/, ""), "ucs2"));
+					$q.all(_promiseList).then(function() {
+						_deferred.resolve();
+					}, function() {
+						_deferred.reject();
+					});
+				});
+			}
+			return _deferred.promise;
+		}},
+	];
+
+
+
+
+	// 保存文件
+	// 状态码：0 初始化；1 运行中；2 成功；3 失败；4 未变更
 	$scope.saveFiles = function() {
 		$scope.saveLock = true;
 		var _promiseList = [];
@@ -121,8 +163,8 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 			var _promise = saveItem.saveFunc();
 			_promiseList.push(_promise);
 
-			_promise.then(function() {
-				saveItem.status = 2;
+			_promise.then(function(statusCode) {
+				saveItem.status = statusCode !== undefined ? statusCode : 2;
 			},function() {
 				saveItem.status = 3;
 			});
@@ -131,6 +173,16 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 		$q.all(_promiseList).finally(function() {
 			$scope.saveMSG = "Finished! 【完成】";
 			$scope.saveLock = false;
+		});
+	};
+
+	// 弹出保存对话框
+	$scope.showSaveMDL = function() {
+		$("#saveMDL").modal();
+
+		$scope.saveMSG = "";
+		$.each($scope.saveFileList, function(i, saveItem) {
+			saveItem.status = 0;
 		});
 	};
 });

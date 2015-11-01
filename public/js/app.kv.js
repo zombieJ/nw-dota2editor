@@ -55,7 +55,7 @@ app.factory("KV", function(NODE, $q) {
 
 					var _key = _match[1];
 					var _value = _match[3];
-					if(_value) {
+					if(_value !== undefined) {
 						this.kvList.push({
 							key: _key,
 							value: _value,
@@ -122,13 +122,17 @@ app.factory("KV", function(NODE, $q) {
 		return this;
 	};
 
-	_KV.Writer.prototype.withHeader = function(title) {
-		this.writeComment(APP_APP_NAME);
-		this.writeComment("Get latest version: " + APP_APP_GITHUB);
-		this.write('');
-		this.write('"$1"', title);
-		this.write('{');
-		this.write('"Version"		"1"');
+	_KV.Writer.prototype.withHeader = function(title, initKV) {
+		var _my = this;
+
+		_my.writeComment(APP_APP_NAME);
+		_my.writeComment("Get latest version: " + APP_APP_GITHUB);
+		_my.write('');
+		_my.write('"$1"', title);
+		_my.write('{');
+		$.each(initKV || {}, function(key, value) {
+			_my.write('"$1"		"$2"', key, value);
+		});
 	};
 
 	_KV.Writer.prototype.withEnd = function() {

@@ -311,8 +311,10 @@
 									<tr ng-repeat="langField in Language.AbilityLang track by $index">
 										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
 										<td>
-											<input type="text" class="form-control" ng-if="langField.type === 'text'" ng-model="ability.getLang(language)[langField.attr || langField.title]" />
-											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5" ng-model="ability.getLang(language)[langField.attr || langField.title]"></textarea>
+											<input type="text" class="form-control" ng-if="langField.type === 'text'"
+											       ng-model="language.map[Language.AbilityPrefix + ability._name + (langField.attr ? '_' + langField.attr : '')]" />
+											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
+											          ng-model="language.map[Language.AbilityPrefix + ability._name + (langField.attr ? '_' + langField.attr : '')]"></textarea>
 										</td>
 									</tr>
 

@@ -203,6 +203,12 @@ common.array.remove = function(val, list) {
 	}
 };
 
+common.array.replace = function(ary1, ary2) {
+	ary1.splice(0);
+	ary1.push.apply(ary1, ary2);
+	return ary1;
+};
+
 // ======================= Map ========================
 common.map = {};
 

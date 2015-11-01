@@ -60,7 +60,11 @@ exports.saveFile = function(path, encoding, data) {
 	var _deferred = $q.defer();
 
 	path = PATH.normalize(content.project + "/" + path);
-	FS.writeFile(path, data, encoding || "ucs2", function (err) {
+	encoding = encoding || "ucs2";
+	if(encoding === "ucs2") {
+		data = "\ufeff" + data;
+	}
+	FS.writeFile(path, data, encoding, function (err) {
 		if(err) {
 			_deferred.reject(err);
 		} else {

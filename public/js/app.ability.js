@@ -127,7 +127,7 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		var _list = [];
 
 		// Particle File
-		// TODO: Sound File
+		// Sound File
 		// TODO: model File
 
 		$.each(this._eventList, function(i, event) {
@@ -299,8 +299,7 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 	// ================================================
 	// =                     常量                     =
 	// ================================================
-	// TODO: remove _
-	Ability.folderPath = "scripts/npc/_npc_abilities_custom.txt";
+	Ability.folderPath = "scripts/npc/npc_abilities_custom.txt";
 	Ability.exportFolderPath = "scripts/npc/npc_abilities_custom.txt";
 
 	// ================================================

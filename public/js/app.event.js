@@ -92,6 +92,7 @@ app.factory("Event", function(Operation) {
 		["OnChannelSucceeded","持续施法成功"],
 		["OnCreated","创建"],
 		["OnEquip","装备物品"],
+		["OnUnequip","取下物品"],
 		["OnHealReceived","受到治疗"],
 		["OnHealthGained","获得生命值"],
 		["OnHeroKilled","被英雄杀死"],

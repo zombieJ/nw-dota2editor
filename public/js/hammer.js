@@ -66,13 +66,9 @@ hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globa
 		$scope.ability = $scope.abilityList[0];
 	}
 
-	// 读取技能文件
-	NODE.listFiles(Language.folderPath, Language.fileNameRegex).then(function(fileList) {
-		$scope.languageList = $.map(fileList, function(fileName) {
-			return new Language(fileName);
-		});
+	// 多语言支持
+	$scope.languageList = globalContent.languageList;
+	globalContent.languageList._promise.then(function() {
 		$scope.language = $scope.languageList[0];
-	}, function(){
-		$scope.languageList = [];
 	});
 });

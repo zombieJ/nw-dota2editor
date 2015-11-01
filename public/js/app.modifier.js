@@ -432,7 +432,7 @@ app.factory("Modifier", function(Event) {
 		["MODIFIER_STATE_INVULNERABLE","无敌"],
 		["MODIFIER_STATE_LOW_ATTACK_PRIORITY","低攻击优先级"],
 		["MODIFIER_STATE_MAGIC_IMMUNE","魔免"],
-		["MODIFIER_STATE_MUTED","静音"],
+		["MODIFIER_STATE_MUTED","禁用物品"],
 		["MODIFIER_STATE_NIGHTMARED","催眠"],
 		["MODIFIER_STATE_NO_HEALTH_BAR","无生命条"],
 		["MODIFIER_STATE_NO_TEAM_MOVE_TO","没有移动到队伍"],
