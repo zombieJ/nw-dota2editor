@@ -14,7 +14,7 @@ app.factory("Operation", function() {
 	};
 
 	Operation.prototype.getPrecache = function() {
-		if(this.name === "AttachEffect" || this.name === "FireEffect") {
+		if(this.name === "AttachEffect" || this.name === "FireEffect" || this.name === "TrackingProjectile" || this.name === "LinearProjectile") {
 			return this.attrs["EffectName"] ? ["particle", this.attrs["EffectName"]] : null;
 		} else if(this.name === "FireSound") {
 			return this.attrs["EffectName"] ? ["soundfile", this.attrs["EffectName"]] : null;
@@ -181,6 +181,7 @@ app.factory("Operation", function() {
 
 	Operation.EventOperation = [
 		["ApplyModifier", "添加修饰器", true, ["Target", "ModifierName"]],
+		["RemoveModifier", "移除修饰器", true, ["Target", "ModifierName"]],
 		["AttachEffect", "添加特效", true, ["EffectName","EffectAttachType","Target","ControlPoints", "ControlPointEntities"]],
 		["FireEffect", "触发特效", true, ["EffectName", "EffectAttachType", "Target", "ControlPoints", "ControlPointEntities"]],
 		["Damage", "伤害", true, ["Target", "Type","Damage", "MinDamage", "MaxDamage", "CurrentHealthPercentBasedDamage", "MaxHealthPercentBasedDamage"]],

@@ -24,7 +24,7 @@ components.directive('eventoperation', function($compile) {
 		},
 		template:
 			'<div>'+
-			'<div ng-repeat="(operation_index, operation) in container[path] track by $index" class="group-operation">'+
+			'<div ng-repeat="(operation_index, operation) in container[path]" class="group-operation">'+
 				'<div class="group-operationAttr">'+
 					'<label>' +
 						'<a href="javascript:void(0)" ng-click="common.array.remove(operation, container[path])">[X]</a>'+

@@ -299,7 +299,9 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 	// ================================================
 	// =                     常量                     =
 	// ================================================
-	Ability.folderPath = "scripts/npc/npc_abilities_custom.txt";
+	// TODO: remove _
+	Ability.folderPath = "scripts/npc/_npc_abilities_custom.txt";
+	Ability.exportFolderPath = "scripts/npc/npc_abilities_custom.txt";
 
 	// ================================================
 	// =                     属性                     =

@@ -94,7 +94,7 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 				});
 				_writer.withEnd();
 
-				_writer.save(Ability.folderPath + ".txt", "utf8",_deferred);
+				_writer.save(Ability.exportFolderPath, "utf8",_deferred);
 			}
 			return _deferred.promise;
 		}},

@@ -50,6 +50,11 @@ app.factory("Event", function(Operation) {
 	Event.prototype.doWriter = function(writer) {
 		writer.writeComment(this._comment);
 
+		// Hack: OnIntervalThink
+		if(this._name === "OnIntervalThink") {
+			writer.write('"ThinkInterval"		"$1"', this.ThinkInterval);
+		}
+
 		// 名称
 		writer.write('"$1"', this._name);
 		writer.write('{');
@@ -70,6 +75,61 @@ app.factory("Event", function(Operation) {
 	// =                     属性                     =
 	// ================================================
 	Event.EventList = [
+		["OnSpellStart","开始施法"],
+
+		["OnAbilityStart","技能开始"],
+		["OnAbilityExecuted","释放技能"],
+		["OnAbilityEndChannel","停止施法"],
+		["OnAbilityPhaseStart","开始阶段（转身之前）"],
+
+
+		["OnAttack","攻击"],
+		["OnAttacked","被攻击"],
+		["OnAttackAllied","攻击队友"],
+		["OnAttackFailed","攻击失败"],
+		["OnChannelFinish","持续施法结束"],
+		["OnChannelInterrupted","持续施法中断"],
+		["OnChannelSucceeded","持续施法成功"],
+		["OnCreated","创建"],
+		["OnEquip","装备物品"],
+		["OnHealReceived","受到治疗"],
+		["OnHealthGained","获得生命值"],
+		["OnHeroKilled","被英雄杀死"],
+		["OnKill","杀死单位"],
+		["OnManaGained","获得魔法值"],
+		["OnOrder","执行指令"],
+		["OnOwnerDied","拥有者死亡"],
+		["OnOwnerSpawned","拥有者出生"],
+		["OnProjectileDodge","投射物闪避"],
+		["OnProjectileFinish","投射物结束"],
+		["OnProjectileHitUnit","投射物命中"],
+		["OnRespawn","重生"],
+		["OnSpentMana","消耗魔法"],
+		["OnStateChanged","状态改变"],
+		["OnTeleported","传送完成"],
+		["OnTeleporting","传送中"],
+		["OnToggleOff","开关：关"],
+		["OnToggleOn","开关：开"],
+		["OnUnitMoved","移动"],
+		["OnUpgrade","技能升级"],
+	];
+
+	Event.ModifierEventList = [
+		["OnCreated","Modifier创建"],
+		["OnDestroy","Modifier移除"],
+		["OnIntervalThink","定时器"],
+
+		["OnAttackLanded","攻击命中"],
+		["OnAttackStart","开始攻击"],
+		["OnDealDamage","施加伤害"],
+		["OnDeath","死亡"],
+		["OnOrbFire","法球被释放"],
+		["OnOrbImpact","法球命中"],
+		["OnTakeDamage","受到伤害"],
+		["Orb","法球"],
+	].concat(Event.EventList);
+
+	/*Event.EventList = [
 		["OnSpellStart","开始施法"],
 		["OnAbilityEndChannel","停止施法"],
 		["OnAbilityPhaseStart","开始阶段（转身之前）"],
@@ -137,7 +197,7 @@ app.factory("Event", function(Operation) {
 		["OnHeroKilled","被英雄杀死"],
 		["OnHealReceived","受到治疗"],
 		["OnKill","杀死单位"],
-	];
+	];*/
 
 	return Event;
 });
