@@ -4,7 +4,7 @@
 // =                        技能                        =
 // ======================================================
 app.factory("Ability", function($q, Event, Modifier, NODE) {
-	function fillAttr(ability, attr, defaultValue) {
+	function _fillAttr(isItem, ability, attr, defaultValue) {
 		if(defaultValue === undefined) {
 			ability[attr] = {};
 			$.each(Ability[attr], function(i, item) {
@@ -14,8 +14,9 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 			ability[attr] = defaultValue;
 		}
 
+		// 属性描述设置，中文描述，显示标题，类型
 		return function(desc, title, type) {
-			ability._requireList.push({
+			(isItem ? ability._requireItemList : ability._requireList).push({
 				attr: attr,
 				title: title,
 				desc: desc,
@@ -24,24 +25,64 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		};
 	}
 
-	var Ability = function() {
+	function fillAttr(ability, attr, defaultValue) {
+		return _fillAttr(false, ability, attr, defaultValue);
+	}
+
+	function fillItemAttr(ability, attr, defaultValue) {
+		return _fillAttr(true, ability, attr, defaultValue);
+	}
+
+	var Ability = function(isItem) {
 		var _my = this;
+		_my._requireItemList = [];
 		_my._requireList = [];
+		_my._isItem = isItem;
 
 		// ========================================
 		// =                 属性                 =
 		// ========================================
 		// 名字
-		fillAttr(_my, "_name", "undefined")("技能名", "Name");
+		_my._name = "undefined";
 
 		// 备注
-		fillAttr(_my, "_comment", "")("备注", "Comment", "blob");
+		_my._comment = "";
 
 		// 基类
 		fillAttr(_my, "BaseClass", "ability_datadriven")("基类");
 
 		// 图标
 		fillAttr(_my, "AbilityTextureName", "")("图标");
+
+		// 物品代码
+		if(isItem) {
+			fillItemAttr(_my, "ID", "")("ID");
+			fillItemAttr(_my, "ItemCost", "0")("花费");
+			fillItemAttr(_my, "ItemDroppable", true)("可丢弃");
+			fillItemAttr(_my, "ItemSellable", true)("可出售");
+			fillItemAttr(_my, "ItemShareability", "-")("共享方式");
+
+			fillItemAttr(_my, "ItemPurchasable", "-")("可购买");
+			fillItemAttr(_my, "ItemDeclarations", "")("购买提醒");
+			fillItemAttr(_my, "ItemKillable", true)("可摧毁");
+			fillItemAttr(_my, "ItemAlertable", false)("可提醒");
+			fillItemAttr(_my, "ItemPermanent", "-")("永久的");
+			fillItemAttr(_my, "ItemInitialCharges", "")("初始数量");
+			fillItemAttr(_my, "ItemRequiresCharges", "-")("需要数量才能使用");
+			fillItemAttr(_my, "ItemStackable", false)("可叠加");
+			fillItemAttr(_my, "SideShop", "-")("基地商店");
+			fillItemAttr(_my, "SecretShop", "-")("神秘商店");
+			fillItemAttr(_my, "ItemCastOnPickup", false)("拾起使用");
+			fillItemAttr(_my, "ItemQuality", "")("物品质量");
+			fillItemAttr(_my, "ItemShopTags", "")("商店标签");
+			fillItemAttr(_my, "ItemAliases", "")("物品别名");
+			fillItemAttr(_my, "MaxUpgradeLevel", "")("物品最大等级");
+			fillItemAttr(_my, "ItemBaseLevel", "")("物品基础等级");
+			fillItemAttr(_my, "ItemRecipe", false)("合成菜单");
+			fillItemAttr(_my, "ItemResult", "")("合成结果");
+			fillItemAttr(_my, "ItemRequirements", "")("合成需要", null, "blob");  // TODO: 合成公式！
+			fillItemAttr(_my, "ItemDisassembleRule", "-")("可拆分");
+		}
 
 		// 行为
 		fillAttr(_my, "AbilityBehavior")("行为");
@@ -158,22 +199,27 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 	// ================================================
 	// =                     解析                     =
 	// ================================================
-	Ability.parse = function(kvUnit, lvl) {
+	Ability.parse = function(kvUnit, isItem, lvl) {
 		lvl = lvl || 0;
 		_LOG("KV", lvl, "└ 技能：",kvUnit.value.title, kvUnit);
 
-		var _ability = new Ability();
+		var _ability = new Ability(isItem);
 		_ability._name = kvUnit.value.title;
 		_ability._comment = kvUnit.value.comment;
 
 		$.each(kvUnit.value.kvList, function(i, unit) {
-			var _attr = common.array.find(unit.key, _ability._requireList, "attr");
+			var _attr = common.array.find(unit.key, _ability._requireList, "attr", false, false) || common.array.find(unit.key, _ability._requireItemList, "attr", false, false);
 
 			// 匹配 _requireList
 			if(_attr) {
+				unit.key = _attr.attr;
+
 				switch (typeof _ability[unit.key]) {
 					case "string":
 						_ability[unit.key] = unit.value;
+						break;
+					case "boolean":
+						_ability[unit.key] = unit.value === "1";
 						break;
 					case "object":
 						$.each(unit.value.split("|"), function (i, _value) {
@@ -234,7 +280,14 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		writer.write('"$1"', this._name);
 		writer.write('{');
 
+		// 物品属性
+		if (this._requireItemList.length) {
+			writer.writeComment('Item');
+			writer.withKVList(this, this._requireItemList);
+		}
+
 		// 常规属性
+		writer.writeComment('Common');
 		writer.withKVList(this, this._requireList);
 
 		// 预载入特效
@@ -299,12 +352,44 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 	// ================================================
 	// =                     常量                     =
 	// ================================================
-	Ability.folderPath = "scripts/npc/npc_abilities_custom.txt";
-	Ability.exportFolderPath = "scripts/npc/npc_abilities_custom.txt";
+	Ability.filePath = "scripts/npc/npc_abilities_custom.txt";
+	Ability.exportFilePath = "scripts/npc/npc_abilities_custom.txt";
+
+	Ability.itemFilePath = "scripts/npc/npc_items_custom.txt";
+	Ability.exportItemFilePath = "scripts/npc/npc_items_custom.txt";
 
 	// ================================================
 	// =                     属性                     =
 	// ================================================
+	Ability.ItemShareability = [
+		["ITEM_FULLY_SHAREABLE","都可以共享"],
+		["ITEM_FULLY_SHAREABLE_STACKING","库存共享"],
+		["ITEM_NOT_SHAREABLE","不可共享"],
+		["ITEM_PARTIALLY_SHAREABLE","部分共享"],
+	];
+
+	Ability.ItemDeclarations = [
+		["DECLARE_PURCHASES_IN_SPEECH","语音"],
+		["DECLARE_PURCHASES_TO_SPECTATORS","观众"],
+		["DECLARE_PURCHASES_TO_TEAMMATES","播音员"],
+	];
+
+	Ability.ItemQuality = [
+		["component","组件"],
+		["rare","稀有(蓝)"],
+		["epic","史诗(紫)"],
+		["common","常见(绿)"],
+		["consumable","消耗品(白)"],
+		["secret_shop","神秘商店(青蓝)"],
+		["artifact","神器(橙)"],
+	];
+
+	Ability.ItemDisassembleRule = [
+		["-","无"],
+		["DOTA_ITEM_DISASSEMBLE_ALWAYS","可拆分"],
+		["DOTA_ITEM_DISASSEMBLE_NEVER","不可拆分"],
+	];
+
 	Ability.AbilityBehavior = [
 		["DOTA_ABILITY_BEHAVIOR_IMMEDIATE","立即",true],
 		["DOTA_ABILITY_BEHAVIOR_HIDDEN","隐藏", true],

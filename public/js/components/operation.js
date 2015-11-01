@@ -5,6 +5,7 @@ components.directive('eventoperation', function($compile) {
 		restrict : 'AE',
 		scope : {
 			container: "=",
+			isitem: "=?isitem",
 			path: "@",
 		},
 		controller: function($scope, $element, $attrs, Ability, Event, Operation) {
@@ -13,8 +14,10 @@ components.directive('eventoperation', function($compile) {
 			$scope.Operation = Operation;
 			$scope.common = common;
 
+			$scope.EventOperation = $scope.isitem ? Operation.EventItemOperation : Operation.EventOperation;
+
 			$scope.getOperationColumn = function(operation) {
-				var op = common.array.find(operation, Operation.EventOperation, "0");
+				var op = common.array.find(operation, $scope.EventOperation, "0");
 				return op ? op[3] : [];
 			};
 
@@ -31,7 +34,7 @@ components.directive('eventoperation', function($compile) {
 						'Operation {{::operation_index + 1}}' +
 					'</label>'+
 					'<select class="form-control" ng-model="operation.name">'+
-						'<option ng-repeat="_operation in Operation.EventOperation track by $index" value="{{::_operation[0]}}">{{::_operation[0]}} 【{{::_operation[1]}}】</option>'+
+						'<option ng-repeat="_operation in EventOperation track by $index" value="{{::_operation[0]}}">{{::_operation[0]}} 【{{::_operation[1]}}】</option>'+
 					'</select>'+
 
 					'<table class="table table-condensed">'+

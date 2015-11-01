@@ -5,70 +5,79 @@ var hammerControllers = angular.module('hammerControllers', ['ngRoute', 'app.com
 hammerControllers.controller('indexCtrl', function ($scope) {
 });
 
-hammerControllers.controller('abilityCtrl', function ($scope, $http, NODE, globalContent, KV, Ability, Event, Operation, Modifier, Language) {
-	if(!globalContent.isOpen) return;
+var _abilityCtrl = function(isItem) {
+	return function ($scope, $http, NODE, globalContent, KV, Ability, Event, Operation, Modifier, Language) {
+		if (!globalContent.isOpen) return;
 
-	$scope.abilityList = [];
+		var _globalListKey = isItem ? "itemList" : "abilityList";
+		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
 
-	$scope.setAbility = function(ability) {
-		$scope.ability = ability;
-	};
+		$scope.abilityList = [];
+		$scope.isItem = isItem;
 
-	$scope.getType = function(attr, src) {
-		src = src || $scope.ability;
-		if(typeof attr === "string") {
-			return typeof src[attr];
+		$scope.setAbility = function (ability) {
+			$scope.ability = ability;
+		};
+
+		$scope.getType = function (attr, src) {
+			src = src || $scope.ability;
+			if (typeof attr === "string") {
+				return typeof src[attr];
+			} else {
+				return attr.type || typeof src[attr.attr];
+			}
+		};
+
+		$scope.addEvent = function (unit) {
+			(unit || $scope.ability)._eventList.push(new Event());
+		};
+
+		$scope.addModifier = function () {
+			$scope.ability._modifierList.push(new Modifier());
+		};
+
+		$scope.setLanguage = function (language) {
+			$scope.language = language;
+		};
+
+		// ================================================================
+		// =                           文件操作                           =
+		// ================================================================
+		// 读取技能文件
+		if (!globalContent[_globalListKey]) {
+			NODE.loadFile(_filePath, "utf8").then(function (data) {
+				var _kv = new KV(data, true);
+				$.each(_kv.kvList, function (i, unit) {
+					if (typeof  unit.value !== "string") {
+						var _ability = Ability.parse(unit, isItem, 1);
+						_LOG("Ability", 0, "实体：", _ability._name, _ability);
+
+						$scope.abilityList.push(_ability);
+					}
+				});
+
+				globalContent[_globalListKey] = $scope.abilityList;
+				$scope.ability = $scope.abilityList[0];
+
+				console.log("Scope >>>", $scope);
+			}, function () {
+				$.dialog({
+					title: "OPS!",
+					content: "Can't find npc_abilities_custom.txt <br/> 【打开npc_abilities_custom.txt失败】",
+				});
+			});
 		} else {
-			return attr.type || typeof src[attr.attr];
-		}
-	};
-
-	$scope.addEvent = function(unit) {
-		(unit || $scope.ability)._eventList.push(new Event());
-	};
-
-	$scope.addModifier = function() {
-		$scope.ability._modifierList.push(new Modifier());
-	};
-
-	$scope.setLanguage = function(language) {
-		$scope.language = language;
-	};
-
-	// ================================================================
-	// =                           文件操作                           =
-	// ================================================================
-	// 读取技能文件
-	if(!globalContent.abilityList) {
-		NODE.loadFile(Ability.folderPath, "utf8").then(function(data) {
-			var _kv = new KV(data, true);
-			$.each(_kv.kvList, function(i, unit) {
-				if(typeof  unit.value !== "string") {
-					var _ability = Ability.parse(unit, 1);
-					_LOG("Ability",0 ,"实体：",_ability._name ,_ability);
-
-					$scope.abilityList.push(_ability);
-				}
-			});
-
-			globalContent.abilityList = $scope.abilityList;
+			$scope.abilityList = globalContent[_globalListKey];
 			$scope.ability = $scope.abilityList[0];
+		}
 
-			console.log("Scope >>>",$scope);
-		}, function(){
-			$.dialog({
-				title: "OPS!",
-				content: "Can't find npc_abilities_custom.txt <br/> 【打开npc_abilities_custom.txt失败】",
-			});
+		// 多语言支持
+		$scope.languageList = globalContent.languageList;
+		globalContent.languageList._promise.then(function () {
+			$scope.language = $scope.languageList[0];
 		});
-	} else {
-		$scope.abilityList = globalContent.abilityList;
-		$scope.ability = $scope.abilityList[0];
-	}
+	};
+};
 
-	// 多语言支持
-	$scope.languageList = globalContent.languageList;
-	globalContent.languageList._promise.then(function() {
-		$scope.language = $scope.languageList[0];
-	});
-});
+hammerControllers.controller('abilityCtrl', _abilityCtrl(false));
+hammerControllers.controller('itemCtrl', _abilityCtrl(true));

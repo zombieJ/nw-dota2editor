@@ -14,6 +14,9 @@ app.config(function($routeProvider) {
 	}).when('/ability', {
 		templateUrl: 'partials/ability.html',
 		controller: 'abilityCtrl'
+	}).when('/item', {
+		templateUrl: 'partials/ability.html',
+		controller: 'itemCtrl'
 	}).otherwise({
 		redirectTo : '/index'
 	});
@@ -24,6 +27,7 @@ app.factory("globalContent", function() {
 		project: localStorage.getItem("project"),
 		isOpen: false,
 		abilityList: null,
+		itemList: null,
 		languageList: [],
 	};
 
@@ -75,41 +79,37 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 		});
 	};
 
-	/*var _kv = new KV($("#test").html(), true);
-	_LOG("KV", 0, "技能列表",_kv);
-	$.each(_kv.kvList, function(i, unit) {
-		if(typeof  unit.value !== "string") {
-			var _ability = Ability.parse(unit, 1);
-			console.log("[Ability] 实体：",_ability);
-			//return false;
-		}
-	});*/
-
 	// 保存项目
+	function saveAbilityFunc(isItem) {
+		return function() {
+			var _deferred = $q.defer();
+			var _globalListKey = isItem ? "itemList" : "abilityList";
+			var _filePath = isItem ? Ability.exportItemFilePath : Ability.exportFilePath;
+
+			if(!globalContent[_globalListKey]) {
+				_deferred.resolve(4);
+			} else {
+				var _writer = new KV.Writer();
+				_writer.withHeader("DOTAAbilities", {Version: 1});
+				$.each(globalContent[_globalListKey], function(i, ability) {
+					_writer.write('');
+					ability.doWriter(_writer);
+				});
+				_writer.withEnd();
+
+				_writer.save(_filePath, "utf8",_deferred);
+			}
+			return _deferred.promise;
+		};
+	}
+
 	$scope.saveMSG = "";
 	$scope.saveLock = false;
 	$scope.saveFileList = [
 		// ===================================================================
 		// =                          保存 【技能】                          =
 		// ===================================================================
-		{name: "Ability", desc: "技能", selected: true, saveFunc: function() {
-			var _deferred = $q.defer();
-
-			if(!globalContent.abilityList) {
-				_deferred.resolve(4);
-			} else {
-				var _writer = new KV.Writer();
-				_writer.withHeader("DOTAAbilities", {Version: 1});
-				$.each(globalContent.abilityList, function(i, ability) {
-					_writer.write('');
-					ability.doWriter(_writer);
-				});
-				_writer.withEnd();
-
-				_writer.save(Ability.exportFolderPath, "utf8",_deferred);
-			}
-			return _deferred.promise;
-		}},
+		{name: "Ability", desc: "技能", selected: true, saveFunc: saveAbilityFunc(false)},
 
 		// ===================================================================
 		// =                          保存 【语言】                          =

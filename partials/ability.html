@@ -9,7 +9,9 @@
 	</div>
 	<div class="col-sm-10 col-md-10">
 		<ul id="myTabs" class="nav nav-tabs" role="tablist">
-			<li class="active"><a href="[data-id='ability']" data-toggle="tab">Ability 【技能】</a></li>
+			<li class="active"><a href="[data-id='ability']" data-toggle="tab">
+				{{isItem ? 'Item 【物品】' : 'Ability 【技能】'}}
+			</a></li>
 			<li><a href="[data-id='description']" data-toggle="tab">Description 【描述】</a></li>
 		</ul>
 
@@ -24,7 +26,8 @@
 					<div class="subPanel">
 						<h3>{{ability._name}}</h3>
 						<ul>
-							<li><a ng-click="common.ui.scrollTo(0);">Common 【常规】</a></li>
+							<li ng-if="ability._requireItemList.length"><a ng-click="common.ui.scrollTo('.abilityItemTitle');">Item 【物品】</a></li>
+							<li><a ng-click="common.ui.scrollTo('.abilityCommonTitle');">Common 【常规】</a></li>
 							<li>
 								<a ng-click="common.ui.scrollTo('.abilityEventTitle');">Event 【事件】</a>
 								<ul>
@@ -51,7 +54,38 @@
 
 				<table class="table table-condensed table-bordered table-tiny">
 					<tbody>
+						<tr>
+							<th>Name 【名称】</th>
+							<td>
+								<input type="text" class="form-control" ng-model="ability._name" />
+							</td>
+						</tr>
+						<tr>
+							<th>Comment 【注释】</th>
+							<td>
+								<textarea class="form-control" ng-model="ability._comment" rows="5"></textarea>
+							</td>
+						</tr>
+
+						<!-- 物品 -->
+						<tr class="abilityItemTitle" ng-if="ability._requireItemList.length">
+							<th colspan="2" class="success">
+								Item 【物品】
+							</th>
+						</tr>
+						<tr ng-repeat="unit in ability._requireItemList track by $index" ng-if="ability._requireItemList.length">
+							<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
+							<td>
+								<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
+							</td>
+						</tr>
+
 						<!-- 属性 -->
+						<tr class="abilityCommonTitle">
+							<th colspan="2" class="success">
+								Common 【常规】
+							</th>
+						</tr>
 						<tr ng-repeat="unit in ability._requireList track by $index">
 							<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
 							<td>
@@ -82,7 +116,7 @@
 									<textarea class="form-control" ng-model="event._comment" rows="5" placeholder="备注"></textarea>
 
 									<!-- 操作 -->
-									<div eventoperation data-container="event" data-path="_operationList"></div>
+									<div eventoperation data-container="event" data-path="_operationList" data-isitem="isItem"></div>
 								</div>
 								<button class="btn btn-primary btn-xs" ng-click="addEvent()">+ new event 【新建事件】</button>
 							</td>
@@ -217,7 +251,7 @@
 													</table>
 
 													<!-- 操作 -->
-													<div eventoperation data-container="event" data-path="_operationList"></div>
+													<div eventoperation data-container="event" data-path="_operationList" data-isitem="isItem"></div>
 												</div>
 												<button class="btn btn-warning btn-xs" ng-click="addEvent(modifier)">+ new event 【新建事件】</button>
 											</td>
