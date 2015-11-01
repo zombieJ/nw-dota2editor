@@ -14,7 +14,9 @@
 		</ul>
 
 		<div class="tab-content">
-			<!-- 技能 -->
+			<!-- ============================================== -->
+			<!-- =                    技能                    = -->
+			<!-- ============================================== -->
 			<div data-id="ability" class="tab-pane fade in active">
 				<!-- 快速定位 -->
 				<div class="fastPin">
@@ -273,8 +275,11 @@
 				</table>
 			</div>
 
-			<!-- 描述 -->
+			<!-- ============================================== -->
+			<!-- =                    描述                    = -->
+			<!-- ============================================== -->
 			<div data-id="description" class="tab-pane fade">
+				<!-- 没有语言文件 -->
 				<div ng-show="languageList.length === 0">
 					<h3>No Language File find</h3>
 					<h3>【没有找到语言文件】</h3>
@@ -282,6 +287,7 @@
 					<p>【请检查{{::Language.folderPath}}目录下的语言文件】</p>
 				</div>
 
+				<!-- 拥有语言文件 -->
 				<div class="row" ng-show="languageList.length !== 0">
 					<div class="col-md-2">
 						<div class="listCntr">
@@ -293,27 +299,60 @@
 					</div>
 					<div class="col-md-10">
 						<p ng-show="!language.ready">Loading...</p>
-						<table class="table table-condensed table-bordered table-tiny" ng-show="language.ready">
-							<tbody>
-								<tr ng-repeat="langField in Language.AbilityLang track by $index">
-									<th width="200">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
-									<td>
-										<input type="text" class="form-control" ng-if="langField.type === 'text'" ng-model="ability.getLang(language)[langField.attr || langField.title]" />
-										<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5" ng-model="ability.getLang(language)[langField.attr || langField.title]"></textarea>
-									</td>
-								</tr>
 
-								<tr>
-									<th colspan="2" class="success">
-										AbilitySpecial 【自定义值】
-									</th>
-								</tr>
-								<tr ng-repeat="langAbilitySpecialField in ability._abilitySpecialList track by $index">
-									<th>{{langAbilitySpecialField[0]}}</th>
-									<td><input type="text" class="form-control" ng-model="ability.getLang(language).AbilitySpecial[langAbilitySpecialField[0]]" /></td>
-								</tr>
-							</tbody>
-						</table>
+						<!-- ========================== -->
+						<!-- =          描述          = -->
+						<!-- ========================== -->
+						<div ng-if="language">
+							<h3>Description 【描述】</h3>
+							<table class="table table-condensed table-bordered table-tiny" ng-show="language.ready">
+								<tbody>
+									<!-- 常规描述 -->
+									<tr ng-repeat="langField in Language.AbilityLang track by $index">
+										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
+										<td>
+											<input type="text" class="form-control" ng-if="langField.type === 'text'" ng-model="ability.getLang(language)[langField.attr || langField.title]" />
+											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5" ng-model="ability.getLang(language)[langField.attr || langField.title]"></textarea>
+										</td>
+									</tr>
+
+									<!-- 自定义值 -->
+									<tr>
+										<th colspan="2" class="success">
+											AbilitySpecial 【自定义值】
+										</th>
+									</tr>
+									<tr ng-repeat="langAbilitySpecialField in ability._abilitySpecialList track by $index">
+										<th>{{langAbilitySpecialField[0]}}</th>
+										<td><input type="text" class="form-control" ng-model="ability.getLang(language).AbilitySpecial[langAbilitySpecialField[0]]" /></td>
+									</tr>
+								</tbody>
+							</table>
+
+							<!-- ========================== -->
+							<!-- =         修饰器         = -->
+							<!-- ========================== -->
+							<h3>Modifiers 【修饰器】</h3>
+							<table class="table table-condensed table-bordered table-tiny" ng-show="language.ready">
+								<tbody ng-repeat="modifier in ability._modifierList track by $index">
+									<tr>
+										<th colspan="2" class="success">
+											<span class="glyphicon glyphicon-tag"></span> {{modifier._name}}
+											<span ng-if="modifier.IsHidden === '1'" class="label label-info">Hidden 【隐藏】</span>
+										</th>
+									</tr>
+									<tr ng-repeat="langField in Language.ModifierLang track by $index">
+										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
+										<td>
+											<input type="text" class="form-control" ng-if="langField.type === 'text'"
+													ng-model="language.map[Language.ModifierPrefix + modifier._name + (langField.attr ? '_' + langField.attr : '')]" />
+											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
+													ng-model="language.map[Language.ModifierPrefix + modifier._name + (langField.attr ? '_' + langField.attr : '')]"></textarea>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>

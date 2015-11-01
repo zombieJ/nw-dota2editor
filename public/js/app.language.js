@@ -45,7 +45,6 @@ app.factory("Language", function(KV, NODE) {
 				_map.AbilitySpecial[key.replace(_abilityPrefix_, "")] = value;
 			}
 		});
-		console.log(">>>", _map);
 		return _map;
 	};
 
@@ -58,7 +57,6 @@ app.factory("Language", function(KV, NODE) {
 	// =                     技能                     =
 	// ================================================
 	Language.AbilityPrefix = "DOTA_Tooltip_ability_";
-
 	Language.AbilityLang = [
 		{attr: "", desc: "名称", title: "Name", type: "text", frequent: true},
 		{attr: "Description", desc: "描述", type: "blob", frequent: true},
@@ -66,6 +64,12 @@ app.factory("Language", function(KV, NODE) {
 		{attr: "Note0", desc: "备注0", type: "blob"},
 		{attr: "Note1", desc: "备注1", type: "blob"},
 		{attr: "Note2", desc: "备注2", type: "blob"},
+	];
+
+	Language.ModifierPrefix = "DOTA_Tooltip_";
+	Language.ModifierLang = [
+		{attr: "", desc: "名称", title: "Name", type: "text", frequent: true},
+		{attr: "Description", desc: "描述", type: "blob", frequent: true},
 	];
 
 	return Language;

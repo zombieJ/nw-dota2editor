@@ -94,6 +94,20 @@ app.factory("Modifier", function(Event) {
 	};
 
 	// ================================================
+	// =                     语言                     =
+	// ================================================
+	Modifier.prototype.getLang = function(language) {
+		if(!language) return null;
+
+		var _lang = this._languages[language.name];
+		if(!_lang) {
+			_lang = language.getModifierLang(this);
+			this._languages[language.name] = _lang;
+		}
+		return _lang;
+	};
+
+	// ================================================
 	// =                     解析                     =
 	// ================================================
 	Modifier.parse = function(kvUnit, lvl) {

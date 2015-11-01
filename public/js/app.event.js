@@ -52,7 +52,7 @@ app.factory("Event", function(Operation) {
 
 		// Hack: OnIntervalThink
 		if(this._name === "OnIntervalThink") {
-			writer.write('"ThinkInterval"		"$1"', this.ThinkInterval);
+			writer.write('"ThinkInterval"			"$1"', this.ThinkInterval);
 		}
 
 		// 名称
