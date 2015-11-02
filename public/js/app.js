@@ -38,7 +38,7 @@ app.factory("NODE", function() {
 	return window.process ? window.process.mainModule.exports : null;
 });
 
-app.controller('main', function($scope, $route, $q, Ability, Event, Operation, Modifier, Language, KV, globalContent, NODE) {
+app.controller('main', function($scope, $route, $location, $q, Ability, Event, Operation, Modifier, Language, KV, globalContent, NODE) {
 	$scope.Ability = Ability;
 	$scope.Event = Event;
 	$scope.Operation = Operation;
@@ -50,6 +50,10 @@ app.controller('main', function($scope, $route, $q, Ability, Event, Operation, M
 	$scope.globalContent = globalContent;
 
 	NODE && NODE.init(globalContent, $q);
+
+	$scope.navSelected = function(path) {
+		return path === $location.path();
+	};
 
 	// 载入项目
 	$scope.loadProject = function() {
