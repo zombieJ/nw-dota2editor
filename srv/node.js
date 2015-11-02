@@ -32,6 +32,9 @@ exports.loadProject = function(projectPath) {
 		FS.exists(projectPath, function (exist) {
 			if (exist) {
 				_deferred.resolve();
+
+				// 创建Dota2Editor配置文件
+				exports.assumeFolder(".dota2editor");
 			} else {
 				_deferred.reject();
 			}
@@ -39,6 +42,15 @@ exports.loadProject = function(projectPath) {
 	}
 
 	return _deferred.promise;
+};
+
+exports.assumeFolder = function(path) {
+	path = PATH.normalize(content.project + "/" + path);
+	FS.exists(path, function(exist) {
+		if(!exist) {
+			FS.mkdir(path);
+		}
+	});
 };
 
 exports.loadFile = function(path, encoding) {

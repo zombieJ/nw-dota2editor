@@ -6,10 +6,11 @@ hammerControllers.controller('indexCtrl', function ($scope) {
 });
 
 var _abilityCtrl = function(isItem) {
-	return function ($scope, $http, NODE, globalContent, KV, Ability, Event, Operation, Modifier, Language) {
+	return function ($scope, $http, NODE, globalContent, KV, Ability, Event, Operation, Modifier, GUI) {
 		if (!globalContent.isOpen) return;
 
 		var _globalListKey = isItem ? "itemList" : "abilityList";
+		var _globalConfigKey = isItem ? "abilityConfig" : "itemConfig";
 		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
 
 		$scope.abilityList = [];
@@ -73,6 +74,15 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                           文件操作                           =
 		// ================================================================
+		// 读取配置文件
+		if (!globalContent[_globalConfigKey]) {
+			NODE.loadFile(".dota2editor/ability.conf", "utf8").then(function (data) {
+				$scope.config = JSON.parse(data);
+			}, function() {
+				$scope.config = {};
+			});
+		}
+
 		// 读取技能文件
 		if (!globalContent[_globalListKey]) {
 			NODE.loadFile(_filePath, "utf8").then(function (data) {
@@ -108,9 +118,20 @@ var _abilityCtrl = function(isItem) {
 		});
 
 		// ================================================================
+		// =                             配置                             =
+		// ================================================================
+		$scope.setAbilityMarkColor = function(color) {
+			if(!$scope.config) return;
+
+			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
+			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+			_ability.markColor = color;
+		};
+
+		// ================================================================
 		// =                              UI                              =
 		// ================================================================
-		// Ability list size
+		// 列表框布局
 		var winWidth;
 		$(window).on("resize.abilityList", function() {
 			setTimeout(function() {
@@ -123,7 +144,7 @@ var _abilityCtrl = function(isItem) {
 			}, 100);
 		}).resize();
 
-		//
+		// 禁止列表框滚屏
 		$("#listCntr").on("mousewheel.abilityList", function(e) {
 			var _my = $(this);
 
@@ -133,14 +154,29 @@ var _abilityCtrl = function(isItem) {
 			var _scrollHeight = _my[0].scrollHeight;
 
 			if((_delta > 0 && _top <= 0) || (_delta < 0 && _top + _height >= _scrollHeight)) {
-				console.log("!!!!");
 				e.preventDefault();
 			}
+		});
+
+		// 列表框右击
+		$("#abilityMenu").hide();
+		var _menuAbility;
+		$(document).on("contextmenu.abilityList", "#listCntr .listItem", function (e) {
+			$("#abilityMenu").show().offset({
+				left: e.originalEvent.x,
+				top: e.originalEvent.y
+			});
+
+			_menuAbility = angular.element(this).scope()._ability;
+
+			e.preventDefault();
+			return false;
 		});
 
 		$scope.$on("$destroy",function() {
 			$(window).off("resize.abilityList");
 			$("#listCntr").off("mousewheel.abilityList");
+			$(document).off("contextmenu.abilityList");
 		});
 	};
 };

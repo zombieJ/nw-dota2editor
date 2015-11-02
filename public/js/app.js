@@ -26,9 +26,18 @@ app.factory("globalContent", function() {
 	var _globalContent = {
 		project: localStorage.getItem("project"),
 		isOpen: false,
+
 		abilityList: null,
 		itemList: null,
+
+		abilityConfig: null,
+		itemConfig: null,
+
 		languageList: [],
+
+		system: {
+			hideMenu: true,
+		},
 	};
 
 	return _globalContent;
@@ -36,6 +45,10 @@ app.factory("globalContent", function() {
 
 app.factory("NODE", function() {
 	return window.process ? window.process.mainModule.exports : null;
+});
+
+app.factory("GUI", function() {
+	return require('nw.gui');
 });
 
 app.controller('main', function($scope, $route, $location, $q, Ability, Event, Operation, Modifier, Language, KV, globalContent, NODE) {
@@ -180,6 +193,9 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 		});
 	};
 
+	// ================================================================
+	// =                              UI                              =
+	// ================================================================
 	// 弹出保存对话框
 	$scope.showSaveMDL = function() {
 		$("#saveMDL").modal();
@@ -189,4 +205,19 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 			saveItem.status = 0;
 		});
 	};
+
+	// 隐藏菜单栏
+	$(document).on("click.abilityList", function (e) {
+		setTimeout(function() {
+			if(globalContent.system.hideMenu) {
+				$(".app-menu.app-float-menu").hide();
+			}
+			globalContent.system.hideMenu = true;
+		}, 1);
+	});
+
+	// 阻止隐藏菜单
+	$(document).on("click.abilityList", ".app-submenu > a", function (e) {
+		globalContent.system.hideMenu = false;
+	});
 });
