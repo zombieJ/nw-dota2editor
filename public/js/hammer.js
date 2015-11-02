@@ -80,7 +80,11 @@ var _abilityCtrl = function(isItem) {
 				$scope.config = JSON.parse(data);
 			}, function() {
 				$scope.config = {};
+			}).finally(function() {
+				globalContent[_globalConfigKey] = $scope.config;
 			});
+		} else {
+			$scope.config = globalContent[_globalConfigKey];
 		}
 
 		// 读取技能文件
