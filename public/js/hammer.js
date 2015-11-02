@@ -106,6 +106,42 @@ var _abilityCtrl = function(isItem) {
 		globalContent.languageList._promise.then(function () {
 			$scope.language = $scope.languageList[0];
 		});
+
+		// ================================================================
+		// =                              UI                              =
+		// ================================================================
+		// Ability list size
+		var winWidth;
+		$(window).on("resize.abilityList", function() {
+			setTimeout(function() {
+				var _winWidth = $(window).width();
+				if(_winWidth !== winWidth) {
+					var _left = $(".abilityCntr").offset().left;
+					$("#listCntr").width(_left - 20);
+				}
+				winWidth = _winWidth;
+			}, 100);
+		}).resize();
+
+		//
+		$("#listCntr").on("mousewheel.abilityList", function(e) {
+			var _my = $(this);
+
+			var _delta = e.originalEvent.wheelDelta;
+			var _top = _my.scrollTop();
+			var _height = _my.outerHeight();
+			var _scrollHeight = _my[0].scrollHeight;
+
+			if((_delta > 0 && _top <= 0) || (_delta < 0 && _top + _height >= _scrollHeight)) {
+				console.log("!!!!");
+				e.preventDefault();
+			}
+		});
+
+		$scope.$on("$destroy",function() {
+			$(window).off("resize.abilityList");
+			$("#listCntr").off("mousewheel.abilityList");
+		});
 	};
 };
 
