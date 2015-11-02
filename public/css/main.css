@@ -2,28 +2,32 @@
 	padding-top: 60px;
 }
 
+.ability-img {
+	height: 20px;
+}
+
 .listCntr {
-    font-size: 12px;
+	font-size: 12px;
 }
 
 .listCntr .listItem {
-    border: 1px solid #999999;
-    border-top: none;
+	border: 1px solid #999999;
+	border-top: none;
 }
 
 .listCntr .listItem:first-child {
-    border-top: 1px solid #999999;
+	border-top: 1px solid #999999;
 }
 
 .listCntr .listItem.active {
-    background: #eb9316;
-    color: #FFFFFF;
+	background: #eb9316;
+	color: #FFFFFF;
 }
 
 .listCntr .listItem p {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .table.table-tiny td {
@@ -31,7 +35,7 @@
 }
 
 .table.table-tiny td > input[type='checkbox'] {
-    margin: 5px 0 0 10px;
+	margin: 5px 0 0 10px;
 }
 
 .table.table-tiny .form-control {
@@ -48,6 +52,7 @@
 label.checkbox {
 	display: inline-block;
 }
+
 label.checkbox input[type="checkbox"] {
 	margin: 0 5px 0 0;
 	position: relative;
@@ -68,11 +73,11 @@ label.checkbox input[type="checkbox"] {
 }
 
 .table.table-tiny .table {
-    margin: 0;
+	margin: 0;
 }
 
 .table.table-tiny td {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 .table.table-tiny .group-event,
@@ -108,9 +113,10 @@ label.checkbox input[type="checkbox"] {
 	z-index: 10;
 	width: 20px;
 	height: 200px;
-	background: rgba(0,0,0,0.8);
+	background: rgba(0, 0, 0, 0.8);
 	margin: 0 0 0 -20px;
 }
+
 .fastPin > .glyphicon {
 	position: absolute;
 	left: 3px;
@@ -123,7 +129,7 @@ label.checkbox input[type="checkbox"] {
 	position: absolute;
 	left: 20px;
 	top: 0;
-	background: rgba(0,0,0,0.8);
+	background: rgba(0, 0, 0, 0.8);
 	padding: 10px 15px;
 	border-radius: 0 5px 5px 0;
 	color: #FFFFFF;
@@ -131,6 +137,15 @@ label.checkbox input[type="checkbox"] {
 
 .fastPin:hover > .subPanel {
 	display: block;
+}
+
+.fastPin > .subPanel .ability-img {
+	height: auto;
+	width: 100px;
+	position: absolute;
+	right: -105px;
+	border: 3px solid rgba(0,0,0,0.8);
+	top: 0px;
 }
 
 .fastPin > .subPanel h3 {
@@ -145,7 +160,7 @@ label.checkbox input[type="checkbox"] {
 	margin: 0;
 	padding: 0 0 0 20px;
 	list-style: none;
-	white-space:nowrap;
+	white-space: nowrap;
 }
 
 .fastPin > .subPanel > ul {

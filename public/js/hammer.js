@@ -19,6 +19,36 @@ var _abilityCtrl = function(isItem) {
 			$scope.ability = ability;
 		};
 
+		var _iconStep = 0;
+		$scope.$watch('ability.AbilityTextureName', function() {
+			if(!$scope.ability) return "";
+
+			_iconStep = 0;
+			var _path = "";
+			if(isItem) {
+				_path = globalContent.project + "/resource/flash3/images/items/" + ($scope.ability.AbilityTextureName || "").replace(/^item_/, "") + ".png";
+			} else {
+				_path = globalContent.project + "/resource/flash3/images/spellicons/" + ($scope.ability.AbilityTextureName || "") + ".png";
+			}
+			$(".ability-img").attr("src", _path);
+		});
+		window.iconError = function() {
+			if(_iconStep === 0) {
+				_iconStep = 1;
+
+				var _path = "";
+				if(isItem) {
+					_path = "https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/items/" + ($scope.ability.AbilityTextureName || "").replace(/^item_/, "") + ".png";
+				} else {
+					_path = "https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/spellicons/" + ($scope.ability.AbilityTextureName || "") + ".png";
+				}
+
+				$(".ability-img").attr("src", _path);
+			} else {
+				$(".ability-img").attr("src", 'public/img/logo.jpg');
+			}
+		};
+
 		$scope.getType = function (attr, src) {
 			src = src || $scope.ability;
 			if (typeof attr === "string") {

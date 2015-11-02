@@ -10,6 +10,7 @@
 	<div class="col-sm-10 col-md-10">
 		<ul id="myTabs" class="nav nav-tabs" role="tablist">
 			<li class="active"><a href="[data-id='ability']" data-toggle="tab">
+				<img class="ability-img" onerror="iconError();" />
 				{{isItem ? 'Item 【物品】' : 'Ability 【技能】'}}
 			</a></li>
 			<li><a href="[data-id='description']" data-toggle="tab">Description 【描述】</a></li>
@@ -24,6 +25,7 @@
 				<div class="fastPin">
 					<a class="glyphicon glyphicon-th-list" ng-click="common.ui.scrollTo(0);"></a>
 					<div class="subPanel">
+						<img class="ability-img" />
 						<h3>{{ability._name}}</h3>
 						<ul>
 							<li ng-if="ability._requireItemList.length"><a ng-click="common.ui.scrollTo('.abilityItemTitle');">Item 【物品】</a></li>
