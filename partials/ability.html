@@ -5,13 +5,17 @@
 			     ng-class="{active: ability == _ability}" ng-click="setAbility(_ability);">
 				<p class="title">
 					<span class="fa fa-circle sm" style="color: {{config.abilities[_ability._name].markColor || '#CCC'}};"></span>
-					{{_ability._name}}
+					{{config.abilities[_ability._name].editorAliasName || _ability._name}}
 				</p>
 				<p class="desc">{{_ability._comment}}</p>
 			</div>
 		</div>
+		<button id="newItem" class="btn btn-primary" ng-click="newAbility()">+ New Ability</button>
 	</div>
-	<div class="col-sm-9 col-md-10 abilityCntr">
+	<div class="col-sm-9 col-md-10" ng-show="!ability">
+		<h1>No Ability Yet 【还未创建Ability】</h1>
+	</div>
+	<div class="col-sm-9 col-md-10 abilityCntr" ng-show="ability">
 		<ul id="myTabs" class="nav nav-tabs" role="tablist">
 			<li class="active"><a href="[data-id='ability']" data-toggle="tab">
 				<img class="ability-img" onerror="iconError();" />
@@ -406,6 +410,7 @@
 <!-- =                              技能菜单                              = -->
 <!-- ====================================================================== -->
 <ul id="abilityMenu" class="app-menu app-float-menu">
+	<li><a ng-click="setAbilityEditorAlias()">Editor Alias 【编辑器别名】</a></li>
 	<li class="app-submenu">
 		<a>Color Marker 【颜色标记】</a>
 		<ul class="app-menu">
@@ -414,6 +419,47 @@
 			<li><a ng-click="setAbilityMarkColor('#dd4b39');"><span class="fa fa-circle sm" style="color: #dd4b39;"></span> Red 【红色】</a></li>
 			<li><a ng-click="setAbilityMarkColor('#f39c12');"><span class="fa fa-circle sm" style="color: #f39c12;"></span> Yellow 【黄色】</a></li>
 			<li><a ng-click="setAbilityMarkColor('#666666');"><span class="fa fa-circle sm" style="color: #666666;"></span> Black 【黑色】</a></li>
+			<li class="line"></li>
+			<li><a ng-click="setAbilityMarkColor();"><span class="fa fa-circle sm" style="color: #cccccc;"></span> None 【还原】</a></li>
 		</ul>
 	</li>
+	<li><a ng-click="copyAbility()">Duplicate Ability 【复制技能】</a></li>
+	<li class="line"></li>
+	<li><a ng-click="deleteAbility()" class="danger">Delete Ability 【删除技能】</a></li>
 </ul>
+
+<!-- ====================================================================== -->
+<!-- =                           新建技能对话框                           = -->
+<!-- ====================================================================== -->
+<div class="modal fade" id="newMDL" tabindex="-1">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Select Template 【选择技能模板】</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Type 【类型】</label>
+					<select class="form-control" ng-model="newAbility._type">
+						<option ng-repeat="_type in newAbility.type" value="{{::_type[2]}}">{{::_type[0]}} 【{{::_type[1]}}】</option>
+					</select>
+				</div>
+				<div class="form-group" ng-show="newAbility._type !== 'Passive'">
+					<label>Target 【目标】</label>
+					<select class="form-control" ng-model="newAbility._target">
+						<option ng-repeat="_target in newAbility.target" value="{{::_target[2]}}">{{::_target[0]}} 【{{::_target[1]}}】</option>
+					</select>
+				</div>
+				<div class="checkbox" ng-show="newAbility._type !== 'Passive'">
+					<label>
+						<input type="checkbox" ng-checked="newAbility._channelled" ng-click="newAbility._channelled = !newAbility._channelled;"> Channelled 【持续施法】
+					</label>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="newAbility.confirm()">Create</button>
+			</div>
+		</div>
+	</div>
+</div>

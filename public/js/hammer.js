@@ -71,12 +71,92 @@ var _abilityCtrl = function(isItem) {
 			$scope.language = language;
 		};
 
+		$scope.newAbility = function() {
+			if(!$scope.abilityList) return;
+
+			$("#newMDL").modal();
+			$scope.newAbility._type = "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET";
+			$scope.newAbility._target = "DOTA_UNIT_TARGET_TEAM_ENEMY";
+			$scope.newAbility._channelled = false;
+		};
+		$scope.newAbility.confirm = function() {
+			$scope.ability = new Ability();
+			$scope.abilityList.push($scope.ability);
+
+			// Type
+			$scope.ability.AbilityBehavior[$scope.newAbility._type] = true;
+			if($scope.newAbility._type !== "Passive") {
+				// Target type
+				$scope.ability.AbilityUnitTargetType.DOTA_UNIT_TARGET_HERO = true;
+				$scope.ability.AbilityUnitTargetType.DOTA_UNIT_TARGET_BASIC = true;
+
+				// Target team
+				$scope.ability.AbilityUnitTargetTeam = $scope.newAbility._target;
+
+				// Channel
+				if($scope.newAbility._channelled) {
+					$scope.ability.AbilityBehavior.DOTA_ABILITY_BEHAVIOR_CHANNELLED = true;
+				}
+			}
+
+			setTimeout(function() {
+				$("#listCntr").scrollTop(9999999);
+			}, 10);
+			$("#newMDL").modal('hide');
+		};
+		$scope.newAbility.type = [
+			["Target","对目标","DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"],
+			["No Target","无目标","DOTA_ABILITY_BEHAVIOR_NO_TARGET"],
+			["Point","对地点","DOTA_ABILITY_BEHAVIOR_POINT"],
+			["Passive","被动","DOTA_ABILITY_BEHAVIOR_PASSIVE"],
+		];
+		$scope.newAbility.target = [
+			["Enemy","敌军","DOTA_UNIT_TARGET_TEAM_ENEMY"],
+			["Friendly","友军","DOTA_UNIT_TARGET_TEAM_FRIENDLY"],
+			["Both","全部","DOTA_UNIT_TARGET_TEAM_BOTH"],
+		];
+
+		$scope.copyAbility = function() {
+			if(!_menuAbility) return;
+
+			var _writer = new KV.Writer();
+			_menuAbility.doWriter(_writer);
+
+			var _clone = Ability.parse({
+				value: new KV(_writer._data)
+			}, isItem);
+			_clone._name += "_clone";
+
+			var _index = $.inArray(_menuAbility, $scope.abilityList);
+			$scope.ability = _clone;
+			$scope.abilityList.splice(_index + 1, 0, $scope.ability);
+		};
+
+		$scope.deleteAbility = function() {
+			if(!_menuAbility) return;
+
+			$.dialog({
+				title: "Delete Confirm 【删除确认】",
+				content: "Do you want to delete '"+_menuAbility._name+"'",
+				confirm: true
+			}, function(ret) {
+				if(!ret) return;
+
+				var _isCurrent = $scope.ability === _menuAbility
+				common.array.remove(_menuAbility, $scope.abilityList);
+				if(_isCurrent) {
+					$scope.ability = $scope.abilityList[0];
+				}
+				$scope.$apply();
+			});
+		};
+
 		// ================================================================
 		// =                           文件操作                           =
 		// ================================================================
 		// 读取配置文件
 		if (!globalContent[_globalConfigKey]) {
-			NODE.loadFile(".dota2editor/ability.conf", "utf8").then(function (data) {
+			NODE.loadFile(isItem ? Ability.itemConfig : Ability.abilityConfig, "utf8").then(function (data) {
 				$scope.config = JSON.parse(data);
 			}, function() {
 				$scope.config = {};
@@ -129,7 +209,39 @@ var _abilityCtrl = function(isItem) {
 
 			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
 			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
-			_ability.markColor = color;
+			if(color) {
+				_ability.markColor = color;
+			} else {
+				delete _ability.markColor;
+			}
+		};
+
+		$scope.setAbilityEditorAlias = function() {
+			if(!$scope.config) return;
+
+			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
+			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+
+			var $input = $("<input type='text' class='form-control' />");
+			$input.val(_ability.editorAliasName || "");
+			$.dialog({
+				title: "Alias Name in Editor 【编辑器中的别名】",
+				content: $input,
+				confirm: true
+			}, function(ret) {
+				if(!ret) return;
+
+				var _alias = $input.val();
+				if(_alias) {
+					_ability.editorAliasName = _alias;
+				} else {
+					delete _ability.editorAliasName;
+				}
+				$scope.$apply();
+			});
+			setTimeout(function() {
+				$input.focus();
+			}, 500);
 		};
 
 		// ================================================================
@@ -142,7 +254,8 @@ var _abilityCtrl = function(isItem) {
 				var _winWidth = $(window).width();
 				if(_winWidth !== winWidth) {
 					var _left = $(".abilityCntr").offset().left;
-					$("#listCntr").width(_left - 20);
+					$("#listCntr").outerWidth(_left - 15);
+					$("#newItem").outerWidth(_left - 15);
 				}
 				winWidth = _winWidth;
 			}, 100);
@@ -172,6 +285,7 @@ var _abilityCtrl = function(isItem) {
 			});
 
 			_menuAbility = angular.element(this).scope()._ability;
+			refreshMenu("#abilityMenu");
 
 			e.preventDefault();
 			return false;

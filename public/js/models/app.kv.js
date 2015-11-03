@@ -5,7 +5,13 @@
 // ======================================================
 app.factory("KV", function(NODE, $q) {
 	var _KV = function(list, keepValObjContent) {
-		var _lines = typeof list === "string" ? list.split(/\n/) : list;
+		var _lines;
+		if(typeof list === "string") {
+			list = list.replace(/\{/g, "\n{").replace(/\}/g, "\n}");
+			_lines = list.split(/\n/);
+		} else {
+			_lines = list;
+		}
 
 		var _tmpComment = "";
 		var _tmpEntity, _tmpEntityStartLine;

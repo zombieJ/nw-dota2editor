@@ -89,11 +89,16 @@ common.isEmpty = function(val) {
 
 // ======================= Log ========================
 var _DEBUG_KV = false;
+var _DEBUG_Ability = false;
 
 window._LOG = function (type, lvl) {
 	var _args = Array.prototype.slice.call(arguments, 2);
 	_args.unshift("["+type+"]" + common.text.repeat("  ", lvl));
-	if(_DEBUG_KV || type !== "KV") {
+	if(
+		(!_DEBUG_KV && type === "KV") ||
+		(!_DEBUG_Ability && type === "Ability")
+	) {
+	} else {
 		console.log.apply(console, _args);
 	}
 };

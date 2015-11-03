@@ -38,34 +38,17 @@ div:hover::-webkit-scrollbar-thumb {
 	height: 20px;
 }
 
-/*.listCntr {
-	font-size: 12px;
+#newItem {
+	position: fixed;
+	bottom: 5px;
+	left: 5px;
 }
 
-.listCntr .listItem {
-	border: 1px solid #999999;
-	border-top: none;
-}
-
-.listCntr .listItem:first-child {
-	border-top: 1px solid #999999;
-}
-
-.listCntr .listItem.active {
-	background: #eb9316;
-	color: #FFFFFF;
-}
-
-.listCntr .listItem p {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}*/
 #listCntr {
 	background: #FFFFFF;
 	position: fixed;
 	top: 55px;
-	bottom: 5px;
+	bottom: 45px;
 	left: 5px;
 	border: 1px solid #999;
 
@@ -78,9 +61,6 @@ div:hover::-webkit-scrollbar-thumb {
 	border-bottom: 1px solid #AAA;
 	cursor: default;
 }
-.listCntr .listItem:last-child {
-	border-bottom: none;
-}
 .listCntr .listItem:hover {
 	background: #F4F4F4;
 }
@@ -90,7 +70,7 @@ div:hover::-webkit-scrollbar-thumb {
 }
 
 .listCntr .listItem p {
-	line-height: 100%;
+	line-height: 110%;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -288,6 +268,10 @@ label.checkbox input[type="checkbox"] {
 .app-menu > li:last-child {
 	border-bottom: none;
 }
+.app-menu > li.line {
+	height: 2px;
+	background: #CCC;
+}
 .app-menu > li > a {
 	padding: 5px 10px;
 	display: block;
@@ -302,6 +286,13 @@ label.checkbox input[type="checkbox"] {
 }
 .app-menu > li:hover > a:active {
 	background: #6e9cc9;
+}
+.app-menu > li > a.danger {
+	color: #dd4b39;
+}
+.app-menu > li:hover > a.danger {
+	background: #dd4b39;
+	color: #FFF;
 }
 .app-menu > li.app-submenu > a {
 	padding-right: 20px;

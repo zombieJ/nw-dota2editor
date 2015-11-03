@@ -99,12 +99,15 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 	// 保存项目
 	function saveAbilityFunc(isItem) {
 		return function() {
-			var _deferred = $q.defer();
+			var _deferred_file = $q.defer();
+			var _deferred_config = $q.defer();
 			var _globalListKey = isItem ? "itemList" : "abilityList";
+			var _globalConfigKey = isItem ? "abilityConfig" : "itemConfig";
 			var _filePath = isItem ? Ability.exportItemFilePath : Ability.exportFilePath;
 
+			// File
 			if(!globalContent[_globalListKey]) {
-				_deferred.resolve(4);
+				_deferred_file.resolve(4);
 			} else {
 				var _writer = new KV.Writer();
 				_writer.withHeader("DOTAAbilities", {Version: 1});
@@ -114,9 +117,21 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 				});
 				_writer.withEnd();
 
-				_writer.save(_filePath, "utf8",_deferred);
+				_writer.save(_filePath, "utf8",_deferred_file);
 			}
-			return _deferred.promise;
+
+			// Config
+			if(!globalContent[_globalConfigKey]) {
+				_deferred_config.resolve(4);
+			} else {
+				_deferred_config = NODE.saveFile(isItem ? Ability.itemConfig : Ability.abilityConfig, "utf8", JSON.stringify(globalContent[_globalConfigKey], null, "\t"));
+			}
+
+			var _deferred_all = $q.all([_deferred_file.promise, _deferred_config.promise]).then(function(result) {
+				return result[0];
+			});
+
+			return _deferred_all;
 		};
 	}
 
@@ -127,6 +142,11 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 		// =                          保存 【技能】                          =
 		// ===================================================================
 		{name: "Ability", desc: "技能", selected: true, saveFunc: saveAbilityFunc(false)},
+
+		// ===================================================================
+		// =                          保存 【物品】                          =
+		// ===================================================================
+		{name: "Item", desc: "物品", selected: true, saveFunc: saveAbilityFunc(true)},
 
 		// ===================================================================
 		// =                          保存 【语言】                          =
@@ -207,7 +227,7 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 	};
 
 	// 隐藏菜单栏
-	$(document).on("click.abilityList", function (e) {
+	$(document).on("click.hideMenu", function (e) {
 		setTimeout(function() {
 			if(globalContent.system.hideMenu) {
 				$(".app-menu.app-float-menu").hide();
@@ -217,7 +237,46 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 	});
 
 	// 阻止隐藏菜单
-	$(document).on("click.abilityList", ".app-submenu > a", function (e) {
+	$(document).on("click.preventHideMenu", ".app-submenu > a", function (e) {
 		globalContent.system.hideMenu = false;
+	});
+
+	var _refreshMenuID;
+	function _refreshMenu(ele) {
+		ele = $(ele);
+
+		var _offset = ele.offset();
+		var _eleHeight = ele.outerHeight();
+		var _winHeight = $(window).height();
+
+		if(_offset.top + _eleHeight > _winHeight) {
+			ele.offset({
+				top: _winHeight - _eleHeight
+			});
+		}
+
+		// Sub Menu
+		var _subMenu = ele.find(".app-menu:visible:first");
+		if(_subMenu.length) _refreshMenu(_subMenu);
+	};
+	window.refreshMenu = function(ele) {
+		ele = $(ele);
+		clearInterval(_refreshMenuID);
+
+		_refreshMenuID = setInterval(function() {
+			if(ele.is(":visible")) {
+				_refreshMenu(ele);
+			} else {
+				ele.find(".app-menu").css("top", 0);
+				clearInterval(_refreshMenuID);
+			}
+		}, 100);
+	};
+
+	// 对话框确认
+	$(document).on("keydown.dialog", ".modal-dialog input[type='text']", function (e) {
+		if(e.which === 13) {
+			$(this).closest(".modal-content").find(".modal-footer .btn-primary").click();
+		}
 	});
 });

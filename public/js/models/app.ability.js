@@ -358,6 +358,9 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 	Ability.itemFilePath = "scripts/npc/npc_items_custom.txt";
 	Ability.exportItemFilePath = "scripts/npc/npc_items_custom.txt";
 
+	Ability.abilityConfig = ".dota2editor/ability.conf";
+	Ability.itemConfig = ".dota2editor/item.conf";
+
 	// ================================================
 	// =                     属性                     =
 	// ================================================
@@ -398,7 +401,7 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		["DOTA_ABILITY_BEHAVIOR_UNIT_TARGET","目标", true],
 		["DOTA_ABILITY_BEHAVIOR_POINT","点", true],
 		["DOTA_ABILITY_BEHAVIOR_AOE","AOE", true],
-		["DOTA_ABILITY_BEHAVIOR_CHANNELLED","施法", true],
+		["DOTA_ABILITY_BEHAVIOR_CHANNELLED","持续施法", true],
 		["DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE","不可学习"],
 		["DOTA_ABILITY_BEHAVIOR_ITEM","物品？"],
 		["DOTA_ABILITY_BEHAVIOR_TOGGLE","开关"],
