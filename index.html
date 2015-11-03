@@ -7,6 +7,7 @@
 	<!-- jQuery -->
 	<script src="public/assets/jquery/jquery-1.11.3.min.js"></script>
 	<script src="public/assets/jquery/jquery.form.js"></script>
+	<script src="public/assets/jquery/jquery-ui.min.js"></script>
 
 	<!-- Moment -->
 	<script src="public/assets/moment/moment.min.js"></script>
@@ -15,6 +16,7 @@
 	<script src="public/assets/angular/angular.min.js"></script>
 	<script src="public/assets/angular/angular-resource.min.js"></script>
 	<script src="public/assets/angular/angular-route.min.js"></script>
+	<script src="public/assets/angular/sortable.js"></script>
 
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="public/assets/bootstrap/css/bootstrap.min.css">
@@ -49,6 +51,7 @@
 	<script src="public/js/models/app.language.js"></script>
 
 	<script src="public/js/hammer.js"></script>
+	<script src="public/js/languageCtrl.js"></script>
 </head>
 <body ng-controller="main">
 
@@ -69,6 +72,7 @@
 				<li ng-class="{active: navSelected('/index')}"><a href="#/index">Home</a></li>
 				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/ability')}"><a href="#/ability">Ability 【技能】</a></li>
 				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/item')}"><a href="#/item">Item 【物品】</a></li>
+				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/language')}"><a href="#/language">Language 【语言】</a></li>
 			</ul>
 			<ul class="nav navbar-nav pull-right">
 				<li ng-show="globalContent.isOpen">

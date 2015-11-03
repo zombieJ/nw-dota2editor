@@ -1,6 +1,6 @@
 ﻿<div class="row">
 	<div class="col-sm-3 col-md-2">
-		<div id="listCntr" class="listCntr noSelect">
+		<div id="listCntr" class="listCntr noSelect" ui-sortable ng-model="abilityList">
 			<div ng-repeat="_ability in abilityList track by $index" class="listItem"
 			     ng-class="{active: ability == _ability}" ng-click="setAbility(_ability);">
 				<p class="title">

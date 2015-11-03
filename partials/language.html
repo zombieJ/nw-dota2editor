@@ -1,0 +1,36 @@
+<div class="row">
+	<div class="col-sm-2 col-md-2">
+		<div id="listCntr" class="listCntr noSelect">
+			<div ng-repeat="_lang in languageList track by $index" class="listItem"
+			     ng-class="{active: lang == _lang}" ng-click="setLang(_lang);">
+				<p class="title">
+					{{config.languages[_lang.name].editorAliasName || _lang.name}}
+				</p>
+				<p class="desc">{{_lang.name}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-9 col-md-10 languageCntr" ng-show="lang">
+		<div id="floatTool" style="position: fixed; background: #FFF; height: 100px;">
+			asdasdasd
+		</div>
+		
+		<table class="table table-condensed table-bordered table-tiny" style="margin-top: 100px;">
+			<thead>
+			<tr>
+				<th width="20"></th>
+				<th width="10">Key 【键】</th>
+				<th>Value 【值】</th>
+			</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="(key, value) in lang.map track by $index">
+					<th class="text-center"><a href="javascript:void(0)" ng-click="removeKey(key)">[X]</a></th>
+					<th>{{key}}</th>
+					<td><textarea class="form-control" rows="5" ng-model="lang.map[key]"></textarea></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+

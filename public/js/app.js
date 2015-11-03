@@ -5,7 +5,7 @@ var APP_APP_NAME = "Dota2 Editor";
 var APP_APP_AUTHOR = "zombieJ";
 var APP_APP_GITHUB = "https://github.com/zombieJ/nw-dota2editor";
 
-var app = angular.module('app', ['ngRoute', 'hammerControllers', 'app.components']);
+var app = angular.module('app', ['ngRoute', 'hammerControllers', 'app.components', 'ui.sortable']);
 
 app.config(function($routeProvider) {
 	$routeProvider.when('/index', {
@@ -17,6 +17,9 @@ app.config(function($routeProvider) {
 	}).when('/item', {
 		templateUrl: 'partials/ability.html',
 		controller: 'itemCtrl'
+	}).when('/language', {
+		templateUrl: 'partials/language.html',
+		controller: 'languageCtrl'
 	}).otherwise({
 		redirectTo : '/index'
 	});
@@ -85,9 +88,11 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 				}));
 			}, function(){
 				common.array.replace(globalContent.languageList, []);
+			}).finally(function() {
+				$route.reload();
 			});
 
-			$route.reload();
+			//$route.reload();
 		}, function () {
 			$.dialog({
 				title: "OPS!",
