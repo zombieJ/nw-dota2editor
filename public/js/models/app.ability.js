@@ -85,6 +85,9 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		}
 
 		// 行为
+		fillAttr(_my, "ScriptFile", "")("仅供ability_lua使用", "ScriptFile(ability_lua only)");
+
+		// 行为
 		fillAttr(_my, "AbilityBehavior")("行为");
 
 		// 目标类型
@@ -101,6 +104,9 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 
 		// 技能类型
 		fillAttr(_my, "AbilityType", "DOTA_ABILITY_TYPE_BASIC")("技能类型");
+
+		// 热键
+		fillAttr(_my, "HotKeyOverride","")("热键");
 
 		// 最大等级
 		fillAttr(_my, "MaxLevel","4")("最大等级");
@@ -415,7 +421,7 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		["DOTA_ABILITY_BEHAVIOR_UNRESTRICTED","无视限制"],
 		["DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE","总有效-自动施法"],
 		["DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL","施法打断有效"],
-		["DOTA_ABILITY_BEHAVIOR_DONT_CANCEL_MOVEMENT","信使？"],
+		["DOTA_ABILITY_BEHAVIOR_DONT_CANCEL_MOVEMENT","不影响移动"],
 		["DOTA_ABILITY_BEHAVIOR_DONT_ALERT_TARGET","不惊醒目标"],
 		["DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK","不恢复攻击"],
 		["DOTA_ABILITY_BEHAVIOR_NORMAL_WHEN_STOLEN","偷取保持前摇"],

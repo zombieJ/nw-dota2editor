@@ -4,10 +4,31 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 【Dota2 KV编辑器 是一款可以可视化编辑KV技能及其多语言描述的编辑器】
 
 ### TODO list
-* Language support color picker
+* Action animation: https://developer.valvesoftware.com/wiki/Dota_2_Workshop_Tools/Scripting/API#GameActivity_t
+* Sound precache error
 * Liner support in Target group unit
+* Channel hide if not channel
 * Auto change language description when ability name changed
+* Only rewrite changed ability
+* ability_lua & RunScript auto generate lua file
+* Modifier prop or state UI. Click to add, and then select.
+* Create new file if file not exist
 * Version control
-* Tree view of customize skill group
+* Language support color picker
 * Fast access of ability with highlight
+* SpellLibrary as template
+* Tree view of customize skill group
+* Win10 smartScreen will block program
 * Auto detect file change to reload in UI
+
+
+
+
+
+
+
+
+
+
+
+

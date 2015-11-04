@@ -15,10 +15,10 @@
 	<div class="col-sm-9 col-md-10" ng-show="!ready">
 		<h1>Loading... 【载入中】</h1>
 	</div>
-	<div class="col-sm-9 col-md-10" ng-show="ready && !ability">
+	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ready && !ability}" ng-show="ready && !ability">
 		<h1>No Ability Yet 【还未创建Ability】</h1>
 	</div>
-	<div class="col-sm-9 col-md-10 abilityCntr" ng-show="ability">
+	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ability}" ng-show="ability">
 		<ul id="myTabs" class="nav nav-tabs" role="tablist">
 			<li class="active"><a href="[data-id='ability']" data-toggle="tab">
 				<img class="ability-img" onerror="iconError();" />
