@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="col-sm-9 col-md-10 languageCntr" ng-show="lang">
-		<div id="floatTool" style="position: fixed; top: 50px;padding-top: 10px; background: #FF0; height: 125px;" class="row">
+		<div id="floatTool" style="position: fixed; top: 50px;padding-top: 10px; background: #FFF; height: 125px; border-bottom: 1px solid #DDD;" class="row">
 			<div class="col-sm-7 col-md-7">
 				<div class="form-group">
 					<label>Create Text 【创建词条】</label>
@@ -32,14 +32,14 @@
 			<thead>
 			<tr>
 				<th width="20"></th>
-				<th width="10">Key 【键】</th>
+				<th width="200">Key 【键】</th>
 				<th>Value 【值】</th>
 			</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="(key, value) in lang.map track by $index" data-key="{{key}}">
+				<tr ng-repeat="key in keyList track by $index" data-key="{{key}}">
 					<th class="text-center"><a href="javascript:void(0)" ng-click="removeKey(key)">[X]</a></th>
-					<th>{{key}}</th>
+					<th style="word-break:break-all;">{{key}}</th>
 					<td><textarea class="form-control" rows="5" ng-model="lang.map[key]"></textarea></td>
 				</tr>
 			</tbody>

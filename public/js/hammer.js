@@ -15,6 +15,7 @@ var _abilityCtrl = function(isItem) {
 
 		$scope.abilityList = [];
 		$scope.isItem = isItem;
+		$scope.ready = false;
 
 		$scope.setAbility = function (ability) {
 			$scope.ability = ability;
@@ -189,10 +190,13 @@ var _abilityCtrl = function(isItem) {
 					title: "OPS!",
 					content: "Can't find npc_abilities_custom.txt <br/> 【打开npc_abilities_custom.txt失败】",
 				});
+			}).finally(function() {
+				$scope.ready = true;
 			});
 		} else {
 			$scope.abilityList = globalContent[_globalListKey];
 			$scope.ability = $scope.abilityList[0];
+			$scope.ready = true;
 		}
 
 		// 多语言支持
