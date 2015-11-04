@@ -17,14 +17,37 @@ app.factory("Language", function($q, KV, NODE) {
 			var _kv = new KV(data);
 			var _map = _kv.kvToMap();
 
-			 _my.name = _map["Language"];
-			 _my.map = _map["Tokens"].kvToMap();
+			_my.name = _map["Language"];
+			_my.map = _map["Tokens"].kvToMap();
 
 			_my.ready = true;
 			_deferred.resolve();
 		});
 
 		return _my;
+	};
+
+	Language.prototype.getAbilityLang = function(ability) {
+		if(!this.ready) return null;
+
+		var _my = this;
+		var _map = {
+			AbilitySpecial: {},
+		};
+
+		var _abilityPrefix = Language.AbilityPrefix+ability._name;
+		$.each(Language.AbilityLang, function(i, langUnit) {
+			var _key = _abilityPrefix+(langUnit.attr ? "_"+langUnit.attr : "");
+			_map[langUnit.attr || langUnit.title] = _my.map[_key];
+		});
+
+		var _abilityPrefix_ = _abilityPrefix + "_";
+		$.each(_my.map, function(key, value) {
+			if(key.indexOf(_abilityPrefix_) === 0) {
+				_map.AbilitySpecial[key.replace(_abilityPrefix_, "")] = value;
+			}
+		});
+		return _map;
 	};
 
 	// ================================================

@@ -10,7 +10,7 @@
 				<p class="desc">{{_ability._comment}}</p>
 			</div>
 		</div>
-		<button id="newItem" class="btn btn-primary" ng-click="newAbility()">+ New Ability</button>
+		<button id="newItem" class="btn btn-primary" ng-click="newAbility()">+ New 【新建】</button>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-show="!ready">
 		<h1>Loading... 【载入中】</h1>
@@ -456,6 +456,11 @@
 				<div class="checkbox" ng-show="newAbility._type !== 'Passive'">
 					<label>
 						<input type="checkbox" ng-checked="newAbility._channelled" ng-click="newAbility._channelled = !newAbility._channelled;"> Channelled 【持续施法】
+					</label>
+				</div>
+				<div class="checkbox" ng-show="isItem" title="Will auto find no conflict ID between 1000 to 5000 【会自动寻找1000~5000中未使用过的ID】">
+					<label>
+						<input type="checkbox" ng-checked="newAbility._autoID" ng-click="newAbility._autoID = !newAbility._autoID;"> Item auto assign ID 【物品自动分配ID】
 					</label>
 				</div>
 			</div>

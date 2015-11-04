@@ -79,9 +79,10 @@ var _abilityCtrl = function(isItem) {
 			$scope.newAbility._type = "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET";
 			$scope.newAbility._target = "DOTA_UNIT_TARGET_TEAM_ENEMY";
 			$scope.newAbility._channelled = false;
+			$scope.newAbility._autoID = true;
 		};
 		$scope.newAbility.confirm = function() {
-			$scope.ability = new Ability();
+			$scope.ability = new Ability(isItem);
 			$scope.abilityList.push($scope.ability);
 
 			// Type
@@ -100,6 +101,8 @@ var _abilityCtrl = function(isItem) {
 				}
 			}
 
+			if($scope.newAbility._autoID) $scope.assignAutoID($scope.ability);
+
 			setTimeout(function() {
 				$("#listCntr").scrollTop(9999999);
 			}, 10);
@@ -117,6 +120,22 @@ var _abilityCtrl = function(isItem) {
 			["Both","全部","DOTA_UNIT_TARGET_TEAM_BOTH"],
 		];
 
+		$scope.assignAutoID = function(ability) {
+			if(!ability._isItem) return;
+
+			var _IDs = [];
+			$.each($scope.abilityList, function(i, _ability) {
+				_IDs[_ability.ID] = true;
+			});
+
+			for(var _id = 1000 ; _id < 5000 ; _id += 1) {
+				if(_IDs[_id] !== true) {
+					ability.ID = _id + "";
+					break;
+				}
+			}
+		};
+
 		$scope.copyAbility = function() {
 			if(!_menuAbility) return;
 
@@ -127,6 +146,7 @@ var _abilityCtrl = function(isItem) {
 				value: new KV(_writer._data)
 			}, isItem);
 			_clone._name += "_clone";
+			$scope.assignAutoID(_clone);
 
 			var _index = $.inArray(_menuAbility, $scope.abilityList);
 			$scope.ability = _clone;
