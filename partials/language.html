@@ -11,11 +11,24 @@
 		</div>
 	</div>
 	<div class="col-sm-9 col-md-10 languageCntr" ng-show="lang">
-		<div id="floatTool" style="position: fixed; background: #FFF; height: 100px;">
-			asdasdasd
+		<div id="floatTool" style="position: fixed; top: 50px;padding-top: 10px; background: #FF0; height: 125px;" class="row">
+			<div class="col-sm-7 col-md-7">
+				<div class="form-group">
+					<label>Create Text 【创建词条】</label>
+					<input type="text" class="form-control" placeholder="Key 【键】" ng-model="createKey" />
+				</div>
+				<button class="btn btn-primary" ng-click="create()">Create 【创建】</button>
+			</div>
+			<div class="col-sm-5 col-md-5">
+				<div class="form-group">
+					<label>Search Text 【搜索词条】</label>
+					<input type="text" class="form-control" placeholder="Key or Value 【键 或 值】" ng-model="searchKey" />
+				</div>
+				<button class="btn btn-primary" ng-click="search()">Search 【搜索】</button>
+			</div>
 		</div>
 		
-		<table class="table table-condensed table-bordered table-tiny" style="margin-top: 100px;">
+		<table class="table table-condensed table-bordered table-tiny" style="margin-top: 125px;">
 			<thead>
 			<tr>
 				<th width="20"></th>
@@ -24,7 +37,7 @@
 			</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="(key, value) in lang.map track by $index">
+				<tr ng-repeat="(key, value) in lang.map track by $index" data-key="{{key}}">
 					<th class="text-center"><a href="javascript:void(0)" ng-click="removeKey(key)">[X]</a></th>
 					<th>{{key}}</th>
 					<td><textarea class="form-control" rows="5" ng-model="lang.map[key]"></textarea></td>
