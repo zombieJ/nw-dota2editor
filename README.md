@@ -10,3 +10,4 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 * Version control
 * Tree view of customize skill group
 * Fast access of ability with highlight
+* Auto detect file change to reload in UI

@@ -142,11 +142,21 @@ var _abilityCtrl = function(isItem) {
 			var _writer = new KV.Writer();
 			_menuAbility.doWriter(_writer);
 
+			// 复制技能
 			var _clone = Ability.parse({
 				value: new KV(_writer._data)
 			}, isItem);
 			_clone._name += "_clone";
 			$scope.assignAutoID(_clone);
+
+			// 复制配置
+			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
+			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+			var _cloneAbility = _abilities[_clone._name] = _abilities[_clone._name] || {};
+			$.extend(_cloneAbility, _ability, true);
+			if(_cloneAbility.editorAliasName) {
+				_cloneAbility.editorAliasName += " copy";
+			}
 
 			var _index = $.inArray(_menuAbility, $scope.abilityList);
 			$scope.ability = _clone;
