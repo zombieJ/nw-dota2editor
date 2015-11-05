@@ -7,10 +7,11 @@ components.directive('operationfield', function($compile, Operation) {
 			opcol: "=",
 			operation: "=",
 		},
-		controller: function($scope, $element, $attrs, Ability, Event, Operation) {
+		controller: function($scope, $element, $attrs, Ability, Event, Operation, Sound) {
 			$scope.Ability = Ability;
 			$scope.Event = Event;
 			$scope.Operation = Operation;
+			$scope.Sound = Sound;
 			$scope.common = common;
 
 			$scope.validateColOperation = function(operation, opcol) {
@@ -33,9 +34,16 @@ components.directive('operationfield', function($compile, Operation) {
 							);
 							break;
 						case "text":
-							_field = $(
-								'<input type="text" class="form-control" ng-model="operation.attrs[opcol]" />'
-							);
+							if(scope.operation.name === "FireSound") {
+								// Sound need additional effort 【声音文件需要额外的匹配】
+								_field = $(
+									'<input typeahead type="text" class="form-control" ng-model="operation.attrs[opcol]" data-matchfuc="Sound.match" />'
+								);
+							} else {
+								_field = $(
+									'<input type="text" class="form-control" ng-model="operation.attrs[opcol]" />'
+								);
+							}
 							break;
 						case "blob":
 							_field = $(

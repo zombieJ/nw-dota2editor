@@ -54,12 +54,13 @@ app.factory("GUI", function() {
 	return require('nw.gui');
 });
 
-app.controller('main', function($scope, $route, $location, $q, Ability, Event, Operation, Modifier, Language, KV, globalContent, NODE) {
-	$scope.Ability = Ability;
-	$scope.Event = Event;
-	$scope.Operation = Operation;
-	$scope.Modifier = Modifier;
-	$scope.Language = Language;
+app.controller('main', function($scope, $route, $location, $q, Ability, Event, Operation, Modifier, Language, KV, Sound, globalContent, NODE) {
+	window.Ability = $scope.Ability = Ability;
+	window.Event = $scope.Event = Event;
+	window.Operation = $scope.Operation = Operation;
+	window.Modifier = $scope.Modifier = Modifier;
+	window.Language = $scope.Language = Language;
+	window.Sound = $scope.Sound = Sound;
 	$scope.common = common;
 	$scope.jQuery = $;
 
@@ -284,4 +285,9 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 			$(this).closest(".modal-content").find(".modal-footer .btn-primary").click();
 		}
 	});
+
+	// ================================================================
+	// =                            初始化                            =
+	// ================================================================
+	Sound.init();
 });

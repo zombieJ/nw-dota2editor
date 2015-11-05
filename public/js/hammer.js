@@ -293,7 +293,10 @@ var _abilityCtrl = function(isItem) {
 				}
 				winWidth = _winWidth;
 			}, 100);
-		}).resize();
+		});
+		setTimeout(function() {
+			$(window).resize();
+		}, 100);
 
 		// 禁止列表框滚屏
 		$("#listCntr").on("mousewheel.abilityList", function(e) {

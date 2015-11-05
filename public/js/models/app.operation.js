@@ -3,7 +3,7 @@
 // ======================================================
 // =                        操作                        =
 // ======================================================
-app.factory("Operation", function() {
+app.factory("Operation", function(Sound) {
 	var Operation = function() {
 		var _my = this;
 
@@ -17,7 +17,7 @@ app.factory("Operation", function() {
 		if(this.name === "AttachEffect" || this.name === "FireEffect" || this.name === "TrackingProjectile" || this.name === "LinearProjectile") {
 			return this.attrs["EffectName"] ? ["particle", this.attrs["EffectName"]] : null;
 		} else if(this.name === "FireSound") {
-			return this.attrs["EffectName"] ? ["soundfile", this.attrs["EffectName"]] : null;
+			return this.attrs["EffectName"] ? ["soundfile", Sound.revertMap[this.attrs["EffectName"]]] : null;
 		}
 		// TODO: Model
 	}
