@@ -4,7 +4,7 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 【Dota2 KV编辑器 是一款可以可视化编辑KV技能及其多语言描述的编辑器】
 
 ### TODO list
-* Sound precache error
+* Sound precache error: https://raw.githubusercontent.com/stephenfournier/Dota-2-ModKit/master/Dota2ModKit/Libs/vsnd_to_soundname_v2.txt
 * Liner support in Target group unit
 * Channel hide if not channel
 * Auto change language description when ability name changed
