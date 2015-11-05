@@ -99,8 +99,10 @@
 								Common 【常规】
 							</th>
 						</tr>
-						<tr ng-repeat="unit in ability._requireList track by $index">
-							<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
+						<tr ng-repeat="unit in ability._requireList track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
+							<th>
+								{{unit.title || unit.attr}} 【{{unit.desc}}】
+							</th>
 							<td>
 								<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
 							</td>

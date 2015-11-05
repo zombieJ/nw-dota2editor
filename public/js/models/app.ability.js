@@ -14,16 +14,23 @@ app.factory("Ability", function($q, Event, Modifier) {
 			ability[attr] = defaultValue;
 		}
 
-		// 属性描述设置，中文描述，显示标题，类型
-		return function(desc, title, type) {
+		// Attribute Config. Arguments: Chinese title, title, type
+		var _attrConfig = function(desc, title, type) {
 			var _unit = {
 				attr: attr,
 				title: title,
 				desc: desc,
 				type: type,
+
+				// Display logic
+				showFunc: null,
 			};
 			(isItem ? ability._requireItemList : ability._requireList).push(_unit);
+
+			return _unit;
 		};
+
+		return _attrConfig;
 	}
 
 	function fillAttr(ability, attr, defaultValue) {
@@ -86,7 +93,9 @@ app.factory("Ability", function($q, Event, Modifier) {
 		}
 
 		// 行为
-		fillAttr(_my, "ScriptFile", "")("仅供ability_lua使用", "ScriptFile(ability_lua only)");
+		fillAttr(_my, "ScriptFile", "")("脚本文件").showFunc = function() {
+			return _my.BaseClass === "ability_lua";
+		};
 
 		// 行为
 		fillAttr(_my, "AbilityBehavior")("行为");
@@ -136,14 +145,20 @@ app.factory("Ability", function($q, Event, Modifier) {
 		// 施法距离缓冲
 		fillAttr(_my, "AbilityCastRangeBuffer","0")("施法距离缓冲");
 
+		// Channel
+		var _channelFunc = function() {
+			return _my.AbilityBehavior["DOTA_ABILITY_BEHAVIOR_CHANNELLED"] === true;
+		};
 		// 持续施法时间
-		fillAttr(_my, "AbilityChannelTime","0")("持续施法时间");
+		fillAttr(_my, "AbilityChannelTime","0")("持续施法时间").showFunc = _channelFunc;
 
 		// 持续施法每秒耗魔
-		fillAttr(_my, "AbilityChannelledManaCostPerSecond","0")("持续施法每秒耗魔");
+		fillAttr(_my, "AbilityChannelledManaCostPerSecond","0")("持续施法每秒耗魔").showFunc = _channelFunc;
 
 		// AOE范围
-		fillAttr(_my, "AOERadius","0")("AOE范围");
+		fillAttr(_my, "AOERadius","0")("AOE范围").showFunc = function() {
+			return _my.AbilityBehavior["DOTA_ABILITY_BEHAVIOR_AOE"] === true;
+		};
 
 		// ========================================
 		// =                 事件                 =
