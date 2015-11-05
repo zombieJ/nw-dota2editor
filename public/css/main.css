@@ -279,6 +279,9 @@ label.checkbox input[type="checkbox"] {
 	white-space: nowrap;
 	cursor: default;
 }
+.app-menu > li.selected > a {
+	background: #EEEEEE;
+}
 .app-menu > li:hover > a {
 	background: #7cb5ec;
 	color: #FFF;

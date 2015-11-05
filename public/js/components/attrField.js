@@ -31,7 +31,7 @@ components.directive('attrfield', function($compile) {
 						);
 					} else if(_type === "text") {
 						// 提供一个Input Box，如果存在备选内容则提供提示功能
-						_field = $('<input typeahead class="form-control" ng-model="srcunit[attrunit.attr]" data-alternative="[\'asd\',\'dsa\']" />');
+						_field = $('<input typeahead class="form-control" ng-model="srcunit[attrunit.attr]" data-alternative="srctmpl[attrunit.attr]" />');
 					} else {
 						console.warn("No match!", _type, scope.srcunit, scope.attrunit.attr);
 					}
