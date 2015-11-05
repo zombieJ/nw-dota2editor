@@ -26,9 +26,12 @@ components.directive('attrfield', function($compile) {
 						_field = $('<div groupselect data-ability="srcunit" data-attr="{{::attrunit.attr}}" data-base="srctmpl" data-single="true"></div>');
 					} else if(_type === "boolean") {
 						_field = $(
-							'<input type="checkbox" ng-checked="srcunit[attrunit.attr]" '+
+							'<input type="checkbox" ng-checked="srcunit[attrunit.attr]" ' +
 							'ng-click="srcunit[attrunit.attr] = !srcunit[attrunit.attr]" />'
 						);
+					} else if(_type === "text") {
+						// 提供一个Input Box，如果存在备选内容则提供提示功能
+						_field = $('<input typeahead class="form-control" ng-model="srcunit[attrunit.attr]" data-alternative="[\'asd\',\'dsa\']" />');
 					} else {
 						console.warn("No match!", _type, scope.srcunit, scope.attrunit.attr);
 					}

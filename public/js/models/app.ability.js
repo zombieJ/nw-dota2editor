@@ -3,7 +3,7 @@
 // ======================================================
 // =                        技能                        =
 // ======================================================
-app.factory("Ability", function($q, Event, Modifier, NODE) {
+app.factory("Ability", function($q, Event, Modifier) {
 	function _fillAttr(isItem, ability, attr, defaultValue) {
 		if(defaultValue === undefined) {
 			ability[attr] = {};
@@ -16,12 +16,13 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 
 		// 属性描述设置，中文描述，显示标题，类型
 		return function(desc, title, type) {
-			(isItem ? ability._requireItemList : ability._requireList).push({
+			var _unit = {
 				attr: attr,
 				title: title,
 				desc: desc,
 				type: type,
-			});
+			};
+			(isItem ? ability._requireItemList : ability._requireList).push(_unit);
 		};
 	}
 
@@ -121,7 +122,7 @@ app.factory("Ability", function($q, Event, Modifier, NODE) {
 		fillAttr(_my, "AbilityCastPoint","0")("施法前摇");
 
 		// 施法动作
-		fillAttr(_my, "AbilityCastAnimation","")("施法动作");
+		fillAttr(_my, "AbilityCastAnimation","")("施法动作", null, "text");
 
 		// 冷却时间
 		fillAttr(_my, "AbilityCooldown","0")("冷却时间");
