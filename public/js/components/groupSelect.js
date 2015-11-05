@@ -27,7 +27,7 @@ components.directive('groupselect', function($compile) {
 				var attr = $scope.attr;
 				var tgtattr = $scope.tgtattr || attr;
 
-				$scope.ability[attr] = $scope.ability[attr] || {};
+				$scope.ability[tgtattr] = $scope.ability[tgtattr] || {};
 
 				var cntr = $("<div>");
 				$.each($scope.getItemList(), function(i, item) {
@@ -73,7 +73,7 @@ components.directive('groupselect', function($compile) {
 						);
 					} else {
 						_field = $(
-							'<select ng-model="ability[attr]" class="form-control">'+
+							'<select ng-model="ability[tgtattr || attr]" class="form-control">'+
 								'<option ng-repeat="(i, item) in getItemList() track by $index" value="{{::item[0]}}">{{::item[0]}} 【{{::item[1]}}】</option>'+
 							'</select>'
 						);

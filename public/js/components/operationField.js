@@ -63,41 +63,75 @@ components.directive('operationfield', function($compile, Operation) {
 							);
 							break;
 						case "unitGroup":
+							scope.operation.attrs[scope.opcol] = scope.operation.attrs[scope.opcol] || {};
+							$.each(Operation.UnitGroupColumns, function(i, colUnit) {
+								if(colUnit[3] === "group") {
+									scope.operation.attrs[scope.opcol][colUnit[0]] = scope.operation.attrs[scope.opcol][colUnit[0]] || {};
+								}
+							});
+
+							if(scope.operation.attrs[scope.opcol].Line) {
+								scope.operation.attrs[scope.opcol]._action = "line";
+							} else {
+								scope.operation.attrs[scope.opcol]._action = "radius";
+							}
+
 							_field = $(
 								'<div>' +
-								'<select class="form-control" ng-model="operation.attrs[opcol].target">' +
-								'	<option ng-repeat="opVal in Operation.EventOperationMap[opcol].value track by $index">{{::opVal}}</option>' +
-								'</select>' +
-								'<table class="table" ng-show="operation.attrs[opcol].target === \'[Group Units]\'">' +
-								'<tbody>' +
-								'<tr>' +
-								'<td>Types 【类型】</td>' +
-								'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetType" data-tgtattr="Types" data-base="Ability"></div></td>' +
-								'</tr>' +
-								'<tr>' +
-								'<td>Teams 【队伍】</td>' +
-								'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetTeam" data-tgtattr="Teams" data-base="Ability" data-single="true"></div></td>' +
-								'</tr>' +
-								'<tr>' +
-								'<td>Flags 【标记】</td>' +
-								'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetFlags" data-tgtattr="Flags" data-base="Ability"></div></td>' +
-								'</tr>' +
-								'<tr>' +
-								'<td>Center 【中点】</td>' +
-								'<td>' +
-								'<select class="form-control" ng-model="operation.attrs[opcol].Center">' +
-								'	<option ng-repeat="opVal in Operation.EventOperationMap.Center.value track by $index">{{::opVal}}</option>' +
-								'</select>' +
-								'</td>' +
-								'</tr>' +
-								'<tr>' +
-								'<td>Radius 【半径】</td>' +
-								'<td>' +
-								'<input type="text" class="form-control" ng-model="operation.attrs[opcol].Radius" />' +
-								'</td>' +
-								'</tr>' +
-								'</tbody>' +
-								'</table>' +
+									'<select class="form-control" ng-model="operation.attrs[opcol].target">' +
+									'	<option ng-repeat="opVal in Operation.EventOperationMap[opcol].value track by $index">{{::opVal}}</option>' +
+									'</select>' +
+									'<table class="table" ng-show="operation.attrs[opcol].target === \'[Group Units]\'">' +
+										'<tbody>' +
+											'<tr>' +
+												'<td>Types 【类型】</td>' +
+												'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetType" data-tgtattr="Types" data-base="Ability"></div></td>' +
+											'</tr>' +
+											'<tr>' +
+												'<td>Teams 【队伍】</td>' +
+												'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetTeam" data-tgtattr="Teams" data-base="Ability" data-single="true"></div></td>' +
+											'</tr>' +
+											'<tr>' +
+												'<td>Flags 【标记】</td>' +
+												'<td><div groupselect data-ability="operation.attrs[opcol]" data-attr="AbilityUnitTargetFlags" data-tgtattr="Flags" data-base="Ability"></div></td>' +
+											'</tr>' +
+											'<tr>' +
+												'<td>Center 【中点】</td>' +
+												'<td>' +
+												'<select class="form-control" ng-model="operation.attrs[opcol].Center">' +
+												'	<option ng-repeat="opVal in Operation.EventOperationMap.Center.value track by $index">{{::opVal}}</option>' +
+												'</select>' +
+												'</td>' +
+											'</tr>' +
+											'<tr>' +
+												'<td>Action 【行为】</td>' +
+												'<td>' +
+													'<select class="form-control" ng-model="operation.attrs[opcol]._action">' +
+													'	<option value="radius">Radius 【范围】</option>' +
+													'	<option value="line">Line 【连线】</option>' +
+													'</select>' +
+												'</td>' +
+											'</tr>' +
+											'<tr ng-if="operation.attrs[opcol]._action === \'radius\'">' +
+												'<td>Radius 【半径】</td>' +
+												'<td>' +
+												'<input type="text" class="form-control" ng-model="operation.attrs[opcol].Radius" />' +
+												'</td>' +
+											'</tr>' +
+											'<tr ng-if="operation.attrs[opcol]._action === \'line\'">' +
+												'<td>Length 【长度】</td>' +
+												'<td>' +
+												'<input type="text" class="form-control" ng-model="operation.attrs[opcol].Line.Length" />' +
+												'</td>' +
+											'</tr>' +
+											'<tr ng-if="operation.attrs[opcol]._action === \'line\'">' +
+												'<td>Thickness 【厚度】</td>' +
+												'<td>' +
+												'<input type="text" class="form-control" ng-model="operation.attrs[opcol].Line.Thickness" />' +
+												'</td>' +
+											'</tr>' +
+										'</tbody>' +
+									'</table>' +
 								'</div>'
 							);
 							break;

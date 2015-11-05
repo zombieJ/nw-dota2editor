@@ -20,7 +20,7 @@ app.factory("Operation", function(Sound) {
 			return this.attrs["EffectName"] ? ["soundfile", Sound.revertMap[this.attrs["EffectName"]]] : null;
 		}
 		// TODO: Model
-	}
+	};
 
 	Operation.prototype.getEventOperation = function() {
 		return common.array.find(this.name, Operation.EventOperation, "0");
@@ -95,6 +95,12 @@ app.factory("Operation", function(Sound) {
 									default:
 										_WARN("KV", lvl + 2, "Operation Unit Group Type not match:", _tmplUnit[3], _tgtUnit.key, _tgtUnit.value);
 								}
+							} else if(_tgtUnit.key.toUpperCase() === "LINE") {
+								var _lineMap = _tgtUnit.value.kvToMap();
+								_operation.attrs[unit.key][_tgtUnit.key] = {
+									Length: _lineMap.Length,
+									Thickness: _lineMap.Thickness,
+								};
 							} else {
 								_WARN("KV", lvl + 2, "Operation Unit Group not match:", _tgtUnit.key, _tgtUnit.value);
 							}
@@ -141,10 +147,25 @@ app.factory("Operation", function(Sound) {
 							writer.write('"$1"', key);
 							writer.write('{');
 							// 一组单位：覆盖写法
-							$.each(value, function(key, value) {
-								if(key === "target") return;
+							$.each(value, function(_key, _value) {
+								if(_key === "target" || _key.match(/^_/)) return;
+								//Operation.UnitGroupColumns
 
-								writer.write('"$1"		"$2"', key, typeof value === "object" ? common.map.join(value, " | ") : value);
+								if(_key === "Radius") {
+									if(value._action === "radius") {
+										writer.write('"$1"		"$2"', _key, _value);
+									}
+								} else if(_key === "Line") {
+									if(value._action === "line") {
+										writer.write('"Line"');
+										writer.write("{");
+										writer.write('"Length"		"$1"', _value.Length);
+										writer.write('"Thickness"		"$1"', _value.Thickness);
+										writer.write("}");
+									}
+								} else {
+									writer.write('"$1"		"$2"', _key, typeof _value === "object" ? common.map.join(_value, " | ") : _value);
+								}
 							});
 							writer.write('}');
 							return;
@@ -310,7 +331,7 @@ app.factory("Operation", function(Sound) {
 
 	Operation.UnitGroupColumns = [
 		["Types", "", [], "group"],
-		["Teams", "", [], "group"],
+		["Teams", "", [], "single"],
 		["Flags", "", [], "group"],
 		["Center", "", [], "single"],
 		["Radius", "", [], "text"],
