@@ -46,6 +46,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 		_my._requireItemList = [];
 		_my._requireList = [];
 		_my._isItem = isItem;
+		_my._changed = false;
 
 		// ========================================
 		// =                 属性                 =

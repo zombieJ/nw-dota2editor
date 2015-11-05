@@ -13,12 +13,22 @@ var _abilityCtrl = function(isItem) {
 		var _globalConfigKey = isItem ? "abilityConfig" : "itemConfig";
 		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
 
+		var _abilityChangeLock = false;
+
 		$scope.abilityList = [];
 		$scope.isItem = isItem;
 		$scope.ready = false;
 
+		// ================================================================
+		// =                           Function                           =
+		// ================================================================
 		$scope.setAbility = function (ability) {
+			_abilityChangeLock = true;
 			$scope.ability = ability;
+
+			setTimeout(function() {
+				_abilityChangeLock = false;
+			}, 500);
 		};
 
 		var _iconStep = 0;
@@ -82,8 +92,9 @@ var _abilityCtrl = function(isItem) {
 			$scope.newAbility._autoID = true;
 		};
 		$scope.newAbility.confirm = function() {
-			$scope.ability = new Ability(isItem);
-			$scope.abilityList.push($scope.ability);
+			var _newAbility = new Ability(isItem);
+			$scope.abilityList.push(_newAbility);
+			$scope.setAbility(_newAbility);
 
 			// Type
 			$scope.ability.AbilityBehavior[$scope.newAbility._type] = true;
@@ -159,7 +170,7 @@ var _abilityCtrl = function(isItem) {
 			}
 
 			var _index = $.inArray(_menuAbility, $scope.abilityList);
-			$scope.ability = _clone;
+			$scope.setAbility(_clone);
 			$scope.abilityList.splice(_index + 1, 0, $scope.ability);
 		};
 
@@ -182,8 +193,14 @@ var _abilityCtrl = function(isItem) {
 			});
 		};
 
+		$scope.$watch('ability', function(newVal, oldVal){
+			if(_abilityChangeLock) return;
+
+			newVal._changed = true;
+		}, true);
+
 		// ================================================================
-		// =                           文件操作                           =
+		// =                        File Operation                        =
 		// ================================================================
 		// 读取配置文件
 		if (!globalContent[_globalConfigKey]) {
@@ -212,7 +229,7 @@ var _abilityCtrl = function(isItem) {
 				});
 
 				globalContent[_globalListKey] = $scope.abilityList;
-				$scope.ability = $scope.abilityList[0];
+				$scope.setAbility($scope.abilityList[0]);
 
 				console.log("Scope >>>", $scope);
 			}, function () {
@@ -225,7 +242,7 @@ var _abilityCtrl = function(isItem) {
 			});
 		} else {
 			$scope.abilityList = globalContent[_globalListKey];
-			$scope.ability = $scope.abilityList[0];
+			$scope.setAbility($scope.abilityList[0]);
 			$scope.ready = true;
 		}
 
@@ -236,7 +253,7 @@ var _abilityCtrl = function(isItem) {
 		});
 
 		// ================================================================
-		// =                             配置                             =
+		// =                        Configuration                         =
 		// ================================================================
 		$scope.setAbilityMarkColor = function(color) {
 			if(!$scope.config) return;
