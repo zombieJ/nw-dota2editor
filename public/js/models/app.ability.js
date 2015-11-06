@@ -207,20 +207,6 @@ app.factory("Ability", function($q, Event, Modifier) {
 	};
 
 	// ================================================
-	// =                     语言                     =
-	// ================================================
-	Ability.prototype.getLang = function(language) {
-		if(!language) return null;
-
-		var _lang = this._languages[language.name];
-		if(!_lang) {
-			_lang = language.getAbilityLang(this);
-			this._languages[language.name] = _lang;
-		}
-		return _lang;
-	};
-
-	// ================================================
 	// =                     解析                     =
 	// ================================================
 	Ability.parse = function(kvUnit, isItem, lvl) {

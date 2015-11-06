@@ -376,7 +376,11 @@
 									</tr>
 									<tr ng-repeat="langAbilitySpecialField in ability._abilitySpecialList track by $index">
 										<th>{{langAbilitySpecialField[0]}}</th>
-										<td><input type="text" class="form-control" ng-model="ability.getLang(language).AbilitySpecial[langAbilitySpecialField[0]]" /></td>
+										<td>
+											<input type="text" class="form-control"
+												   ng-model="language.map[Language.AbilityPrefix + ability._name + '_' + langAbilitySpecialField[0]]"
+											/>
+										</td>
 									</tr>
 								</tbody>
 							</table>

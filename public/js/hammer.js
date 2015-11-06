@@ -13,7 +13,7 @@ var _abilityCtrl = function(isItem) {
 		var _globalConfigKey = isItem ? "abilityConfig" : "itemConfig";
 		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
 
-		var _abilityChangeLock = false;
+		var _abilityChangeLock = true;
 
 		$scope.abilityList = [];
 		$scope.isItem = isItem;
@@ -211,6 +211,11 @@ var _abilityCtrl = function(isItem) {
 			if(_abilityChangeLock || !newVal) return;
 			newVal._changed = true;
 		}, true);
+
+		$scope.$watch('ability._name', function(newVal, oldVal){
+			if(_abilityChangeLock) return;
+			console.log("===>>>>", newVal, oldVal);
+		});
 
 		// ================================================================
 		// =                        File Operation                        =
