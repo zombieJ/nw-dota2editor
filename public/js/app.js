@@ -160,7 +160,7 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 		{name: "Language", desc: "语言", selected: true, saveFunc: function() {
 			var _deferred = $q.defer();
 
-			if(!globalContent.languageList) {
+			if(!globalContent.languageList || !globalContent.languageList.length) {
 				_deferred.resolve(4);
 			} else {
 				var _promiseList = [];

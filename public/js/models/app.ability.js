@@ -47,6 +47,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 		_my._requireList = [];
 		_my._isItem = isItem;
 		_my._changed = false;
+		_my._oriContent = null;
 
 		// ========================================
 		// =                 属性                 =
@@ -229,6 +230,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 		var _ability = new Ability(isItem);
 		_ability._name = kvUnit.value.title;
 		_ability._comment = kvUnit.value.comment;
+		_ability._oriContent = kvUnit.value.content;
 
 		$.each(kvUnit.value.kvList, function(i, unit) {
 			var _attr = common.array.find(unit.key, _ability._requireList, "attr", false, false) || common.array.find(unit.key, _ability._requireItemList, "attr", false, false);
@@ -298,6 +300,12 @@ app.factory("Ability", function($q, Event, Modifier) {
 	// ================================================
 	Ability.prototype.doWriter = function(writer) {
 		writer.writeComment(this._comment);
+
+		// If not change, don't override
+		if(!this._changed) {
+			writer.writeContent(this._oriContent);
+			return;
+		}
 
 		// 名称
 		writer.write('"$1"', this._name);

@@ -29,6 +29,11 @@ div:hover::-webkit-scrollbar-thumb {
 	font-size: 80%;
 }
 
+/* Text */
+.u {
+	text-decoration: underline;
+}
+
 /* Main */
 #content {
 	padding-top: 60px;

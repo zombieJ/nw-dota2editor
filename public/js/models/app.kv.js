@@ -167,6 +167,10 @@ app.factory("KV", function(NODE, $q) {
 		});
 	};
 
+	_KV.Writer.prototype.writeContent = function(content) {
+		this._data += content + "\n";
+	};
+
 	_KV.Writer.prototype.write = function(template) {
 		var _my = this;
 		var text = template;

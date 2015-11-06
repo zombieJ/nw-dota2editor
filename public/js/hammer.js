@@ -93,6 +93,7 @@ var _abilityCtrl = function(isItem) {
 		};
 		$scope.newAbility.confirm = function() {
 			var _newAbility = new Ability(isItem);
+			_newAbility._changed = true;
 			$scope.abilityList.push(_newAbility);
 			$scope.setAbility(_newAbility);
 
@@ -158,6 +159,7 @@ var _abilityCtrl = function(isItem) {
 				value: new KV(_writer._data)
 			}, isItem);
 			_clone._name += "_clone";
+			_clone._changed = true;
 			$scope.assignAutoID(_clone);
 
 			// 复制配置
@@ -194,7 +196,7 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		$scope.$watch('ability', function(newVal, oldVal){
-			if(_abilityChangeLock) return;
+			if(_abilityChangeLock || !newVal) return;
 
 			newVal._changed = true;
 		}, true);
@@ -303,8 +305,9 @@ var _abilityCtrl = function(isItem) {
 		$(window).on("resize.abilityList", function() {
 			setTimeout(function() {
 				var _winWidth = $(window).width();
-				if(_winWidth !== winWidth) {
-					var _left = $(".abilityCntr").offset().left;
+				var $abilityCntr = $(".abilityCntr");
+				if(_winWidth !== winWidth && $abilityCntr.length) {
+					var _left = $abilityCntr.offset().left;
 					$("#listCntr").outerWidth(_left - 15);
 					$("#newItem").outerWidth(_left - 15);
 				}
