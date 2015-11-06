@@ -1,6 +1,6 @@
 'use strict';
 
-components.directive('typeahead', function($compile) {
+components.directive('tipfield', function($compile) {
 	return {
 		restrict: 'AE',
 		scope: {

@@ -5,7 +5,7 @@ var APP_APP_NAME = "Dota2 Editor";
 var APP_APP_AUTHOR = "zombieJ";
 var APP_APP_GITHUB = "https://github.com/zombieJ/nw-dota2editor";
 
-var app = angular.module('app', ['ngRoute', 'hammerControllers', 'app.components', 'ui.sortable']);
+var app = angular.module('app', ['ngRoute', 'hammerControllers', 'app.components', 'ui.sortable','ui.bootstrap']);
 
 app.config(function($routeProvider) {
 	$routeProvider.when('/index', {

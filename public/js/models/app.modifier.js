@@ -24,9 +24,11 @@ app.factory("Modifier", function(Event) {
 		};
 	}
 
+	var _id = 0;
 	var Modifier = function() {
 		var _my = this;
 		_my._requireList = [];
+		_my._innerID = ++_id;
 
 		// ========================================
 		// =                 属性                 =

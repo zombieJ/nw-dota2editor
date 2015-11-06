@@ -6,7 +6,8 @@
 				<p class="title">
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.abilities[_ability._name].markColor || '#CCC'}}"></span>
 					{{config.abilities[_ability._name].editorAliasName || _ability._name}}
-					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]" title="Conflict name 【名称冲突】"></span>
+					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
+						  uib-tooltip="Conflict name 【名称冲突】" tooltip-placement="right" tooltip-append-to-body="true"></span>
 				</p>
 				<p class="desc">{{_ability._comment}}</p>
 			</div>
@@ -69,7 +70,11 @@
 				<table class="table table-condensed table-bordered table-tiny">
 					<tbody>
 						<tr>
-							<th>Name 【名称】</th>
+							<th>
+								Name 【名称】
+								<span class="fa fa-question-circle" tooltip-placement="right" tooltip-append-to-body="true"
+									  uib-tooltip="Will auto update language description mapping 【会同步更新多语言描述匹配】"></span>
+							</th>
 							<td>
 								<input type="text" class="form-control" ng-model="ability._name" />
 							</td>
@@ -465,8 +470,8 @@
 						<input type="checkbox" ng-checked="newAbility._channelled" ng-click="newAbility._channelled = !newAbility._channelled;"> Channelled 【持续施法】
 					</label>
 				</div>
-				<div class="checkbox" ng-show="isItem" title="Will auto find no conflict ID between 1000 to 5000 【会自动寻找1000~5000中未使用过的ID】">
-					<label>
+				<div class="checkbox" ng-show="isItem">
+					<label uib-tooltip="Will auto find no conflict ID between 1000 to 5000 【会自动寻找1000~5000中未使用过的ID】" tooltip-placement="right" tooltip-append-to-body="true">
 						<input type="checkbox" ng-checked="newAbility._autoID" ng-click="newAbility._autoID = !newAbility._autoID;"> Item auto assign ID 【物品自动分配ID】
 					</label>
 				</div>

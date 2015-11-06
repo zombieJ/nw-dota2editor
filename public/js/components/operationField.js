@@ -37,7 +37,7 @@ components.directive('operationfield', function($compile, Operation) {
 							if(scope.operation.name === "FireSound") {
 								// Sound need additional effort 【声音文件需要额外的匹配】
 								_field = $(
-									'<input typeahead type="text" class="form-control" ng-model="operation.attrs[opcol]" data-matchfuc="Sound.match" />'
+									'<input tipfield type="text" class="form-control" ng-model="operation.attrs[opcol]" data-matchfuc="Sound.match" />'
 								);
 							} else {
 								_field = $(

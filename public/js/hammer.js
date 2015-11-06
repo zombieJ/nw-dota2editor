@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var hammerControllers = angular.module('hammerControllers', ['ngRoute', 'app.components']);
+var hammerControllers = angular.module('hammerControllers', ['ngRoute', 'app.components','ui.bootstrap']);
 
 hammerControllers.controller('indexCtrl', function ($scope) {
 });
@@ -215,14 +215,52 @@ var _abilityCtrl = function(isItem) {
 		// Sync ability language
 		$scope.$watch('ability._name', function(newVal, oldVal){
 			if(_abilityChangeLock) return;
-			console.log("===>>>>", newVal, oldVal);
 
-			// Common description
-			$.each(Language.AbilityLang, function(i, langField) {
-				//var _preDesc = ;
-				//language.map[Language.AbilityPrefix + ability._name + (langField.attr ? '_' + langField.attr : '')]
+			$.each($scope.languageList, function(i, language) {
+				// Common description
+				$.each(Language.AbilityLang, function(i, langField) {
+					var _preKey = Language.abilityAttr(oldVal, langField.attr);
+					if(_preKey in language.map) {
+						var _preDesc = language.map[_preKey];
+						language.map[Language.abilityAttr(newVal, langField.attr)] = _preDesc;
+						delete language.map[_preKey];
+					}
+				});
+
+				// special description
+				$.each($scope.ability._abilitySpecialList, function(i, langAbilitySpecialField) {
+					var _preKey = Language.abilityAttr(oldVal, langAbilitySpecialField[0]);
+					if(_preKey in language.map) {
+						var _preDesc = language.map[_preKey];
+						language.map[Language.abilityAttr(newVal, langAbilitySpecialField[0])] = _preDesc;
+						delete language.map[_preKey];
+					}
+				});
 			});
 		});
+
+		// Sync modifier language
+		$scope.$watch('ability._modifierList', function(newVal, oldVal){
+			if(_abilityChangeLock) return;
+
+			$.each(newVal, function(i, _modifier) {
+				var _preModifier = common.array.find(_modifier._innerID, oldVal, "_innerID");
+				if(_preModifier) {
+					$.each($scope.languageList, function(i, language) {
+						// Common description
+						$.each(Language.ModifierLang, function(i, langField) {
+							var _preKey = Language.modifierAttr(_preModifier._name, langField.attr)
+							if(_preKey in language.map) {
+								var _preDesc = language.map[_preKey];
+								language.map[Language.modifierAttr(_modifier._name, langField.attr)] = _preDesc;
+								delete language.map[_preKey];
+							}
+						});
+					});
+				}
+			});
+
+		}, true);
 
 		// ================================================================
 		// =                        File Operation                        =
