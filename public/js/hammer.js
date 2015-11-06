@@ -18,6 +18,7 @@ var _abilityCtrl = function(isItem) {
 		$scope.abilityList = [];
 		$scope.isItem = isItem;
 		$scope.ready = false;
+		$scope.conflictMap = {};
 
 		// ================================================================
 		// =                           Function                           =
@@ -196,8 +197,18 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		$scope.$watch('ability', function(newVal, oldVal){
-			if(_abilityChangeLock || !newVal) return;
+			// Check conflict
+			var _checkMap = {};
+			$scope.conflictMap = {};
+			$.each($scope.abilityList, function(i, _ability) {
+				if(_checkMap[_ability._name]) {
+					$scope.conflictMap[_ability._name] = true;
+				}
+				_checkMap[_ability._name] = true;
+			});
 
+			// Mark as changed
+			if(_abilityChangeLock || !newVal) return;
 			newVal._changed = true;
 		}, true);
 

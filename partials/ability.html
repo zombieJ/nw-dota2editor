@@ -6,6 +6,7 @@
 				<p class="title">
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.abilities[_ability._name].markColor || '#CCC'}}"></span>
 					{{config.abilities[_ability._name].editorAliasName || _ability._name}}
+					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]" title="Conflict name 【名称冲突】"></span>
 				</p>
 				<p class="desc">{{_ability._comment}}</p>
 			</div>
