@@ -184,6 +184,7 @@ label.checkbox input[type="checkbox"] {
 	margin: 0 0 0 -20px;
 }
 
+.fastPin > .fa,
 .fastPin > .glyphicon {
 	position: absolute;
 	left: 3px;

@@ -361,6 +361,47 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                              UI                              =
 		// ================================================================
+		var _lastFocus = null;
+
+		// Show paint box
+		$("#langColorPicker").colorpicker({
+			colorSelectors: {
+				'default': '#777777',
+				'primary': '#337ab7',
+				'success': '#5cb85c',
+				'info': '#5bc0de',
+				'warning': '#f0ad4e',
+				'danger': '#d9534f'
+			}
+		}).on('hidePicker.colorpicker', function(event) {
+			if(!_lastFocus) return;
+
+			var _my = _lastFocus;
+			var _color = event.color.toHex();
+			var _colorStart = "<font color='" + _color + "'>";
+			var _colorEnd = "</font>";
+
+			var _startPos = _my.selectionStart;
+			var _endPos = _my.selectionEnd;
+			var tmpStr = _my.value;
+
+			var _selectContent = tmpStr.slice(_startPos, _endPos);
+
+			_my.value = tmpStr.substring(0, _startPos) + _colorStart + _selectContent + _colorEnd + tmpStr.substring(_endPos, tmpStr.length);
+			$(_my).trigger('input');
+
+			setTimeout(function () {
+				$(_my).focus();
+				_my.selectionStart = _startPos + _colorStart.length;
+				_my.selectionEnd = _startPos + _colorStart.length + _selectContent.length;
+			}, 500);
+		});
+
+		// Set last focus input
+		$('[data-id="description"]').on("focus.colorPicker", 'input, textarea', function (e) {
+			_lastFocus = this;
+		});
+
 		// 列表框布局
 		var winWidth;
 		$(window).on("resize.abilityList", function() {
@@ -411,6 +452,8 @@ var _abilityCtrl = function(isItem) {
 		});
 
 		$scope.$on("$destroy",function() {
+			$("#langColorPicker").off('hidePicker.colorpicker').colorpicker('destroy');
+			$('[data-id="description"]').off("focus.colorPicker");
 			$(window).off("resize.abilityList");
 			$("#listCntr").off("mousewheel.abilityList");
 			$(document).off("contextmenu.abilityList");
