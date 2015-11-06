@@ -28,6 +28,17 @@ app.factory("Language", function($q, KV, NODE) {
 	};
 
 	// ================================================
+	// =                     键名                     =
+	// ================================================
+	Language.abilityAttr = function(abilityName, attr) {
+		return Language.AbilityPrefix + abilityName + (attr ? '_' + attr : '');
+	};
+
+	Language.modifierAttr = function(modifierName, attr) {
+		return Language.ModifierPrefix +modifierName + (attr ? '_' + attr : '')
+	};
+
+	// ================================================
 	// =                     常量                     =
 	// ================================================
 	Language.fileNameRegex = /^addon_\w+\.txt$/i;

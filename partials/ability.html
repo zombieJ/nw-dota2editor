@@ -362,9 +362,9 @@
 										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
 										<td>
 											<input type="text" class="form-control" ng-if="langField.type === 'text'"
-											       ng-model="language.map[Language.AbilityPrefix + ability._name + (langField.attr ? '_' + langField.attr : '')]" />
+											       ng-model="language.map[Language.abilityAttr(ability._name, langField.attr)]" />
 											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
-											          ng-model="language.map[Language.AbilityPrefix + ability._name + (langField.attr ? '_' + langField.attr : '')]"></textarea>
+											          ng-model="language.map[Language.abilityAttr(ability._name, langField.attr)]"></textarea>
 										</td>
 									</tr>
 
@@ -378,7 +378,7 @@
 										<th>{{langAbilitySpecialField[0]}}</th>
 										<td>
 											<input type="text" class="form-control"
-												   ng-model="language.map[Language.AbilityPrefix + ability._name + '_' + langAbilitySpecialField[0]]"
+												   ng-model="language.map[Language.abilityAttr(ability._name, langAbilitySpecialField[0])]"
 											/>
 										</td>
 									</tr>
@@ -401,9 +401,9 @@
 										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
 										<td>
 											<input type="text" class="form-control" ng-if="langField.type === 'text'"
-													ng-model="language.map[Language.ModifierPrefix + modifier._name + (langField.attr ? '_' + langField.attr : '')]" />
+													ng-model="language.map[Language.modifierAttr(modifier._name, langField.attr)]" />
 											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
-													ng-model="language.map[Language.ModifierPrefix + modifier._name + (langField.attr ? '_' + langField.attr : '')]"></textarea>
+													ng-model="language.map[Language.modifierAttr(modifier._name, langField.attr)]"></textarea>
 										</td>
 									</tr>
 								</tbody>

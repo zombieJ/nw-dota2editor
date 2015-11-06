@@ -212,9 +212,16 @@ var _abilityCtrl = function(isItem) {
 			newVal._changed = true;
 		}, true);
 
+		// Sync ability language
 		$scope.$watch('ability._name', function(newVal, oldVal){
 			if(_abilityChangeLock) return;
 			console.log("===>>>>", newVal, oldVal);
+
+			// Common description
+			$.each(Language.AbilityLang, function(i, langField) {
+				//var _preDesc = ;
+				//language.map[Language.AbilityPrefix + ability._name + (langField.attr ? '_' + langField.attr : '')]
+			});
 		});
 
 		// ================================================================
