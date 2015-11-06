@@ -336,7 +336,8 @@ var _abilityCtrl = function(isItem) {
 		$("#abilityMenu").hide();
 		var _menuAbility;
 		$(document).on("contextmenu.abilityList", "#listCntr .listItem", function (e) {
-			$("#abilityMenu").show().offset({
+			var $menu = $("#abilityMenu").show();
+			common.ui.offsetWin($menu, {
 				left: e.originalEvent.x,
 				top: e.originalEvent.y
 			});

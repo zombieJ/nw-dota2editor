@@ -39,7 +39,7 @@ components.directive('eventoperation', function($compile) {
 
 						'<table class="table table-condensed">'+
 							'<tbody>'+
-								'<tr ng-repeat="opCol in getOperationColumn(operation.name) track by $index">'+
+								'<tr ng-repeat="opCol in getOperationColumn(operation.name)">'+
 									'<td width="20%">{{::opCol}}</td>'+
 									'<td>' +
 									'<div operationfield data-operation="operation" data-opcol="opCol"></div>' +

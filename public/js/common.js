@@ -292,3 +292,23 @@ common.ui.scrollTo = function(element, animate) {
 };
 common.ui.scrollTo.tid = null;
 common.ui.scrollTo.scrolling = false;
+
+common.ui.offsetWin = function(ele, offset) {
+	ele = $(ele);
+
+	var $win = $(window);
+	var _winLeft = $win.scrollLeft();
+	var _winTop = $win.scrollTop();
+
+	if(!offset) {
+		var _offset = ele.offset();
+		_offset.left -= _winLeft;
+		_offset.top -= _winTop;
+		return _offset;
+	} else {
+		ele.offset({
+			left: offset.left + _winLeft,
+			top: offset.top + _winTop
+		});
+	}
+};

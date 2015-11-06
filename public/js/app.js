@@ -251,13 +251,14 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 	function _refreshMenu(ele) {
 		ele = $(ele);
 
-		var _offset = ele.offset();
+		var _offset = common.ui.offsetWin(ele);
 		var _eleHeight = ele.outerHeight();
 		var _winHeight = $(window).height();
 
 		if(_offset.top + _eleHeight > _winHeight) {
-			ele.offset({
-				top: _winHeight - _eleHeight
+			common.ui.offsetWin(ele,{
+				top: _winHeight - _eleHeight,
+				left: _offset.left
 			});
 		}
 
