@@ -13,6 +13,10 @@ components.directive('modifier', function($compile) {
 			$scope.Operation = Operation;
 			$scope.common = common;
 
+			$scope.addEvent = function() {
+				$scope.modifier._eventList.push(new Event());
+			};
+
 			// ================================================================
 			// =                         Optimization                         =
 			// ================================================================
@@ -127,27 +131,28 @@ components.directive('modifier', function($compile) {
 					'<tr>'+
 						'<td colspan="2">'+
 						'<!-- 事件 -->'+
-							'<div ng-repeat="(event_index,event) in modifier._eventList track by $index" class="group-event">'+
+							'<div ng-repeat="_index in optEventNum track by $index" ng-show="modifier._eventList[_index]" class="group-event">'+
+							//'<div ng-repeat="(event_index,event) in modifier._eventList track by $index" class="group-event">'+
 								'<label>'+
-									'<a href="javascript:void(0)" ng-click="common.array.remove(event, modifier._eventList)">[X]</a>'+
-									'Event {{event_index + 1}}'+
+									'<a href="javascript:void(0)" ng-click="common.array.remove(modifier._eventList[_index], modifier._eventList)">[X]</a>'+
+									'Event {{_index + 1}}'+
 								'</label>'+
-								'<select class="form-control" ng-model="event._name">'+
-									'<option ng-repeat="_event in Event.ModifierEventList track by $index" value="{{_event[0]}}">{{_event[0]}} 【{{_event[1]}}】</option>'+
+								'<select class="form-control" ng-model="modifier._eventList[_index]._name">'+
+									'<option ng-repeat="_event in Event.ModifierEventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>'+
 								'</select>'+
-								'<table ng-if="event._name === \'OnIntervalThink\'" class="table">'+
+								'<table ng-if="modifier._eventList[_index]._name === \'OnIntervalThink\'" class="table">'+
 									'<tbody>'+
 										'<tr>'+
 											'<td width="200">ThinkInterval 【间隔】</td>'+
-											'<td><input type="text" class="form-control" ng-model="event.ThinkInterval" /></td>'+
+											'<td><input type="text" class="form-control" ng-model="modifier._eventList[_index].ThinkInterval" /></td>'+
 										'</tr>'+
 									'</tbody>'+
 								'</table>'+
 
 								'<!-- 操作 -->'+
-								'<div eventoperation data-container="event" data-path="_operationList" data-isitem="isItem"></div>'+
+								'<div eventoperation data-container="modifier._eventList[_index]" data-path="_operationList" data-isitem="isItem"></div>'+
 							'</div>'+
-							'<button class="btn btn-warning btn-xs" ng-click="addEvent(modifier)">+ new event 【新建事件】</button>'+
+							'<button class="btn btn-warning btn-xs" ng-click="addEvent()">+ new event 【新建事件】</button>'+
 						'</td>'+
 					'</tr>'+
 
