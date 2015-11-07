@@ -29,13 +29,14 @@ var _abilityCtrl = function(isItem) {
 		$scope.optLangModifierNum = common.array.num(5);
 
 		//var _optListTimeout;
-		$scope.optUpdateLimitation = function(switchAbility) {
+		$scope.optUpdateLimitation = function() {
 			if(!$scope.ability) return;
 
 			// ===================== Events =====================
 			if($scope.ability._eventList.length > $scope.optEventNum.length) {
 				$scope.optEventNum = common.array.num($scope.ability._eventList.length + 1);
 			}
+			// Modifier List
 
 			// ==================== Language ====================
 			// Special List

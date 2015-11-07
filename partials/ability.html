@@ -155,24 +155,24 @@
 						<tr>
 							<td colspan="2">
 								<!-- 修饰器 -->
-								<div ng-repeat="(modifier_index,modifier) in [] track by $index" class="group-modifier abilityModifier_{{modifier._name}}">
+								<div ng-repeat="_index in optLangModifierNum track by $index" class="group-modifier abilityModifier_{{ability._modifierList[_index]._name}}" ng-show="ability._modifierList[_index]">
 								<!--div ng-repeat="(modifier_index,modifier) in ability._modifierList track by $index" class="group-modifier abilityModifier_{{modifier._name}}"-->
 									<label>
-										<a href="javascript:void(0)" ng-click="common.array.remove(modifier, ability._modifierList)">[X]</a>
-										Modifier {{modifier_index + 1}}
+										<a href="javascript:void(0)" ng-click="common.array.remove(ability._modifierList[_index], ability._modifierList)">[X]</a>
+										Modifier {{_index + 1}}
 									</label>
 									<table class="table table-condensed table-bordered">
 										<tbody>
 										<!-- 常规 -->
-										<tr ng-repeat="unit in modifier._requireList track by $index">
+										<tr ng-repeat="unit in ability._modifierList[_index]._requireList track by $index">
 											<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
 											<td>
-												<div attrfield data-attrunit="unit" data-srcunit="modifier" data-srctmpl="Modifier"></div>
+												<div attrfield data-attrunit="unit" data-srcunit="ability._modifierList[_index]" data-srctmpl="Modifier"></div>
 											</td>
 										</tr>
 
 										<!-- 属性 -->
-										<tr class="abilityModifier_{{modifier._name}}__PROP">
+										<tr class="abilityModifier_{{ability._modifierList[_index]._name}}__PROP">
 											<th colspan="2" class="warning">
 												Properties 【属性】
 											</th>
@@ -181,9 +181,9 @@
 											<td colspan="2">
 												<table class="table table-bordered table-condensed">
 													<tbody>
-													<tr ng-repeat="_prop in modifier._propertyList track by $index">
+													<tr ng-repeat="_prop in ability._modifierList[_index]._propertyList track by $index">
 														<th>
-															<a href="javascript:void(0)" ng-click="common.array.remove(_prop, modifier._propertyList)">[X]</a>
+															<a href="javascript:void(0)" ng-click="common.array.remove(_prop, ability._modifierList[_index]._propertyList)">[X]</a>
 															{{_prop[0].replace("MODIFIER_PROPERTY_", "")}}
 															【{{common.array.find(_prop[0], Modifier.Properties, "0")[1]}}】
 														</th>
@@ -203,12 +203,12 @@
 														【{{item[1]}}】
 													</option>
 												</select>
-												<button class="btn btn-warning btn-xs" ng-click="modifier._propertyList.push([modifierProp, ''])">+ new Property 【添加属性】</button>
+												<button class="btn btn-warning btn-xs" ng-click="ability._modifierList[_index]._propertyList.push([modifierProp, ''])">+ new Property 【添加属性】</button>
 											</td>
 										</tr>
 
 										<!-- 状态 -->
-										<tr class="abilityModifier_{{modifier._name}}__STATE">
+										<tr class="abilityModifier_{{ability._modifierList[_index]._name}}__STATE">
 											<th colspan="2" class="warning">
 												States 【状态】
 											</th>
@@ -217,9 +217,9 @@
 											<td colspan="2">
 												<table class="table table-bordered table-condensed">
 													<tbody>
-													<tr ng-repeat="_state in modifier._stateList track by $index">
+													<tr ng-repeat="_state in ability._modifierList[_index]._stateList track by $index">
 														<th>
-															<a href="javascript:void(0)" ng-click="common.array.remove(_state, modifier._stateList)">[X]</a>
+															<a href="javascript:void(0)" ng-click="common.array.remove(_state, ability._modifierList[_index]._stateList)">[X]</a>
 															{{_state[0].replace("MODIFIER_STATE_", "")}}
 															【{{common.array.find(_state[0], Modifier.States, "0")[1]}}】
 														</th>
@@ -244,12 +244,12 @@
 														【{{item[1]}}】
 													</option>
 												</select>
-												<button class="btn btn-warning btn-xs" ng-click="modifier._stateList.push([modifierState, Modifier.StateValues[0][0]])">+ new State 【添加状态】</button>
+												<button class="btn btn-warning btn-xs" ng-click="ability._modifierList[_index]._stateList.push([modifierState, Modifier.StateValues[0][0]])">+ new State 【添加状态】</button>
 											</td>
 										</tr>
 
 										<!-- 事件 -->
-										<tr class="abilityModifier_{{modifier._name}}__EVENT">
+										<tr class="abilityModifier_{{ability._modifierList[_index]._name}}__EVENT">
 											<th colspan="2" class="warning">
 												Events 【事件】
 											</th>
@@ -257,9 +257,9 @@
 										<tr>
 											<td colspan="2">
 												<!-- 事件 -->
-												<div ng-repeat="(event_index,event) in modifier._eventList track by $index" class="group-event">
+												<div ng-repeat="(event_index,event) in ability._modifierList[_index]._eventList track by $index" class="group-event">
 													<label>
-														<a href="javascript:void(0)" ng-click="common.array.remove(event, modifier._eventList)">[X]</a>
+														<a href="javascript:void(0)" ng-click="common.array.remove(event, ability._modifierList[_index]._eventList)">[X]</a>
 														Event {{event_index + 1}}
 													</label>
 													<select class="form-control" ng-model="event._name">
@@ -277,7 +277,7 @@
 													<!-- 操作 -->
 													<div eventoperation data-container="event" data-path="_operationList" data-isitem="isItem"></div>
 												</div>
-												<button class="btn btn-warning btn-xs" ng-click="addEvent(modifier)">+ new event 【新建事件】</button>
+												<button class="btn btn-warning btn-xs" ng-click="addEvent(ability._modifierList[_index])">+ new event 【新建事件】</button>
 											</td>
 										</tr>
 										</tbody>
