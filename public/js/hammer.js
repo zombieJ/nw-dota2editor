@@ -6,7 +6,7 @@ hammerControllers.controller('indexCtrl', function ($scope) {
 });
 
 var _abilityCtrl = function(isItem) {
-	return function ($scope, $http, NODE, globalContent, KV, Ability, Event, Operation, Modifier, GUI) {
+	return function ($scope, $http, $interval, NODE, globalContent, KV, Ability, Event, Operation, Modifier, GUI) {
 		if (!globalContent.isOpen) return;
 
 		var _globalListKey = isItem ? "itemList" : "abilityList";
@@ -19,6 +19,37 @@ var _abilityCtrl = function(isItem) {
 		$scope.isItem = isItem;
 		$scope.ready = false;
 		$scope.conflictMap = {};
+
+		// ================================================================
+		// =                         Optimization                         =
+		// ================================================================
+		function _numArray(num) {
+			var _array = [];
+			for(var i = 0 ; i < num ; i += 1) {
+				_array[i] = i;
+			}
+			return _array;
+		}
+
+		$scope.optEventList = [];
+		$scope.optModifierList = [];
+
+		$scope.optLangAbilitySpecialNum = _numArray(10);
+		$scope.optLangModifierNum = _numArray(5);
+
+		$scope.optUpdateLimitation = function() {
+			if(!$scope.ability) return;
+
+			// ==================== Language ====================
+			// Special List
+			if($scope.ability._abilitySpecialList.length > $scope.optLangAbilitySpecialNum.length) {
+				$scope.optLangAbilitySpecialNum = _numArray($scope.ability._abilitySpecialList.length + 5);
+			}
+			// Modifier List
+			if($scope.ability._modifierList.length > $scope.optLangModifierNum.length) {
+				$scope.optLangModifierNum = _numArray($scope.ability._modifierList.length + 5);
+			}
+		};
 
 		// ================================================================
 		// =                           Function                           =
@@ -196,8 +227,8 @@ var _abilityCtrl = function(isItem) {
 			});
 		};
 
-		$scope.$watch('ability', function(newVal, oldVal){
-			// Check conflict
+		// Conflict check
+		var _conflictCheckInterval = $interval(function() {
 			var _checkMap = {};
 			$scope.conflictMap = {};
 			$.each($scope.abilityList, function(i, _ability) {
@@ -206,6 +237,12 @@ var _abilityCtrl = function(isItem) {
 				}
 				_checkMap[_ability._name] = true;
 			});
+		}, 2000);
+
+		// Ability changed listen
+		$scope.$watch('ability', function(newVal, oldVal){
+			// Optimization Call
+			$scope.optUpdateLimitation();
 
 			// Mark as changed
 			if(_abilityChangeLock || !newVal) return;
@@ -362,7 +399,10 @@ var _abilityCtrl = function(isItem) {
 		// =                              UI                              =
 		// ================================================================
 		// Select ability
-		var _abilitySelectTime;
+		$scope.setAbilityMouseDown = function(ability) {
+			$scope.setAbility(ability);
+		};
+		/*var _abilitySelectTime;
 		$scope.setAbilityMouseDown = function() {
 			_abilitySelectTime = +new Date();
 		};
@@ -371,7 +411,7 @@ var _abilityCtrl = function(isItem) {
 			if(_desTime < 500) {
 				$scope.setAbility(ability);
 			}
-		};
+		};*/
 
 		var _lastFocus = null;
 		// Show paint box
@@ -463,6 +503,7 @@ var _abilityCtrl = function(isItem) {
 		});
 
 		$scope.$on("$destroy",function() {
+			$interval.cancel(_conflictCheckInterval);
 			$("#langColorPicker").off('hidePicker.colorpicker').colorpicker('destroy');
 			$('[data-id="description"]').off("focus.colorPicker");
 			$(window).off("resize.abilityList");
