@@ -1,7 +1,7 @@
 'use strict';
 
 // ======================================================
-// =                        ÓïÑÔ                        =
+// =                        è¯­è¨€                        =
 // ======================================================
 app.factory("Sound", function(NODE) {
 	var Sound = function() {
@@ -18,7 +18,7 @@ app.factory("Sound", function(NODE) {
 			if(err) {
 				$.dialog({
 					title: "OPS!",
-					content: "Can't load sound mapping resource. ¡¾ÎŞ·¨¼ÓÔØÉùÒô×ÊÔ´ÎÄ¼ş¡¿",
+					content: "Can't load sound mapping resource. ã€æ— æ³•åŠ è½½å£°éŸ³èµ„æºæ–‡ä»¶ã€‘",
 				});
 			} else {
 				var _worker = new Worker("public/js/worker/soundWorker.js");
