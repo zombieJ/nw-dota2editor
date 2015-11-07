@@ -21,7 +21,9 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 * 语言界面显示所有使用到的语言
 
 ### TODO list
+* fast search ability
 * ability_lua & RunScript auto generate lua file
+* Ability icon picker
 * Modifier prop or state UI. Click to add, and then select.
 * Create new file if file not exist
 * Version control
