@@ -131,6 +131,17 @@ common.text.preFill = function(text, fillChar, length) {
 // ====================== Array =======================
 common.array = {};
 
+/***
+ * Create number array
+ */
+common.array.num = function(num) {
+	var _array = [];
+	for(var i = 0 ; i < num ; i += 1) {
+		_array[i] = i;
+	}
+	return _array;
+};
+
 common.array.sum = function(list, path) {
 	var _sum = 0;
 	if(list) {

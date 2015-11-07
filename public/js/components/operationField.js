@@ -24,7 +24,10 @@ components.directive('operationfield', function($compile, Operation) {
 			return {
 				pre: function (scope, element, attrs) {
 					var _field;
-					var _type = Operation.EventOperationMap[scope.opcol].type;
+					var _operationCol = Operation.EventOperationMap[scope.opcol];
+					if(!_operationCol) return;
+
+					var _type = _operationCol.type;
 					switch (_type) {
 						case "single":
 							_field = $(

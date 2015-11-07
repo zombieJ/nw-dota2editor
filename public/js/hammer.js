@@ -6,7 +6,7 @@ hammerControllers.controller('indexCtrl', function ($scope) {
 });
 
 var _abilityCtrl = function(isItem) {
-	return function ($scope, $http, $interval, NODE, globalContent, KV, Ability, Event, Operation, Modifier, GUI) {
+	return function ($scope, $http, $interval, $timeout, NODE, globalContent, KV, Ability, Event, Operation, Modifier, GUI) {
 		if (!globalContent.isOpen) return;
 
 		var _globalListKey = isItem ? "itemList" : "abilityList";
@@ -23,31 +23,28 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                         Optimization                         =
 		// ================================================================
-		function _numArray(num) {
-			var _array = [];
-			for(var i = 0 ; i < num ; i += 1) {
-				_array[i] = i;
-			}
-			return _array;
-		}
+		$scope.optEventNum = common.array.num(3);
 
-		$scope.optEventList = [];
-		$scope.optModifierList = [];
+		$scope.optLangAbilitySpecialNum = common.array.num(10);
+		$scope.optLangModifierNum = common.array.num(5);
 
-		$scope.optLangAbilitySpecialNum = _numArray(10);
-		$scope.optLangModifierNum = _numArray(5);
-
-		$scope.optUpdateLimitation = function() {
+		//var _optListTimeout;
+		$scope.optUpdateLimitation = function(switchAbility) {
 			if(!$scope.ability) return;
+
+			// ===================== Events =====================
+			if($scope.ability._eventList.length > $scope.optEventNum.length) {
+				$scope.optEventNum = common.array.num($scope.ability._eventList.length + 1);
+			}
 
 			// ==================== Language ====================
 			// Special List
 			if($scope.ability._abilitySpecialList.length > $scope.optLangAbilitySpecialNum.length) {
-				$scope.optLangAbilitySpecialNum = _numArray($scope.ability._abilitySpecialList.length + 5);
+				$scope.optLangAbilitySpecialNum = common.array.num($scope.ability._abilitySpecialList.length + 5);
 			}
 			// Modifier List
 			if($scope.ability._modifierList.length > $scope.optLangModifierNum.length) {
-				$scope.optLangModifierNum = _numArray($scope.ability._modifierList.length + 5);
+				$scope.optLangModifierNum = common.array.num($scope.ability._modifierList.length + 5);
 			}
 		};
 

@@ -124,21 +124,22 @@
 						<tr>
 							<td colspan="2">
 								<!-- 事件 -->
-								<div ng-repeat="(event_index,event) in optEventList track by $index" class="group-event abilityEvent_{{event._name}}">
+								<div ng-repeat="_index in optEventNum track by $index" ng-show="ability._eventList[_index]"
+									 class="group-event abilityEvent_{{ability._eventList[_index]._name}}">
 									<!-- 事件类型 -->
 									<label>
-										<a href="javascript:void(0)" ng-click="common.array.remove(event, ability._eventList)">[X]</a>
-										Event {{event_index + 1}}
+										<a href="javascript:void(0)" ng-click="common.array.remove(ability._eventList[_index], ability._eventList)">[X]</a>
+										Event {{_index + 1}}
 									</label>
-									<select class="form-control" ng-model="event._name">
-										<option ng-repeat="_event in Event.EventList track by $index" value="{{_event[0]}}">{{_event[0]}} 【{{_event[1]}}】</option>
+									<select class="form-control" ng-model="ability._eventList[_index]._name">
+										<option ng-repeat="_event in Event.EventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>
 									</select>
 
 									<!-- 事件备注 -->
-									<textarea class="form-control" ng-model="event._comment" rows="5" placeholder="备注"></textarea>
+									<textarea class="form-control" ng-model="ability._eventList[_index]._comment" rows="5" placeholder="备注"></textarea>
 
 									<!-- 操作 -->
-									<div eventoperation data-container="event" data-path="_operationList" data-isitem="isItem"></div>
+									<div eventoperation data-container="ability._eventList[_index]" data-path="_operationList" data-isitem="isItem"></div>
 								</div>
 								<button class="btn btn-primary btn-xs" ng-click="addEvent()">+ new event 【新建事件】</button>
 							</td>
@@ -154,7 +155,8 @@
 						<tr>
 							<td colspan="2">
 								<!-- 修饰器 -->
-								<div ng-repeat="(modifier_index,modifier) in optModifierList track by $index" class="group-modifier abilityModifier_{{modifier._name}}">
+								<div ng-repeat="(modifier_index,modifier) in [] track by $index" class="group-modifier abilityModifier_{{modifier._name}}">
+								<!--div ng-repeat="(modifier_index,modifier) in ability._modifierList track by $index" class="group-modifier abilityModifier_{{modifier._name}}"-->
 									<label>
 										<a href="javascript:void(0)" ng-click="common.array.remove(modifier, ability._modifierList)">[X]</a>
 										Modifier {{modifier_index + 1}}
