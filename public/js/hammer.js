@@ -361,8 +361,19 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                              UI                              =
 		// ================================================================
-		var _lastFocus = null;
+		// Select ability
+		var _abilitySelectTime;
+		$scope.setAbilityMouseDown = function() {
+			_abilitySelectTime = +new Date();
+		};
+		$scope.setAbilityMouseUp = function(ability) {
+			var _desTime = +new Date() - _abilitySelectTime;
+			if(_desTime < 500) {
+				$scope.setAbility(ability);
+			}
+		};
 
+		var _lastFocus = null;
 		// Show paint box
 		$("#langColorPicker").colorpicker({
 			colorSelectors: {

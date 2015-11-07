@@ -2,7 +2,8 @@
 	<div class="col-sm-3 col-md-2">
 		<div id="listCntr" class="listCntr noSelect" ui-sortable ng-model="abilityList">
 			<div ng-repeat="_ability in abilityList track by $index" class="listItem"
-			     ng-class="{active: ability == _ability}" ng-click="setAbility(_ability);">
+			     ng-class="{active: ability == _ability}"
+				 ng-mousedown="setAbilityMouseDown(_ability);" ng-mouseup="setAbilityMouseUp(_ability);">
 				<p class="title">
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.abilities[_ability._name].markColor || '#CCC'}}"></span>
 					{{config.abilities[_ability._name].editorAliasName || _ability._name}}
