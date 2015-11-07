@@ -189,11 +189,13 @@ app.factory("Operation", function(Sound) {
 					case "operation":
 						writer.write('"$1"', key);
 						writer.write('{');
-						$.each(value, function (i, _subOpeartion) {
-							if(i !== 0) writer.write('');
+						if(value) {
+							$.each(value, function (i, _subOpeartion) {
+								if (i !== 0) writer.write('');
 
-							_subOpeartion.doWriter(writer);
-						});
+								_subOpeartion.doWriter(writer);
+							});
+						}
 						writer.write('}');
 						return;
 					default :
