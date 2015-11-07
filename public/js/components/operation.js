@@ -22,6 +22,7 @@ components.directive('eventoperation', function($compile) {
 			};
 
 			$scope.addOperation = function() {
+				$scope.container[$scope.path] = $scope.container[$scope.path] || [];
 				$scope.container[$scope.path].push(new Operation());
 			};
 
@@ -31,6 +32,7 @@ components.directive('eventoperation', function($compile) {
 			$scope.optOperationNum = common.array.num(1);
 			$scope.$watch("container[path].length", function() {
 				if(!$scope.container || !$scope.container[$scope.path]) return;
+				if(!$.isArray($scope.container[$scope.path])) $scope.container[$scope.path] = [];
 
 				if($scope.container[$scope.path].length > $scope.optOperationNum.length) {
 					$scope.optOperationNum = common.array.num($scope.container[$scope.path].length);

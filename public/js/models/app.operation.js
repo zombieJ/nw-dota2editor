@@ -79,6 +79,7 @@ app.factory("Operation", function(Sound) {
 							// 遍历属性赋值
 							var _tmplUnit = common.array.find(_tgtUnit.key, Operation.UnitGroupColumns, "0");
 
+							_operation.attrs[unit.key]._action = "radius";
 							if (_tmplUnit) {
 								switch (_tmplUnit[3]) {
 									case "text":
@@ -96,6 +97,7 @@ app.factory("Operation", function(Sound) {
 										_WARN("KV", lvl + 2, "Operation Unit Group Type not match:", _tmplUnit[3], _tgtUnit.key, _tgtUnit.value);
 								}
 							} else if(_tgtUnit.key.toUpperCase() === "LINE") {
+								_operation.attrs[unit.key]._action = "line";
 								var _lineMap = _tgtUnit.value.kvToMap();
 								_operation.attrs[unit.key][_tgtUnit.key] = {
 									Length: _lineMap.Length,
