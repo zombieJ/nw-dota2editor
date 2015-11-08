@@ -227,11 +227,6 @@
 				<!-- 拥有语言文件 -->
 				<div class="row" ng-show="languageList.length !== 0">
 					<div class="col-md-2">
-						<!-- 快速定位 -->
-						<div class="fastPin">
-							<a class="fa fa-paint-brush" id="langColorPicker"></a>
-						</div>
-
 						<div class="listCntr">
 							<div ng-repeat="_lang in languageList track by $index" class="listItem"
 							     ng-class="{active: language == _lang}" ng-click="setLanguage(_lang);">

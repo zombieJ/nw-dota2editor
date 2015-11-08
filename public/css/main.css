@@ -83,8 +83,10 @@ div:hover::-webkit-scrollbar-thumb {
 #colorPickerMDL #colorDisplayLayout {
 	border: 1px solid #BBB;
 	padding: 10px;
-	box-shadow: inset 1px 1px 5px rgba(0,0,0,0.2);
+	box-shadow: inset 1px 1px 5px rgba(255,255,255,0.2);
 	min-height: 200px;
+	color: #FFF;
+	background: #222;
 }
 
 /* List container */

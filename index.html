@@ -145,13 +145,15 @@
 					<div id="colorPickerRegion" class="clearfix">
 						<button class="btn" ng-repeat="color in colorList" style="background: {{color}};" ng-click="selectColorPickerColor(color)"></button>
 
-						<input type="text" class="form-control pull-right" />
+						<input type="text" class="form-control pull-right" id="colorPickerInput" data-format="hex" />
 					</div>
 					<div id="colorDisplayLayout" contenteditable="true"></div>
 				</div>
 				<div class="modal-footer">
+					<button type="button" class="btn btn-warning pull-left" ng-click="clearColorPickerStyle()">Clear 【清除格式】</button>
+
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">OK</button>
+					<button type="button" class="btn btn-primary" ng-click="confirmColoredText()">OK</button>
 				</div>
 			</div>
 		</div>

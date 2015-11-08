@@ -400,18 +400,8 @@ var _abilityCtrl = function(isItem) {
 		$scope.setAbilityMouseDown = function(ability) {
 			$scope.setAbility(ability);
 		};
-		/*var _abilitySelectTime;
-		$scope.setAbilityMouseDown = function() {
-			_abilitySelectTime = +new Date();
-		};
-		$scope.setAbilityMouseUp = function(ability) {
-			var _desTime = +new Date() - _abilitySelectTime;
-			if(_desTime < 500) {
-				$scope.setAbility(ability);
-			}
-		};*/
 
-		var _lastFocus = null;
+		/*var _lastFocus = null;
 		// Show paint box
 		$("#langColorPicker").colorpicker({
 			colorSelectors: {
@@ -449,7 +439,7 @@ var _abilityCtrl = function(isItem) {
 		// Set last focus input
 		$('[data-id="description"]').on("focus.colorPicker", 'input, textarea', function (e) {
 			_lastFocus = this;
-		});
+		});*/
 
 		// 列表框布局
 		var winWidth;
@@ -502,8 +492,8 @@ var _abilityCtrl = function(isItem) {
 
 		$scope.$on("$destroy",function() {
 			$interval.cancel(_conflictCheckInterval);
-			$("#langColorPicker").off('hidePicker.colorpicker').colorpicker('destroy');
-			$('[data-id="description"]').off("focus.colorPicker");
+			//$("#langColorPicker").off('hidePicker.colorpicker').colorpicker('destroy');
+			//$('[data-id="description"]').off("focus.colorPicker");
 			$(window).off("resize.abilityList");
 			$("#listCntr").off("mousewheel.abilityList");
 			$(document).off("contextmenu.abilityList");

@@ -237,11 +237,24 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 		'#777777', '#337ab7',  '#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f'
 	];
 
+	// Show color picker dialog
+	var _colorTarget;
 	$(document).on("click", ".color-picker", function() {
-		var $input = $(this).closest("td").find("input, textarea");
-		$("#colorDisplayLayout").html($input.val());
+		_colorTarget = $(this).closest("td").find("input, textarea");
+		$("#colorDisplayLayout").html(_colorTarget.val());
 		$("#colorPickerMDL").modal();
 	});
+
+	$("#colorPickerInput").colorpicker();
+
+	// Save color picker text
+	$scope.confirmColoredText = function() {
+		$("#colorPickerMDL").modal('hide');
+
+		var _text = $("#colorDisplayLayout").html().replace(/"/g, "'");
+		_colorTarget.val(_text);
+		_colorTarget.trigger("input");
+	};
 
 	$scope.selectColorPickerColor = function(color) {
 		var _my = $("#colorDisplayLayout")[0];
@@ -249,64 +262,80 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 
 		if($(_selection.anchorNode).closest("#colorDisplayLayout").length === 0) return;
 
-		var _start = _selection.anchorOffset;
-		var _end = _selection.focusOffset;
+		function _getRootNode(node) {
+			if(node.parentNode.nodeName === "FONT") {
+				return node.parentNode;
+			} else {
+				return node;
+			}
+		}
+		function _getText(node) {
+			if(node.nodeName === "FONT") {
+				return node.innerText;
+			} else {
+				return node.textContent;
+			}
+		}
+
+		var _range = _selection.getRangeAt(0);
+		var _start = _range.startOffset;
+		var _end = _range.endOffset;
 		var _content = {
 			first: null,
 			text: "",
 			last: null,
 		};
 
-		var _firstNode = _selection.anchorNode;
-		var _lastNode = _selection.focusNode;
+		var _firstNode = _getRootNode(_range.startContainer);
+		var _lastNode = _getRootNode(_range.endContainer);
 		var _nodeList = [];
 
-		console.log(">>",_firstNode, _lastNode);
 		if(_firstNode === _lastNode) {
 			// Only one selection
-			console.log(_start,_end);
-			console.log(_firstNode.textContent.slice(0, _start),"|", _firstNode.textContent.slice(_start, _end),"|", _firstNode.textContent.slice(_end));
-			_content.first = [_firstNode.textContent.slice(0, _start), _firstNode];
-			_content.text = _firstNode.textContent.slice(_start, _end);
-			_content.last = [_firstNode.textContent.slice(_end), _firstNode];
+			_content.first = [_getText(_firstNode).slice(0, _start), _firstNode];
+			_content.text = _getText(_firstNode).slice(_start, _end);
+			_content.last = [_getText(_firstNode).slice(_end), _firstNode];
 
 			_nodeList.push(_firstNode);
 		} else {
-			for (var _currentNode = _firstNode; true; _currentNode = _currentNode.nextSibling) {
+			for (var _currentNode = _getRootNode(_firstNode); true; _currentNode = _getRootNode(_currentNode).nextSibling) {
 				// First part
 				if (_currentNode === _firstNode) {
-					_content.first = [_currentNode.textContent.slice(0, _start), _currentNode];
-					_content.text = _currentNode.textContent.slice(_start);
-				} else if (!_currentNode.nextSibling) {
-					_content.last = [_currentNode.textContent.slice(_end), _currentNode];
-					_content.text += _currentNode.textContent.slice(0, _end);
+					_content.first = [_getText(_currentNode).slice(0, _start), _currentNode];
+					_content.text = _getText(_currentNode).slice(_start);
+				} else if (_currentNode === _lastNode) {
+					_content.last = [_getText(_currentNode).slice(_end), _currentNode];
+					_content.text += _getText(_currentNode).slice(0, _end);
 				} else {
-					_content.text += _currentNode.textContent;
+					_content.text += _getText(_currentNode);
 				}
 
 				_nodeList.push(_currentNode);
-				if(_firstNode === _lastNode) break;
+				if(_currentNode === _lastNode) break;
 			}
 		}
 
 		// Process
-		function genNode(text, nodeName) {
+		function genNode(text, nodeName, preNode) {
 			if(!text) return null;
 
 			var _node;
 			if(nodeName === "FONT") {
 				_node = document.createElement("font");
-				_node.textContent = text;
+				_node.innerText = text;
+
+				if(preNode && preNode.nodeName === "FONT") {
+					_node.color = preNode.color;
+				}
 			} else {
 				_node = document.createTextNode(text);
 			}
 			return _node;
 		}
 
-		var _genFirst = genNode(_content.first[0], _content.first[1].parentNode.nodeName);
+		var _genFirst = genNode(_content.first[0], _getRootNode(_content.first[1]).nodeName, _getRootNode(_content.first[1]));
 		var _genMiddle = genNode(_content.text, "FONT");
-		var _genLast = genNode(_content.last[0], _content.last[1].parentNode.nodeName);
-		console.log(_genFirst, _genMiddle, _genLast);
+		var _genLast = genNode(_content.last[0], _getRootNode(_content.last[1]).nodeName, _getRootNode(_content.last[1]));
 		_genMiddle.color = color;
 
 		// Update
@@ -317,12 +346,12 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 
 		// Clean
 		$.each(_nodeList, function(i, node) {
-			if(node.parentNode.nodeName === "FONT") {
-				node.parentNode.remove();
-			} else {
-				node.remove();
-			}
+			_getRootNode(node).remove();
 		});
+	};
+
+	$scope.clearColorPickerStyle = function() {
+		$("#colorDisplayLayout").text($("#colorDisplayLayout").text());
 	};
 
 	// 隐藏菜单栏
