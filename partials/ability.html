@@ -253,6 +253,7 @@
 									<tr ng-repeat="langField in Language.AbilityLang track by $index">
 										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
 										<td>
+											<button class="btn btn-warning fa fa-paint-brush color-picker"></button>
 											<input type="text" class="form-control" ng-if="langField.type === 'text'"
 											       ng-model="language.map[Language.abilityAttr(ability._name, langField.attr)]" />
 											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"

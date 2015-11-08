@@ -100,7 +100,10 @@
 	<div ng-show="globalContent.isOpen" ng-view></div>
 </div>
 
-	<!-- Modal -->
+	<!-- ==================================================================== -->
+	<!-- =                              Modal                               = -->
+	<!-- ==================================================================== -->
+	<!-- Save Modal -->
 	<div class="modal fade" id="saveMDL" tabindex="-1" data-backdrop="static">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -126,6 +129,29 @@
 
 					<button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="saveLock">Close</button>
 					<button type="button" class="btn btn-primary" ng-click="saveFiles()" ng-disabled="saveLock">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Color Picker Modal -->
+	<div class="modal fade" id="colorPickerMDL" tabindex="-1">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Color Picker 【调色盘】</h4>
+				</div>
+				<div class="modal-body">
+					<div id="colorPickerRegion" class="clearfix">
+						<button class="btn" ng-repeat="color in colorList" style="background: {{color}};" ng-click="selectColorPickerColor(color)"></button>
+
+						<input type="text" class="form-control pull-right" />
+					</div>
+					<div id="colorDisplayLayout" contenteditable="true"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">OK</button>
 				</div>
 			</div>
 		</div>

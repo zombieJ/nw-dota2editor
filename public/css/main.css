@@ -49,6 +49,45 @@ div:hover::-webkit-scrollbar-thumb {
 	left: 5px;
 }
 
+/* Color picker */
+.color-picker {
+	position: absolute;
+	margin-left: -24px;
+	margin-top: 4px;
+	padding: 0;
+	line-height: 100%;
+	width: 20px;
+	height: 20px;
+	opacity: 0.3;
+}
+.color-picker:hover {
+	opacity: 1;
+}
+
+#colorPickerMDL #colorPickerRegion {
+	margin-bottom: 10px;
+}
+
+#colorPickerMDL #colorPickerRegion input {
+	display: inline-block;
+	width: 100px;
+}
+
+#colorPickerMDL #colorPickerRegion .btn {
+	padding: 0;
+	height: 30px;
+	width: 30px;
+	margin-right: 5px;
+}
+
+#colorPickerMDL #colorDisplayLayout {
+	border: 1px solid #BBB;
+	padding: 10px;
+	box-shadow: inset 1px 1px 5px rgba(0,0,0,0.2);
+	min-height: 200px;
+}
+
+/* List container */
 #listCntr {
 	background: #FFFFFF;
 	position: fixed;
