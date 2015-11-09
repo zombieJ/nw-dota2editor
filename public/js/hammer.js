@@ -23,10 +23,10 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                         Optimization                         =
 		// ================================================================
-		$scope.optEventNum = common.array.num(3);
+		$scope.optEventNum = common.array.num(2);
 
-		$scope.optLangAbilitySpecialNum = common.array.num(10);
-		$scope.optLangModifierNum = common.array.num(5);
+		$scope.optLangAbilitySpecialNum = common.array.num(5);
+		$scope.optLangModifierNum = common.array.num(2);
 
 		//var _optListTimeout;
 		$scope.optUpdateLimitation = function() {
@@ -34,18 +34,18 @@ var _abilityCtrl = function(isItem) {
 
 			// ===================== Events =====================
 			if($scope.ability._eventList.length > $scope.optEventNum.length) {
-				$scope.optEventNum = common.array.num($scope.ability._eventList.length + 1);
+				$scope.optEventNum = common.array.num($scope.ability._eventList.length);
 			}
 			// Modifier List
 
 			// ==================== Language ====================
 			// Special List
 			if($scope.ability._abilitySpecialList.length > $scope.optLangAbilitySpecialNum.length) {
-				$scope.optLangAbilitySpecialNum = common.array.num($scope.ability._abilitySpecialList.length + 5);
+				$scope.optLangAbilitySpecialNum = common.array.num($scope.ability._abilitySpecialList.length);
 			}
 			// Modifier List
 			if($scope.ability._modifierList.length > $scope.optLangModifierNum.length) {
-				$scope.optLangModifierNum = common.array.num($scope.ability._modifierList.length + 5);
+				$scope.optLangModifierNum = common.array.num($scope.ability._modifierList.length);
 			}
 		};
 
@@ -55,6 +55,8 @@ var _abilityCtrl = function(isItem) {
 		$scope.setAbility = function (ability) {
 			_abilityChangeLock = true;
 			$scope.ability = ability;
+
+			abilityChangeWatch();
 
 			setTimeout(function() {
 				_abilityChangeLock = false;
@@ -238,14 +240,34 @@ var _abilityCtrl = function(isItem) {
 		}, 2000);
 
 		// Ability changed listen
-		$scope.$watch('ability', function(newVal, oldVal){
-			// Optimization Call
+		// > ability._eventList.length
+		$scope.$watch('ability._eventList.length', function(){
 			$scope.optUpdateLimitation();
+		});
+		// > ability._abilitySpecialList.length
+		$scope.$watch('ability._abilitySpecialList.length', function(){
+			$scope.optUpdateLimitation();
+		});
+		// > ability._modifierList.length
+		$scope.$watch('ability._modifierList.length', function(){
+			$scope.optUpdateLimitation();
+		});
+		// > Change
+		var _abilityChangeWatchListener;
+		function abilityChangeWatch() {
+			if(_abilityChangeWatchListener) return;
 
-			// Mark as changed
-			if(_abilityChangeLock || !newVal) return;
-			newVal._changed = true;
-		}, true);
+			_abilityChangeWatchListener = $scope.$watch('ability', function(newVal, oldVal){
+				if(_abilityChangeLock || !newVal) return;
+
+				newVal._changed = true;
+
+				if(_abilityChangeWatchListener) {
+					_abilityChangeWatchListener();
+					_abilityChangeWatchListener = null;
+				}
+			}, true);
+		}
 
 		// Sync ability language
 		$scope.$watch('ability._name', function(newVal, oldVal){
