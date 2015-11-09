@@ -3,7 +3,7 @@
 // ======================================================
 // =                        语言                        =
 // ======================================================
-app.factory("Sound", function(NODE) {
+app.factory("Sound", function(NODE, FS) {
 	var Sound = function() {
 	};
 
@@ -13,7 +13,8 @@ app.factory("Sound", function(NODE) {
 		Sound.map = {};
 		Sound.revertMap = {};
 
-		var FS = require("fs");
+		if(!FS) return;
+
 		FS.readFile("res/sounds.json", "utf8", function (err, data) {
 			if(err) {
 				$.dialog({

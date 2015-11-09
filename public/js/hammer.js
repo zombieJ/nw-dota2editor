@@ -6,7 +6,7 @@ hammerControllers.controller('indexCtrl', function ($scope) {
 });
 
 var _abilityCtrl = function(isItem) {
-	return function ($scope, $http, $interval, $timeout, NODE, globalContent, KV, Ability, Event, Operation, Modifier, GUI) {
+	return function ($scope, $http, $interval, $timeout, NODE, globalContent, KV, Ability, Event, Operation, Modifier) {
 		if (!globalContent.isOpen) return;
 
 		var _globalListKey = isItem ? "itemList" : "abilityList";

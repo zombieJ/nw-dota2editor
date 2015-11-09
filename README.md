@@ -19,8 +19,10 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 * 树状结构快速导航
 * 如果修饰器被设为隐藏，则多语言界面显示隐藏标记
 * 语言界面显示所有使用到的语言
+* 检测是否存在未填写描述的技能和修饰器
 
 ### TODO list
+* Custom sound support:http://www.dota2rpg.com/thread-2491-1-1.html
 * fast search ability
 * ability_lua & RunScript auto generate lua file
 * Ability icon picker
