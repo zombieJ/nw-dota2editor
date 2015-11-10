@@ -109,7 +109,16 @@ app.factory("Operation", function(Sound) {
 						});
 					}
 				} else {
-					_WARN("KV", lvl + 2, "Operation Object not match:", unit.key, unit.value);
+					// Hack: Operation
+					if(_operation.name === "RunScript") {
+						if(_operation.attrs.CustomizeKV) {
+							_operation.attrs.CustomizeKV += '\n"' + unit.key + '"	"' + unit.value + '"';
+						} else {
+							_operation.attrs.CustomizeKV = '"' + unit.key + '"	"' + unit.value + '"';
+						}
+					} else {
+						_WARN("KV", lvl + 2, "Operation Object not match:", unit.key, unit.value);
+					}
 				}
 			});
 		} else {
