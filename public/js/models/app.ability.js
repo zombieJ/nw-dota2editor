@@ -293,6 +293,8 @@ app.factory("Ability", function($q, Event, Modifier) {
 			return;
 		}
 
+		var _writerStartLoc = writer._data.length;
+
 		// 名称
 		writer.write('"$1"', this._name);
 		writer.write('{');
@@ -363,6 +365,10 @@ app.factory("Ability", function($q, Event, Modifier) {
 		}
 
 		writer.write('}');
+
+		// Get update ability content
+		this._oriContent = writer._data.slice(_writerStartLoc);
+
 		return writer;
 	};
 

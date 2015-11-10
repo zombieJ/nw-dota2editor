@@ -156,6 +156,7 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 				$.each(globalContent[_globalListKey], function(i, ability) {
 					_writer.write('');
 					ability.doWriter(_writer);
+					ability._changed = false;
 				});
 				_writer.withEnd();
 
