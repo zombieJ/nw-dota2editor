@@ -168,7 +168,12 @@ app.factory("KV", function(NODE, $q) {
 	};
 
 	_KV.Writer.prototype.writeContent = function(content) {
-		this._data += content + "\n";
+		var _my = this;
+		$.each(content.split("\n"), function(i, line) {
+			line = line.trim();
+			if(!line) return;
+			_my.write(line);
+		});
 	};
 
 	_KV.Writer.prototype.write = function(template) {

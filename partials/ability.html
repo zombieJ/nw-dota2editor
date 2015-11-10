@@ -6,6 +6,7 @@
 				 ng-mousedown="setAbilityMouseDown(_ability);">
 				<p class="title">
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.abilities[_ability._name].markColor || '#CCC'}}"></span>
+					<span class="fa fa-cubes sm" ng-if="config.abilities[_ability._name].markUsage === 'dummy'"></span>
 					{{config.abilities[_ability._name].editorAliasName || _ability._name}}
 					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
 						  uib-tooltip="Conflict name 【名称冲突】" tooltip-placement="right" tooltip-append-to-body="true"></span>
@@ -22,6 +23,9 @@
 		<h1>No Ability Yet 【还未创建Ability】</h1>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ability}" ng-show="ability">
+		<button class="btn btn-primary pull-right" uibTooltip="will check all the abilities which miss the description. 【将会找出未填写语言描述的技能列表】"
+		        tooltip-placement="left" ng-click="abilitiesCheck()">Inspection 【检测】</button>
+
 		<ul id="myTabs" class="nav nav-tabs" role="tablist">
 			<li class="active"><a href="[data-id='ability']" data-toggle="tab">
 				<img class="ability-img" onerror="iconError();" />
@@ -310,6 +314,14 @@
 <ul id="abilityMenu" class="app-menu app-float-menu">
 	<li><a ng-click="setAbilityEditorAlias()">Editor Alias 【编辑器别名】</a></li>
 	<li class="app-submenu">
+		<a>Usage Marker 【功能标记】</a>
+		<ul class="app-menu">
+			<li><a ng-click="setAbilityMarkUsage('dummy');"> Dummy Ability 【马甲技能】</a></li>
+			<li class="line"></li>
+			<li><a ng-click="setAbilityMarkUsage();"> No mark 【无标记】</a></li>
+		</ul>
+	</li>
+	<li class="app-submenu">
 		<a>Color Marker 【颜色标记】</a>
 		<ul class="app-menu">
 			<li><a ng-click="setAbilityMarkColor('#00a65a');"><span class="fa fa-circle sm" style="color: #00a65a;"></span> Green 【绿色】</a></li>
@@ -362,6 +374,35 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary" ng-click="newAbility.confirm()">Create</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Check report -->
+<div class="modal fade" id="checkReportMDL" tabindex="-1">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Check Report 【检测报告】</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Filter 【过滤】</label>
+					<input type="text" class="form-control" ng-model="checkReportFilter"/>
+				</div>
+
+				<ul>
+					<li ng-repeat="item in checkReport.language | filter: checkReportFilter">
+						[{{item.language.name}}]
+						<a href="javascript:void(0)" ng-click="setAbility(item.ability);">{{item.ability._name}}</a>
+						<span ng-if="item.modifier">-> {{item.modifier._name}}</span>:
+						<span ng-if="item.field.attr">[{{item.field.attr}}]</span> miss
+					</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>

@@ -225,18 +225,6 @@ var _abilityCtrl = function(isItem) {
 			});
 		};
 
-		// Conflict check
-		var _conflictCheckInterval = $interval(function() {
-			var _checkMap = {};
-			$scope.conflictMap = {};
-			$.each($scope.abilityList, function(i, _ability) {
-				if(_checkMap[_ability._name]) {
-					$scope.conflictMap[_ability._name] = true;
-				}
-				_checkMap[_ability._name] = true;
-			});
-		}, 2000);
-
 		// Ability changed listen
 		$scope.$watch('ability', function(newVal, oldVal){
 			// Optimization Call
@@ -250,6 +238,15 @@ var _abilityCtrl = function(isItem) {
 		// Sync ability language
 		$scope.$watch('ability._name', function(newVal, oldVal){
 			if(_abilityChangeLock) return;
+
+			console.log("Sync ability!");
+			// Change configuration mapping
+			var _configAbility = common.getValueByPath($scope, "config.abilities." + oldVal);
+			if(_configAbility) {
+				$scope.config.abilities[newVal] = _configAbility;
+				delete $scope.config.abilities[oldVal];
+			}
+
 
 			$.each($scope.languageList, function(i, language) {
 				// Common description
@@ -278,6 +275,7 @@ var _abilityCtrl = function(isItem) {
 		$scope.$watch('ability._modifierList', function(newVal, oldVal){
 			if(_abilityChangeLock) return;
 
+			console.log("Sync modifier!");
 			$.each(newVal, function(i, _modifier) {
 				var _preModifier = common.array.find(_modifier._innerID, oldVal, "_innerID");
 				if(_preModifier) {
@@ -294,8 +292,73 @@ var _abilityCtrl = function(isItem) {
 					});
 				}
 			});
-
 		}, true);
+
+		// ================================================================
+		// =                          Auto Detect                         =
+		// ================================================================
+		// Naming conflict check
+		var _conflictCheckInterval = $interval(function() {
+			var _checkMap = {};
+			$scope.conflictMap = {};
+			$.each($scope.abilityList, function(i, _ability) {
+				if(_checkMap[_ability._name]) {
+					$scope.conflictMap[_ability._name] = true;
+				}
+				_checkMap[_ability._name] = true;
+			});
+		}, 2000);
+
+		// Check language description
+		$scope.checkReport = {};
+		$scope.abilitiesCheck = function() {
+			var _reportList = [];
+			$scope.checkReport = {
+				language: _reportList
+			};
+
+			$.each($scope.abilityList, function(i, ability) {
+				if(common.getValueByPath($scope, "config.abilities." + ability._name + ".markUsage") === "dummy") return;
+
+				// Loop language
+				$.each($scope.languageList, function(i, language) {
+					// =============== Ability ===============
+					if(!ability.AbilityBehavior.DOTA_ABILITY_BEHAVIOR_HIDDEN) {
+						$.each(Language.AbilityLang, function (i, langField) {
+							if (!langField.frequent) return;
+
+							if (!language.map[Language.abilityAttr(ability._name, langField.attr)]) {
+								_reportList.push({
+									ability: ability,
+									language: language,
+									field: langField,
+								});
+							}
+						});
+					}
+
+					// =============== Modifier ===============
+					$.each(ability._modifierList, function(i, modifier) {
+						if(modifier.IsHidden === "1") return;
+
+						$.each(Language.ModifierLang, function(j, langField) {
+							if (!langField.frequent) return;
+
+							if (!language.map[Language.modifierAttr(modifier._name, langField.attr)]) {
+								_reportList.push({
+									ability: ability,
+									modifier: modifier,
+									language: language,
+									field: langField,
+								});
+							}
+						});
+					});
+				});
+			});
+
+			$("#checkReportMDL").modal();
+		};
 
 		// ================================================================
 		// =                        File Operation                        =
@@ -353,6 +416,18 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                        Configuration                         =
 		// ================================================================
+		$scope.setAbilityMarkUsage = function(usage) {
+			if(!$scope.config) return;
+
+			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
+			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+			if(usage) {
+				_ability.markUsage = usage;
+			} else {
+				delete _ability.markUsage;
+			}
+		};
+
 		$scope.setAbilityMarkColor = function(color) {
 			if(!$scope.config) return;
 
@@ -400,46 +475,6 @@ var _abilityCtrl = function(isItem) {
 		$scope.setAbilityMouseDown = function(ability) {
 			$scope.setAbility(ability);
 		};
-
-		/*var _lastFocus = null;
-		// Show paint box
-		$("#langColorPicker").colorpicker({
-			colorSelectors: {
-				'default': '#777777',
-				'primary': '#337ab7',
-				'success': '#5cb85c',
-				'info': '#5bc0de',
-				'warning': '#f0ad4e',
-				'danger': '#d9534f'
-			}
-		}).on('hidePicker.colorpicker', function(event) {
-			if(!_lastFocus) return;
-
-			var _my = _lastFocus;
-			var _color = event.color.toHex();
-			var _colorStart = "<font color='" + _color + "'>";
-			var _colorEnd = "</font>";
-
-			var _startPos = _my.selectionStart;
-			var _endPos = _my.selectionEnd;
-			var tmpStr = _my.value;
-
-			var _selectContent = tmpStr.slice(_startPos, _endPos);
-
-			_my.value = tmpStr.substring(0, _startPos) + _colorStart + _selectContent + _colorEnd + tmpStr.substring(_endPos, tmpStr.length);
-			$(_my).trigger('input');
-
-			setTimeout(function () {
-				$(_my).focus();
-				_my.selectionStart = _startPos + _colorStart.length;
-				_my.selectionEnd = _startPos + _colorStart.length + _selectContent.length;
-			}, 500);
-		});
-
-		// Set last focus input
-		$('[data-id="description"]').on("focus.colorPicker", 'input, textarea', function (e) {
-			_lastFocus = this;
-		});*/
 
 		// 列表框布局
 		var winWidth;

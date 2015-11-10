@@ -245,7 +245,32 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 		$("#colorPickerMDL").modal();
 	});
 
+	// Color picker
 	$("#colorPickerInput").colorpicker();
+	$("#colorPickerInput").keydown(function(e) {
+		if(e.which === 13){
+			var _val = ($(this).val() + "").trim();
+			if(_val.match(/^\#[abcdefABCDEF\d]{6}$/)) {
+				$scope.selectColorPickerColor(_val);
+				$("#colorPickerInput").colorpicker('hide');
+			}
+		}
+	});
+
+	var _selection = null;
+	$("#colorDisplayLayout").mouseup(function () {
+		var _winSelect = window.getSelection();
+		if(!_winSelect || $(_winSelect.anchorNode).closest("#colorDisplayLayout").length === 0) return;
+
+		var _range = _winSelect.getRangeAt(0);
+
+		_selection = {
+			start: _range.startOffset,
+			end: _range.endOffset,
+			firstNode: _range.startContainer,
+			lastNode: _range.endContainer,
+		};
+	});
 
 	// Save color picker text
 	$scope.confirmColoredText = function() {
@@ -257,10 +282,7 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 	};
 
 	$scope.selectColorPickerColor = function(color) {
-		var _my = $("#colorDisplayLayout")[0];
-		var _selection = window.getSelection();
-
-		if($(_selection.anchorNode).closest("#colorDisplayLayout").length === 0) return;
+		if(!_selection) return;
 
 		function _getRootNode(node) {
 			if(node.parentNode.nodeName === "FONT") {
@@ -277,17 +299,16 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 			}
 		}
 
-		var _range = _selection.getRangeAt(0);
-		var _start = _range.startOffset;
-		var _end = _range.endOffset;
 		var _content = {
 			first: null,
 			text: "",
 			last: null,
 		};
 
-		var _firstNode = _getRootNode(_range.startContainer);
-		var _lastNode = _getRootNode(_range.endContainer);
+		var _start = _selection.start;
+		var _end = _selection.end;
+		var _firstNode = _getRootNode(_selection.firstNode);
+		var _lastNode = _getRootNode(_selection.lastNode);
 		var _nodeList = [];
 
 		if(_firstNode === _lastNode) {
@@ -348,6 +369,8 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 		$.each(_nodeList, function(i, node) {
 			_getRootNode(node).remove();
 		});
+
+		_selection = null;
 	};
 
 	$scope.clearColorPickerStyle = function() {
