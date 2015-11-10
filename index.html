@@ -96,6 +96,7 @@
 		       placeholder="项目路径，例如：C:\Steam\steamapps\common\dota 2 beta\game\dota_addons\sampleGame" />
 		<br/>
 		<button class="btn btn-primary" ng-click="loadProject()">Open【载入】</button>
+		<button class="btn btn-primary" ng-click="inlineMode()" ng-if="globalContent.inlineMode">Inline mode</button>
 	</div>
 	<div ng-show="globalContent.isOpen" ng-view></div>
 </div>

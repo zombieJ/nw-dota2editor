@@ -27,6 +27,8 @@ app.config(function($routeProvider) {
 
 app.factory("globalContent", function() {
 	var _globalContent = {
+		inlineMode: !window.require,
+
 		project: localStorage.getItem("project"),
 		isOpen: false,
 
@@ -46,12 +48,35 @@ app.factory("globalContent", function() {
 	return _globalContent;
 });
 
-app.factory("NODE", function() {
-	return window.process ? window.process.mainModule.exports : null;
+app.factory("NODE", function($http, globalContent) {
+	if(window.process) {
+		return window.process.mainModule.exports;
+	} else if(globalContent.inlineMode) {
+		var _fakeNode = {};
+
+		// init
+		_fakeNode.init = $.noop;
+
+		// Fake load
+		_fakeNode.loadFile = function(path) {
+			_LOG("FAKE", 0, "Load file:", path);
+
+			return $http.get("fake/" + path).then(function(data) {
+				return data.data;
+			});
+		};
+
+		return _fakeNode;
+	}
+	return null;
 });
 
-app.factory("GUI", function() {
-	return require('nw.gui');
+app.factory("FS", function() {
+	if(window.require) {
+		return require("fs");
+	} else {
+		return null;
+	}
 });
 
 app.controller('main', function($scope, $route, $location, $q, Ability, Event, Operation, Modifier, Language, KV, Sound, globalContent, NODE) {
@@ -100,6 +125,17 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 				content: "Project folder not exist!<br>【文件路径不存在！】",
 			});
 		});
+	};
+
+	// 测试模式
+	$scope.inlineMode = function() {
+		globalContent.isOpen = true;
+
+		var _langSChinese = new Language("addon_schinese.txt");
+		globalContent.languageList = [_langSChinese];
+		globalContent.languageList._promise = _langSChinese._promise;
+
+			$route.reload();
 	};
 
 	// 保存项目
@@ -234,7 +270,7 @@ app.controller('main', function($scope, $route, $location, $q, Ability, Event, O
 
 	// Color picker
 	$scope.colorList = [
-		'#777777', '#337ab7',  '#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f'
+		'#777777', '#337ab7', '#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f'
 	];
 
 	// Show color picker dialog
