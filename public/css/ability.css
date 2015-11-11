@@ -1,0 +1,93 @@
+/* Common */
+a {
+	cursor: pointer;
+}
+
+.ability-form {
+	position: relative;
+}
+
+.ability-form input,
+.ability-form textarea {
+	border: none;
+	border-bottom: 1px solid #CCC;
+	display: block;
+	width: 100%;
+	padding: 2px 5px;
+	outline: none;
+	resize: none;
+}
+
+.ability-form .ability-tip {
+	position: absolute;
+	right: 5px;
+	margin: 3px 0;
+	background: rgba(0,0,0, 0.8);
+	color: #FFF;
+	padding: 3px 8px 3px 12px;
+	border-radius: 3px;
+	display: none;
+	pointer-events:none;
+	z-index: 1;
+}
+
+.ability-form:hover .ability-tip {
+	display: block;
+}
+
+/* Header */
+.ability-cntr-header {
+	font-family: "Microsoft YaHei",Î¢ÈíÑÅºÚ,"Microsoft JhengHei",»ªÎÄÏ¸ºÚ,STHeiti,MingLiu;
+	margin-bottom: 10px;
+}
+
+.ability-cntr-header .ability-cntr-header-img {
+	width: 140px;
+	overflow: hidden;
+	float: left;
+}
+
+.ability-cntr-header .ability-img {
+	height: 100px;
+	min-width: 100px;
+	width: auto;
+}
+
+.ability-cntr-header .nav li a {
+	padding: 5px 7px;
+	font-size: 20px;
+}
+
+.ability-cntr-header .nav li .nav-tip {
+	background: rgba(0,0,0, 0.8);
+	color: #FFF;
+	padding: 3px 8px 3px 12px;
+	border-radius: 3px;
+	display: none;
+	position: absolute;
+	z-index: 1;
+	width: 150px;
+	right: 35px;
+	top: 0;
+	pointer-events:none;
+	text-align: center;
+}
+.ability-cntr-header .nav li:hover .nav-tip {
+	display: block;
+}
+
+.ability-cntr-header .ability-cntr-header-desc {
+	margin-left: 145px;
+}
+
+.ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name {
+	margin-right: 110px;
+}
+
+.ability-cntr-header .ability-cntr-header-desc input {
+	font-size: 20px;
+}
+.ability-cntr-header .ability-cntr-header-desc textarea {
+	height: 65px;
+	border: none;
+}

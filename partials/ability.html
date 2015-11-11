@@ -23,21 +23,45 @@
 		<h1>No Ability Yet 【还未创建Ability】</h1>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ability}" ng-show="ability">
-		<button class="btn btn-primary pull-right" uibTooltip="will check all the abilities which miss the description. 【将会找出未填写语言描述的技能列表】"
-		        tooltip-placement="left" ng-click="abilitiesCheck()">Inspection 【检测】</button>
+		<!-- ================================================================== -->
+		<!-- =                           技能  引领                           = -->
+		<!-- ================================================================== -->
+		<div class="ability-cntr-header clearfix">
+			<div class="ability-cntr-header-img">
+				<img class="ability-img" />
+			</div>
+			<div class="ability-cntr-header-desc">
+				<ul class="nav nav-pills pull-right">
+					<li class="active">
+						<a data-toggle="tab" class="fa fa-file-code-o" href="[data-id='ability']"></a>
+						<span class="nav-tip">Ability 【能力】</span>
+					</li>
+					<li>
+						<a data-toggle="tab" class="fa fa-book" href="[data-id='description']"></a>
+						<span class="nav-tip">Language 【语言】</span>
+					</li>
+					<li>
+						<a class="fa fa-check-circle-o" ng-click="abilitiesCheck()"></a>
+						<span class="nav-tip">Inspection 【检测】</span>
+					</li>
+				</ul>
 
-		<ul id="myTabs" class="nav nav-tabs" role="tablist">
-			<li class="active"><a href="[data-id='ability']" data-toggle="tab">
-				<img class="ability-img" onerror="iconError();" />
-				{{isItem ? 'Item 【物品】' : 'Ability 【技能】'}}
-			</a></li>
-			<li><a href="[data-id='description']" data-toggle="tab">Description 【描述】</a></li>
-		</ul>
+				<div class="ability-cntr-header-name ability-form">
+					<span class="ability-tip">Name 【名称】</span>
+					<input type="text" ng-model="ability._name" />
+				</div>
+
+				<div class="ability-form">
+					<span class="ability-tip">Comment 【注释】</span>
+					<textarea class="ability-form" ng-model="ability._comment" placeholder="Comment 【注释】..."></textarea>
+				</div>
+			</div>
+		</div>
 
 		<div class="tab-content">
-			<!-- ============================================== -->
-			<!-- =                    技能                    = -->
-			<!-- ============================================== -->
+			<!-- ============================================================================================ -->
+			<!-- =                                           技能                                           = -->
+			<!-- ============================================================================================ -->
 			<div data-id="ability" class="tab-pane fade in active">
 				<!-- 快速定位 -->
 				<div class="fastPin">
