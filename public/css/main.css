@@ -301,6 +301,10 @@ label.checkbox input[type="checkbox"] {
 	min-width: 100px;
 	background: #FFF;
 	box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+	z-index: 5;
+	position: absolute;
+	left: 0;
+	top: 25px;
 }
 
 .app-menu.app-float-menu {

@@ -145,13 +145,18 @@
 										<span class="ability-tip">Operation</span>
 										操作
 									</th>
-									<td class="ability-form" colspan="2">
+									<td class="ability-form" colspan="2" style="background: #FFF">
 										<div eventoperation data-container="ability._eventList[_index]" data-path="_operationList" data-isitem="isItem"></div>
 									</td>
 								</tr>
+							</tbody>
 
-
-
+							<tbody ng-if="ability._eventList.length === 0">
+								<tr>
+									<td>
+										<p>No Event 【没有事件】</p>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 						<button class="btn btn-primary" ng-click="addEvent()">+ new event 【新建事件】</button>

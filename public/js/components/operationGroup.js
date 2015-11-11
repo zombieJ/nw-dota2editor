@@ -37,16 +37,12 @@ components.directive('operationgroup', function($compile) {
 			});
 		},
 		template:
-		'<table class="table table-condensed">'+
-		'	<tbody>'+
-		'		<tr ng-repeat="_index in optColumnNum track by $index" ng-show="getOperationColumn(operation.name)[_index]">'+
-		'			<td width="20%">{{getOperationColumn(operation.name)[_index]}}</td>'+
-		'			<td>' +
-		'				<div operationfield data-operation="operation" data-opcol="getOperationColumn(operation.name)[_index]"></div>' +
-		'			</td>'+
-		'		</tr>'+
-		'	</tbody>'+
-		'</table>',
+		'<ul class="ability-operation-body">'+
+			'<li ng-repeat="_index in optColumnNum track by $index" ng-show="getOperationColumn(operation.name)[_index]">'+
+				'<span class="text-muted">{{getOperationColumn(operation.name)[_index]}}:</span>'+
+				'<div operationfield data-operation="operation" data-opcol="getOperationColumn(operation.name)[_index]"></div>' +
+			'</li>'+
+		'</ul>',
 		replace : true
 	};
 });

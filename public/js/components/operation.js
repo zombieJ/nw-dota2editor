@@ -40,21 +40,17 @@ components.directive('eventoperation', function($compile) {
 			});
 		},
 		template:
-		'<div>'+
-		'	<div ng-repeat="_index in optOperationNum track by $index" ng-show="container[path][_index]" class="group-operation">'+
-		'		<div class="group-operationAttr">'+
-		'			<label>' +
-		'				<a href="javascript:void(0)" ng-click="common.array.remove(container[path][_index], container[path])">[X]</a>'+
-		'					Operation {{_index + 1}}' +
-		'			</label>'+
-		'			<select class="form-control" ng-model="container[path][_index].name">'+
-		'				<option ng-repeat="_operation in EventOperation track by $index" value="{{::_operation[0]}}">{{::_operation[0]}} 【{{::_operation[1]}}】</option>'+
-		'			</select>'+
-
-		'			<div operationgroup data-operation="container[path][_index]"></div>'+
-		'		</div>'+
-		'	</div>'+
-		'	<a class="btn btn-link" ng-click="addOperation()" href="javascript:void(0);">+ new operation 【新建操作】</a>'+
+		'<div class="ability-operation-list">'+
+			'<div ng-repeat="_index in optOperationNum track by $index" ng-show="container[path][_index]" class="ability-operation">'+
+				'<div class="ability-operation-header">' +
+					'<a class="fa fa-trash" ng-click="common.array.remove(container[path][_index], container[path])"></a>' +
+					'<select class="form-control" ng-model="container[path][_index].name">'+
+						'<option ng-repeat="_operation in EventOperation track by $index" value="{{::_operation[0]}}">{{::_operation[0]}} 【{{::_operation[1]}}】</option>'+
+					'</select>'+
+				'</div>'+
+				'<div operationgroup data-operation="container[path][_index]"></div>'+
+			'</div>'+
+			'<a ng-click="addOperation()">+ new operation 【新建操作】</a>'+
 		'</div>',
 		replace : true
 	};

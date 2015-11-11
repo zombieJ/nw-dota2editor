@@ -61,26 +61,30 @@ hr {
 }
 
 
-.ability-table th {
-	padding: 0 5px;
+.ability-table > thead > tr > th,
+.ability-table > tbody > tr > th {
+	padding: 3px 5px 0 5px;
 	color: #5B5B5B;
 	background: #E2E2E2;
 	position: relative;
 	vertical-align: top;
 }
-.ability-table td {
+.ability-table > thead > tr > td,
+.ability-table > tbody > tr > td {
 	background: #fafafa;
 	border-left: 1px solid #E2E2E2;
 }
-.ability-table th,
-.ability-table td {
+.ability-table > thead > tr > th,
+.ability-table > thead > tr > td,
+.ability-table > tbody > tr > th,
+.ability-table > tbody > tr > td {
 	line-height: 150%;
 	height: 30px;
 }
 
-.ability-table td input,
-.ability-table td textarea,
-.ability-table td select {
+.ability-table > tbody > tr > td input,
+.ability-table > tbody > tr > td textarea,
+.ability-table > tbody > tr > td select {
 	border: none;
 	padding: 0 5px;
 	box-shadow: none;
@@ -89,18 +93,18 @@ hr {
 	height: 28px;
 }
 
-.ability-table td input[type="checkbox"] {
+.ability-table > tbody > tr > td input[type="checkbox"] {
 	height: 22px;
 	width: 22px;
 	margin-left: 5px;
 }
 
-.ability-table td textarea {
+.ability-table > tbody > tr > td textarea {
 	height: auto;
 	padding: 5px;
 }
 
-.ability-table td p {
+.ability-table > tbody > tr > td p {
 	line-height: 100%;
 	margin: 0;
 	padding: 0 0 0 5px;
@@ -132,6 +136,82 @@ hr {
 .ability-table tr:hover > th > .ability-tip,
 .ability-table tr:hover > td > .ability-tip {
 	display: block;
+}
+
+.ability-operation-list > a {
+	margin-left: 10px;
+}
+
+.ability-operation-list .ability-operation .ability-operation-header .fa {
+	float: left;
+	margin: 5px 8px 0 8px;
+	font-size: 20px;
+}
+
+.ability-operation-list .ability-operation .ability-operation-header select.form-control {
+	width: 300px;
+	background: #eee;
+	margin: 5px 0 0 0;
+	font-weight: bolder;
+}
+
+.ability-operation .ability-operation-body {
+	padding-left: 32px;
+}
+
+.ability-operation .ability-operation-body li {
+	display: table;
+	width: 100%;
+}
+
+.ability-operation .ability-operation-body li > span {
+	display: table-cell;
+	width: 10px;
+	vertical-align: top;
+	word-break: keep-all;
+	white-space: nowrap;
+}
+
+.ability-operation .ability-operation-body li > .ability-form {
+	display: block;
+}
+
+.ability-operation .ability-operation-body .ability-form {
+	display: inline-block;
+}
+
+.ability-operation .ability-operation-body .ability-form input,
+.ability-operation .ability-operation-body .ability-form select,
+.ability-operation .ability-operation-body .ability-form textarea {
+	background: transparent;
+	/*border-bottom: 1px solid #AAA;*/
+	display: inline-block;
+	height: auto;
+	padding: 0 0 2px 5px;
+	text-decoration: underline;
+}
+
+.ability-operation .ability-operation-body .ability-form .ability-form-blob {
+	padding: 0 5px;
+}
+
+.ability-operation .ability-operation-body .ability-form textarea {
+	border: 1px solid #EEE;
+	border-left: 2px solid #3c8dbc;
+	text-decoration: none;
+}
+
+.ability-operation .ability-operation-body .ability-form ::-webkit-input-placeholder {
+	padding-top: 3px;
+}
+
+.ability-operation .ability-operation-body .ability-form .ability-form-operationList {
+	border-left: 2px solid #CCC;
+	margin-left: 5px;
+}
+
+.ability-operation .ability-operation-body .ability-form .ability-form-unitGroup {
+	padding: 0 0 0 5px;
 }
 
 /* Header */
