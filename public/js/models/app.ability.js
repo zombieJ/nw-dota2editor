@@ -416,6 +416,12 @@ app.factory("Ability", function($q, Event, Modifier) {
 		["DOTA_ITEM_DISASSEMBLE_NEVER","不可拆分"],
 	];
 
+	Ability.ItemPermanent = Ability.ItemRequiresCharges = [
+		["-","无"],
+		["0","否"],
+		["1","是"],
+	];
+
 	Ability.AbilityBehavior = [
 		["DOTA_ABILITY_BEHAVIOR_IMMEDIATE","立即",true],
 		["DOTA_ABILITY_BEHAVIOR_HIDDEN","隐藏", true],

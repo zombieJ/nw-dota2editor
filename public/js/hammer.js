@@ -20,6 +20,8 @@ var _abilityCtrl = function(isItem) {
 		$scope.ready = false;
 		$scope.conflictMap = {};
 
+		$scope.currentTab = "common";
+
 		// ================================================================
 		// =                         Optimization                         =
 		// ================================================================

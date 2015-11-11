@@ -1,0 +1,467 @@
+﻿<div class="row">
+	<div class="col-sm-3 col-md-2">
+		<div id="listCntr" class="listCntr noSelect" ui-sortable ng-model="abilityList">
+			<div ng-repeat="_ability in abilityList track by $index" class="listItem"
+			     ng-class="{active: ability == _ability}"
+				 ng-mousedown="setAbilityMouseDown(_ability);">
+				<p class="title">
+					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.abilities[_ability._name].markColor || '#CCC'}}"></span>
+					<span class="fa fa-cubes sm" ng-if="config.abilities[_ability._name].markUsage === 'dummy'"></span>
+					{{config.abilities[_ability._name].editorAliasName || _ability._name}}
+					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
+						  uib-tooltip="Conflict name 【名称冲突】" tooltip-placement="right" tooltip-append-to-body="true"></span>
+				</p>
+				<p class="desc">{{_ability._comment}}</p>
+			</div>
+		</div>
+		<button id="newItem" class="btn btn-primary" ng-click="newAbility()">+ New 【新建】</button>
+	</div>
+	<div class="col-sm-9 col-md-10" ng-show="!ready">
+		<h1>Loading... 【载入中】</h1>
+	</div>
+	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ready && !ability}" ng-show="ready && !ability">
+		<h1>No Ability Yet 【还未创建Ability】</h1>
+	</div>
+	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ability}" ng-show="ability">
+		<!-- ================================================================== -->
+		<!-- =                           技能  引领                           = -->
+		<!-- ================================================================== -->
+		<div class="ability-cntr-header clearfix">
+			<div class="ability-cntr-header-img">
+				<img class="ability-img" onerror="iconError();" />
+			</div>
+			<div class="ability-cntr-header-desc">
+				<ul class="nav nav-pills pull-right">
+					<li class="active">
+						<a data-toggle="tab" class="fa fa-file-code-o" href="[data-id='ability']"></a>
+						<span class="nav-tip">Ability 【能力】</span>
+					</li>
+					<li>
+						<a data-toggle="tab" class="fa fa-book" href="[data-id='description']"></a>
+						<span class="nav-tip">Language 【语言】</span>
+					</li>
+					<li>
+						<a class="fa fa-check-circle-o" ng-click="abilitiesCheck()"></a>
+						<span class="nav-tip">Inspection 【检测】</span>
+					</li>
+				</ul>
+
+				<div class="ability-cntr-header-name ability-form">
+					<span class="ability-tip">Name 【名称】</span>
+					<input type="text" ng-model="ability._name" />
+				</div>
+
+				<div class="ability-form">
+					<span class="ability-tip">Comment 【注释】</span>
+					<textarea class="ability-form" ng-model="ability._comment" placeholder="Comment 【注释】..."></textarea>
+				</div>
+			</div>
+		</div>
+
+		<hr/>
+
+		<!-- ================================================================== -->
+		<!-- =                           技能  容器                           = -->
+		<!-- ================================================================== -->
+		<div class="tab-content ability-cntr-body">
+			<div data-id="ability" class="tab-pane fade in active">
+				<ul class="nav nav-pills">
+					<li class="active"><a data-toggle="tab" href="[data-id='ability_common']">Common 【常规】</a></li>
+					<li ng-if="isItem"><a data-toggle="tab" href="[data-id='ability_item']">Item 【物品】</a></li>
+					<li><a data-toggle="tab" href="[data-id='ability_']">Events 【事件】</a></li>
+					<li><a data-toggle="tab" href="[data-id='ability_']">Modifiers 【修饰器】</a></li>
+					<li><a data-toggle="tab" href="[data-id='ability_']">Ability Special 【自定义值】</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<!-- ====================== 常规 ====================== -->
+					<div class="tab-pane fade in active" data-id="ability_common">
+						<table class="ability-table">
+							<tbody>
+								<tr ng-repeat="unit in ability._requireList track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
+									<th>
+										<span class="ability-tip">{{unit.title || unit.attr}}</span>
+										{{unit.desc}}
+									</th>
+									<td class="ability-form">
+										<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<!-- ====================== 物品 ====================== -->
+					<div class="tab-pane fade" data-id="ability_item">
+						item
+					</div>
+				</div>
+
+				<!-- 快速定位 -->
+				<!--div class="fastPin">
+					<a class="glyphicon glyphicon-th-list" ng-click="common.ui.scrollTo(0);"></a>
+					<div class="subPanel">
+						<img class="ability-img" />
+						<h3>{{ability._name}}</h3>
+						<ul>
+							<li ng-if="ability._requireItemList.length"><a ng-click="common.ui.scrollTo('.abilityItemTitle');">Item 【物品】</a></li>
+							<li><a ng-click="common.ui.scrollTo('.abilityCommonTitle');">Common 【常规】</a></li>
+							<li>
+								<a ng-click="common.ui.scrollTo('.abilityEventTitle');">Event 【事件】</a>
+								<ul>
+									<li ng-repeat="event in ability._eventList track by $index">
+										<a ng-click="common.ui.scrollTo('.abilityEvent_' + event._name);">{{event._name}}</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a ng-click="common.ui.scrollTo('.abilityModifierTitle');">Modifier 【修饰器】</a>
+								<ul>
+									<li ng-repeat="modifier in ability._modifierList track by $index">
+										<a ng-click="common.ui.scrollTo('.abilityModifier_' + modifier._name);">{{modifier._name}}</a>
+										<a ng-click="common.ui.scrollTo('.abilityModifier_' + modifier._name + '__PROP');">[P]</a>
+										<a ng-click="common.ui.scrollTo('.abilityModifier_' + modifier._name + '__STATE');">[S]</a>
+										<a ng-click="common.ui.scrollTo('.abilityModifier_' + modifier._name + '__EVENT');">[E]</a>
+									</li>
+								</ul>
+							</li>
+							<li><a ng-click="common.ui.scrollTo('.abilitySpecialTitle');">Ability Special 【自定义值】</a></li>
+						</ul>
+					</div>
+				</div-->
+
+				<table class="table table-condensed table-bordered table-tiny hidden">
+					<tbody>
+						<tr>
+							<th>
+								Name 【名称】
+								<span class="fa fa-question-circle" tooltip-placement="right" tooltip-append-to-body="true"
+									  uib-tooltip="Will auto update language description mapping 【会同步更新多语言描述匹配】"></span>
+							</th>
+							<td>
+								<input type="text" class="form-control" ng-model="ability._name" />
+							</td>
+						</tr>
+						<tr>
+							<th>Comment 【注释】</th>
+							<td>
+								<textarea class="form-control" ng-model="ability._comment" rows="5"></textarea>
+							</td>
+						</tr>
+
+						<!-- 物品 -->
+						<tr class="abilityItemTitle" ng-if="ability._requireItemList.length">
+							<th colspan="2" class="success">
+								Item 【物品】
+							</th>
+						</tr>
+						<tr ng-repeat="unit in ability._requireItemList track by $index" ng-if="ability._requireItemList.length">
+							<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>
+							<td>
+								<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
+							</td>
+						</tr>
+
+						<!-- 属性 -->
+						<tr class="abilityCommonTitle">
+							<th colspan="2" class="success">
+								Common 【常规】
+							</th>
+						</tr>
+						<tr ng-repeat="unit in ability._requireList track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
+							<th>
+								{{unit.title || unit.attr}} 【{{unit.desc}}】
+							</th>
+							<td>
+								<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
+							</td>
+						</tr>
+
+						<!-- 事件 -->
+						<tr class="abilityEventTitle">
+							<th colspan="2" class="success">
+								Events 【事件】
+							</th>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<!-- 事件 -->
+								<div ng-repeat="_index in optEventNum track by $index" ng-show="ability._eventList[_index]"
+									 class="group-event abilityEvent_{{ability._eventList[_index]._name}}">
+									<!-- 事件类型 -->
+									<label>
+										<a href="javascript:void(0)" ng-click="common.array.remove(ability._eventList[_index], ability._eventList)">[X]</a>
+										Event {{_index + 1}}
+									</label>
+									<select class="form-control" ng-model="ability._eventList[_index]._name">
+										<option ng-repeat="_event in Event.EventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>
+									</select>
+
+									<!-- 事件备注 -->
+									<textarea class="form-control" ng-model="ability._eventList[_index]._comment" rows="5" placeholder="备注"></textarea>
+
+									<!-- 操作 -->
+									<div eventoperation data-container="ability._eventList[_index]" data-path="_operationList" data-isitem="isItem"></div>
+								</div>
+								<button class="btn btn-primary btn-xs" ng-click="addEvent()">+ new event 【新建事件】</button>
+							</td>
+						</tr>
+
+
+						<!-- 修饰器 -->
+						<tr class="abilityModifierTitle">
+							<th colspan="2" class="success">
+								Modifiers 【修饰器】
+							</th>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<!-- 修饰器 -->
+								<div ng-repeat="_index in optLangModifierNum track by $index" class="group-modifier abilityModifier_{{ability._modifierList[_index]._name}}" ng-show="ability._modifierList[_index]">
+									<label>
+										<a href="javascript:void(0)" ng-click="common.array.remove(ability._modifierList[_index], ability._modifierList)">[X]</a>
+										Modifier {{_index + 1}}
+									</label>
+									<div modifier="ability._modifierList[_index]" data-ability="ability"></div>
+								</div>
+								<button class="btn btn-primary btn-xs" ng-click="addModifier()">+ new Modifier 【新建修饰器】</button>
+							</td>
+						</tr>
+
+						<!-- 自定义值 -->
+						<tr class="abilitySpecialTitle">
+							<th colspan="2" class="success">
+								AbilitySpecial 【自定义值】
+							</th>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<table class="table table-bordered table-condensed">
+									<thead>
+									<tr>
+										<th></th>
+										<th>Key 【变量名】</th>
+										<th>type 【类型】</th>
+										<th>Value 【变量值】</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="_abilitySpecial in ability._abilitySpecialList track by $index">
+										<th>
+											<a href="javascript:void(0)" ng-click="common.array.remove(_abilitySpecial, ability._abilitySpecialList)">[X]</a>
+										</th>
+										<td>
+											<input type="text" class="form-control" ng-model="_abilitySpecial[0]" />
+										</td>
+										<td>
+											<select class="form-control" ng-model="_abilitySpecial[1]">
+												<option ng-repeat="type in Ability.AbilitySpecialType track by $index" value="{{::type[0]}}">
+													{{type[0]}}
+													【{{type[1]}}】
+												</option>
+											</select>
+										</td>
+										<td>
+											<input type="text" class="form-control" ng-model="_abilitySpecial[2]" />
+										</td>
+									</tr>
+									</tbody>
+								</table>
+								<button class="btn btn-primary btn-xs" ng-click="ability._abilitySpecialList.push([])">+ new Key Value 【新建键值】</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- ============================================== -->
+			<!-- =                    描述                    = -->
+			<!-- ============================================== -->
+			<div data-id="description" class="tab-pane fade">
+				<!-- 没有语言文件 -->
+				<div ng-show="languageList.length === 0">
+					<h3>No Language File find</h3>
+					<h3>【没有找到语言文件】</h3>
+					<p>Please check your language file in {{::Language.folderPath}} folder.</p>
+					<p>【请检查{{::Language.folderPath}}目录下的语言文件】</p>
+				</div>
+
+				<!-- 拥有语言文件 -->
+				<div class="row" ng-show="languageList.length !== 0">
+					<div class="col-md-2">
+						<div class="listCntr">
+							<div ng-repeat="_lang in languageList track by $index" class="listItem"
+							     ng-class="{active: language == _lang}" ng-click="setLanguage(_lang);">
+								<p>{{_lang.name}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-10">
+						<p ng-show="!language.ready">Loading...</p>
+
+						<!-- ========================== -->
+						<!-- =          描述          = -->
+						<!-- ========================== -->
+						<div ng-if="language">
+							<h3>Description 【描述】</h3>
+							<table class="table table-condensed table-bordered table-tiny" ng-show="language.ready">
+								<tbody>
+									<!-- 常规描述 -->
+									<tr ng-repeat="langField in Language.AbilityLang track by $index">
+										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
+										<td>
+											<button class="btn btn-warning fa fa-paint-brush color-picker"></button>
+											<input type="text" class="form-control" ng-if="langField.type === 'text'"
+											       ng-model="language.map[Language.abilityAttr(ability._name, langField.attr)]" />
+											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
+											          ng-model="language.map[Language.abilityAttr(ability._name, langField.attr)]"></textarea>
+										</td>
+									</tr>
+
+									<!-- 自定义值 -->
+									<tr>
+										<th colspan="2" class="success">
+											AbilitySpecial 【自定义值】
+										</th>
+									</tr>
+									<tr ng-repeat="_index in optLangAbilitySpecialNum track by $index" ng-show="ability._abilitySpecialList[_index]">
+										<th>{{ability._abilitySpecialList[_index][0]}}</th>
+										<td>
+											<input type="text" class="form-control"
+												   ng-model="language.map[Language.abilityAttr(ability._name, ability._abilitySpecialList[_index][0])]"
+													/>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+
+							<!-- ========================== -->
+							<!-- =         修饰器         = -->
+							<!-- ========================== -->
+							<h3>Modifiers 【修饰器】</h3>
+							<table class="table table-condensed table-bordered table-tiny" ng-show="language.ready">
+								<tbody ng-repeat="_index in optLangModifierNum track by $index" ng-show="ability._modifierList[_index]">
+									<tr>
+										<th colspan="2" class="success">
+											<span class="glyphicon glyphicon-tag"></span> {{ability._modifierList[_index]._name}}
+											<span ng-if="ability._modifierList[_index].IsHidden === '1'" class="label label-info">Hidden 【隐藏】</span>
+										</th>
+									</tr>
+									<tr ng-repeat="langField in Language.ModifierLang track by $index">
+										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
+										<td>
+											<input type="text" class="form-control" ng-if="langField.type === 'text'"
+													ng-model="language.map[Language.modifierAttr(ability._modifierList[_index]._name, langField.attr)]" />
+											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
+													ng-model="language.map[Language.modifierAttr(ability._modifierList[_index]._name, langField.attr)]"></textarea>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ====================================================================== -->
+<!-- =                              技能菜单                              = -->
+<!-- ====================================================================== -->
+<ul id="abilityMenu" class="app-menu app-float-menu">
+	<li><a ng-click="setAbilityEditorAlias()">Editor Alias 【编辑器别名】</a></li>
+	<li class="app-submenu">
+		<a>Usage Marker 【功能标记】</a>
+		<ul class="app-menu">
+			<li><a ng-click="setAbilityMarkUsage('dummy');"> Dummy Ability 【马甲技能】</a></li>
+			<li class="line"></li>
+			<li><a ng-click="setAbilityMarkUsage();"> No mark 【无标记】</a></li>
+		</ul>
+	</li>
+	<li class="app-submenu">
+		<a>Color Marker 【颜色标记】</a>
+		<ul class="app-menu">
+			<li><a ng-click="setAbilityMarkColor('#00a65a');"><span class="fa fa-circle sm" style="color: #00a65a;"></span> Green 【绿色】</a></li>
+			<li><a ng-click="setAbilityMarkColor('#00c0ef');"><span class="fa fa-circle sm" style="color: #00c0ef;"></span> Blue 【蓝色】</a></li>
+			<li><a ng-click="setAbilityMarkColor('#dd4b39');"><span class="fa fa-circle sm" style="color: #dd4b39;"></span> Red 【红色】</a></li>
+			<li><a ng-click="setAbilityMarkColor('#f39c12');"><span class="fa fa-circle sm" style="color: #f39c12;"></span> Yellow 【黄色】</a></li>
+			<li><a ng-click="setAbilityMarkColor('#666666');"><span class="fa fa-circle sm" style="color: #666666;"></span> Black 【黑色】</a></li>
+			<li class="line"></li>
+			<li><a ng-click="setAbilityMarkColor();"><span class="fa fa-circle sm" style="color: #cccccc;"></span> None 【还原】</a></li>
+		</ul>
+	</li>
+	<li><a ng-click="copyAbility()">Duplicate Ability 【复制技能】</a></li>
+	<li class="line"></li>
+	<li><a ng-click="deleteAbility()" class="danger">Delete Ability 【删除技能】</a></li>
+</ul>
+
+<!-- ====================================================================== -->
+<!-- =                           新建技能对话框                           = -->
+<!-- ====================================================================== -->
+<div class="modal fade" id="newMDL" tabindex="-1">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Select Template 【选择技能模板】</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Type 【类型】</label>
+					<select class="form-control" ng-model="newAbility._type">
+						<option ng-repeat="_type in newAbility.type" value="{{::_type[2]}}">{{::_type[0]}} 【{{::_type[1]}}】</option>
+					</select>
+				</div>
+				<div class="form-group" ng-show="newAbility._type !== 'Passive'">
+					<label>Target 【目标】</label>
+					<select class="form-control" ng-model="newAbility._target">
+						<option ng-repeat="_target in newAbility.target" value="{{::_target[2]}}">{{::_target[0]}} 【{{::_target[1]}}】</option>
+					</select>
+				</div>
+				<div class="checkbox" ng-show="newAbility._type !== 'Passive'">
+					<label>
+						<input type="checkbox" ng-checked="newAbility._channelled" ng-click="newAbility._channelled = !newAbility._channelled;"> Channelled 【持续施法】
+					</label>
+				</div>
+				<div class="checkbox" ng-show="isItem">
+					<label uib-tooltip="Will auto find no conflict ID between 1000 to 5000 【会自动寻找1000~5000中未使用过的ID】" tooltip-placement="right" tooltip-append-to-body="true">
+						<input type="checkbox" ng-checked="newAbility._autoID" ng-click="newAbility._autoID = !newAbility._autoID;"> Item auto assign ID 【物品自动分配ID】
+					</label>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="newAbility.confirm()">Create</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Check report -->
+<div class="modal fade" id="checkReportMDL" tabindex="-1">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Check Report 【检测报告】</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Filter 【过滤】</label>
+					<input type="text" class="form-control" ng-model="checkReportFilter"/>
+				</div>
+
+				<ul>
+					<li ng-repeat="item in checkReport.language | filter: checkReportFilter">
+						[{{item.language.name}}]
+						<a href="javascript:void(0)" ng-click="setAbility(item.ability);">{{item.ability._name}}</a>
+						<span ng-if="item.modifier">-> {{item.modifier._name}}</span>:
+						<span ng-if="item.field.attr">[{{item.field.attr}}]</span> miss
+					</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
