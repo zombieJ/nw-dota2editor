@@ -52,13 +52,13 @@ div:hover::-webkit-scrollbar-thumb {
 /* Color picker */
 .color-picker {
 	position: absolute;
-	margin-left: -24px;
-	margin-top: 4px;
 	padding: 0;
 	line-height: 100%;
 	width: 20px;
 	height: 20px;
 	opacity: 0.3;
+	right: 4px;
+	top: 4px;
 }
 .color-picker:hover {
 	opacity: 1;
@@ -170,11 +170,6 @@ label.checkbox input[type="checkbox"] {
 	font-size: 12px;
 }
 
-.table.table-tiny [groupselect] .radio,
-.table.table-tiny [groupselect] .checkbox {
-	margin: 0 0 0 10px;
-}
-
 .table.table-tiny .checkbox,
 .table.table-tiny .radio {
 	margin: 3px 0;
@@ -188,107 +183,8 @@ label.checkbox input[type="checkbox"] {
 	vertical-align: middle;
 }
 
-.table.table-tiny .group-event,
-.table.table-tiny .group-modifier {
-	padding: 5px 10px;
-	border-bottom: 1px solid #999;
-	margin-bottom: 5px;
-}
-
-.table.table-tiny .group-operation,
-.table.table-tiny .group-operationAttr {
-	margin: 5px 0 0 15px;
-}
-
-.table.table-tiny .form-control {
-	font-size: 12px;
-	padding: 0px 3px;
-	height: 28px;
-	box-shadow: none;
-}
-
-.table.table-tiny .group-operation textarea.form-control,
-.table.table-tiny textarea.form-control {
-	height: auto;
-}
-
 .tab-content .tab-pane {
 	position: relative;
-}
-
-.fastPin {
-	position: fixed;
-	z-index: 10;
-	width: 20px;
-	height: 200px;
-	background: rgba(0, 0, 0, 0.8);
-	margin: 0 0 0 -20px;
-}
-
-.fastPin > .fa,
-.fastPin > .glyphicon {
-	position: absolute;
-	left: 3px;
-	top: 3px;
-	color: #FFFFFF;
-}
-
-.fastPin > .subPanel {
-	display: none;
-	position: absolute;
-	left: 20px;
-	top: 0;
-	background: rgba(0, 0, 0, 0.8);
-	padding: 10px 15px;
-	border-radius: 0 5px 5px 0;
-	color: #FFFFFF;
-}
-
-.fastPin:hover > .subPanel {
-	display: block;
-}
-
-.fastPin > .subPanel .ability-img {
-	height: auto;
-	width: 100px;
-	position: absolute;
-	right: -105px;
-	border: 3px solid rgba(0,0,0,0.8);
-	top: 0px;
-}
-
-.fastPin > .subPanel h3 {
-	margin: 0 0 10px 0;
-	padding: 0 0 10px 0;
-	font-size: 20px;
-	font-weight: bolder;
-	border-bottom: 1px solid #FFFFFF;
-}
-
-.fastPin > .subPanel ul {
-	margin: 0;
-	padding: 0 0 0 20px;
-	list-style: none;
-	white-space: nowrap;
-}
-
-.fastPin > .subPanel > ul {
-	padding: 0;
-}
-
-.fastPin > .subPanel ul li:before {
-	content: "•";
-	margin-right: 10px;
-	color: #FFFFFF;
-}
-
-.fastPin > .subPanel ul li a.glyphicon {
-	font-size: 10px;
-}
-
-.fastPin > .subPanel a {
-	cursor: pointer;
-	color: #FFFFFF;
 }
 
 /* Menu */

@@ -80,6 +80,7 @@ hr {
 .ability-table > tbody > tr > td {
 	line-height: 150%;
 	height: 30px;
+	position: relative;
 }
 
 .ability-table > tbody > tr > td input,

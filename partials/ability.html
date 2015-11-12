@@ -260,13 +260,16 @@
 						<!-- ========================== -->
 						<div ng-if="language">
 							<h3>Description 【描述】</h3>
-							<table class="table table-condensed table-bordered table-tiny" ng-show="language.ready">
+							<table class="ability-table" ng-show="language.ready">
 								<tbody>
 									<!-- 常规描述 -->
 									<tr ng-repeat="langField in Language.AbilityLang track by $index">
-										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
+										<th width="150">
+											<span class="ability-tip">{{langField.attr || langField.title}}</span>
+											{{langField.desc}}
+										</th>
 										<td>
-											<button class="btn btn-warning fa fa-paint-brush color-picker"></button>
+											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
 											<input type="text" class="form-control" ng-if="langField.type === 'text'"
 											       ng-model="language.map[Language.abilityAttr(ability._name, langField.attr)]" />
 											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
@@ -283,6 +286,7 @@
 									<tr ng-repeat="_index in optLangAbilitySpecialNum track by $index" ng-show="ability._abilitySpecialList[_index]">
 										<th>{{ability._abilitySpecialList[_index][0]}}</th>
 										<td>
+											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
 											<input type="text" class="form-control"
 												   ng-model="language.map[Language.abilityAttr(ability._name, ability._abilitySpecialList[_index][0])]"
 													/>
@@ -295,7 +299,7 @@
 							<!-- =         修饰器         = -->
 							<!-- ========================== -->
 							<h3>Modifiers 【修饰器】</h3>
-							<table class="table table-condensed table-bordered table-tiny" ng-show="language.ready">
+							<table class="ability-table" ng-show="language.ready">
 								<tbody ng-repeat="_index in optLangModifierNum track by $index" ng-show="ability._modifierList[_index]">
 									<tr>
 										<th colspan="2" class="success">
@@ -304,8 +308,12 @@
 										</th>
 									</tr>
 									<tr ng-repeat="langField in Language.ModifierLang track by $index">
-										<th width="150">{{langField.attr || langField.title}} 【{{langField.desc}}】</th>
+										<th width="150">
+											<span class="ability-tip">{{langField.attr || langField.title}}</span>
+											{{langField.desc}}
+										</th>
 										<td>
+											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
 											<input type="text" class="form-control" ng-if="langField.type === 'text'"
 													ng-model="language.map[Language.modifierAttr(ability._modifierList[_index]._name, langField.attr)]" />
 											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
