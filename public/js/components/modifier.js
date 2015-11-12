@@ -41,11 +41,11 @@ components.directive('modifier', function($compile) {
 				'<td class="ability-form">'+
 					'<input type="text" ng-model="modifier._name" />'+
 				'</td>'+
-				'<td width="60" class="text-center">'+
+				/*'<td width="60" class="text-center">'+
 					'<a href="javascript:void(0)" ng-click="common.array.remove(modifier, ability._modifierList)">'+
 						'Delete'+
 					'</a>'+
-				'</td>'+
+				'</td>'+*/
 			'</tr>'+
 
 			// =========================== 常规 ===========================
@@ -54,7 +54,7 @@ components.directive('modifier', function($compile) {
 					'<span class="ability-tip">{{unit.title || unit.attr}}</span>'+
 					'{{unit.desc}}' +
 				'</th>'+
-				'<td colspan="2" class="ability-form">'+
+				'<td class="ability-form">'+
 					'<div attrfield data-attrunit="unit" data-srcunit="modifier" data-srctmpl="Modifier"></div>'+
 				'</td>'+
 			'</tr>'+
@@ -65,8 +65,8 @@ components.directive('modifier', function($compile) {
 					'<span class="ability-tip">Properties</span>'+
 					'属性' +
 				'</th>'+
-				'<td colspan="2">'+
-					'<div class="ability-modifer-list">'+
+				'<td>'+
+					'<div class="ability-modifer-prop-list">'+
 						'<ul>'+
 							'<li ng-repeat="_prop in modifier._propertyList track by $index">'+
 								'<a ng-click="common.array.remove(_prop, modifier._propertyList)">[X]</a>'+
@@ -91,8 +91,8 @@ components.directive('modifier', function($compile) {
 					'<span class="ability-tip">States</span>'+
 					'状态' +
 				'</th>'+
-				'<td colspan="2">'+
-					'<div class="ability-modifer-list">'+
+				'<td>'+
+					'<div class="ability-modifer-prop-list">'+
 						'<ul>'+
 							'<li ng-repeat="_state in modifier._stateList track by $index">'+
 								'<a ng-click="common.array.remove(_state, modifier._stateList)">[X]</a>'+
@@ -121,7 +121,7 @@ components.directive('modifier', function($compile) {
 					'<span class="ability-tip">Events</span>'+
 					'事件' +
 				'</th>'+
-				'<td colspan="2" style="padding: 5px">'+
+				'<td style="padding: 5px">'+
 					'<table class="ability-table">'+
 						'<tbody ng-repeat="_index in optEventNum track by $index" ng-show="modifier._eventList[_index]">'+
 							// 事件类型

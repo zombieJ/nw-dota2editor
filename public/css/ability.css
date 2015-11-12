@@ -225,35 +225,35 @@ hr {
 	padding: 0 0 0 5px;
 }
 
-.ability-modifer-list ul {
+.ability-modifer-prop-list ul {
 	margin: 0;
 	padding: 0 0 0 5px;
 }
 
-.ability-modifer-list ul li {
+.ability-modifer-prop-list ul li {
 	display: table;
 	width: 100%;
 }
 
-.ability-modifer-list ul li > a {
+.ability-modifer-prop-list ul li > a {
 	display: table-cell;
 	vertical-align: top;
 	width: 10px;
 	word-break: keep-all;
 	white-space: nowrap;
 }
-.ability-modifer-list ul li > .ability-modifer-item-select {
+.ability-modifer-prop-list ul li > .ability-modifer-item-select {
 	display: table-cell;
 	vertical-align: top;
 }
 
-.ability-modifer-list ul li > .ability-modifer-item-select select {
+.ability-modifer-prop-list ul li > .ability-modifer-item-select select {
 	width: 100%;
 	height: auto;
 	outline: none;
 
 }
-.ability-modifer-list ul li > input {
+.ability-modifer-prop-list ul li > input {
 	background: transparent;
 	height: auto!important;
 	width: 150px;
@@ -262,16 +262,16 @@ hr {
 	display: table-cell;
 	outline: none;
 }
-.ability-modifer-list ul li > input:focus {
+.ability-modifer-prop-list ul li > input:focus {
 	box-shadow: none;
 }
 
-.ability-modifer-list ul li > select {
+.ability-modifer-prop-list ul li > select {
 	display: table-cell;
 	outline: none;
 }
 
-.ability-modifer-list > a {
+.ability-modifer-prop-list > a {
 	margin-left: 10px;
 }
 
@@ -350,4 +350,26 @@ hr {
 .ability-cntr-body .nav.nav-pills li.active a {
 	background: #AAA;
 	color: #FFF;
+}
+
+.ability-cntr-body .ability-modifer-list {
+	border-top: 1px solid #EEE;
+	padding-top: 5px;
+}
+
+.ability-cntr-body .ability-modifer-list.nav.nav-pills li a.removeMark {
+	position: absolute;
+	background: rgba(0,0,0,0.6);
+	color: #FFF;
+	display: none;
+	padding: 3px 10px;
+	z-index: 2;
+}
+
+.ability-cntr-body .ability-modifer-list.nav.nav-pills li:hover a.removeMark {
+	display: block;
+}
+
+.ability-cntr-body .ability-modifer-list.nav.nav-pills li:hover a.removeMark:hover {
+	background: rgba(0,0,0,0.8);
 }

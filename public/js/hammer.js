@@ -21,6 +21,7 @@ var _abilityCtrl = function(isItem) {
 		$scope.conflictMap = {};
 
 		$scope.currentTab = "common";
+		$scope.currentModifier = null;
 
 		// ================================================================
 		// =                         Optimization                         =
@@ -57,12 +58,30 @@ var _abilityCtrl = function(isItem) {
 		$scope.setAbility = function (ability) {
 			_abilityChangeLock = true;
 			$scope.ability = ability;
+			$scope.currentModifier = ability._modifierList[0];
 
 			abilityChangeWatch();
 
 			setTimeout(function() {
 				_abilityChangeLock = false;
 			}, 500);
+		};
+
+		$scope.setModifier = function (modifier) {
+			$scope.currentModifier = modifier;
+		};
+		$scope.removeModifier = function (modifier) {
+			$.dialog({
+				title: "Delete Confirm",
+				content: "Do you want to delete modifier: '" + modifier._name + "'",
+				confirm: true
+			}, function(ret) {
+				if(!ret) return;
+
+				common.array.remove(modifier, $scope.ability._modifierList);
+				if($scope.currentModifier === modifier) $scope.currentModifier = $scope.ability._modifierList[0];
+				$scope.$apply();
+			});
 		};
 
 		var _iconStep = 0;
@@ -109,7 +128,11 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		$scope.addModifier = function () {
-			$scope.ability._modifierList.push(new Modifier());
+			var _modifier = new Modifier();
+			_modifier._name = $scope.ability._name + "_modifier";
+			$scope.ability._modifierList.push(_modifier);
+
+			$scope.currentModifier = _modifier;
 		};
 
 		$scope.setLanguage = function (language) {
