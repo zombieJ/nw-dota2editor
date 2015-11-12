@@ -272,3 +272,9 @@ label.checkbox input[type="checkbox"] {
 .app-menu > li:hover > .app-menu {
 	display: block;
 }
+
+/* button */
+.btn.btn-dark {
+	background: #AAA;
+	color: #FFF;
+}

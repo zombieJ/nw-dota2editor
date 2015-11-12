@@ -159,20 +159,24 @@
 								</tr>
 							</tbody>
 						</table>
-						<button class="btn btn-primary" ng-click="addEvent()">+ new event 【新建事件】</button>
+						<button class="btn btn-dark" ng-click="addEvent()">+ new event 【新建事件】</button>
 					</div>
 
 					<!-- ===================== 修饰器 ===================== -->
 					<div ng-show="currentTab === 'modifiers'">
 						<ul class="ability-modifer-list nav nav-pills">
-							<li class="active"><a ng-click="addModifier()">+</a></li>
+							<li class="active">
+								<a ng-click="addModifier()">
+									+ <span ng-show="!currentModifier">New Modifier 【新建修饰器】</span>
+								</a>
+							</li>
 							<li ng-repeat="modifier in ability._modifierList" ng-class="{active: currentModifier === modifier}">
 								<a ng-click="setModifier(modifier)">{{modifier._name}}</a>
 								<a class="removeMark" ng-click="removeModifier(modifier)">[X] Delete</a>
 							</li>
 						</ul>
 
-						<table class="ability-table">
+						<table class="ability-table" ng-show="currentModifier">
 							<tbody modifier="currentModifier" data-ability="ability"></tbody>
 
 							<tbody ng-if="ability._modifierList.length === 0">
@@ -224,7 +228,7 @@
 							</tbody>
 						</table>
 
-						<button class="btn btn-primary" ng-click="ability._abilitySpecialList.push([])">+ new Key Value 【新建键值】</button>
+						<button class="btn btn-dark" ng-click="ability._abilitySpecialList.push([])">+ new Key Value 【新建键值】</button>
 					</div>
 
 				</div>
