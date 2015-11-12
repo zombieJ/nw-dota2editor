@@ -162,6 +162,23 @@
 						<button class="btn btn-primary" ng-click="addEvent()">+ new event 【新建事件】</button>
 					</div>
 
+					<!-- ===================== 修饰器 ===================== -->
+					<div ng-if="currentTab === 'modifiers'">
+						<table class="ability-table">
+							<tbody ng-repeat="_index in optLangModifierNum track by $index" ng-show="ability._modifierList[_index]"
+							       modifier="ability._modifierList[_index]" data-ability="ability"></tbody>
+
+							<tbody ng-if="ability._modifierList.length === 0">
+								<tr>
+									<td>
+										<p>No Modifier 【没有修饰器】</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<button class="btn btn-primary" ng-click="addModifier()">+ new Modifier 【新建修饰器】</button>
+					</div>
+
 					<!-- ==================== 自定义值 ==================== -->
 					<div ng-if="currentTab === 'abilitySpecial'">
 						<table class="ability-table">

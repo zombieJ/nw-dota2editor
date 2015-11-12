@@ -138,6 +138,10 @@ hr {
 	display: block;
 }
 
+.ability-table .ability-table {
+	margin: 0;
+}
+
 .ability-operation-list > a {
 	margin-left: 10px;
 }
@@ -149,7 +153,7 @@ hr {
 }
 
 .ability-operation-list .ability-operation .ability-operation-header select.form-control {
-	width: 300px;
+	width: 450px;
 	background: #eee;
 	margin: 5px 0 0 0;
 	font-weight: bolder;
@@ -157,11 +161,18 @@ hr {
 
 .ability-operation .ability-operation-body {
 	padding-left: 32px;
+	margin: 0;
 }
 
 .ability-operation .ability-operation-body li {
 	display: table;
 	width: 100%;
+}
+
+.ability-operation .ability-operation-body li > a {
+	display: table-cell;
+	width: 10px;
+	vertical-align: top;
 }
 
 .ability-operation .ability-operation-body li > span {
@@ -212,6 +223,56 @@ hr {
 
 .ability-operation .ability-operation-body .ability-form .ability-form-unitGroup {
 	padding: 0 0 0 5px;
+}
+
+.ability-modifer-list ul {
+	margin: 0;
+	padding: 0 0 0 5px;
+}
+
+.ability-modifer-list ul li {
+	display: table;
+	width: 100%;
+}
+
+.ability-modifer-list ul li > a {
+	display: table-cell;
+	vertical-align: top;
+	width: 10px;
+	word-break: keep-all;
+	white-space: nowrap;
+}
+.ability-modifer-list ul li > .ability-modifer-item-select {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.ability-modifer-list ul li > .ability-modifer-item-select select {
+	width: 100%;
+	height: auto;
+	outline: none;
+
+}
+.ability-modifer-list ul li > input {
+	background: transparent;
+	height: auto!important;
+	width: 150px;
+	padding: 1px 0 2px 5px!important;
+	text-decoration: underline;
+	display: table-cell;
+	outline: none;
+}
+.ability-modifer-list ul li > input:focus {
+	box-shadow: none;
+}
+
+.ability-modifer-list ul li > select {
+	display: table-cell;
+	outline: none;
+}
+
+.ability-modifer-list > a {
+	margin-left: 10px;
 }
 
 /* Header */

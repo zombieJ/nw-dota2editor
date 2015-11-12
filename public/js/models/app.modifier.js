@@ -34,7 +34,8 @@ app.factory("Modifier", function(Event) {
 		// =                 属性                 =
 		// ========================================
 		// 名字
-		fillAttr(_my, "_name", "undefined")("修饰器名", "Name");
+		_my._name = "undefined";
+		//fillAttr(_my, "_name", "undefined")("修饰器名", "Name");
 
 		// 备注
 		fillAttr(_my, "_comment", "")("备注", "Comment", "blob");

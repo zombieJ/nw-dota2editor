@@ -31,139 +31,145 @@ components.directive('modifier', function($compile) {
 			});
 		},
 		template:
-		'<div>'+
-			'<table class="table table-condensed table-bordered">'+
-				'<tbody>'+
-					// 常规
-					'<tr ng-repeat="unit in modifier._requireList track by $index">'+
-						'<th>{{unit.title || unit.attr}} 【{{unit.desc}}】</th>'+
-						'<td>'+
-							'<div attrfield data-attrunit="unit" data-srcunit="modifier" data-srctmpl="Modifier"></div>'+
-						'</td>'+
-					'</tr>'+
+		'<tbody>'+
+			// =========================== 名称 ===========================
+			'<tr>'+
+				'<th width="130">'+
+					'<span class="ability-tip">Name</span>'+
+					'名称'+
+				'</th>'+
+				'<td class="ability-form">'+
+					'<input type="text" ng-model="modifier._name" />'+
+				'</td>'+
+				'<td width="60" class="text-center">'+
+					'<a href="javascript:void(0)" ng-click="common.array.remove(modifier, ability._modifierList)">'+
+						'Delete'+
+					'</a>'+
+				'</td>'+
+			'</tr>'+
 
-					// 属性
-					'<tr class="abilityModifier_{{modifier._name}}__PROP">'+
-						'<th colspan="2" class="warning">'+
-								'Properties 【属性】'+
-						'</th>'+
-					'</tr>'+
-					'<tr>'+
-						'<td colspan="2">'+
-							'<table class="table table-bordered table-condensed">'+
-								'<tbody>'+
-									'<tr ng-repeat="_prop in modifier._propertyList track by $index">'+
-										'<th>'+
-											'<a href="javascript:void(0)" ng-click="common.array.remove(_prop, modifier._propertyList)">[X]</a>'+
-											'{{_prop[0].replace("MODIFIER_PROPERTY_", "")}} '+
-											'【{{common.array.find(_prop[0], Modifier.Properties, "0")[1]}}】'+
-										'</th>'+
-										'<td>'+
-											'<input type="text" class="form-control" ng-model="_prop[1]" />'+
-										'</td>'+
-									'</tr>'+
-								'</tbody>'+
-							'</table>'+
-						'</td>'+
-					'</tr>'+
-					'<tr>'+
-						'<td colspan="2">'+
-							'<select class="form-control" ng-init="modifierProp = Modifier.Properties[0][0]" ng-model="modifierProp">'+
-								'<option ng-repeat="item in Modifier.Properties track by $index" value="{{::item[0]}}">'+
-									'{{item[0].replace("MODIFIER_PROPERTY_", "")}} '+
-									'【{{item[1]}}】'+
-								'</option>'+
-							'</select>'+
-							'<button class="btn btn-warning btn-xs" ng-click="modifier._propertyList.push([modifierProp, \'\'])">+ new Property 【添加属性】</button>'+
-						'</td>'+
-					'</tr>'+
+			// =========================== 常规 ===========================
+			'<tr ng-repeat="unit in modifier._requireList track by $index">'+
+				'<th>' +
+					'<span class="ability-tip">{{unit.title || unit.attr}}</span>'+
+					'{{unit.desc}}' +
+				'</th>'+
+				'<td colspan="2" class="ability-form">'+
+					'<div attrfield data-attrunit="unit" data-srcunit="modifier" data-srctmpl="Modifier"></div>'+
+				'</td>'+
+			'</tr>'+
 
-					// 状态
-					'<tr class="abilityModifier_{{modifier._name}}__STATE">'+
-						'<th colspan="2" class="warning">'+
-							'States 【状态】'+
-						'</th>'+
-					'</tr>'+
+			// =========================== 属性 ===========================
+			'<tr>'+
+				'<th>'+
+					'<span class="ability-tip">Properties</span>'+
+					'属性' +
+				'</th>'+
+				'<td colspan="2">'+
+					'<div class="ability-modifer-list">'+
+						'<ul>'+
+							'<li ng-repeat="_prop in modifier._propertyList track by $index">'+
+								'<a ng-click="common.array.remove(_prop, modifier._propertyList)">[X]</a>'+
+								'<div class="ability-modifer-item-select">'+
+									'<select ng-model="_prop[0]">'+
+										'<option ng-repeat="item in Modifier.Properties track by $index" value="{{::item[0]}}">'+
+											'{{item[0].replace("MODIFIER_PROPERTY_", "")}} 【{{item[1]}}】'+
+										'</option>'+
+									'</select>'+
+								'</div>'+
+								'<input type="text" class="form-control" ng-model="_prop[1]" />'+
+							'</li>'+
+						'</ul>'+
+						'<a class="add-link" ng-click="modifier._propertyList.push([\'MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL\', \'\'])">+ new Property 【添加属性】</a>'+
+					'</div>'+
+				'</td>'+
+			'</tr>'+
 
-					'<tr>'+
-						'<td colspan="2">'+
-							'<table class="table table-bordered table-condensed">'+
-								'<tbody>'+
-									'<tr ng-repeat="_state in modifier._stateList track by $index">'+
-										'<th>'+
-											'<a href="javascript:void(0)" ng-click="common.array.remove(_state, modifier._stateList)">[X]</a>'+
-											'{{_state[0].replace("MODIFIER_STATE_", "")}} '+
-											'【{{common.array.find(_state[0], Modifier.States, "0")[1]}}】'+
-										'</th>'+
-										'<td>'+
-											'<select class="form-control" ng-model="_state[1]">'+
-												'<option ng-repeat="st in Modifier.StateValues track by $index" value="{{::st[0]}}">'+
-													'{{::st[0].replace("MODIFIER_STATE_VALUE_", "")}}'+
-													'【{{::st[1]}}】'+
-												'</option>'+
-											'</select>'+
-										'</td>'+
-									'</tr>'+
-								'</tbody>'+
-							'</table>'+
-						'</td>'+
-					'</tr>'+
-
-					'<tr>'+
-						'<td colspan="2">'+
-							'<select class="form-control" ng-init="modifierState = Modifier.States[0][0]" ng-model="modifierState">'+
-								'<option ng-repeat="item in Modifier.States track by $index" value="{{::item[0]}}">'+
-									'{{::item[0].replace("MODIFIER_STATE_", "")}}'+
-									'【{{::item[1]}}】'+
-								'</option>'+
-							'</select>'+
-							'<button class="btn btn-warning btn-xs" ng-click="modifier._stateList.push([modifierState, Modifier.StateValues[0][0]])">+ new State 【添加状态】</button>'+
-						'</td>'+
-					'</tr>'+
-
-					// 事件
-					'<tr class="abilityModifier_{{modifier._name}}__EVENT">'+
-						'<th colspan="2" class="warning">'+
-							'Events 【事件】'+
-						'</th>'+
-					'</tr>'+
-
-					'<tr>'+
-						'<td colspan="2">'+
-						'<!-- 事件 -->'+
-							'<div ng-repeat="_index in optEventNum track by $index" ng-show="modifier._eventList[_index]" class="group-event">'+
-							//'<div ng-repeat="(event_index,event) in modifier._eventList track by $index" class="group-event">'+
-								'<label>'+
-									'<a href="javascript:void(0)" ng-click="common.array.remove(modifier._eventList[_index], modifier._eventList)">[X]</a>'+
-									'Event {{_index + 1}}'+
-								'</label>'+
-								'<select class="form-control" ng-model="modifier._eventList[_index]._name">'+
-									'<option ng-repeat="_event in Event.ModifierEventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>'+
+			// =========================== 状态 ===========================
+			'<tr>'+
+				'<th>'+
+					'<span class="ability-tip">States</span>'+
+					'状态' +
+				'</th>'+
+				'<td colspan="2">'+
+					'<div class="ability-modifer-list">'+
+						'<ul>'+
+							'<li ng-repeat="_state in modifier._stateList track by $index">'+
+								'<a ng-click="common.array.remove(_state, modifier._stateList)">[X]</a>'+
+								'<div class="ability-modifer-item-select">'+
+									'<select ng-model="_state[0]">'+
+										'<option ng-repeat="item in Modifier.States track by $index" value="{{::item[0]}}">'+
+											'{{item[0].replace("MODIFIER_STATE_", "")}} 【{{item[1]}}】'+
+										'</option>'+
+									'</select>'+
+								'</div>'+
+								'<select ng-model="_state[1]">'+
+									'<option ng-repeat="item in Modifier.StateValues track by $index" value="{{::item[0]}}">'+
+										'{{item[0].replace("MODIFIER_STATE_VALUE_", "")}} 【{{item[1]}}】'+
+									'</option>'+
 								'</select>'+
-								'<table ng-if="modifier._eventList[_index]._name === \'OnIntervalThink\'" class="table">'+
-									'<tbody>'+
-										'<tr>'+
-											'<td width="200">ThinkInterval 【间隔】</td>'+
-											'<td><input type="text" class="form-control" ng-model="modifier._eventList[_index].ThinkInterval" /></td>'+
-										'</tr>'+
-									'</tbody>'+
-								'</table>'+
+							'</li>'+
+						'</ul>'+
+						'<a class="add-link" ng-click="modifier._stateList.push([\'MODIFIER_STATE_ATTACK_IMMUNE\', \'\'])">+ new State 【添加状态】</a>'+
+					'</div>'+
+				'</td>'+
+			'</tr>'+
 
-								'<!-- 操作 -->'+
-								'<div eventoperation data-container="modifier._eventList[_index]" data-path="_operationList" data-isitem="isItem"></div>'+
-							'</div>'+
-							'<button class="btn btn-warning btn-xs" ng-click="addEvent()">+ new event 【新建事件】</button>'+
-						'</td>'+
-					'</tr>'+
+			// =========================== 事件 ===========================
+			'<tr>'+
+				'<th>'+
+					'<span class="ability-tip">Events</span>'+
+					'事件' +
+				'</th>'+
+				'<td colspan="2" style="padding: 5px">'+
+					'<table class="ability-table">'+
+						'<tbody ng-repeat="_index in optEventNum track by $index" ng-show="modifier._eventList[_index]">'+
+							// 事件类型
+							'<tr>'+
+								'<th width="120">'+
+									'<span class="ability-tip">Event Type</span>'+
+									'事件类型'+
+								'</th>'+
+								'<td class="ability-form">'+
+									'<select ng-model="modifier._eventList[_index]._name">'+
+										'<option ng-repeat="_event in Event.ModifierEventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>'+
+									'</select>'+
+								'</td>'+
+								'<td width="60" class="text-center">'+
+									'<a href="javascript:void(0)" ng-click="common.array.remove(modifier._eventList[_index], modifier._eventList)">'+
+										'Delete'+
+									'</a>'+
+								'</td>'+
+							'</tr>'+
 
+							// 事件备注
+							'<tr>'+
+								'<th>'+
+									'<span class="ability-tip">Comment</span>'+
+									'备注'+
+								'</th>'+
+								'<td class="ability-form" colspan="2">'+
+									'<textarea class="form-control" ng-model="modifier._eventList[_index]._comment" rows="3" placeholder="备注"></textarea>'+
+								'</td>'+
+							'</tr>'+
 
+							// 操作
+							'<tr>'+
+								'<th>'+
+									'<span class="ability-tip">Operation</span>'+
+									'操作'+
+								'</th>'+
+								'<td class="ability-form" colspan="2" style="background: #FFF">'+
+									'<div eventoperation data-container="modifier._eventList[_index]" data-path="_operationList" data-isitem="isItem"></div>'+
+								'</td>'+
+							'</tr>'+
+						'</tbody>'+
+					'</table>'+
 
-
-
-
-				'</tbody>'+
-			'</table>'+
-		'</div>',
+					'<a ng-click="addEvent()">+ new event 【新建事件】</a>'+
+				'</td>'+
+			'</tr>'+
+		'</tbody>',
 		replace : true
 	};
 });
