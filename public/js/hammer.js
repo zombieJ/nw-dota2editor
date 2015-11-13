@@ -345,6 +345,7 @@ var _abilityCtrl = function(isItem) {
 		// =                          Auto Detect                         =
 		// ================================================================
 		// Naming conflict check
+		// TODO: Use name change event
 		var _conflictCheckInterval = $interval(function() {
 			var _checkMap = {};
 			$scope.conflictMap = {};
@@ -426,8 +427,8 @@ var _abilityCtrl = function(isItem) {
 		// 读取技能文件
 		if (!globalContent[_globalListKey]) {
 			NODE.loadFile(_filePath, "utf8").then(function (data) {
-				var _kv = new KV(data, true);
-				$.each(_kv.kvList, function (i, unit) {
+				var _kv = KV.parse(data);
+				$.each(_kv.value, function (i, unit) {
 					if (typeof  unit.value !== "string") {
 						var _ability = Ability.parse(unit, isItem, 1);
 						_LOG("Ability", 0, "实体：", _ability._name, _ability);

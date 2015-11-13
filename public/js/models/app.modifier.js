@@ -100,15 +100,15 @@ app.factory("Modifier", function(Event) {
 	// =                     解析                     =
 	// ================================================
 	Modifier.parse = function(kvUnit, lvl) {
-		_LOG("KV", lvl, "└ 修饰器：", kvUnit.value.title,kvUnit);
+		_LOG("KV", lvl, "└ 修饰器：", kvUnit.key,kvUnit);
 
 		var _modifier = new Modifier();
-		_modifier._name = kvUnit.value.title;
-		_modifier._comment = kvUnit.value.comment;
+		_modifier._name = kvUnit.key;
+		_modifier._comment = kvUnit.comment;
 
 		var _ThinkIntervalList = [];
 
-		$.each(kvUnit.value.kvList, function(i, unit) {
+		$.each(kvUnit.value, function(i, unit) {
 			var _attr = common.array.find(unit.key, _modifier._requireList, "attr", false, false);
 
 			// 匹配 _requireList
@@ -140,7 +140,7 @@ app.factory("Modifier", function(Event) {
 			// 匹配 Properties
 			else if(unit.key === "Properties") {
 				_LOG("KV", lvl + 1, "└ 修饰器属性", unit.value);
-				$.each(unit.value.kvList, function(i, _prop) {
+				$.each(unit.value, function(i, _prop) {
 					_modifier._propertyList.push([_prop.key, _prop.value]);
 				});
 			}
@@ -148,7 +148,7 @@ app.factory("Modifier", function(Event) {
 			// 匹配 States
 			else if(unit.key === "States") {
 				_LOG("KV", lvl + 1, "└ 修饰器状态", unit.value);
-				$.each(unit.value.kvList, function(i, _state) {
+				$.each(unit.value, function(i, _state) {
 					_modifier._stateList.push([_state.key, _state.value]);
 				});
 			}

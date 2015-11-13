@@ -30,11 +30,11 @@ app.factory("Event", function(Operation) {
 	// =                     解析                     =
 	// ================================================
 	Event.parse = function(kvUnit, lvl) {
-		_LOG("KV", lvl, "└ 事件：", kvUnit.value.title, kvUnit);
+		_LOG("KV", lvl, "└ 事件：", kvUnit.key, kvUnit);
 
 		var _event = new Event();
-		_event._name = kvUnit.value.title;
-		_event._comment = kvUnit.value.comment;
+		_event._name = kvUnit.key;
+		_event._comment = kvUnit.comment;
 		_event._operationList = [];
 
 		var _attr = common.array.find(_event._name, Event.ModifierEventList, "0", false, false);
@@ -44,7 +44,7 @@ app.factory("Event", function(Operation) {
 			_WARN("KV", lvl + 1, "Unmatched Event key:", _event._name);
 		}
 
-		$.each(kvUnit.value.kvList, function (i, unit) {
+		$.each(kvUnit.value, function (i, unit) {
 			_event._operationList.push(Operation.parse(unit, lvl + 1));
 		});
 

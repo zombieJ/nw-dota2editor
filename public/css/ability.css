@@ -176,12 +176,16 @@ hr {
 	vertical-align: top;
 }
 
+.ability-operation .ability-operation-body li > a,
 .ability-operation .ability-operation-body li > span {
 	display: table-cell;
 	width: 10px;
 	vertical-align: top;
 	word-break: keep-all;
 	white-space: nowrap;
+}
+.ability-operation .ability-operation-body li > a.fa {
+	padding: 5px 0 0 5px;
 }
 
 .ability-operation .ability-operation-body li > .ability-form {

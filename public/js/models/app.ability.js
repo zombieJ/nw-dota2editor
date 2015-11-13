@@ -211,14 +211,14 @@ app.factory("Ability", function($q, Event, Modifier) {
 	// ================================================
 	Ability.parse = function(kvUnit, isItem, lvl) {
 		lvl = lvl || 0;
-		_LOG("KV", lvl, "└ 技能：",kvUnit.value.title, kvUnit);
+		_LOG("KV", lvl, "└ 技能：",kvUnit.key, kvUnit);
 
 		var _ability = new Ability(isItem);
-		_ability._name = kvUnit.value.title;
-		_ability._comment = kvUnit.value.comment;
-		_ability._oriContent = kvUnit.value.content;
+		_ability._name = kvUnit.key;
+		_ability._comment = kvUnit.comment;
+		_ability._oriContent = kvUnit.content;
 
-		$.each(kvUnit.value.kvList, function(i, unit) {
+		$.each(kvUnit.value, function(i, unit) {
 			var _attr = common.array.find(unit.key, _ability._requireList, "attr", false, false) || common.array.find(unit.key, _ability._requireItemList, "attr", false, false);
 
 			// 匹配 _requireList
@@ -255,7 +255,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 			// 匹配 Modifiers
 			else if(unit.key === "Modifiers") {
 				_LOG("KV", lvl + 1, "└ 修饰器列表", unit.value);
-				$.each(unit.value.kvList, function(i, _modifier) {
+				$.each(unit.value, function(i, _modifier) {
 					_ability._modifierList.push(Modifier.parse(_modifier, lvl + 2));
 				});
 			}
@@ -263,8 +263,8 @@ app.factory("Ability", function($q, Event, Modifier) {
 			// 匹配 Modifiers
 			else if(unit.key === "AbilitySpecial") {
 				_LOG("KV", lvl + 1, "└ 自定义值列表", unit.value);
-				_ability._abilitySpecialList = $.map(unit.value.kvList, function(asUnit) {
-					return [[asUnit.value.kvList[1].key, asUnit.value.kvList[0].value, asUnit.value.kvList[1].value]];
+				_ability._abilitySpecialList = $.map(unit.value, function(asUnit) {
+					return [[asUnit.value[1].key, asUnit.value[0].value, asUnit.value[1].value]];
 				});
 			}
 

@@ -38,7 +38,7 @@ app.factory("Operation", function(Sound) {
 	// =                     解析                     =
 	// ================================================
 	Operation.parse = function(kvUnit, lvl) {
-		_LOG("KV", lvl + 1, "└ 操作：", kvUnit.value.title, kvUnit);
+		_LOG("KV", lvl + 1, "└ 操作：", kvUnit.key, kvUnit);
 
 		var _operation = new Operation();
 
@@ -49,7 +49,7 @@ app.factory("Operation", function(Sound) {
 			_operation.name = kvUnit.key;
 
 			// 属性
-			$.each(kvUnit.value.kvList, function (i, unit) {
+			$.each(kvUnit.value, function (i, unit) {
 				var _meta = Operation.EventOperationMap[unit.key];
 
 				if (_meta && (_meta.type === "text" || _meta.type === "single")) {
@@ -60,12 +60,12 @@ app.factory("Operation", function(Sound) {
 					_operation.attrs[unit.key] = unit.value === "1" || unit.value === "MODIFIER_STATE_VALUE_ENABLED";
 				} else if (_meta && _meta.type === "operation") {
 					// 操作
-					_operation.attrs[unit.key] = $.map(unit.value.kvList, function (_opUnit) {
+					_operation.attrs[unit.key] = $.map(unit.value, function (_opUnit) {
 						return Operation.parse(_opUnit, lvl + 1);
 					});
 				} else if (_meta && _meta.type === "blob") {
 					// Blob块
-					_operation.attrs[unit.key] = unit.value.kvToString();
+					_operation.attrs[unit.key] = unit.kvToString();
 				} else if (_meta && _meta.type === "unitGroup") {
 					// 单位选择组
 					_operation.attrs[unit.key] = {};
@@ -75,7 +75,7 @@ app.factory("Operation", function(Sound) {
 					} else {
 						// 如果是单位组
 						_operation.attrs[unit.key].target = "[Group Units]";
-						$.each(unit.value.kvList, function (i, _tgtUnit) {
+						$.each(unit.value, function (i, _tgtUnit) {
 							// 遍历属性赋值
 							var _tmplUnit = common.array.find(_tgtUnit.key, Operation.UnitGroupColumns, "0");
 
@@ -254,11 +254,42 @@ app.factory("Operation", function(Sound) {
 		["SpendCharge", "消耗物品", true, []],
 	].concat(Operation.EventOperation);
 
+	// ==========================================================
+	// =                       Auto Match                       =
+	// ==========================================================
+	var _match_EffectName = function(operation) {
+		return operation.name === "FireSound" ?  Sound.match : null;
+	};
+
+	var _match_ModifierName = function(match) {
+		match = (match || "").toUpperCase();
+		var _list = $.map(_match_ModifierName.ability._modifierList, function(modifier) {
+			if((modifier._name || "").toUpperCase().indexOf(match) !== -1) return [[modifier._name]];
+		});
+		return _list;
+	};
+
+	var _link_ModifierName = function() {
+		var $scope = angular.element("#listCntr").scope();
+		$scope.currentTab = "modifiers";
+		$scope.currentModifier = _link_ModifierName.modifier;
+	};
+
 	Operation.EventOperationMap = {
 		Target: {type: "unitGroup", value: ["","CASTER","TARGET","POINT","ATTACKER","UNIT", "[Group Units]"]},
 		AbilityName: {type: "text"},
-		ModifierName: {type: "text"},
-		EffectName: {type: "text"},
+		ModifierName: {type: "text", match: function(operation, ability) {
+			_match_ModifierName.ability = ability;
+			return _match_ModifierName;
+		}, link: function(value, operation, ability) {
+			var _modifier = common.array.find(value, ability._modifierList, "_name");
+			if(_modifier) {
+				_link_ModifierName.modifier = _modifier;
+				return _link_ModifierName;
+			}
+			return null;
+		}},
+		EffectName: {type: "text", match: _match_EffectName},
 		EffectAttachType: {type: "single", value: ["follow_origin", "follow_overhead", "start_at_customorigin", "world_origin"]},
 		ControlPoints: {type: "blob"},
 		ControlPointEntities: {type: "blob"},

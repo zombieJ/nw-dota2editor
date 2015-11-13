@@ -7,6 +7,7 @@ components.directive('eventoperation', function($compile) {
 			container: "=",
 			isitem: "=?isitem",
 			path: "@",
+			ability: "=",
 		},
 		controller: function($scope, $element, $attrs, Ability, Event, Operation) {
 			$scope.Ability = Ability;
@@ -45,10 +46,10 @@ components.directive('eventoperation', function($compile) {
 				'<div class="ability-operation-header">' +
 					'<a class="fa fa-trash" ng-click="common.array.remove(container[path][_index], container[path])"></a>' +
 					'<select class="form-control" ng-model="container[path][_index].name">'+
-						'<option ng-repeat="_operation in EventOperation track by $index" value="{{::_operation[0]}}">{{::_operation[0]}} 【{{::_operation[1]}}】</option>'+
+						'<option ng-repeat="_operation in EventOperation track by $index" value="{{_operation[0]}}">{{_operation[0]}} 【{{_operation[1]}}】</option>'+
 					'</select>'+
 				'</div>'+
-				'<div operationgroup data-operation="container[path][_index]"></div>'+
+				'<div operationgroup data-ability="ability" data-operation="container[path][_index]"></div>'+
 			'</div>'+
 			'<a ng-click="addOperation()">+ new operation 【新建操作】</a>'+
 		'</div>',

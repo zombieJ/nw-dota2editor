@@ -14,11 +14,10 @@ app.factory("Language", function($q, KV, NODE) {
 		_my._promise = _deferred.promise;
 
 		NODE.loadFile(Language.folderPath + "/" + fileName, "ucs2").then(function(data) {
-			var _kv = new KV(data);
-			var _map = _kv.kvToMap();
+			var _kv = KV.parse(data.substr(1));
 
-			_my.name = _map["Language"];
-			_my.map = _map["Tokens"].kvToMap();
+			_my.name = _kv.get("Language", false);
+			_my.map = _kv.getKV("Tokens", false).kvToMap();
 
 			_my.ready = true;
 			_deferred.resolve();

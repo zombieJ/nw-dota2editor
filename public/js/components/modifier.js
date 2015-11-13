@@ -41,11 +41,6 @@ components.directive('modifier', function($compile) {
 				'<td class="ability-form">'+
 					'<input type="text" ng-model="modifier._name" />'+
 				'</td>'+
-				/*'<td width="60" class="text-center">'+
-					'<a href="javascript:void(0)" ng-click="common.array.remove(modifier, ability._modifierList)">'+
-						'Delete'+
-					'</a>'+
-				'</td>'+*/
 			'</tr>'+
 
 			// =========================== 常规 ===========================
@@ -160,7 +155,7 @@ components.directive('modifier', function($compile) {
 									'操作'+
 								'</th>'+
 								'<td class="ability-form" colspan="2" style="background: #FFF">'+
-									'<div eventoperation data-container="modifier._eventList[_index]" data-path="_operationList" data-isitem="isItem"></div>'+
+									'<div eventoperation data-container="modifier._eventList[_index]" data-path="_operationList" data-ability="ability" data-isitem="isItem"></div>'+
 								'</td>'+
 							'</tr>'+
 						'</tbody>'+

@@ -4,7 +4,7 @@
 // =                        ¼üÖµ                        =
 // ======================================================
 app.factory("KV", function(NODE, $q) {
-	var _KV = function(list, keepValObjContent) {
+	/*var _KV = function(list, keepValObjContent) {
 		var _lines;
 		if(typeof list === "string") {
 			list = list.replace(/\{/g, "\n{").replace(/\}/g, "\n}");
@@ -98,10 +98,12 @@ app.factory("KV", function(NODE, $q) {
 		}
 
 		return this;
-	};
+	};*/
+
+	var _KV = KV;
 
 	_KV.prototype.kvToString = function() {
-		var _str = $.map(this.kvList, function(kv) {
+		var _str = $.map(this.value, function(kv) {
 			return '"'+kv.key+'"    "'+kv.value+'"';
 		}).join("\n");
 		return _str;
@@ -110,7 +112,7 @@ app.factory("KV", function(NODE, $q) {
 	_KV.prototype.kvToMap = function() {
 		if(!this._map) {
 			var _map = this._map = {};
-			$.each(this.kvList, function(i, kvUnit) {
+			$.each(this.value, function(i, kvUnit) {
 				_map[kvUnit.key] = kvUnit.value;
 			});
 		}

@@ -4,7 +4,8 @@ components.directive('operationgroup', function($compile) {
 	return {
 		restrict : 'AE',
 		scope : {
-			operation: "="
+			operation: "=",
+			ability: "=",
 		},
 		controller: function($scope, $element, $attrs, Operation) {
 			$scope.common = common;
@@ -19,6 +20,19 @@ components.directive('operationgroup', function($compile) {
 					var op = common.array.find(operation, $scope.EventOperation, "0");
 					_operationColumnCache[operation] = op ? op[3] : "";
 					return _operationColumnCache[operation];
+				}
+			};
+
+			$scope.getOpColLink = function(index) {
+				if(!$scope.operation || !$scope.operation.name) return null;
+
+				var _cols = $scope.getOperationColumn($scope.operation.name);
+				var _colName = _cols[index];
+				var link = Operation.EventOperationMap[_colName].link;
+				if(link) {
+					return link($scope.operation.attrs[_colName], $scope.operation, $scope.ability);
+				} else {
+					return null;
 				}
 			};
 
@@ -40,7 +54,8 @@ components.directive('operationgroup', function($compile) {
 		'<ul class="ability-operation-body">'+
 			'<li ng-repeat="_index in optColumnNum track by $index" ng-show="getOperationColumn(operation.name)[_index]">'+
 				'<span class="text-muted">{{getOperationColumn(operation.name)[_index]}}:</span>'+
-				'<div operationfield data-operation="operation" data-opcol="getOperationColumn(operation.name)[_index]"></div>' +
+				'<a class="fa fa-link" ng-if="getOpColLink(_index)" ng-click="getOpColLink(_index)()"></a>'+
+				'<div operationfield data-ability="ability" data-operation="operation" data-opcol="getOperationColumn(operation.name)[_index]"></div>' +
 			'</li>'+
 		'</ul>',
 		replace : true

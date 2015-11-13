@@ -66,11 +66,11 @@
 		<div class="tab-content ability-cntr-body">
 			<div data-id="ability" class="tab-pane fade in active">
 				<ul class="nav nav-pills">
-					<li class="active"><a data-toggle="tab" ng-click="currentTab = 'common'">Common【常规】</a></li>
-					<li ng-show="isItem"><a data-toggle="tab" ng-click="currentTab = 'item'">Item【物品】</a></li>
-					<li><a data-toggle="tab" ng-click="currentTab = 'events'">Events【事件】({{ability._eventList.length}})</a></li>
-					<li><a data-toggle="tab" ng-click="currentTab = 'modifiers'">Modifiers【修饰器】({{ability._modifierList.length}})</a></li>
-					<li><a data-toggle="tab" ng-click="currentTab = 'abilitySpecial'">Ability Special【自定义值】({{ability._abilitySpecialList.length}})</a></li>
+					<li ng-class="{active: currentTab === 'common'}"><a ng-click="currentTab = 'common'">Common【常规】</a></li>
+					<li ng-class="{active: currentTab === 'item'}" ng-show="isItem"><a ng-click="currentTab = 'item'">Item【物品】</a></li>
+					<li ng-class="{active: currentTab === 'events'}"><a ng-click="currentTab = 'events'">Events【事件】({{ability._eventList.length}})</a></li>
+					<li ng-class="{active: currentTab === 'modifiers'}"><a ng-click="currentTab = 'modifiers'">Modifiers【修饰器】({{ability._modifierList.length}})</a></li>
+					<li ng-class="{active: currentTab === 'abilitySpecial'}"><a ng-click="currentTab = 'abilitySpecial'">Ability Special【自定义值】({{ability._abilitySpecialList.length}})</a></li>
 				</ul>
 
 				<div>
@@ -146,7 +146,7 @@
 										操作
 									</th>
 									<td class="ability-form" colspan="2" style="background: #FFF">
-										<div eventoperation data-container="ability._eventList[_index]" data-path="_operationList" data-isitem="isItem"></div>
+										<div eventoperation data-container="ability._eventList[_index]" data-path="_operationList" data-ability="ability" data-isitem="isItem"></div>
 									</td>
 								</tr>
 							</tbody>

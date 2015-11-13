@@ -6,6 +6,7 @@ components.directive('operationfield', function($compile, Operation) {
 		scope: {
 			opcol: "=",
 			operation: "=",
+			ability: "=",
 		},
 		controller: function($scope, $element, $attrs, Ability, Event, Operation, Sound) {
 			$scope.Ability = Ability;
@@ -41,15 +42,12 @@ components.directive('operationfield', function($compile, Operation) {
 		'<div ng-switch="Operation.EventOperationMap[opcol].type" class="ability-form">' +
 			// Single
 			'<select ng-model="operation.attrs[opcol]" ng-switch-when="single" placeholder="[None]">' +
-				'<option ng-repeat="opVal in Operation.EventOperationMap[opcol].value track by $index">{{::opVal}}</option>' +
+				'<option ng-repeat="opVal in Operation.EventOperationMap[opcol].value track by $index">{{opVal}}</option>' +
 			'</select>'+
 
 			// Text
 			'<div ng-switch-when="text">'+
-				// Sound need additional effort
-				'<input tipfield type="text" ng-model="operation.attrs[opcol]" placeholder="[None]" data-matchfuc="Sound.match" ng-if="operation.name === \'FireSound\'" />'+
-				//Other text field
-				'<input type="text" ng-model="operation.attrs[opcol]" placeholder="[None]" ng-if="operation.name !== \'FireSound\'" />' +
+				'<input tipfield type="text" ng-model="operation.attrs[opcol]" placeholder="[None]" data-matchfuc="Operation.EventOperationMap[opcol].match(operation, ability)" />'+
 			'</div>'+
 
 			// Blob
