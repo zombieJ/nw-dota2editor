@@ -64,7 +64,7 @@
 			_write('"' + this.key + '"');
 			_write('{');
 			this.value.forEach(function(subKV) {
-				_data = subKV.toString(_data, _lvl + 1);
+				_data = subKV.toString(_data, _lvl + 1) + "\n";
 			});
 			_write('}');
 		}

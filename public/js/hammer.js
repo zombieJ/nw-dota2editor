@@ -243,7 +243,7 @@ var _abilityCtrl = function(isItem) {
 			}, function(ret) {
 				if(!ret) return;
 
-				var _isCurrent = $scope.ability === _menuAbility
+				var _isCurrent = $scope.ability === _menuAbility;
 				common.array.remove(_menuAbility, $scope.abilityList);
 				if(_isCurrent) {
 					$scope.ability = $scope.abilityList[0];
@@ -573,6 +573,14 @@ var _abilityCtrl = function(isItem) {
 
 			e.preventDefault();
 			return false;
+		});
+
+		// =================================================================
+		// =                          Application                          =
+		// =================================================================
+		$scope.$on("AppSaved",function() {
+			console.log("Saved!");
+			$scope.setAbility($scope.ability);
 		});
 
 		$scope.$on("$destroy",function() {

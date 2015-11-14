@@ -254,6 +254,7 @@ app.controller('main', function($scope, $route, $location, $q, Locale, Ability, 
 		$q.all(_promiseList).finally(function() {
 			$scope.saveMSG = "Finished! 【完成】";
 			$scope.saveLock = false;
+			$scope.$broadcast("AppSaved", "");
 		});
 	};
 

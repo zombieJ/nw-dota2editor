@@ -297,16 +297,17 @@ app.factory("Ability", function($q, Event, Modifier) {
 	// =                    格式化                    =
 	// ================================================
 	Ability.prototype.doWriter = function(writer) {
-		writer.writeComment(this._comment);
-
 		// If not change, don't override
 		if(!this._changed) {
 			if(typeof this._oriContent === "object") {
 				writer.writeContent(this._oriContent.toString());
 			} else {
+				writer.writeComment(this._comment);
 				writer.writeContent(this._oriContent);
 			}
 			return;
+		} else {
+			writer.writeComment(this._comment);
 		}
 
 		var _writerStartLoc = writer._data.length;
