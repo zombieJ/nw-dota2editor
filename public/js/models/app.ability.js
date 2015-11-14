@@ -218,7 +218,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 		var _ability = new Ability(isItem);
 		_ability._name = kvUnit.key;
 		_ability._comment = kvUnit.comment;
-		_ability._oriContent = kvUnit.content;
+		_ability._oriContent = kvUnit;
 
 		$.each(kvUnit.value, function(i, unit) {
 			var _attr = null;
@@ -301,7 +301,11 @@ app.factory("Ability", function($q, Event, Modifier) {
 
 		// If not change, don't override
 		if(!this._changed) {
-			writer.writeContent(this._oriContent);
+			if(typeof this._oriContent === "object") {
+				writer.writeContent(this._oriContent.toString());
+			} else {
+				writer.writeContent(this._oriContent);
+			}
 			return;
 		}
 
