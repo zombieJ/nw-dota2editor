@@ -73,6 +73,7 @@ app.factory("Locale", function() {
 		ItemDisassembleRule: "可拆分",
 
 		// 修饰器
+		_name: "名称",
 		_comment: "备注",
 		Attributes: "属性",
 		Duration: "持续时间",
@@ -94,6 +95,13 @@ app.factory("Locale", function() {
 		StatusEffectName: "状态特效",
 		StatusEffectPriority: "状态特效优先级",
 		OverrideAnimation: "覆盖动画",
+
+		Properties: "属性",
+		States: "状态",
+		Events: "事件",
+		Operation: "操作",
+
+		"Event Type": "事件类型",
 	};
 
 	return Locale;

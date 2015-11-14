@@ -14,7 +14,7 @@ app.factory("Modifier", function(Event) {
 		// =                 属性                 =
 		// ========================================
 		// 名字
-		_my._name = "undefined";
+		this.fillAttr("common", "_name", "text", "undefined");
 
 		// 备注
 		this.fillAttr("common", "_comment", "blob", "");

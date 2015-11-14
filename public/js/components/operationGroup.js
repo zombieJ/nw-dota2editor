@@ -27,7 +27,10 @@ components.directive('operationgroup', function($compile) {
 				if(!$scope.operation || !$scope.operation.name) return null;
 
 				var _cols = $scope.getOperationColumn($scope.operation.name);
+				if(!_cols || _cols.length === 0) return null;
+
 				var _colName = _cols[index];
+				if(!_colName) return null;
 				var link = Operation.EventOperationMap[_colName].link;
 				if(link) {
 					return link($scope.operation.attrs[_colName], $scope.operation, $scope.ability);

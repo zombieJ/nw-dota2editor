@@ -176,30 +176,139 @@
 							</li>
 						</ul>
 
-						<!--table class="ability-table" ng-show="currentModifier">
-							<tbody modifier="currentModifier" data-ability="ability"></tbody>
-
-							<tbody ng-if="ability._modifierList.length === 0">
-								<tr>
-									<td>
-										<p>No Modifier 【没有修饰器】</p>
+						<table class="ability-table" ng-show="currentModifier">
+							<!-- Modifier: Common -->
+							<tbody ng-repeat="group in currentModifier._attrList track by $index">
+								<tr ng-repeat="unit in group.list track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
+									<th width="150">
+										<span class="ability-tip">{{unit.title || unit.attr}}</span>
+										{{Locale(unit.attr)}}
+									</th>
+									<td class="ability-form">
+										<div attrfield data-attrunit="unit" data-srcunit="currentModifier" data-srctmpl="Modifier"></div>
 									</td>
 								</tr>
 							</tbody>
-						</table-->
-						<table class="ability-table" ng-show="currentModifier">
-							<tbody ng-repeat="group in currentModifier._attrList track by $index">
-							<tr ng-repeat="unit in group.list track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
-								<th width="150">
-									<span class="ability-tip">{{unit.title || unit.attr}}</span>
-									{{Locale(unit.attr)}}
-								</th>
-								<td class="ability-form">
-									<div attrfield data-attrunit="unit" data-srcunit="currentModifier" data-srctmpl="Modifier"></div>
-								</td>
-							</tr>
+
+							<!-- Modifier: Prop -->
+							<tbody>
+								<tr>
+									<th>
+										<span class="ability-tip">Properties</span>
+										{{Locale('Properties')}}
+									</th>
+									<td>
+										<div class="ability-modifer-prop-list">
+											<ul>
+												<li ng-repeat="_prop in currentModifier._propertyList track by $index">
+													<a ng-click="common.array.remove(_prop, currentModifier._propertyList)">[X]</a>
+													<div class="ability-modifer-item-select">
+														<select ng-model="_prop[0]">
+															<option ng-repeat="item in Modifier.Properties track by $index" value="{{::item[0]}}">
+																{{item[0].replace("MODIFIER_PROPERTY_", "")}} 【{{item[1]}}】
+															</option>
+														</select>
+													</div>
+													<input type="text" class="form-control" ng-model="_prop[1]" />
+												</li>
+											</ul>
+											<a class="add-link" ng-click="currentModifier._propertyList.push(['MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL', ''])">+ new Property 【添加属性】</a>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+
+							<!-- Modifier: State -->
+							<tbody>
+								<tr>
+									<th>
+										<span class="ability-tip">States</span>
+										{{Locale('States')}}
+									</th>
+									<td>
+										<div class="ability-modifer-prop-list">
+											<ul>
+												<li ng-repeat="_state in currentModifier._stateList track by $index">
+													<a ng-click="common.array.remove(_state, currentModifier._stateList)">[X]</a>
+													<div class="ability-modifer-item-select">
+														<select ng-model="_state[0]">
+															<option ng-repeat="item in Modifier.States track by $index" value="{{::item[0]}}">
+																{{item[0].replace("MODIFIER_STATE_", "")}} 【{{item[1]}}】
+															</option>
+														</select>
+													</div>
+													<select ng-model="_state[1]">
+														<option ng-repeat="item in Modifier.StateValues track by $index" value="{{::item[0]}}">
+															{{item[0].replace("MODIFIER_STATE_VALUE_", "")}} 【{{item[1]}}】
+														</option>
+													</select>
+												</li>
+											</ul>
+											<a class="add-link" ng-click="currentModifier._stateList.push(['MODIFIER_STATE_ATTACK_IMMUNE', ''])">+ new State 【添加状态】</a>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+
+							<!-- Modifier: Events -->
+							<tbody>
+								<tr>
+									<th>
+										<span class="ability-tip">Events</span>
+										{{Locale('Events')}}
+									</th>
+									<td style="padding: 5px">
+										<table class="ability-table">
+											<tbody ng-repeat="_index in optEventNum track by $index" ng-show="currentModifier._eventList[_index]">
+											<!-- Event Type -->
+											<tr>
+												<th width="120">
+													<span class="ability-tip">Event Type</span>
+													{{Locale('Event Type')}}
+												</th>
+												<td class="ability-form">
+													<select ng-model="currentModifier._eventList[_index]._name">
+														<option ng-repeat="_event in Event.ModifierEventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>
+													</select>
+												</td>
+												<td width="60" class="text-center">
+													<a href="javascript:void(0)" ng-click="common.array.remove(currentModifier._eventList[_index], currentModifier._eventList)">
+														Delete
+													</a>
+												</td>
+											</tr>
+
+											<!-- Event Comment -->
+											<tr>
+												<th>
+													<span class="ability-tip">Comment</span>
+													{{Locale('_comment')}}
+												</th>
+												<td class="ability-form" colspan="2">
+													<textarea class="form-control" ng-model="currentModifier._eventList[_index]._comment" rows="3" placeholder="备注"></textarea>
+												</td>
+											</tr>
+
+											<!-- Event Operation -->
+											<tr>
+												<th>
+													<span class="ability-tip">Operation</span>
+													{{Locale('Operation')}}
+												</th>
+												<td class="ability-form" colspan="2" style="background: #FFF">
+													<div eventoperation data-container="currentModifier._eventList[_index]" data-path="_operationList" data-ability="ability" data-isitem="isItem"></div>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+
+										<a ng-click="addEvent()">+ new event 【新建事件】</a>
+									</td>
+								</tr>
 							</tbody>
 						</table>
+
+						<p ng-if="ability._modifierList.length === 0">No Modifier 【没有修饰器】</p>
 					</div>
 
 					<!-- ==================== 自定义值 ==================== -->
