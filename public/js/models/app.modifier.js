@@ -40,12 +40,16 @@ app.factory("Modifier", function(Event) {
 		this.fillAttr("state", "AllowIllusionDuplicate", "single", "-");
 
 		// 光环
-		this.fillAttr("aura", "Aura", "text", "");
-		this.fillAttr("aura", "Aura_Radius", "text", "");
-		this.fillAttr("aura", "Aura_Teams", "single", "DOTA_UNIT_TARGET_TEAM_NONE");
-		this.fillAttr("aura", "Aura_Types", "group");
-		this.fillAttr("aura", "Aura_Flags", "group");
-		this.fillAttr("aura", "Aura_ApplyToCaster", "single", "-");
+		var _auraFunc = function() {
+			return _my._IsAura === true;
+		};
+		this.fillAttr("aura", "_IsAura", "boolean", false);
+		this.fillAttr("aura", "Aura", "text", "").showFunc = _auraFunc;
+		this.fillAttr("aura", "Aura_Radius", "text", "").showFunc = _auraFunc;
+		this.fillAttr("aura", "Aura_Teams", "single", "DOTA_UNIT_TARGET_TEAM_NONE").showFunc = _auraFunc;
+		this.fillAttr("aura", "Aura_Types", "group").showFunc = _auraFunc;
+		this.fillAttr("aura", "Aura_Flags", "group").showFunc = _auraFunc;
+		this.fillAttr("aura", "Aura_ApplyToCaster", "single", "-").showFunc = _auraFunc;
 
 		// 特效
 		this.fillAttr("effect", "EffectName", "text", "");
@@ -154,6 +158,11 @@ app.factory("Modifier", function(Event) {
 						break;
 					default :
 						_WARN("KV", lvl + 1, "Unmatched Modifier type:", unit.key, _modifier[unit.key]);
+				}
+
+				// Code Specific: Aura
+				if(unit.key === "Aura") {
+					_modifier._IsAura = true;
 				}
 			}
 

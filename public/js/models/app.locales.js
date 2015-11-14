@@ -84,6 +84,7 @@ app.factory("Locale", function() {
 		IsHidden: "隐藏图标",
 		IsPurgable: "可净化",
 		AllowIllusionDuplicate: "幻象可继承",
+		_IsAura: "作为光环",
 		Aura: "光环赋予的修饰器",
 		Aura_Radius: "光环影响半径",
 		Aura_Teams: "光环影响队伍",

@@ -179,7 +179,7 @@
 						<table class="ability-table" ng-show="currentModifier">
 							<!-- Modifier: Common -->
 							<tbody ng-repeat="group in currentModifier._attrList track by $index">
-								<tr ng-repeat="unit in group.list track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
+								<tr ng-repeat="unit in group.list track by $index" ng-if="unit.showFunc ? unit.showFunc() : true;">
 									<th width="150">
 										<span class="ability-tip">{{unit.title || unit.attr}}</span>
 										{{Locale(unit.attr)}}
