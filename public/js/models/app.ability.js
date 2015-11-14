@@ -4,47 +4,10 @@
 // =                        技能                        =
 // ======================================================
 app.factory("Ability", function($q, Event, Modifier) {
-	function _fillAttr(isItem, ability, attr, defaultValue) {
-		if(defaultValue === undefined) {
-			ability[attr] = {};
-			$.each(Ability[attr], function(i, item) {
-				ability[attr][item[0]] = false;
-			});
-		} else {
-			ability[attr] = defaultValue;
-		}
-
-		// Attribute Config. Arguments: Chinese title, title, type
-		var _attrConfig = function(desc, title, type) {
-			var _unit = {
-				attr: attr,
-				title: title,
-				desc: desc,
-				type: type,
-
-				// Display logic
-				showFunc: null,
-			};
-			(isItem ? ability._requireItemList : ability._requireList).push(_unit);
-
-			return _unit;
-		};
-
-		return _attrConfig;
-	}
-
-	function fillAttr(ability, attr, defaultValue) {
-		return _fillAttr(false, ability, attr, defaultValue);
-	}
-
-	function fillItemAttr(ability, attr, defaultValue) {
-		return _fillAttr(true, ability, attr, defaultValue);
-	}
-
 	var Ability = function(isItem) {
 		var _my = this;
-		_my._requireItemList = [];
-		_my._requireList = [];
+		_my._attrList = [];
+		_my._attrItemList = [];
 		_my._isItem = isItem;
 		_my._changed = false;
 		_my._oriContent = null;
@@ -59,108 +22,110 @@ app.factory("Ability", function($q, Event, Modifier) {
 		_my._comment = "";
 
 		// 基类
-		fillAttr(_my, "BaseClass", "ability_datadriven")("基类");
+		this.fillAttr("common", "BaseClass", "text", "ability_datadriven");
 
 		// 图标
-		fillAttr(_my, "AbilityTextureName", "")("图标");
+		this.fillAttr("common", "AbilityTextureName", "text", "");
 
-		// 物品代码
-		if(isItem) {
-			fillItemAttr(_my, "ID", "")("ID");
-			fillItemAttr(_my, "ItemCost", "0")("花费");
-			fillItemAttr(_my, "ItemDroppable", true)("可丢弃");
-			fillItemAttr(_my, "ItemSellable", true)("可出售");
-			fillItemAttr(_my, "ItemShareability", "-")("共享方式");
-
-			fillItemAttr(_my, "ItemPurchasable", "-")("可购买");
-			fillItemAttr(_my, "ItemDeclarations", "")("购买提醒");
-			fillItemAttr(_my, "ItemKillable", true)("可摧毁");
-			fillItemAttr(_my, "ItemAlertable", false)("可提醒");
-			fillItemAttr(_my, "ItemPermanent", "-")("永久的");
-			fillItemAttr(_my, "ItemInitialCharges", "")("初始数量");
-			fillItemAttr(_my, "ItemRequiresCharges", "-")("需要数量才能使用");
-			fillItemAttr(_my, "ItemStackable", false)("可叠加");
-			fillItemAttr(_my, "SideShop", "-")("基地商店");
-			fillItemAttr(_my, "SecretShop", "-")("神秘商店");
-			fillItemAttr(_my, "ItemCastOnPickup", false)("拾起使用");
-			fillItemAttr(_my, "ItemQuality", "")("物品质量");
-			fillItemAttr(_my, "ItemShopTags", "")("商店标签");
-			fillItemAttr(_my, "ItemAliases", "")("物品别名");
-			fillItemAttr(_my, "MaxUpgradeLevel", "")("物品最大等级");
-			fillItemAttr(_my, "ItemBaseLevel", "")("物品基础等级");
-			fillItemAttr(_my, "ItemRecipe", false)("合成菜单");
-			fillItemAttr(_my, "ItemResult", "")("合成结果");
-			fillItemAttr(_my, "ItemRequirements", "")("合成需要", null, "blob");  // TODO: 合成公式！
-			fillItemAttr(_my, "ItemDisassembleRule", "-")("可拆分");
-		}
-
-		// 行为
-		fillAttr(_my, "ScriptFile", "")("脚本文件").showFunc = function() {
+		// 脚本文件
+		this.fillAttr("common", "ScriptFile", "text", "").showFunc = function() {
 			return _my.BaseClass === "ability_lua";
 		};
 
 		// 行为
-		fillAttr(_my, "AbilityBehavior")("行为");
+		this.fillAttr("common", "AbilityBehavior", "group");
 
 		// 目标类型
-		fillAttr(_my, "AbilityUnitTargetType")("目标类型");
+		this.fillAttr("target", "AbilityUnitTargetType", "group");
 
 		// 目标队伍
-		fillAttr(_my, "AbilityUnitTargetTeam", "DOTA_UNIT_TARGET_TEAM_NONE")("目标队伍");
+		this.fillAttr("target", "AbilityUnitTargetTeam", "single", "DOTA_UNIT_TARGET_TEAM_NONE");
 
 		// 目标标记
-		fillAttr(_my, "AbilityUnitTargetFlags")("目标标记");
+		this.fillAttr("target", "AbilityUnitTargetFlags", "group");
 
 		// 伤害类型
-		fillAttr(_my, "AbilityUnitDamageType","-")("伤害类型");
+		this.fillAttr("target", "AbilityUnitDamageType", "single", "-");
 
 		// 技能类型
-		fillAttr(_my, "AbilityType", "DOTA_ABILITY_TYPE_BASIC")("技能类型");
+		this.fillAttr("skill", "AbilityType", "single", "DOTA_ABILITY_TYPE_BASIC");
 
 		// 热键
-		fillAttr(_my, "HotKeyOverride","")("热键");
+		this.fillAttr("skill", "HotKeyOverride", "text", "");
 
 		// 最大等级
-		fillAttr(_my, "MaxLevel","4")("最大等级");
+		this.fillAttr("skill", "MaxLevel", "text","4");
 
 		// 需要等级
-		fillAttr(_my, "RequiredLevel","1")("需求等级");
+		this.fillAttr("skill", "RequiredLevel", "text","1");
 
 		// 升级等级间隔
-		fillAttr(_my, "LevelsBetweenUpgrades","2")("升级间隔");
+		this.fillAttr("skill", "LevelsBetweenUpgrades", "text","2");
 
 		// 施法前摇
-		fillAttr(_my, "AbilityCastPoint","0")("施法前摇");
+		this.fillAttr("animation", "AbilityCastPoint", "text","0");
 
 		// 施法动作
-		fillAttr(_my, "AbilityCastAnimation","")("施法动作", null, "text");
+		this.fillAttr("animation", "AbilityCastAnimation", "text","");
 
 		// 冷却时间
-		fillAttr(_my, "AbilityCooldown","0")("冷却时间");
+		this.fillAttr("usage", "AbilityCooldown","text","0");
 
 		// 魔法消耗
-		fillAttr(_my, "AbilityManaCost","0")("魔法消耗");
+		this.fillAttr("usage", "AbilityManaCost","text","0");
 
 		// 施法距离
-		fillAttr(_my, "AbilityCastRange","0")("施法距离");
+		this.fillAttr("usage", "AbilityCastRange","text","0");
 
 		// 施法距离缓冲
-		fillAttr(_my, "AbilityCastRangeBuffer","0")("施法距离缓冲");
+		this.fillAttr("usage", "AbilityCastRangeBuffer","text","0");
 
 		// Channel
 		var _channelFunc = function() {
 			return _my.AbilityBehavior["DOTA_ABILITY_BEHAVIOR_CHANNELLED"] === true;
 		};
 		// 持续施法时间
-		fillAttr(_my, "AbilityChannelTime","0")("持续施法时间").showFunc = _channelFunc;
+		this.fillAttr("usage", "AbilityChannelTime","text","0").showFunc = _channelFunc;
 
 		// 持续施法每秒耗魔
-		fillAttr(_my, "AbilityChannelledManaCostPerSecond","0")("持续施法每秒耗魔").showFunc = _channelFunc;
+		this.fillAttr("usage", "AbilityChannelledManaCostPerSecond","text","0").showFunc = _channelFunc;
 
 		// AOE范围
-		fillAttr(_my, "AOERadius","0")("AOE范围").showFunc = function() {
+		this.fillAttr("usage", "AOERadius","text","0").showFunc = function() {
 			return _my.AbilityBehavior["DOTA_ABILITY_BEHAVIOR_AOE"] === true;
 		};
+
+		// ========================================
+		// =                 物品                 =
+		// ========================================
+		if (isItem) {
+			this.fillAttr("item", "ID", "text", "");
+			this.fillAttr("item", "ItemCost", "text", "0");
+			this.fillAttr("item", "ItemDroppable", "boolean", true);
+			this.fillAttr("item", "ItemSellable", "boolean", true);
+			this.fillAttr("item", "ItemShareability", "single", "-");
+
+			this.fillAttr("item", "ItemPurchasable", "single", "-");
+			this.fillAttr("item", "ItemDeclarations", "single", "-");
+			this.fillAttr("item", "ItemKillable", "boolean", true);
+			this.fillAttr("item", "ItemAlertable", "boolean", false);
+			this.fillAttr("item", "ItemPermanent", "single", "-");
+			this.fillAttr("item", "ItemInitialCharges", "text", "");
+			this.fillAttr("item", "ItemRequiresCharges", "single", "-");
+			this.fillAttr("item", "ItemStackable", "boolean", false);
+			this.fillAttr("item", "SideShop", "text", "-");
+			this.fillAttr("item", "SecretShop", "text", "-");
+			this.fillAttr("item", "ItemCastOnPickup", "boolean", false);
+			this.fillAttr("item", "ItemQuality", "single", "");
+			this.fillAttr("item", "ItemShopTags", "text", "");
+			this.fillAttr("item", "ItemAliases", "text", "");
+			this.fillAttr("item", "MaxUpgradeLevel", "text", "");
+			this.fillAttr("item", "ItemBaseLevel", "text", "");
+			this.fillAttr("item", "ItemRecipe", "boolean", false);
+			this.fillAttr("item", "ItemResult", "text", "");
+			this.fillAttr("item", "ItemRequirements", "blob", "");  // TODO: 合成公式！
+			this.fillAttr("item", "ItemDisassembleRule", "single", "-");
+		}
 
 		// ========================================
 		// =                 事件                 =
@@ -183,6 +148,43 @@ app.factory("Ability", function($q, Event, Modifier) {
 		_my._languages = {};
 
 		return this;
+	};
+
+	Ability.prototype.fillAttr = function(group, attr, type, defaultValue) {
+		var _my = this;
+		var _list = group.match(/^item/) ? _my._attrItemList : _my._attrList;
+
+		// Get group
+		var _group = common.array.find(group, _list, "name");
+		if(!_group) {
+			_group = {
+				name: group,
+				list: [],
+			};
+			_list.push(_group);
+		}
+
+		// Fill value
+		if(type === "group") {
+			_my[attr] = {};
+			$.each(Ability[attr], function(i, item) {
+				_my[attr][item[0]] = false;
+			});
+		} else {
+			_my[attr] = defaultValue;
+		}
+
+		// Config unit
+		var _unit = {
+			attr: attr,
+			type: type,
+
+			// Display logic
+			showFunc: null,
+		};
+
+		_group.list.push(_unit);
+		return _unit;
 	};
 
 	// ================================================
@@ -219,7 +221,17 @@ app.factory("Ability", function($q, Event, Modifier) {
 		_ability._oriContent = kvUnit.content;
 
 		$.each(kvUnit.value, function(i, unit) {
-			var _attr = common.array.find(unit.key, _ability._requireList, "attr", false, false) || common.array.find(unit.key, _ability._requireItemList, "attr", false, false);
+			var _attr = null;
+			$.each(_ability._attrList, function(i, group) {
+				_attr = common.array.find(unit.key, group.list, "attr", false, false);
+				if(_attr) return false;
+			});
+			if(!_attr) {
+				$.each(_ability._attrItemList, function (i, group) {
+					_attr = common.array.find(unit.key, group.list, "attr", false, false);
+					if (_attr) return false;
+				});
+			}
 
 			// 匹配 _requireList
 			if(_attr) {
@@ -416,7 +428,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 		["DOTA_ITEM_DISASSEMBLE_NEVER","不可拆分"],
 	];
 
-	Ability.ItemPermanent = Ability.ItemRequiresCharges = [
+	Ability.ItemPurchasable = Ability.ItemPermanent = Ability.ItemRequiresCharges = [
 		["-","无"],
 		["0","否"],
 		["1","是"],

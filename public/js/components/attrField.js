@@ -17,12 +17,13 @@ components.directive('attrfield', function($compile) {
 					var _field;
 					var _type = scope.attrunit.type || typeof scope.srcunit[scope.attrunit.attr];
 					if(_type === "string" && !scope.srctmpl[scope.attrunit.attr]) {
+						// TODO: remove this
 						_field = $('<input class="form-control" ng-model="srcunit[attrunit.attr]" />');
 					} else if(_type === "blob") {
 						_field = $('<textarea class="form-control" rows="5" ng-model="srcunit[attrunit.attr]"></textarea>');
-					} else if(_type === "object") {
+					} else if(_type === "group") {
 						_field = $('<div groupselect data-ability="srcunit" data-attr="{{::attrunit.attr}}" data-base="srctmpl"></div>');
-					} else if(_type === "string" && scope.srctmpl[scope.attrunit.attr]) {
+					} else if(_type === "single") {
 						_field = $('<div groupselect data-ability="srcunit" data-attr="{{::attrunit.attr}}" data-base="srctmpl" data-single="true"></div>');
 					} else if(_type === "boolean") {
 						_field = $(

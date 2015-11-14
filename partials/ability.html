@@ -77,11 +77,11 @@
 					<!-- ====================== 常规 ====================== -->
 					<div ng-if="currentTab === 'common'">
 						<table class="ability-table">
-							<tbody>
-								<tr ng-repeat="unit in ability._requireList track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
+							<tbody ng-repeat="group in ability._attrList track by $index">
+								<tr ng-repeat="unit in group.list track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
 									<th width="150">
 										<span class="ability-tip">{{unit.title || unit.attr}}</span>
-										{{unit.desc}}
+										{{Locale(unit.attr)}}
 									</th>
 									<td class="ability-form">
 										<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
@@ -94,16 +94,16 @@
 					<!-- ====================== 物品 ====================== -->
 					<div ng-if="currentTab === 'item'">
 						<table class="ability-table">
-							<tbody>
-								<tr ng-repeat="unit in ability._requireItemList track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
-									<th width="150">
-										<span class="ability-tip">{{unit.title || unit.attr}}</span>
-										{{unit.desc}}
-									</th>
-									<td class="ability-form">
-										<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
-									</td>
-								</tr>
+							<tbody ng-repeat="group in ability._attrItemList track by $index">
+							<tr ng-repeat="unit in group.list track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
+								<th width="150">
+									<span class="ability-tip">{{unit.title || unit.attr}}</span>
+									{{Locale(unit.attr)}}
+								</th>
+								<td class="ability-form">
+									<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
+								</td>
+							</tr>
 							</tbody>
 						</table>
 					</div>
@@ -176,7 +176,7 @@
 							</li>
 						</ul>
 
-						<table class="ability-table" ng-show="currentModifier">
+						<!--table class="ability-table" ng-show="currentModifier">
 							<tbody modifier="currentModifier" data-ability="ability"></tbody>
 
 							<tbody ng-if="ability._modifierList.length === 0">
@@ -185,6 +185,19 @@
 										<p>No Modifier 【没有修饰器】</p>
 									</td>
 								</tr>
+							</tbody>
+						</table-->
+						<table class="ability-table" ng-show="currentModifier">
+							<tbody ng-repeat="group in currentModifier._attrList track by $index">
+							<tr ng-repeat="unit in group.list track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
+								<th width="150">
+									<span class="ability-tip">{{unit.title || unit.attr}}</span>
+									{{Locale(unit.attr)}}
+								</th>
+								<td class="ability-form">
+									<div attrfield data-attrunit="unit" data-srcunit="currentModifier" data-srctmpl="Modifier"></div>
+								</td>
+							</tr>
 							</tbody>
 						</table>
 					</div>

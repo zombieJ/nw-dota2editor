@@ -440,6 +440,10 @@ var _abilityCtrl = function(isItem) {
 				globalContent[_globalListKey] = $scope.abilityList;
 				$scope.setAbility($scope.abilityList[0]);
 
+				setTimeout(function() {
+					$(window).resize();
+				}, 100);
+
 				console.log("Scope >>>", $scope);
 			}, function () {
 				$.dialog({
@@ -530,17 +534,15 @@ var _abilityCtrl = function(isItem) {
 			setTimeout(function() {
 				var _winWidth = $(window).width();
 				var $abilityCntr = $(".abilityCntr");
+
 				if(_winWidth !== winWidth && $abilityCntr.length) {
 					var _left = $abilityCntr.offset().left;
 					$("#listCntr").outerWidth(_left - 15);
 					$("#newItem").outerWidth(_left - 15);
+					winWidth = _winWidth;
 				}
-				winWidth = _winWidth;
 			}, 100);
 		}).resize();
-		setTimeout(function() {
-			$(window).resize();
-		}, 10);
 
 		// 禁止列表框滚屏
 		$("#listCntr").on("mousewheel.abilityList", function(e) {

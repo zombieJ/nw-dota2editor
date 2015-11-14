@@ -79,7 +79,8 @@ app.factory("FS", function() {
 	}
 });
 
-app.controller('main', function($scope, $route, $location, $q, Ability, Event, Operation, Modifier, Language, KV, Sound, globalContent, NODE) {
+app.controller('main', function($scope, $route, $location, $q, Locale, Ability, Event, Operation, Modifier, Language, KV, Sound, globalContent, NODE) {
+	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
 	window.Event = $scope.Event = Event;
 	window.Operation = $scope.Operation = Operation;

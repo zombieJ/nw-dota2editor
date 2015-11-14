@@ -4,30 +4,10 @@
 // =                        操作                        =
 // ======================================================
 app.factory("Modifier", function(Event) {
-	function fillAttr(modifier, attr, defaultValue) {
-		if(defaultValue === undefined) {
-			modifier[attr] = {};
-			$.each(Modifier[attr], function(i, item) {
-				modifier[attr][item[0]] = false;
-			});
-		} else {
-			modifier[attr] = defaultValue;
-		}
-
-		return function(desc, title, type) {
-			modifier._requireList.push({
-				attr: attr,
-				title: title,
-				desc: desc,
-				type: type,
-			});
-		};
-	}
-
 	var _id = 0;
 	var Modifier = function() {
 		var _my = this;
-		_my._requireList = [];
+		_my._attrList = [];
 		_my._innerID = ++_id;
 
 		// ========================================
@@ -35,53 +15,89 @@ app.factory("Modifier", function(Event) {
 		// ========================================
 		// 名字
 		_my._name = "undefined";
-		//fillAttr(_my, "_name", "undefined")("修饰器名", "Name");
 
 		// 备注
-		fillAttr(_my, "_comment", "")("备注", "Comment", "blob");
+		this.fillAttr("common", "_comment", "blob", "");
 
 		// 属性
-		fillAttr(_my, "Attributes", "MODIFIER_ATTRIBUTE_NONE")("属性");
+		this.fillAttr("common", "Attributes", "single", "MODIFIER_ATTRIBUTE_NONE");
 
 		// 持续时间
-		fillAttr(_my, "Duration", "")("持续时间");
+		this.fillAttr("common", "Duration", "text", "");
 
 		// 默认拥有
-		fillAttr(_my, "Passive", false)("默认拥有");
+		this.fillAttr("state", "Passive", "boolean", false);
 
 		// 图标
-		fillAttr(_my, "TextureName", "")("图标");
+		this.fillAttr("state", "TextureName", "text", "");
 
 
-		fillAttr(_my, "IsBuff", "-")("正面效果");
-		fillAttr(_my, "IsDebuff", "-")("负面效果");
-		fillAttr(_my, "IsHidden", "-")("隐藏图标");
-		fillAttr(_my, "IsPurgable", "-")("可净化");
+		this.fillAttr("state", "IsBuff", "single", "-");
+		this.fillAttr("state", "IsDebuff", "single", "-");
+		this.fillAttr("state", "IsHidden", "single", "-");
+		this.fillAttr("state", "IsPurgable", "single", "-");
 
-		fillAttr(_my, "AllowIllusionDuplicate", "-")("幻象可继承");
+		this.fillAttr("state", "AllowIllusionDuplicate", "single", "-");
 
 		// 光环
-		fillAttr(_my, "Aura", "")("光环赋予的修饰器");
-		fillAttr(_my, "Aura_Radius", "")("光环影响半径");
-		fillAttr(_my, "Aura_Teams")("光环影响队伍");
-		fillAttr(_my, "Aura_Types")("光环影响类型");
-		fillAttr(_my, "Aura_Flags")("光环影响标记");
-		fillAttr(_my, "Aura_ApplyToCaster", "-")("光环影响拥有者");
+		this.fillAttr("aura", "Aura", "text", "");
+		this.fillAttr("aura", "Aura_Radius", "text", "");
+		this.fillAttr("aura", "Aura_Teams", "single", "DOTA_UNIT_TARGET_TEAM_NONE");
+		this.fillAttr("aura", "Aura_Types", "group");
+		this.fillAttr("aura", "Aura_Flags", "group");
+		this.fillAttr("aura", "Aura_ApplyToCaster", "single", "-");
 
 		// 特效
-		fillAttr(_my, "EffectName", "")("特效名");
-		fillAttr(_my, "EffectAttachType", "-")("特效绑定位置");
+		this.fillAttr("effect", "EffectName", "text", "");
+		this.fillAttr("effect", "EffectAttachType", "single", "-");
 
 		// 状态特效
-		fillAttr(_my, "StatusEffectName", "")("状态特效");
-		fillAttr(_my, "StatusEffectPriority", "")("状态特效优先级");
-		fillAttr(_my, "OverrideAnimation", "-")("覆盖动画");
+		this.fillAttr("statusEffect", "StatusEffectName", "text", "");
+		this.fillAttr("statusEffect", "StatusEffectPriority", "text", "");
+		this.fillAttr("statusEffect", "OverrideAnimation", "single", "-");
 
 		_my._propertyList = [];
 		_my._stateList = [];
 		_my._eventList = [];
 
 		return _my;
+	};
+
+	Modifier.prototype.fillAttr = function(group, attr, type, defaultValue) {
+		var _my = this;
+		var _list = _my._attrList;
+
+		// Get group
+		var _group = common.array.find(group, _list, "name");
+		if(!_group) {
+			_group = {
+				name: group,
+				list: [],
+			};
+			_list.push(_group);
+		}
+
+		// Fill value
+		if(type === "group") {
+			_my[attr] = {};
+			$.each(Modifier[attr], function(i, item) {
+				_my[attr][item[0]] = false;
+			});
+		} else {
+			_my[attr] = defaultValue;
+		}
+
+		// Config unit
+		var _unit = {
+			attr: attr,
+			type: type,
+
+			// Display logic
+			showFunc: null,
+		};
+
+		_group.list.push(_unit);
+		return _unit;
 	};
 
 	Modifier.prototype.getPrecacheList = function() {
@@ -109,7 +125,11 @@ app.factory("Modifier", function(Event) {
 		var _ThinkIntervalList = [];
 
 		$.each(kvUnit.value, function(i, unit) {
-			var _attr = common.array.find(unit.key, _modifier._requireList, "attr", false, false);
+			var _attr = null;
+			$.each(_modifier._attrList, function(i, group) {
+				_attr = common.array.find(unit.key, group.list, "attr", false, false);
+				if(_attr) return false;
+			});
 
 			// 匹配 _requireList
 			if (_attr) {
@@ -196,7 +216,7 @@ app.factory("Modifier", function(Event) {
 		// 修饰器属性
 		if(this._propertyList.length) {
 			writer.write('"Properties"');
-			writer.write("{");
+			writer.write;
 			$.each(this._propertyList, function(i, _propUnit) {
 				writer.write('"$1"		"$2"', _propUnit[0], _propUnit[1]);
 			});
