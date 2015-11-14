@@ -210,12 +210,16 @@ var _abilityCtrl = function(isItem) {
 
 			var _writer = new KV.Writer();
 			_menuAbility.doWriter(_writer);
+			var _data = _writer._data;
+
+			// 重写修改器
+			_data = _data.split('"'+_menuAbility._name+'"').join('"'+_menuAbility._name +'_clone"')
+			$.each(_menuAbility._modifierList, function(i, modifier) {
+				_data = _data.split('"'+modifier._name+'"').join('"'+modifier._name +'_clone"')
+			});
 
 			// 复制技能
-			var _clone = Ability.parse({
-				value: new KV(_writer._data)
-			}, isItem);
-			_clone._name += "_clone";
+			var _clone = Ability.parse(KV.parse(_data), isItem);
 			_clone._changed = true;
 			$scope.assignAutoID(_clone);
 
@@ -246,7 +250,7 @@ var _abilityCtrl = function(isItem) {
 				var _isCurrent = $scope.ability === _menuAbility;
 				common.array.remove(_menuAbility, $scope.abilityList);
 				if(_isCurrent) {
-					$scope.ability = $scope.abilityList[0];
+					$scope.setAbility($scope.abilityList[0]);
 				}
 				$scope.$apply();
 			});
@@ -346,7 +350,7 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// Naming conflict check
 		// TODO: Use name change event
-		var _conflictCheckInterval = setInterval(function() {
+		function _conflictCheck() {
 			var _checkMap = {};
 			var _conflictMap = {};
 
@@ -363,7 +367,8 @@ var _abilityCtrl = function(isItem) {
 				$scope.conflictMap = _conflictMap;
 				$scope.$apply();
 			}
-		}, 1000);
+		};
+		var _conflictCheckInterval = setInterval(_conflictCheck, 1000);
 
 		// Check language description
 		$scope.checkReport = {};
