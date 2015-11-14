@@ -105,6 +105,12 @@ hr {
 	padding: 5px;
 }
 
+.ability-table > tbody > tr > td > a.fa-link {
+	position: absolute;
+	right: 5px;
+	top: 8px;
+}
+
 .ability-table > tbody > tr > td p {
 	line-height: 100%;
 	margin: 0;

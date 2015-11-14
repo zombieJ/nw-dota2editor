@@ -7,6 +7,7 @@ components.directive('attrfield', function($compile) {
 			srctmpl: "=",
 			srcunit: "=",
 			attrunit: "=",
+			ability: "=",
 			path: "@",
 		},
 		controller: function ($scope, $element, $attrs) {
@@ -29,7 +30,8 @@ components.directive('attrfield', function($compile) {
 						);
 					} else if(_type === "text") {
 						// 提供一个Input Box，如果存在备选内容则提供提示功能
-						_field = $('<input tipfield class="form-control" ng-model="srcunit[attrunit.attr]" data-alternative="srctmpl[attrunit.attr]" />');
+						_field = $('<input tipfield class="form-control" ng-model="srcunit[attrunit.attr]" ' +
+							'data-alternative="srctmpl[attrunit.attr]" data-matchfuc="attrunit.match(srcunit[attrunit.attr], ability)" />');
 					} else {
 						console.warn("No match!", _type, scope.srcunit, scope.attrunit.attr);
 					}

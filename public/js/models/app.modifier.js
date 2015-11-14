@@ -26,10 +26,10 @@ app.factory("Modifier", function(Event) {
 		this.fillAttr("common", "Duration", "text", "");
 
 		// 默认拥有
-		this.fillAttr("state", "Passive", "boolean", false);
+		this.fillAttr("common", "Passive", "boolean", false);
 
 		// 图标
-		this.fillAttr("state", "TextureName", "text", "");
+		this.fillAttr("common", "TextureName", "text", "");
 
 
 		this.fillAttr("state", "IsBuff", "single", "-");
@@ -43,8 +43,34 @@ app.factory("Modifier", function(Event) {
 		var _auraFunc = function() {
 			return _my._IsAura === true;
 		};
+		var _match_ModifierName = function(match) {
+			match = (match || "").toUpperCase();
+			var _list = $.map(_match_ModifierName.ability._modifierList, function(modifier) {
+				if((modifier._name || "").toUpperCase().indexOf(match) !== -1) return [[modifier._name]];
+			});
+			return _list;
+		};
+		var _link_ModifierName = function() {
+			var $scope = angular.element("#listCntr").scope();
+			$scope.currentTab = "modifiers";
+			$scope.currentModifier = _link_ModifierName.modifier;
+		};
+
 		this.fillAttr("aura", "_IsAura", "boolean", false);
-		this.fillAttr("aura", "Aura", "text", "").showFunc = _auraFunc;
+		var _aura = this.fillAttr("aura", "Aura", "text", "");
+		_aura.showFunc = _auraFunc;
+		_aura.match = function(value, ability) {
+			_match_ModifierName.ability = ability;
+			return _match_ModifierName;
+		};
+		_aura.link = function(value, ability) {
+			var _modifier = common.array.find(value, ability._modifierList, "_name");
+			if(_modifier) {
+				_link_ModifierName.modifier = _modifier;
+				return _link_ModifierName;
+			}
+			return null;
+		};
 		this.fillAttr("aura", "Aura_Radius", "text", "").showFunc = _auraFunc;
 		this.fillAttr("aura", "Aura_Teams", "single", "DOTA_UNIT_TARGET_TEAM_NONE").showFunc = _auraFunc;
 		this.fillAttr("aura", "Aura_Types", "group").showFunc = _auraFunc;
@@ -98,6 +124,8 @@ app.factory("Modifier", function(Event) {
 
 			// Display logic
 			showFunc: null,
+			link: null,
+			match: null,
 		};
 
 		_group.list.push(_unit);

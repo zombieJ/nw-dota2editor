@@ -84,7 +84,7 @@
 										{{Locale(unit.attr)}}
 									</th>
 									<td class="ability-form">
-										<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
+										<div attrfield attrfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
 									</td>
 								</tr>
 							</tbody>
@@ -101,7 +101,7 @@
 									{{Locale(unit.attr)}}
 								</th>
 								<td class="ability-form">
-									<div attrfield data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
+									<div attrfield attrfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
 								</td>
 							</tr>
 							</tbody>
@@ -185,7 +185,9 @@
 										{{Locale(unit.attr)}}
 									</th>
 									<td class="ability-form">
-										<div attrfield data-attrunit="unit" data-srcunit="currentModifier" data-srctmpl="Modifier"></div>
+										{{unit.link}}
+										<a class="fa fa-link" ng-if="unit.link && unit.link(currentModifier[unit.attr], ability)" ng-click="unit.link(currentModifier[unit.attr], ability)()"></a>
+										<div attrfield data-ability="ability" data-attrunit="unit" data-srcunit="currentModifier" data-srctmpl="Modifier"></div>
 									</td>
 								</tr>
 							</tbody>
