@@ -147,25 +147,28 @@ app.factory("KV", function(NODE, $q) {
 		this.write('}');
 	};
 
-	_KV.Writer.prototype.withKVList = function(entity, list) {
+	_KV.Writer.prototype.withAttrList = function(entity, list) {
 		var _my = this;
 
-		$.each(list, function(i, requestUnit) {
-			if(/^_/.test(requestUnit.attr)) return;
+		$.each(list, function(i, group) {
+			$.each(group.list, function(i, requestUnit) {
+				if(/^_/.test(requestUnit.attr)) return;
+				if(requestUnit.showFunc && !requestUnit.showFunc()) return;
 
-			var _content = entity[requestUnit.attr];
-			switch(typeof _content) {
-				case "boolean":
-					_content = _content ? "1" : "0";
-					break;
-				case "object":
-					_content = common.map.join(_content, " | ");
-					break;
-			}
+				var _content = entity[requestUnit.attr];
+				switch(typeof _content) {
+					case "boolean":
+						_content = _content ? "1" : "0";
+						break;
+					case "object":
+						_content = common.map.join(_content, " | ");
+						break;
+				}
 
-			if(_content && _content !== "-") {
-				_my.write('"$1"					"$2"', requestUnit.attr, _content);
-			}
+				if(_content && _content !== "-") {
+					_my.write('"$1"					"$2"', requestUnit.attr, _content);
+				}
+			});
 		});
 	};
 

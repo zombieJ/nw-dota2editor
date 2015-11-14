@@ -233,7 +233,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 				});
 			}
 
-			// 匹配 _requireList
+			// 匹配 _attrList
 			if(_attr) {
 				unit.key = _attr.attr;
 
@@ -312,14 +312,14 @@ app.factory("Ability", function($q, Event, Modifier) {
 		writer.write('{');
 
 		// 物品属性
-		if (this._requireItemList.length) {
+		if (this._attrItemList.length) {
 			writer.writeComment('Item');
-			writer.withKVList(this, this._requireItemList);
+			writer.withAttrList(this, this._attrItemList);
 		}
 
 		// 常规属性
 		writer.writeComment('Common');
-		writer.withKVList(this, this._requireList);
+		writer.withAttrList(this, this._attrList);
 
 		// 预载入特效
 		var _precacheList = this.getPrecacheList();

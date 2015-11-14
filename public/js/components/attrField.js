@@ -16,10 +16,7 @@ components.directive('attrfield', function($compile) {
 				pre: function (scope, element, attrs) {
 					var _field;
 					var _type = scope.attrunit.type || typeof scope.srcunit[scope.attrunit.attr];
-					if(_type === "string" && !scope.srctmpl[scope.attrunit.attr]) {
-						// TODO: remove this
-						_field = $('<input class="form-control" ng-model="srcunit[attrunit.attr]" />');
-					} else if(_type === "blob") {
+					if(_type === "blob") {
 						_field = $('<textarea class="form-control" rows="5" ng-model="srcunit[attrunit.attr]"></textarea>');
 					} else if(_type === "group") {
 						_field = $('<div groupselect data-ability="srcunit" data-attr="{{::attrunit.attr}}" data-base="srctmpl"></div>');

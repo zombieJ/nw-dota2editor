@@ -135,7 +135,7 @@ app.factory("Modifier", function(Event) {
 				if(_attr) return false;
 			});
 
-			// 匹配 _requireList
+			// 匹配 _attrList
 			if (_attr) {
 				unit.key = _attr.attr;
 
@@ -220,7 +220,7 @@ app.factory("Modifier", function(Event) {
 		writer.write('{');
 
 		// 常规属性
-		writer.withKVList(this, this._requireList);
+		writer.withAttrList(this, this._attrList);
 
 		// 修饰器属性
 		if(this._propertyList.length) {
