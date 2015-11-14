@@ -251,6 +251,18 @@ common.map.join = function(obj, spliter) {
 	}).join(spliter);
 };
 
+common.map.mapKeyInMap = function(keyMap, map) {
+	var _isSubSet = true;
+	$.each(keyMap, function(key, value) {
+		if(!(key in map)) {
+			_isSubSet = false;
+			return false;
+		}
+	});
+
+	return _isSubSet;
+};
+
 // ======================== UI ========================
 common.ui = {};
 

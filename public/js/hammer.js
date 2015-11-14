@@ -346,16 +346,24 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// Naming conflict check
 		// TODO: Use name change event
-		var _conflictCheckInterval = $interval(function() {
+		var _conflictCheckInterval = setInterval(function() {
 			var _checkMap = {};
-			$scope.conflictMap = {};
+			var _conflictMap = {};
+
+			// Statistic
 			$.each($scope.abilityList, function(i, _ability) {
-				if(_checkMap[_ability._name]) {
-					$scope.conflictMap[_ability._name] = true;
+				_checkMap[_ability._name] = (_checkMap[_ability._name] || 0) + 1;
+				if(_checkMap[_ability._name] >= 2) {
+					_conflictMap[_ability._name] = true;
 				}
-				_checkMap[_ability._name] = true;
 			});
-		}, 2000);
+
+			// Fill
+			if(!common.map.mapKeyInMap(_conflictMap, $scope.conflictMap) || !common.map.mapKeyInMap($scope.conflictMap, _conflictMap)) {
+				$scope.conflictMap = _conflictMap;
+				$scope.$apply();
+			}
+		}, 1000);
 
 		// Check language description
 		$scope.checkReport = {};
@@ -584,9 +592,7 @@ var _abilityCtrl = function(isItem) {
 		});
 
 		$scope.$on("$destroy",function() {
-			$interval.cancel(_conflictCheckInterval);
-			//$("#langColorPicker").off('hidePicker.colorpicker').colorpicker('destroy');
-			//$('[data-id="description"]').off("focus.colorPicker");
+			clearInterval(_conflictCheckInterval);
 			$(window).off("resize.abilityList");
 			$("#listCntr").off("mousewheel.abilityList");
 			$(document).off("contextmenu.abilityList");

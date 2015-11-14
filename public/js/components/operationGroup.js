@@ -26,6 +26,7 @@ components.directive('operationgroup', function($compile) {
 			$scope.getOpColLink = function(index) {
 				if(!$scope.operation || !$scope.operation.name) return null;
 
+				console.log("FUCK!");
 				var _cols = $scope.getOperationColumn($scope.operation.name);
 				if(!_cols || _cols.length === 0) return null;
 
