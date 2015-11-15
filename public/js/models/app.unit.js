@@ -14,6 +14,8 @@ app.factory("Unit", function($q, KV, NODE) {
 		_my._comment = "";
 
 		_my.HasInventory = "-";
+		_my.AttackCapabilities = "-";
+		_my.AttackDamageType = "-";
 
 		// Creature
 		_my.Creature = {};
@@ -31,12 +33,31 @@ app.factory("Unit", function($q, KV, NODE) {
 
 		$.each(kvUnit.value, function(i, kv) {
 			var _attr = null;
-			$.each(Unit.AttrList, function(i, attrGroup) {
+			var _key = (kv.key || "").toUpperCase();
 
+			$.each(Unit.AttrList, function(i, attrList) {
+				$.each(attrList.value, function(i, attrGroup) {
+					$.each(attrGroup, function (j, attrUnit) {
+						if (attrUnit.attr.toUpperCase() === _key) {
+							_attr = attrUnit;
+							return false;
+						}
+					});
+
+					if(_attr) return false;
+				});
+
+				if(_attr) return false;
 			});
 
-			if(typeof kv.value === "string") {
-				_unit[kv.key] = kv.value;
+			if(_attr) {
+				kv.key = _attr.attr;
+
+				if (typeof kv.value === "string") {
+					_unit[kv.key] = kv.value;
+				}
+			} else {
+				_WARN("UNIT", 0, "Unmatched Unit type:", kv.key, kv.value);
 			}
 		});
 
@@ -62,6 +83,11 @@ app.factory("Unit", function($q, KV, NODE) {
 			{group: "common", attr: "ModelScale", type: "text"},
 			{group: "common", attr: "Level", type: "text"},
 			{group: "common", attr: "HasInventory", type: "single"},
+		],
+
+		[
+			{group: "miniMap", attr: "MinimapIcon", type: "text"},
+			{group: "miniMap", attr: "MinimapIconSize", type: "text"},
 		],
 
 		[
@@ -113,7 +139,7 @@ app.factory("Unit", function($q, KV, NODE) {
 		],
 	];
 
-	Unit.AttrAttackDefenseList = [
+	Unit.AttrAttackDefenseSpeedList = [
 		[
 			{group: "attack", attr: "AttackCapabilities", type: "single"},
 			{group: "attack", attr: "AttackDamageType", type: "single"},
@@ -129,15 +155,15 @@ app.factory("Unit", function($q, KV, NODE) {
 			{group: "armor", attr: "ArmorPhysical", type: "text"},
 			{group: "armor", attr: "MagicalResistance", type: "text"},
 		],
-	];
 
-	Unit.AttrOtherList = [
 		[
 			{group: "movement", attr: "MovementCapabilities", type: "single"},
 			{group: "movement", attr: "MovementSpeed", type: "text"},
 			{group: "movement", attr: "MovementTurnRate", type: "text"},
 		],
+	];
 
+	Unit.AttrHPMPVisionList = [
 		[
 			{group: "status", attr: "StatusHealth", type: "text"},
 			{group: "status", attr: "StatusHealthRegen", type: "text"},
@@ -149,12 +175,18 @@ app.factory("Unit", function($q, KV, NODE) {
 			{group: "Vision", attr: "VisionDaytimeRange", type: "text"},
 			{group: "Vision", attr: "VisionNighttimeRange", type: "text"},
 		],
+	];
+
+	Unit.AttrOtherList = [
+		[
+			{group: "label", attr: "UnitLabel", type: "text"},
+		],
 
 		[
 			{group: "Team", attr: "TeamName", type: "text"},
-			{group: "Team", attr: "CombatClassAttack", type: "text"},
-			{group: "Team", attr: "CombatClassDefend", type: "text"},
-			{group: "Team", attr: "UnitRelationShipClass", type: "text"},
+			{group: "Team", attr: "CombatClassAttack", type: "single"},
+			{group: "Team", attr: "CombatClassDefend", type: "single"},
+			{group: "Team", attr: "UnitRelationShipClass", type: "single"},
 		],
 	];
 
@@ -184,18 +216,78 @@ app.factory("Unit", function($q, KV, NODE) {
 		{name: "Common", value: Unit.AttrCommonList},
 		{name: "Hero", value: Unit.AttrHeroList, showFunc: function($scope) {return $scope.isHero;}},
 		{name: "Ability", value: Unit.AttrAbilityList},
-		{name: "AttackDefense", value: Unit.AttrAttackDefenseList},
+		{name: "AttackDefenseSpeed", value: Unit.AttrAttackDefenseSpeedList},
+		{name: "HPMPVision", value: Unit.AttrHPMPVisionList},
 		{name: "Others", value: Unit.AttrOtherList},
-		{name: "Creature", value: Unit.AttrCreatureList, showFunc: function($scope) {return $scope.isHero || $scope.ability.BaseClass === "npc_dota_creature";}},
+		{name: "Creature", value: Unit.AttrCreatureList, showFunc: function($scope) {return $scope.isHero || ($scope.ability && $scope.ability.BaseClass === "npc_dota_creature");}},
 	];
 
 	// ================================================
 	// =                     枚举                     =
 	// ================================================
 	Unit.HasInventory = [
-		["-","无"],
+		["-","默认"],
 		["0","否"],
 		["1","是"],
+	];
+
+	Unit.BoundsHullName = [
+		["-","默认"],
+		["DOTA_HULL_SIZE_SMALL","8"],
+		["DOTA_HULL_SIZE_REGULAR","16"],
+		["DOTA_HULL_SIZE_SIEGE","16"],
+		["DOTA_HULL_SIZE_HERO","24"],
+		["DOTA_HULL_SIZE_HUGE","80"],
+		["DOTA_HULL_SIZE_BUILDING","81"],
+		["DOTA_HULL_SIZE_FILLER","96"],
+		["DOTA_HULL_SIZE_BARRACKS","144"],
+		["DOTA_HULL_SIZE_TOWER","144"],
+	];
+
+	Unit.AttackCapabilities = [
+		["-","默认"],
+		["DOTA_UNIT_CAP_NO_ATTACK","不能攻击"],
+		["DOTA_UNIT_CAP_MELEE_ATTACK","近战攻击"],
+		["DOTA_UNIT_CAP_RANGED_ATTACK","远程攻击"],
+	];
+
+	Unit.AttackDamageType = [];
+
+	Unit.MovementCapabilities = [
+		["-", "默认"],
+		["DOTA_UNIT_CAP_MOVE_NONE", "不能移动"],
+		["DOTA_UNIT_CAP_MOVE_GROUND", "地面"],
+		["DOTA_UNIT_CAP_MOVE_FLY", "飞行"],
+	];
+
+	Unit.CombatClassAttack = [
+		["-", "默认"],
+		["DOTA_COMBAT_CLASS_ATTACK_BASIC", "普通"],
+		["DOTA_COMBAT_CLASS_ATTACK_HERO", "英雄"],
+		["DOTA_COMBAT_CLASS_ATTACK_LIGHT", "混乱"],
+		["DOTA_COMBAT_CLASS_ATTACK_PIERCE", "穿刺"],
+		["DOTA_COMBAT_CLASS_ATTACK_SIEGE", "攻城"],
+	];
+
+	Unit.CombatClassDefend = [
+		["-", "默认"],
+		["DOTA_COMBAT_CLASS_DEFEND_BASIC", "普通"],
+		["DOTA_COMBAT_CLASS_DEFEND_HERO", "英雄"],
+		["DOTA_COMBAT_CLASS_DEFEND_SOFT", "轻型"],
+		["DOTA_COMBAT_CLASS_DEFEND_STRONG", "重型"],
+		["DOTA_COMBAT_CLASS_DEFEND_STRUCTURE", "建筑"],
+		["DOTA_COMBAT_CLASS_DEFEND_WEAK", "脆弱"],
+	];
+
+	Unit.UnitRelationShipClass = [
+		["-", "默认"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT", "默认"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_BARRACKS", "兵营"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_BUILDING", "建筑"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_COURIER", "信使"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_HERO", "英雄"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_SIEGE", "主城"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_WARD", "眼"],
 	];
 
 	return Unit;

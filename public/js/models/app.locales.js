@@ -29,7 +29,8 @@ app.factory("Locale", function() {
 		Item: "物品",
 		Language: "语言",
 		Common: "常规",
-		AttackDefense: "攻防",
+		AttackDefenseSpeed: "攻防速",
+		HPMPVision: "血法视野",
 		Others: "其他",
 		Creature: "生物",
 
@@ -148,7 +149,7 @@ app.factory("Locale", function() {
 		AttackCapabilities: "攻击能力",
 		AttackDamageMax: "攻击最大值",
 		AttackDamageMin: "攻击最小值",
-		AttackDamageType: "攻击伤害类型",
+		AttackDamageType: "攻击伤害类型【无效】",
 		AttackRange: "攻击范围",
 		AttackRate: "攻击速率",
 		BoundsHullName: "碰撞体积",

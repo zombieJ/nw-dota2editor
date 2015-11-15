@@ -57,37 +57,22 @@ components.directive('groupselect', function($compile) {
 				});
 			};
 		},
-		compile: function (element, attrs) {
-			return {
-				pre: function (scope, element, attrs) {
-					var _field;
-					if(!scope.single) {
-						_field = $(
-							'<a href="javascript: void(0);" ng-click="editGroup()">' +
-								'<span class="label label-default" ng-repeat="(unitName, unitValue) in ability[tgtattr || attr]" ng-if="unitValue">' +
-									'{{::unitName.replace("DOTA_UNIT_TARGET_", "").replace("DECLARE_PURCHASES_", "").replace("FLAG_", "").replace("DOTA_ABILITY_BEHAVIOR_", "")}} ' +
-									'【{{common.array.find(unitName, getItemList(), "0")[1]}}】' +
-								'</span>'+
-								' <span class="glyphicon glyphicon-pencil"></span>'+
-							'</a>'
-						);
-					} else {
-						_field = $(
-							'<select ng-model="ability[tgtattr || attr]" class="form-control">'+
-								'<option ng-repeat="(i, item) in getItemList() track by $index" value="{{::item[0]}}">{{::item[0]}} 【{{::item[1]}}】</option>'+
-							'</select>'
-						);
-					}
-					if(_field) {
-						var compiledContents = $compile(_field);
-						compiledContents(scope, function(clone, scope) {
-							element.append(clone);
-						});
-					}
-				}
-			};
-		},
-		template : '<div></div>',
+		template :
+		'<div ng-switch="single">' +
+			// Single
+			'<select ng-model="ability[tgtattr || attr]" class="form-control" ng-switch-when="true">'+
+				'<option ng-repeat="(i, item) in getItemList() track by $index" value="{{item[0]}}">{{item[0]}} 【{{item[1]}}】</option>'+
+			'</select>'+
+
+			// Group
+			'<a href="javascript: void(0);" ng-click="editGroup()" ng-switch-default>' +
+				'<span class="label label-default" ng-repeat="(unitName, unitValue) in ability[tgtattr || attr]" ng-if="unitValue">' +
+				'{{unitName.replace("DOTA_UNIT_TARGET_", "").replace("DECLARE_PURCHASES_", "").replace("FLAG_", "").replace("DOTA_ABILITY_BEHAVIOR_", "")}} ' +
+				'【{{common.array.find(unitName, getItemList(), "0")[1]}}】' +
+				'</span>'+
+				' <span class="glyphicon glyphicon-pencil"></span>'+
+			'</a>'+
+		'</div>',
 		replace : true
 	};
 });
