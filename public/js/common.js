@@ -90,15 +90,12 @@ common.isEmpty = function(val) {
 // ======================= Log ========================
 var _DEBUG_KV = false;
 var _DEBUG_Ability = false;
+var _DEBUG_IGNORE_LIST = ["KV", "Ability", "Unit"];
 
 window._LOG = function (type, lvl) {
 	var _args = Array.prototype.slice.call(arguments, 2);
 	_args.unshift("["+type+"]" + common.text.repeat("  ", lvl));
-	if(
-		(!_DEBUG_KV && type === "KV") ||
-		(!_DEBUG_Ability && type === "Ability")
-	) {
-	} else {
+	if($.inArray(type, _DEBUG_IGNORE_LIST) === -1 ) {
 		console.log.apply(console, _args);
 	}
 };

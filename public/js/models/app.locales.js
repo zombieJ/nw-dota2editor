@@ -5,7 +5,13 @@
 // ======================================================
 app.factory("Locale", function() {
 	var Locale = function(key) {
-		return Locale.langMap[Locale.lang][key] || "NONE";
+		var _lang = Locale.langMap[Locale.lang][key];
+		if(_lang) {
+			return _lang;
+		} else {
+			_WARN("LANG", 0, "No Lang:", key);
+			return "> " + key;
+		}
 	};
 
 	Locale.lang = "cn";
@@ -15,6 +21,18 @@ app.factory("Locale", function() {
 	// =                  CN                  =
 	// ========================================
 	Locale.langMap["cn"] = {
+		AppName: "Dota2 KV 编辑器",
+		Home: "首页",
+		Unit: "单位",
+		Hero: "英雄",
+		Ability: "技能",
+		Item: "物品",
+		Language: "语言",
+		Common: "常规",
+		AttackDefense: "攻防",
+		Others: "其他",
+		Creature: "生物",
+
 		// 属性
 		BaseClass: "基类",
 		AbilityTextureName: "图标",
@@ -103,6 +121,78 @@ app.factory("Locale", function() {
 		Operation: "操作",
 
 		"Event Type": "事件类型",
+
+		// 单位
+		Ability1: "技能1",
+		Ability2: "技能2",
+		Ability3: "技能3",
+		Ability4: "技能4",
+		Ability5: "技能5",
+		Ability6: "技能6",
+		Ability7: "技能7",
+		Ability8: "技能8",
+		Ability9: "技能9",
+		Ability10: "技能10",
+		Ability11: "技能11",
+		Ability12: "技能12",
+		Ability13: "技能13",
+		Ability14: "技能14",
+		Ability15: "技能15",
+		Ability16: "技能16",
+		AbilityLayout: "技能布局",
+		ArmorGain: "护甲获得",
+		ArmorPhysical: "物理护甲",
+		AttachWearables: "穿戴物",
+		AttackAcquisitionRange: "攻击接受范围",
+		AttackAnimationPoint: "攻击动画点",
+		AttackCapabilities: "攻击能力",
+		AttackDamageMax: "攻击最大值",
+		AttackDamageMin: "攻击最小值",
+		AttackDamageType: "攻击伤害类型",
+		AttackRange: "攻击范围",
+		AttackRate: "攻击速率",
+		BoundsHullName: "碰撞体积",
+		BountyGain: "奖励获得",
+		BountyGoldMax: "金钱奖励最大值",
+		BountyGoldMin: "金钱奖励最小值",
+		CanRespawn: "可复活？",
+		CombatClassAttack: "攻击类型",
+		CombatClassDefend: "防御类型",
+		DamageGain: "伤害获得",
+		DisableClumpingBehavior: "聚集行为",
+		DisableResistance: "控制抗性",
+		HasInventory: "有物品栏",
+		HealthBarOffset: "生命条偏移",
+		HPGain: "生命获得",
+		Level: "等级",
+		MagicalResistance: "魔法抗性",
+		MagicResistGain: "魔抗获得",
+		Model: "模型",
+		ModelScale: "模型比例",
+		MovementCapabilities: "移动能力",
+		MovementSpeed: "移动速度",
+		MovementTurnRate: "转身速率",
+		MoveSpeedGain: "移动速度获得",
+		RingRadius: "选取框半径",
+		StatusHealth: "基础生命值",
+		StatusHealthRegen: "基础生命恢复",
+		StatusMana: "基础魔法值",
+		StatusManaRegen: "基础魔法恢复",
+		TeamName: "队伍名称",
+		UnitRelationShipClass: "单位相关类型",
+		VisionDaytimeRange: "白天视野",
+		VisionNighttimeRange: "晚上视野",
+		XPGain: "经验获得",
+
+		// 英雄
+		override_hero: "替换英雄",
+		AttributePrimary: "主属性",
+		AttributeBaseStrength: "基础力量",
+		AttributeStrengthGain: "升级力量获得",
+		AttributeBaseAgility: "基础敏捷",
+		AttributeAgilityGain: "升级敏捷获得",
+		AttributeBaseIntelligence: "基础智力",
+		AttributeIntelligenceGain: "升级智力获得",
 	};
 
 	return Locale;

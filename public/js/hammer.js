@@ -349,7 +349,6 @@ var _abilityCtrl = function(isItem) {
 		// =                          Auto Detect                         =
 		// ================================================================
 		// Naming conflict check
-		// TODO: Use name change event
 		function _conflictCheck() {
 			var _checkMap = {};
 			var _conflictMap = {};

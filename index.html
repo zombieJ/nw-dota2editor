@@ -59,8 +59,10 @@
 	<script src="public/js/models/app.language.js"></script>
 	<script src="public/js/models/app.sound.js"></script>
 	<script src="public/js/models/app.locales.js"></script>
+	<script src="public/js/models/app.unit.js"></script>
 
 	<script src="public/js/hammer.js"></script>
+	<script src="public/js/unitCtrl.js"></script>
 	<script src="public/js/languageCtrl.js"></script>
 </head>
 <body ng-controller="main">
@@ -75,14 +77,16 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#/">Dota2 KV Editor</a>
+			<a class="navbar-brand" href="#/">{{Locale('AppName')}}</a>
 		</div>
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li ng-class="{active: navSelected('/index')}"><a href="#/index">Home</a></li>
-				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/ability')}"><a href="#/ability">Ability 【技能】</a></li>
-				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/item')}"><a href="#/item">Item 【物品】</a></li>
-				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/language')}"><a href="#/language">Language 【语言】</a></li>
+				<li ng-class="{active: navSelected('/index')}"><a href="#/index">{{Locale('Home')}}</a></li>
+				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/unit')}"><a href="#/unit">{{Locale('Unit')}}</a></li>
+				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/hero')}"><a href="#/hero">{{Locale('Hero')}}</a></li>
+				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/ability')}"><a href="#/ability">{{Locale('Ability')}}</a></li>
+				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/item')}"><a href="#/item">{{Locale('Item')}}</a></li>
+				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/language')}"><a href="#/language">{{Locale('Language')}}</a></li>
 			</ul>
 			<ul class="nav navbar-nav pull-right">
 				<li ng-show="globalContent.isOpen">

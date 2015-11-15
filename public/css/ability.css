@@ -331,6 +331,10 @@ hr {
 	margin-left: 145px;
 }
 
+.ability-cntr-header.noIcon .ability-cntr-header-desc {
+	margin-left: 0;
+}
+
 .ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name {
 	margin-right: 150px;
 }

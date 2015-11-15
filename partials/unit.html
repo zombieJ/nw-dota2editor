@@ -1,0 +1,79 @@
+<div class="row">
+	<div class="col-sm-3 col-md-2">
+		<div id="listCntr" class="listCntr noSelect" ui-sortable ng-model="abilityList">
+			<div ng-repeat="_ability in abilityList track by $index" class="listItem"
+			     ng-class="{active: ability == _ability}"
+			     ng-mousedown="setAbilityMouseDown(_ability);">
+				<p class="title">
+					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.abilities[_ability._name].markColor || '#CCC'}}"></span>
+					<span class="fa fa-cubes sm" ng-if="config.abilities[_ability._name].markUsage === 'dummy'"></span>
+					{{config.abilities[_ability._name].editorAliasName || _ability._name}}
+					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
+					      uib-tooltip="Conflict name 【名称冲突】" tooltip-placement="right" tooltip-append-to-body="true"></span>
+				</p>
+				<p class="desc">{{_ability._comment}}</p>
+			</div>
+		</div>
+		<button id="newItem" class="btn btn-primary" ng-click="newAbility()">+ New 【新建】</button>
+	</div>
+	<div class="col-sm-9 col-md-10" ng-show="!ready">
+		<h1>Loading... 【载入中】</h1>
+	</div>
+	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ready && !ability}" ng-show="ready && !ability">
+		<h1>No Ability Yet 【还未创建Ability】</h1>
+	</div>
+	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ability}" ng-show="ability">
+		<div class="ability-cntr-header noIcon clearfix">
+			<div class="ability-cntr-header-desc">
+				<ul class="nav nav-pills pull-right">
+					<li class="active">
+						<a data-toggle="tab" class="fa fa-file-code-o" href="[data-id='ability']"></a>
+						<span class="nav-tip">Ability 【能力】</span>
+					</li>
+					<li>
+						<a data-toggle="tab" class="fa fa-book" href="[data-id='description']"></a>
+						<span class="nav-tip">Language 【语言】</span>
+					</li>
+				</ul>
+
+				<div class="ability-cntr-header-name ability-form">
+					<span class="ability-tip">Name 【名称】</span>
+					<input type="text" ng-model="ability._name" />
+				</div>
+
+				<div class="ability-form">
+					<span class="ability-tip">Comment 【注释】</span>
+					<textarea class="ability-form" ng-model="ability._comment" placeholder="Comment 【注释】..."></textarea>
+				</div>
+			</div>
+		</div>
+
+		<hr/>
+
+		<div class="tab-content ability-cntr-body">
+			<div data-id="ability" class="tab-pane fade in active">
+				<ul class="nav nav-pills">
+					<li ng-repeat="attrGroup in Unit.AttrList" ng-class="{active: currentTab === attrGroup.value}" ng-show="attrGroup.showFunc ? attrGroup.showFunc(this) : true;">
+						<a ng-click="setCurrentTab(attrGroup.value)">{{Locale(attrGroup.name)}}</a>
+					</li>
+				</ul>
+
+				<div>
+					<table class="ability-table">
+						<tbody ng-repeat="list in currentTab track by $index">
+						<tr ng-repeat="unit in list track by $index" ng-show="unit.showFunc ? unit.showFunc(this) : true;">
+							<th width="200">
+								<span class="ability-tip">{{unit.attr}}</span>
+								{{Locale(unit.attr)}}
+							</th>
+							<td class="ability-form">
+								<div attrfield attrfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Unit"></div>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

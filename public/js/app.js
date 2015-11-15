@@ -11,6 +11,12 @@ app.config(function($routeProvider) {
 	$routeProvider.when('/index', {
 		templateUrl: 'partials/index.html',
 		controller: 'indexCtrl'
+	}).when('/unit', {
+		templateUrl: 'partials/unit.html',
+		controller: 'unitCtrl'
+	}).when('/hero', {
+		templateUrl: 'partials/unit.html',
+		controller: 'heroCtrl'
 	}).when('/ability', {
 		templateUrl: 'partials/ability.html',
 		controller: 'abilityCtrl'
@@ -79,7 +85,7 @@ app.factory("FS", function() {
 	}
 });
 
-app.controller('main', function($scope, $route, $location, $q, Locale, Ability, Event, Operation, Modifier, Language, KV, Sound, globalContent, NODE) {
+app.controller('main', function($scope, $route, $location, $q, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE) {
 	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
 	window.Event = $scope.Event = Event;
@@ -87,6 +93,7 @@ app.controller('main', function($scope, $route, $location, $q, Locale, Ability, 
 	window.Modifier = $scope.Modifier = Modifier;
 	window.Language = $scope.Language = Language;
 	window.Sound = $scope.Sound = Sound;
+	window.Unit = $scope.Unit = Unit;
 	$scope.common = common;
 	$scope.jQuery = $;
 
