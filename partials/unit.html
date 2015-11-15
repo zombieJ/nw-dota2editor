@@ -53,25 +53,50 @@
 		<div class="tab-content ability-cntr-body">
 			<div data-id="ability" class="tab-pane fade in active">
 				<ul class="nav nav-pills">
-					<li ng-repeat="attrGroup in Unit.AttrList" ng-class="{active: currentTab === attrGroup.value}" ng-show="attrGroup.showFunc ? attrGroup.showFunc(this) : true;">
-						<a ng-click="setCurrentTab(attrGroup.value)">{{Locale(attrGroup.name)}}</a>
+					<li ng-repeat="attrGroup in Unit.AttrList" ng-class="{active: currentTab === attrGroup}" ng-show="attrGroup.showFunc ? attrGroup.showFunc(this) : true;">
+						<a ng-click="setCurrentTab(attrGroup)">{{Locale(attrGroup.name)}}</a>
 					</li>
 				</ul>
 
-				<div>
+				<!-- Common KV Tab -->
+				<div ng-show="currentTab.value">
 					<table class="ability-table">
-						<tbody ng-repeat="list in currentTab track by $index">
-						<tr ng-repeat="unit in list track by $index" ng-show="unit.showFunc ? unit.showFunc(this) : true;">
-							<th width="200">
-								<span class="ability-tip">{{unit.attr}}</span>
-								{{Locale(unit.attr)}}
-							</th>
-							<td class="ability-form">
-								<div attrfield attrfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Unit"></div>
-							</td>
-						</tr>
+						<tbody ng-repeat="list in currentTab.value track by $index">
+							<tr ng-repeat="unit in list track by $index" ng-if="unit.showFunc ? unit.showFunc(this) : true;">
+								<th width="200">
+									<span class="ability-tip">{{unit.attr}}</span>
+									{{Locale(unit.attr)}}
+								</th>
+								<td class="ability-form">
+									<div attrfield attrfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Unit"></div>
+								</td>
+							</tr>
 						</tbody>
 					</table>
+				</div>
+
+				<!-- Wearable Tab -->
+				<div ng-show="currentTab.name === 'Wearable'">
+					<table class="ability-table">
+						<tbody>
+							<tr ng-repeat="wearable in ability._wearableList track by $index">
+								<th width="150">
+									<span class="ability-tip">Wearable{{$index + 1}}</span>
+									{{Locale('Wearable')}}{{$index + 1}}
+								</th>
+								<td class="ability-form">
+									<input tipfield ng-model="wearable.ItemDef" data-matchfuc="" />
+								</td>
+							</tr>
+
+							<tr ng-if="ability._wearableList.length === 0">
+								<td>
+									<p>No Wearable 【没有饰品】</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<button class="btn btn-dark" ng-click="ability._wearableList.push({})">+ new wearable 【新建饰品】</button>
 				</div>
 			</div>
 		</div>

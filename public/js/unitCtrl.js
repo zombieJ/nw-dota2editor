@@ -13,7 +13,7 @@ var _unitCtrl = function(isHero) {
 		var _globalConfigKey = isHero ? "heroConfig" : "unitConfig";
 		var _filePath = isHero ? Unit.heroFilePath : Unit.filePath;
 
-		$scope.currentTab = Unit.AttrCommonList;
+		$scope.currentTab = Unit.AttrList[0];
 		$scope.setCurrentTab = function (current) {
 			$scope.currentTab = current;
 		};

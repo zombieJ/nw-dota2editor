@@ -3,7 +3,7 @@
 // ======================================================
 // =                        语言                        =
 // ======================================================
-app.factory("Unit", function($q, KV, NODE) {
+app.factory("Unit", function($q, FS) {
 	var Unit = function() {
 		var _my = this;
 
@@ -14,13 +14,42 @@ app.factory("Unit", function($q, KV, NODE) {
 		_my._comment = "";
 
 		_my.HasInventory = "-";
+		_my.ConsideredHero = "-";
 		_my.AttackCapabilities = "-";
 		_my.AttackDamageType = "-";
+		_my.CanBeDominated = "-";
+		_my.AutoAttacksByDefault = "-";
+		_my.ShouldDoFlyHeightVisual = "-";
+
+		_my._wearableList = [];
 
 		// Creature
 		_my.Creature = {};
 
 		return _my;
+	};
+
+	Unit.init = function() {
+		if (Unit.list) return;
+
+		Unit.list = {};
+
+		if(!FS) return;
+
+		FS.readFile("res/items_game.json", "utf8", function (err, data) {
+			if(err) {
+				$.dialog({
+					title: "OPS!",
+					content: "Can't load item mapping resource. 【无法加载饰品资源文件】",
+				});
+			} else {
+				var _worker = new Worker("public/js/worker/itemWorker.js");
+				_worker.onmessage = function(event) {
+					Unit.list = event.data.list;
+				};
+				_worker.postMessage(data);
+			}
+		});
 	};
 
 	// ================================================
@@ -36,6 +65,8 @@ app.factory("Unit", function($q, KV, NODE) {
 			var _key = (kv.key || "").toUpperCase();
 
 			$.each(Unit.AttrList, function(i, attrList) {
+				if(!attrList.value) return;
+
 				$.each(attrList.value, function(i, attrGroup) {
 					$.each(attrGroup, function (j, attrUnit) {
 						if (attrUnit.attr.toUpperCase() === _key) {
@@ -83,6 +114,7 @@ app.factory("Unit", function($q, KV, NODE) {
 			{group: "common", attr: "ModelScale", type: "text"},
 			{group: "common", attr: "Level", type: "text"},
 			{group: "common", attr: "HasInventory", type: "single"},
+			{group: "common", attr: "ConsideredHero", type: "single", showFunc: function($scope) {return !$scope.isHero;}},
 		],
 
 		[
@@ -91,6 +123,7 @@ app.factory("Unit", function($q, KV, NODE) {
 		],
 
 		[
+			{group: "bounty", attr: "BountyXP", type: "text"},
 			{group: "bounty", attr: "BountyGoldMin", type: "text"},
 			{group: "bounty", attr: "BountyGoldMax", type: "text"},
 		],
@@ -99,6 +132,9 @@ app.factory("Unit", function($q, KV, NODE) {
 			{group: "bounds", attr: "HealthBarOffset", type: "text"},
 			{group: "bounds", attr: "BoundsHullName", type: "text"},
 			{group: "bounds", attr: "RingRadius", type: "text"},
+		],
+		[
+			{group: "ai", attr: "vscripts", type: "text"},
 		],
 	];
 
@@ -117,7 +153,13 @@ app.factory("Unit", function($q, KV, NODE) {
 		],
 	];
 
-	Unit.AttrAbilityList = [
+	Unit.AttrSoundAbilityList = [
+		[
+			{group: "sound", attr: "SoundSet", type: "text"},
+			{group: "sound", attr: "GameSoundsFile", type: "text"},
+			{group: "sound", attr: "IdleSoundLoop", type: "text"},
+		],
+
 		[
 			{group: "ability", attr: "AbilityLayout", type: "text"},
 			{group: "ability", attr: "Ability1", type: "text"},
@@ -152,6 +194,11 @@ app.factory("Unit", function($q, KV, NODE) {
 		],
 
 		[
+			{group: "Projectile", attr: "ProjectileModel", type: "text", showFunc: function($scope) {return $scope.ability.AttackCapabilities === "DOTA_UNIT_CAP_RANGED_ATTACK";}},
+			{group: "Projectile", attr: "ProjectileSpeed", type: "text", showFunc: function($scope) {return $scope.ability.AttackCapabilities === "DOTA_UNIT_CAP_RANGED_ATTACK";}},
+		],
+
+		[
 			{group: "armor", attr: "ArmorPhysical", type: "text"},
 			{group: "armor", attr: "MagicalResistance", type: "text"},
 		],
@@ -160,6 +207,8 @@ app.factory("Unit", function($q, KV, NODE) {
 			{group: "movement", attr: "MovementCapabilities", type: "single"},
 			{group: "movement", attr: "MovementSpeed", type: "text"},
 			{group: "movement", attr: "MovementTurnRate", type: "text"},
+			{group: "movement", attr: "HasAggressiveStance", type: "boolean"},
+			{group: "movement", attr: "FollowRange", type: "text"},
 		],
 	];
 
@@ -169,6 +218,7 @@ app.factory("Unit", function($q, KV, NODE) {
 			{group: "status", attr: "StatusHealthRegen", type: "text"},
 			{group: "status", attr: "StatusMana", type: "text"},
 			{group: "status", attr: "StatusManaRegen", type: "text"},
+			{group: "status", attr: "StatusStartingMana", type: "text"},
 		],
 
 		[
@@ -183,10 +233,25 @@ app.factory("Unit", function($q, KV, NODE) {
 		],
 
 		[
+			{group: "others", attr: "IsAncient", type: "boolean"},
+			{group: "others", attr: "IsNeutralUnitType", type: "boolean"},
+			{group: "others", attr: "CanBeDominated", type: "single"},
+			{group: "others", attr: "AutoAttacksByDefault", type: "single"},
+			{group: "others", attr: "ShouldDoFlyHeightVisual", type: "single"},
+			{group: "others", attr: "WakesNeutrals", type: "boolean"},
+		],
+
+		[
+			{group: "AttackDefend", attr: "CombatClassAttack", type: "single"},
+			{group: "AttackDefend", attr: "CombatClassDefend", type: "single"},
+		],
+
+		[
 			{group: "Team", attr: "TeamName", type: "text"},
-			{group: "Team", attr: "CombatClassAttack", type: "single"},
-			{group: "Team", attr: "CombatClassDefend", type: "single"},
 			{group: "Team", attr: "UnitRelationShipClass", type: "single"},
+			{group: "Team", attr: "SelectionGroup", type: "text"},
+			{group: "Team", attr: "SelectOnSpawn", type: "boolean"},
+			{group: "Team", attr: "IgnoreAddSummonedToSelection", type: "boolean"},
 		],
 	];
 
@@ -206,26 +271,24 @@ app.factory("Unit", function($q, KV, NODE) {
 			{group: "Level", attr: "BountyGain", type: "text"},
 			{group: "Level", attr: "XPGain", type: "text"},
 		],
-
-		[
-			{group: "Wearable", attr: "AttachWearables", type: "wearable"},
-		],
 	];
+	Unit.AttrCreatureList.path = "Creature";
 
 	Unit.AttrList = [
 		{name: "Common", value: Unit.AttrCommonList},
 		{name: "Hero", value: Unit.AttrHeroList, showFunc: function($scope) {return $scope.isHero;}},
-		{name: "Ability", value: Unit.AttrAbilityList},
+		{name: "SoundAbility", value: Unit.AttrSoundAbilityList},
 		{name: "AttackDefenseSpeed", value: Unit.AttrAttackDefenseSpeedList},
 		{name: "HPMPVision", value: Unit.AttrHPMPVisionList},
-		{name: "Others", value: Unit.AttrOtherList},
 		{name: "Creature", value: Unit.AttrCreatureList, showFunc: function($scope) {return $scope.isHero || ($scope.ability && $scope.ability.BaseClass === "npc_dota_creature");}},
+		{name: "Wearable", showFunc: function($scope) {return $scope.isHero || ($scope.ability && $scope.ability.BaseClass === "npc_dota_creature");}},
+		{name: "Others", value: Unit.AttrOtherList},
 	];
 
 	// ================================================
 	// =                     枚举                     =
 	// ================================================
-	Unit.HasInventory = [
+	Unit.HasInventory = Unit.ConsideredHero = Unit.CanBeDominated = Unit.AutoAttacksByDefault = Unit.ShouldDoFlyHeightVisual = [
 		["-","默认"],
 		["0","否"],
 		["1","是"],

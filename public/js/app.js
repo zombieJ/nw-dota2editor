@@ -456,7 +456,7 @@ app.controller('main', function($scope, $route, $location, $q, Locale, Ability, 
 		// Sub Menu
 		var _subMenu = ele.find(".app-menu:visible:first");
 		if(_subMenu.length) _refreshMenu(_subMenu);
-	};
+	}
 	window.refreshMenu = function(ele) {
 		ele = $(ele);
 		clearInterval(_refreshMenuID);
@@ -482,4 +482,5 @@ app.controller('main', function($scope, $route, $location, $q, Locale, Ability, 
 	// =                            初始化                            =
 	// ================================================================
 	Sound.init();
+	Unit.init();
 });
