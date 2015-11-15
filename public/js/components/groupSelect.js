@@ -34,7 +34,7 @@ components.directive('groupselect', function($compile) {
 					cntr.append($(
 							'<label class="'+ (item[2] ? "text-primary": "") +  ' checkbox" style="width: 360px;">'+
 								'<input type="checkbox" ' + ($scope.ability[tgtattr][item[0]] ? 'checked' : '') + ' data-name="' + item[0] + '">'+
-								item[0].replace("DOTA_UNIT_TARGET_", "").replace("FLAG_", "").replace("DOTA_ABILITY_BEHAVIOR_", "") +
+								item[0].replace("DOTA_UNIT_TARGET_", "").replace("DECLARE_PURCHASES_", "").replace("FLAG_", "").replace("DOTA_ABILITY_BEHAVIOR_", "") +
 								' 【' + item[1] + '】'+
 							'</label>'
 					));
@@ -65,7 +65,7 @@ components.directive('groupselect', function($compile) {
 						_field = $(
 							'<a href="javascript: void(0);" ng-click="editGroup()">' +
 								'<span class="label label-default" ng-repeat="(unitName, unitValue) in ability[tgtattr || attr]" ng-if="unitValue">' +
-									'{{::unitName.replace("DOTA_UNIT_TARGET_", "").replace("FLAG_", "").replace("DOTA_ABILITY_BEHAVIOR_", "")}} ' +
+									'{{::unitName.replace("DOTA_UNIT_TARGET_", "").replace("DECLARE_PURCHASES_", "").replace("FLAG_", "").replace("DOTA_ABILITY_BEHAVIOR_", "")}} ' +
 									'【{{common.array.find(unitName, getItemList(), "0")[1]}}】' +
 								'</span>'+
 								' <span class="glyphicon glyphicon-pencil"></span>'+

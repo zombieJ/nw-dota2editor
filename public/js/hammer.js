@@ -422,6 +422,25 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		// ================================================================
+		// =                           Pre-cache                          =
+		// ================================================================
+		$scope.itemPrecacheList = function() {
+			var $textarea = $("<textarea class='form-control' rows='20'>");
+			var _text = "";
+			$.each($scope.abilityList, function(i, item) {
+				if(item.getPrecacheList().length) {
+					_text += 'PrecacheItemByNameSync("' + item._name + '", context)\n';
+					//_text += 'PrecacheItemByNameAsync("' + item._name + '", function(...) end)\n';
+				}
+			});
+			$textarea.val(_text.replace(/\n$/, ""));
+			$.dialog({
+				title: "Precache Script 【缓存脚本】",
+				content: $textarea
+			});
+		};
+
+		// ================================================================
 		// =                        File Operation                        =
 		// ================================================================
 		// 读取配置文件
@@ -592,7 +611,6 @@ var _abilityCtrl = function(isItem) {
 		// =                          Application                          =
 		// =================================================================
 		$scope.$on("AppSaved",function() {
-			console.log("Saved!");
 			$scope.setAbility($scope.ability);
 		});
 

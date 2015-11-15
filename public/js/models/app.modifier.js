@@ -253,6 +253,7 @@ app.factory("Modifier", function(Event) {
 		// 修饰器属性
 		if(this._propertyList.length) {
 			writer.write('"Properties"');
+			writer.write("{");
 			writer.write;
 			$.each(this._propertyList, function(i, _propUnit) {
 				writer.write('"$1"		"$2"', _propUnit[0], _propUnit[1]);

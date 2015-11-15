@@ -106,7 +106,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 			this.fillAttr("item", "ItemShareability", "single", "-");
 
 			this.fillAttr("item", "ItemPurchasable", "single", "-");
-			this.fillAttr("item", "ItemDeclarations", "single", "-");
+			this.fillAttr("item", "ItemDeclarations", "group", "-");
 			this.fillAttr("item", "ItemKillable", "boolean", true);
 			this.fillAttr("item", "ItemAlertable", "boolean", false);
 			this.fillAttr("item", "ItemPermanent", "single", "-");
