@@ -88,7 +88,7 @@ var _unitCtrl = function(isHero) {
 			$scope.setAbility(ability);
 		};
 
-		// 列表框布局
+		// List Container layout
 		var winWidth;
 		$(window).on("resize.abilityList", function () {
 			setTimeout(function () {

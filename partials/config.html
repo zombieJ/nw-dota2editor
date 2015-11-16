@@ -1,0 +1,10 @@
+<div class="form-group">
+	<label for="streamKey">
+		Stream API Key
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('streamKeyDesc')}}"></span>
+	</label>
+	<input type="text" class="form-control" id="streamKey" ng-model="config.streamAPIKey">
+</div>
+<p class="text-muted">* {{Locale('applyStreamKey')}} https://steamcommunity.com/dev/apikey</p>
+
+<button class="btn btn-primary" ng-click="saveConfig()">{{Locale('Save')}}</button>

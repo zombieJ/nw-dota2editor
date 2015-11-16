@@ -26,7 +26,9 @@ app.factory("Locale", function() {
 		Unit: "单位",
 		Hero: "英雄",
 		Ability: "技能",
+		Save: "保存",
 		Item: "物品",
+		Config: "配置",
 		Language: "语言",
 		Common: "常规",
 		SoundAbility: "声音|技能",
@@ -220,6 +222,12 @@ app.factory("Locale", function() {
 		AttributeAgilityGain: "升级敏捷获得",
 		AttributeBaseIntelligence: "基础智力",
 		AttributeIntelligenceGain: "升级智力获得",
+
+		// 帮助
+		connectionError: "网络连接错误，请重试",
+		streamKeyDesc: "用于访问Stream API获取Dota2数据，未填写只会影响少部分功能。",
+		applyStreamKey: "如果您还没有Stream API Key，可以通过该地址申请（中国部分地区需要通过VPN访问）：",
+		streamKeyNotSet: "未设置Stream API Key，您可能会遇到数据无法显示。于配置页设置/申请Stream API Key。",
 	};
 
 	return Locale;

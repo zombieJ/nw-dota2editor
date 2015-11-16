@@ -26,6 +26,9 @@ app.config(function($routeProvider) {
 	}).when('/language', {
 		templateUrl: 'partials/language.html',
 		controller: 'languageCtrl'
+	}).when('/config', {
+		templateUrl: 'partials/config.html',
+		controller: 'configCtrl'
 	}).otherwise({
 		redirectTo : '/index'
 	});

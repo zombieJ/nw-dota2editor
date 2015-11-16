@@ -1,6 +1,5 @@
 'use strict';
 
-
 hammerControllers.controller('languageCtrl', function ($scope, globalContent) {
 	$scope.languageList = globalContent.languageList;
 	$scope.lang = $scope.languageList[0];

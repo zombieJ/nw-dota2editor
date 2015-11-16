@@ -3,7 +3,7 @@
 // ======================================================
 // =                        语言                        =
 // ======================================================
-app.factory("Unit", function($q, FS) {
+app.factory("Unit", function($q, $http, FS, Locale) {
 	var Unit = function() {
 		var _my = this;
 
@@ -77,11 +77,39 @@ app.factory("Unit", function($q, FS) {
 		return _matchList;
 	};
 
-	Unit.getWearableImagePath = function(key) {
-		var _path = common.getValueByPath(Unit, "list." + key + ".image_inventory", null);
-		if(!_path) return null;
+	Unit.showWearablePreview = function(key) {
+		var _item = common.getValueByPath(Unit, "list." + key, null);
+		if(!_item) return null;
 
-		return "http://git.oschina.net/zombiej/dota2-econ-heroes/raw/master/" + _path.replace("econ/heroes/", "") + ".png";
+		var _path = _item.image_inventory;
+
+		var $content = $("<div class='text-center'>").append($("<p>").text(_item.model_player));
+		var $loading = $('<i class="fa fa-refresh fa-spin"></i>').prependTo($content);
+
+		if(_path) {
+			var _streamAPIKey = localStorage.getItem("streamAPIKey") || "";
+			if(!_streamAPIKey) {
+				$content.prepend($("<img>").attr("src", "http://git.oschina.net/zombiej/dota2-econ-heroes/raw/master/" + _path.replace("econ/heroes/", "") + ".png"));
+				$content.append($("<small class='text-warning'>").text(Locale('streamKeyNotSet')));
+				$loading.remove();
+			} else {
+				var _name = _item.image_inventory.match(/[^\/]*$/)[0].toLowerCase();
+				$http.get("https://api.steampowered.com/IEconDOTA2_570/GetItemIconPath/v1/?key=" + _streamAPIKey + "&iconname=" + _name).then(function (ret) {
+					var _path = common.getValueByPath(ret, "data.result.path");
+					var _url = "http://cdn.dota2.com/apps/570/" + _path;
+					$content.prepend($("<img>").attr("src", _url));
+					$loading.remove();
+				}, function() {
+					$content.prepend($("<p class='text-danger'>").text(Locale('connectionError')));
+					$loading.remove();
+				});
+			}
+		}
+
+		$.dialog({
+			title: _item.name,
+			content: $content
+		});
 	};
 
 	// ================================================

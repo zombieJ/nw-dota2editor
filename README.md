@@ -23,8 +23,8 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 
 ### TODO list
 * link each other
+* item compound formula auto generate
 * sound finder
-* Auto check support modify directly
 * Auto generate english language version
 * Auto create empty modifier
 * Custom sound support:http://www.dota2rpg.com/thread-2491-1-1.html

@@ -91,13 +91,16 @@
 								</th>
 								<td class="ability-form">
 									<input tipfield ng-model="wearable.ItemDef" data-matchfuc="Unit.match" />
-									<div class="img-preview" ng-if="Unit.getWearableImagePath(wearable.ItemDef)">
+									<!--div class="img-preview" ng-if="Unit.getWearableImagePath(wearable.ItemDef)">
 										<button class="btn btn-default fa fa-picture-o"></button>
 										<div class="img-preview-cntr">
 											<h2>{{Unit.list[wearable.ItemDef].name}}</h2>
 											<p>{{Unit.list[wearable.ItemDef].model_player}}</p>
 											<img ng-src="{{Unit.getWearableImagePath(wearable.ItemDef)}}">
 										</div>
+									</div-->
+									<div class="img-preview" ng-show="Unit.list[wearable.ItemDef]">
+										<button class="btn btn-default fa fa-picture-o" ng-click="Unit.showWearablePreview(wearable.ItemDef)"></button>
 									</div>
 								</td>
 							</tr>

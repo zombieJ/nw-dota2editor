@@ -64,6 +64,7 @@
 	<script src="public/js/hammer.js"></script>
 	<script src="public/js/unitCtrl.js"></script>
 	<script src="public/js/languageCtrl.js"></script>
+	<script src="public/js/configCtrl.js"></script>
 </head>
 <body ng-controller="main">
 
@@ -87,6 +88,7 @@
 				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/ability')}"><a href="#/ability">{{Locale('Ability')}}</a></li>
 				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/item')}"><a href="#/item">{{Locale('Item')}}</a></li>
 				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/language')}"><a href="#/language">{{Locale('Language')}}</a></li>
+				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/config')}"><a href="#/config">{{Locale('Config')}}</a></li>
 			</ul>
 			<ul class="nav navbar-nav pull-right">
 				<li ng-show="globalContent.isOpen">
