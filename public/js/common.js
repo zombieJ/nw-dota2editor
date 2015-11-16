@@ -88,8 +88,6 @@ common.isEmpty = function(val) {
 };
 
 // ======================= Log ========================
-var _DEBUG_KV = false;
-var _DEBUG_Ability = false;
 var _DEBUG_IGNORE_LIST = ["KV", "Ability", "Unit"];
 
 window._LOG = function (type, lvl) {

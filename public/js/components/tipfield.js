@@ -90,7 +90,10 @@ components.directive('tipfield', function($compile) {
 					$scope._alternativeCntr = $(
 						'<ul class="app-menu" ng-show="currentList.length">'+
 							'<li ng-repeat="item in currentList track by $index" ng-mousedown="selectItem(item)" ng-class="{selected: $index === selected}">' +
-								'<a>{{item.key || item[0]}}</a>' +
+								'<a>' +
+									'{{item.key || item[0]}} ' +
+									'<span ng-if="item[1]">[{{item[1]}}]</span>' +
+								'</a>' +
 							'</li>'+
 						'</ul>'
 					);

@@ -48,6 +48,38 @@ hr {
 	display: block;
 }
 
+.ability-form .img-preview {
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 2;
+}
+
+.ability-form .img-preview .img-preview-cntr {
+	position: fixed;
+	display: none;
+	left: 10px;
+	top:60px;
+	z-index: 5;
+	background: #FFF;
+	border: 2px solid #CCC;
+	padding: 15px;
+	text-align: center;
+	box-shadow: 2px 2px 5px rgba(90,90,90,0.5);
+}
+.ability-form .img-preview:hover .img-preview-cntr {
+	display: block;
+}
+
+.ability-form .img-preview .img-preview-cntr h2 {
+	margin: 0 0 10px 0;
+	font-size: 20px;
+}
+
+.ability-form .img-preview .img-preview-cntr p {
+	margin: 0 0 10px 0;
+}
+
 .ability-table {
 	width: 100%;
 	border: 3px solid #C5C5C5;

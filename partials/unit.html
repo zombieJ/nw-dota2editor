@@ -80,12 +80,25 @@
 					<table class="ability-table">
 						<tbody>
 							<tr ng-repeat="wearable in ability._wearableList track by $index">
+								<th width="30">
+									<a ng-click="common.array.remove(wearable, ability._wearableList)">
+										[X]
+									</a>
+								</th>
 								<th width="150">
 									<span class="ability-tip">Wearable{{$index + 1}}</span>
 									{{Locale('Wearable')}}{{$index + 1}}
 								</th>
 								<td class="ability-form">
-									<input tipfield ng-model="wearable.ItemDef" data-matchfuc="" />
+									<input tipfield ng-model="wearable.ItemDef" data-matchfuc="Unit.match" />
+									<div class="img-preview" ng-if="Unit.getWearableImagePath(wearable.ItemDef)">
+										<button class="btn btn-default fa fa-picture-o"></button>
+										<div class="img-preview-cntr">
+											<h2>{{Unit.list[wearable.ItemDef].name}}</h2>
+											<p>{{Unit.list[wearable.ItemDef].model_player}}</p>
+											<img ng-src="{{Unit.getWearableImagePath(wearable.ItemDef)}}">
+										</div>
+									</div>
 								</td>
 							</tr>
 

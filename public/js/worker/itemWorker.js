@@ -8,6 +8,7 @@ onmessage = function(event) {
 		_list[key] = {
 			name: value.name,
 			image_inventory: value.image_inventory,
+			model_player: value.model_player,
 		};
 	};
 

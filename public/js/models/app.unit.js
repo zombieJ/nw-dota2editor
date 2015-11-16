@@ -52,6 +52,38 @@ app.factory("Unit", function($q, FS) {
 		});
 	};
 
+	Unit.match = function(match) {
+		match = (match || "").trim().toUpperCase();
+		if(!match || !Unit.list) return [];
+
+		var _matchList = [];
+		var _maxMatch = 10;
+		$.each(Unit.list, function(key, value) {
+			if(!value) return;
+
+			if(
+				(key+"").toUpperCase().indexOf(match) !== -1 ||
+				(value.name || "").toUpperCase().indexOf(match) !== -1 ||
+				(value.image_inventory || "").toUpperCase().indexOf(match) !== -1 ||
+				(value.model_player || "").toUpperCase().indexOf(match) !== -1
+			) {
+				_maxMatch -= 1;
+				_matchList.push([key, value.name]);
+
+				if(_maxMatch < 0) return false;
+			}
+		});
+
+		return _matchList;
+	};
+
+	Unit.getWearableImagePath = function(key) {
+		var _path = common.getValueByPath(Unit, "list." + key + ".image_inventory", null);
+		if(!_path) return null;
+
+		return "http://git.oschina.net/zombiej/dota2-econ-heroes/raw/master/" + _path.replace("econ/heroes/", "") + ".png";
+	};
+
 	// ================================================
 	// =                     解析                     =
 	// ================================================
@@ -64,8 +96,9 @@ app.factory("Unit", function($q, FS) {
 			var _attr = null;
 			var _key = (kv.key || "").toUpperCase();
 
+			// Find attr key(common)
 			$.each(Unit.AttrList, function(i, attrList) {
-				if(!attrList.value) return;
+				if(!attrList.value || attrList.value.path) return;
 
 				$.each(attrList.value, function(i, attrGroup) {
 					$.each(attrGroup, function (j, attrUnit) {
@@ -87,6 +120,36 @@ app.factory("Unit", function($q, FS) {
 				if (typeof kv.value === "string") {
 					_unit[kv.key] = kv.value;
 				}
+			} else if(_key === "CREATURE") {
+				// Creature
+				$.each(kv.value, function(i, _ckv) {
+					var _cAttr;
+					$.each(Unit.AttrCreatureList, function(j, attrGroup) {
+						_cAttr = common.array.find(_ckv.key, attrGroup, "attr", false, false);
+						if(_cAttr) return false;
+					});
+
+					if(_cAttr) {
+						_unit[_cAttr.attr] = _ckv.value;
+					} else if(_ckv.key.toUpperCase() === "ATTACHWEARABLES") {
+						// Loop Wearable
+						$.each(_ckv.value, function(j, wearableKV) {
+							var _wearable = {};
+							// Loop Prop
+							$.each(wearableKV.value, function(k, prop) {
+								if(prop.key.toUpperCase() === "ITEMDEF") {
+									_wearable.ItemDef = prop.value;
+								} else {
+									_WARN("UNIT", 0, "Unmatched Unit Creature Wearable Key:", prop.key, prop.value);
+								}
+							});
+							_unit._wearableList.push(_wearable);
+						});
+					} else {
+						_WARN("UNIT", 0, "Unmatched Unit Creature type:", _ckv.key, _ckv.value);
+					}
+				});
+
 			} else {
 				_WARN("UNIT", 0, "Unmatched Unit type:", kv.key, kv.value);
 			}
@@ -191,6 +254,7 @@ app.factory("Unit", function($q, FS) {
 			{group: "attack", attr: "AttackAnimationPoint", type: "text"},
 			{group: "attack", attr: "AttackAcquisitionRange", type: "text"},
 			{group: "attack", attr: "AttackRange", type: "text"},
+			{group: "attack", attr: "AttackRangeBuffer", type: "text"},
 		],
 
 		[
@@ -281,7 +345,7 @@ app.factory("Unit", function($q, FS) {
 		{name: "AttackDefenseSpeed", value: Unit.AttrAttackDefenseSpeedList},
 		{name: "HPMPVision", value: Unit.AttrHPMPVisionList},
 		{name: "Creature", value: Unit.AttrCreatureList, showFunc: function($scope) {return $scope.isHero || ($scope.ability && $scope.ability.BaseClass === "npc_dota_creature");}},
-		{name: "Wearable", showFunc: function($scope) {return $scope.isHero || ($scope.ability && $scope.ability.BaseClass === "npc_dota_creature");}},
+		{name: "Wearable", showFunc: function($scope) {return $scope.ability && $scope.ability.BaseClass === "npc_dota_creature";}},
 		{name: "Others", value: Unit.AttrOtherList},
 	];
 
@@ -315,6 +379,13 @@ app.factory("Unit", function($q, FS) {
 	];
 
 	Unit.AttackDamageType = [];
+
+	Unit.AttributePrimary = [
+		["-", "默认"],
+		["DOTA_ATTRIBUTE_AGILITY", "敏捷"],
+			["DOTA_ATTRIBUTE_INTELLECT", "智力"],
+			["DOTA_ATTRIBUTE_STRENGTH", "力量"],
+	];
 
 	Unit.MovementCapabilities = [
 		["-", "默认"],

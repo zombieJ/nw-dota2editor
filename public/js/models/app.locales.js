@@ -154,6 +154,7 @@ app.factory("Locale", function() {
 		AttackDamageMin: "攻击最小值",
 		AttackDamageType: "攻击伤害类型【无效】",
 		AttackRange: "攻击范围",
+		AttackRangeBuffer: "攻击缓冲范围",
 		AttackRate: "攻击速率",
 		BoundsHullName: "碰撞体积",
 		BountyGain: "奖励获得",
