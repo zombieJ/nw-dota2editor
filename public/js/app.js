@@ -88,7 +88,27 @@ app.factory("FS", function() {
 	}
 });
 
-app.controller('main', function($scope, $route, $location, $q, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE) {
+app.factory("UI", function($rootScope) {
+	var UI = function() {};
+
+	// Delete item from an array
+	UI.arrayDelete = function(item, array) {
+		$.dialog({
+			title: "Delete Confirm",
+			content: "Are you sure to delete?",
+			confirm: true
+		}, function(ret) {
+			if(!ret) return;
+
+			common.array.remove(item, array);
+			$rootScope.$apply();
+		});
+	};
+
+	return UI;
+});
+
+app.controller('main', function($scope, $route, $location, $q, UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE) {
 	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
 	window.Event = $scope.Event = Event;
@@ -97,6 +117,7 @@ app.controller('main', function($scope, $route, $location, $q, Locale, Ability, 
 	window.Language = $scope.Language = Language;
 	window.Sound = $scope.Sound = Sound;
 	window.Unit = $scope.Unit = Unit;
+	window.UI = $scope.UI = UI;
 	$scope.common = common;
 	$scope.jQuery = $;
 

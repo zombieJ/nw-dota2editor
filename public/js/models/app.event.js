@@ -19,8 +19,10 @@ app.factory("Event", function(Operation) {
 		var _list = [];
 
 		$.each(this._operationList, function(i, operation) {
-			var _effect = operation.getPrecache();
-			if(_effect) _list.push(_effect);
+			var _effectList = operation.getPrecache();
+			if(_effectList) {
+				_list.push.apply(_list, _effectList);
+			}
 		});
 
 		return _list;

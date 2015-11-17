@@ -9,10 +9,11 @@ components.directive('eventoperation', function($compile) {
 			path: "@",
 			ability: "=",
 		},
-		controller: function($scope, $element, $attrs, Ability, Event, Operation) {
+		controller: function($scope, $element, $attrs, Ability, Event, Operation,UI) {
 			$scope.Ability = Ability;
 			$scope.Event = Event;
 			$scope.Operation = Operation;
+			$scope.UI = UI;
 			$scope.common = common;
 
 			$scope.EventOperation = $scope.isitem ? Operation.EventItemOperation : Operation.EventOperation;
@@ -44,7 +45,7 @@ components.directive('eventoperation', function($compile) {
 		'<div class="ability-operation-list">'+
 			'<div ng-repeat="_index in optOperationNum track by $index" ng-show="container[path][_index]" class="ability-operation">'+
 				'<div class="ability-operation-header">' +
-					'<a class="fa fa-trash" ng-click="common.array.remove(container[path][_index], container[path])"></a>' +
+					'<a class="fa fa-trash" ng-click="UI.arrayDelete(container[path][_index], container[path])"></a>' +
 					'<select class="form-control" ng-model="container[path][_index].name">'+
 						'<option ng-repeat="_operation in EventOperation track by $index" value="{{_operation[0]}}">{{_operation[0]}} 【{{_operation[1]}}】</option>'+
 					'</select>'+

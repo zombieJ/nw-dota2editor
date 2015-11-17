@@ -14,10 +14,25 @@ app.factory("Operation", function(Sound) {
 	};
 
 	Operation.prototype.getPrecache = function() {
-		if(this.name === "AttachEffect" || this.name === "FireEffect" || this.name === "TrackingProjectile" || this.name === "LinearProjectile") {
-			return this.attrs["EffectName"] ? ["particle", this.attrs["EffectName"]] : null;
-		} else if(this.name === "FireSound") {
-			return this.attrs["EffectName"] ? ["soundfile", Sound.revertMap[this.attrs["EffectName"]]] : null;
+		var _my = this;
+
+		if(_my.name === "AttachEffect" || _my.name === "FireEffect" || _my.name === "TrackingProjectile" || _my.name === "LinearProjectile") {
+			return _my.attrs["EffectName"] ? [["particle", _my.attrs["EffectName"]]] : null;
+		} else if(_my.name === "FireSound") {
+			return _my.attrs["EffectName"] ? [["soundfile", Sound.revertMap[_my.attrs["EffectName"]]]] : null;
+		} else {
+			var _operation = common.array.find(_my.name, Operation.EventItemOperation, "0", false, false);
+			if(_operation) {
+				var _list = $.map(_operation[3], function(optAttr) {
+					if(Operation.EventOperationMap[optAttr].type !== "operation") return;
+					return $.map( _my.attrs[optAttr] || [], function(_operation) {
+						return _operation.getPrecache();
+					});
+				});
+				return _list;
+			} else {
+				_WARN("Operation", 0, "Precache Operation not find:", _my.name);
+			}
 		}
 		// TODO: Model
 	};
