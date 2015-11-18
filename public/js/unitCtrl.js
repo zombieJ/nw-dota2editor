@@ -1,7 +1,7 @@
 'use strict';
 
 var _unitCtrl = function(isHero) {
-	return function ($scope, globalContent, NODE, Unit) {
+	return function ($scope, globalContent, NODE, Unit, KV) {
 		if (!globalContent.isOpen) return;
 
 		window.scope = $scope;
@@ -25,6 +25,11 @@ var _unitCtrl = function(isHero) {
 		// ================================================================
 		$scope.setAbility = function (ability) {
 			$scope.ability = ability;
+		};
+
+		$scope.newWearable = function () {
+			var _wearable = new KV("wearable", [new KV("ItemDef")]);
+			$scope.ability.kv.assumeKey('Creature.AttachWearables', true).value.push(_wearable);
 		};
 
 		// ================================================================
@@ -83,6 +88,109 @@ var _unitCtrl = function(isHero) {
 		});
 
 		// ================================================================
+		// =                     List Item Operation                      =
+		// ================================================================
+		$scope.setAbilityMarkUsage = function(usage) {
+			if(!$scope.config) return;
+
+			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
+			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+			if(usage) {
+				_ability.markUsage = usage;
+			} else {
+				delete _ability.markUsage;
+			}
+		};
+
+		$scope.setAbilityMarkColor = function(color) {
+			if(!$scope.config) return;
+
+			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
+			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+			if(color) {
+				_ability.markColor = color;
+			} else {
+				delete _ability.markColor;
+			}
+		};
+
+		$scope.setAbilityEditorAlias = function() {
+			if(!$scope.config) return;
+
+			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
+			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+
+			var $input = $("<input type='text' class='form-control' />");
+			$input.val(_ability.editorAliasName || "");
+			$.dialog({
+				title: "Alias Name in Editor 【编辑器中的别名】",
+				content: $input,
+				confirm: true
+			}, function(ret) {
+				if(!ret) return;
+
+				var _alias = $input.val();
+				if(_alias) {
+					_ability.editorAliasName = _alias;
+				} else {
+					delete _ability.editorAliasName;
+				}
+				$scope.$apply();
+			});
+			setTimeout(function() {
+				$input.focus();
+			}, 500);
+		};
+
+		$scope.copyAbility = function() {
+			if(!_menuAbility) return;
+
+			/*var _writer = new KV.Writer();
+			_menuAbility.doWriter(_writer);
+			var _data = _writer._data;
+
+			// 复制技能
+			var _clone = Ability.parse(KV.parse(_data), isItem);
+			_clone._changed = true;
+			$scope.assignAutoID(_clone);*/
+			var _clone = new Unit(_menuAbility.kv.clone());
+			_clone._name += "_clone";
+			_clone._changed = true;
+
+			// 复制配置
+			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
+			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+			var _cloneAbility = _abilities[_clone._name] = _abilities[_clone._name] || {};
+			$.extend(_cloneAbility, _ability, true);
+			if(_cloneAbility.editorAliasName) {
+				_cloneAbility.editorAliasName += " copy";
+			}
+
+			var _index = $.inArray(_menuAbility, $scope.abilityList);
+			$scope.setAbility(_clone);
+			$scope.abilityList.splice(_index + 1, 0, $scope.ability);
+		};
+
+		$scope.deleteAbility = function() {
+			if(!_menuAbility) return;
+
+			$.dialog({
+				title: "Delete Confirm 【删除确认】",
+				content: "Do you want to delete '"+_menuAbility._name+"'",
+				confirm: true
+			}, function(ret) {
+				if(!ret) return;
+
+				var _isCurrent = $scope.ability === _menuAbility;
+				common.array.remove(_menuAbility, $scope.abilityList);
+				if(_isCurrent) {
+					$scope.setAbility($scope.abilityList[0]);
+				}
+				$scope.$apply();
+			});
+		};
+
+		// ================================================================
 		// =                              UI                              =
 		// ================================================================
 		// Select ability
@@ -106,7 +214,7 @@ var _unitCtrl = function(isHero) {
 			}, 100);
 		}).resize();
 
-		// 禁止列表框滚屏
+		// Prevent list container scroll
 		$("#listCntr").on("mousewheel.abilityList", function (e) {
 			var _my = $(this);
 
@@ -118,6 +226,23 @@ var _unitCtrl = function(isHero) {
 			if ((_delta > 0 && _top <= 0) || (_delta < 0 && _top + _height >= _scrollHeight)) {
 				e.preventDefault();
 			}
+		});
+
+		// Right click on list item
+		$("#abilityMenu").hide();
+		var _menuAbility;
+		$(document).on("contextmenu.abilityList", "#listCntr .listItem", function (e) {
+			var $menu = $("#abilityMenu").show();
+			common.ui.offsetWin($menu, {
+				left: e.originalEvent.x,
+				top: e.originalEvent.y
+			});
+
+			_menuAbility = angular.element(this).scope()._ability;
+			refreshMenu("#abilityMenu");
+
+			e.preventDefault();
+			return false;
 		});
 	};
 };

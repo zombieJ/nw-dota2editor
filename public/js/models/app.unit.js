@@ -7,6 +7,11 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 	var Unit = function(kv) {
 		var _my = this;
 		_my.kv = kv || new KV("undefined", []);
+		_my._changed = false;
+
+		// Refresh un-assigned list
+		_my.unassignedList = [];
+		_my.refreshUnassignedList();
 
 		// ========================================
 		// =                 Prop                 =
@@ -94,7 +99,7 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 		if(_path) {
 			// Cache before reborn version
 			var $img = $("<img>");
-			$img.attr("src", "http://git.oschina.net/zombiej/dota2-econ-heroes/raw/master/" + _path.replace("econ/heroes/", "") + ".png");
+			$img.attr("src", "http://git.oschina.net/zombiej/dota2-econ-heroes/raw/master/" + _path.replace("econ/", "") + ".png");
 			$content.prepend($img);
 			$img.load(function() {
 				$loading.remove();
@@ -202,6 +207,57 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 		});
 
 		return _unit;*/
+	};
+
+	// ================================================
+	// =                    格式化                    =
+	// ================================================
+	Unit.prototype.doWriter = function(writer) {
+		var _keepKV = localStorage.getItem("saveKeepKV") === "true";
+
+		var _wearableList = this.kv.getValueByPath('Creature.AttachWearables', []);
+		$.each(_wearableList, function(i, _wearable) {
+			_wearable.key = "Wearable" + (i + 1);
+		});
+
+		writer.writeContent(this.kv.toString(_keepKV));
+	};
+
+	// ================================================
+	// =                寻找未定义键值                =
+	// ================================================
+	//_my.unassignedList = [];
+	//_my.refreshUnassignedList();
+
+	Unit.prototype.refreshUnassignedList = function() {
+		var _my = this;
+		_my.unassignedList = [];
+
+		$.each(this.kv.value, function(i, kv) {
+			var _key = (kv.key || "").toUpperCase();
+			var _match = false;
+
+			if(_key === "CREATURE") return;
+			$.each(Unit.AttrList, function(i, attrList) {
+				if (!attrList.value) return;
+
+				$.each(attrList.value, function (i, attrGroup) {
+					$.each(attrGroup, function (j, attrUnit) {
+						if (!attrUnit.path && attrUnit.attr.toUpperCase() === _key) {
+							_match = true;
+							return false;
+						}
+					});
+					if(_match) return false;
+				});
+				if(_match) return false;
+			});
+
+			if(!_match) {
+				_my.unassignedList.push(kv);
+			}
+		});
+		console.log(_my.unassignedList);
 	};
 
 	// ================================================

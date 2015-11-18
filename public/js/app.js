@@ -171,6 +171,51 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 	};
 
 	// 保存项目
+	function saveUnitFunc(isHero) {
+		return function() {
+			var _deferred_file = $q.defer();
+			var _deferred_config = $q.defer();
+			var _globalListKey = isHero ? "heroList" : "unitList";
+			var _globalConfigKey = isHero ? "heroConfig" : "unitConfig";
+			var _filePath = isHero ? Unit.heroFilePath : Unit.filePath;
+
+			// File
+			if(!globalContent[_globalListKey]) {
+				_deferred_file.resolve(4);
+			} else {
+				var _writer = new KV.Writer();
+
+				if(isHero) {
+					_writer.withHeader("DOTAHeroes", {Version: 1});
+				} else {
+					_writer.withHeader("DOTAUnits", {Version: 1});
+				}
+
+				$.each(globalContent[_globalListKey], function(i, ability) {
+					_writer.write('');
+					ability.doWriter(_writer);
+					ability._changed = false;
+				});
+				_writer.withEnd();
+
+				_writer.save(_filePath, "utf8",_deferred_file);
+			}
+
+			// Config
+			if(!globalContent[_globalConfigKey]) {
+				_deferred_config.resolve(4);
+			} else {
+				_deferred_config = NODE.saveFile(isHero ? Unit.heroConfig : Unit.unitConfig, "utf8", JSON.stringify(globalContent[_globalConfigKey], null, "\t"));
+			}
+
+			var _deferred_all = $q.all([_deferred_file.promise, _deferred_config.promise]).then(function(result) {
+				return result[0];
+			});
+
+			return _deferred_all;
+		};
+	}
+
 	function saveAbilityFunc(isItem) {
 		return function() {
 			var _deferred_file = $q.defer();
@@ -213,6 +258,16 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 	$scope.saveMSG = "";
 	$scope.saveLock = false;
 	$scope.saveFileList = [
+		// ===================================================================
+		// =                          保存 【单位】                          =
+		// ===================================================================
+		{name: "Unit", desc: "单位", selected: true, saveFunc: saveUnitFunc(false)},
+
+		// ===================================================================
+		// =                          保存 【英雄】                          =
+		// ===================================================================
+		{name: "Hero", desc: "英雄", selected: true, saveFunc: saveUnitFunc(true)},
+
 		// ===================================================================
 		// =                          保存 【技能】                          =
 		// ===================================================================

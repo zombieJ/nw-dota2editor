@@ -44,6 +44,10 @@
 		return this;
 	};
 
+	KV.prototype.clone = function(keepEmpty) {
+		return KV.parse(this.toString(keepEmpty !== false));
+	};
+
 	KV.prototype.toString = function(keepEmpty) {
 		return this._toString(null, null, keepEmpty);
 	};

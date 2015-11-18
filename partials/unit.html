@@ -75,40 +75,89 @@
 					</table>
 				</div>
 
-				<!-- Wearable Tab -->
-				<div ng-show="currentTab.name === 'Wearable'">
-					<table class="ability-table">
-						<tbody>
-							<tr ng-repeat="wearable in ability.kv.getValueByPath('Creature.AttachWearables', []) track by $index">
-								<th width="30">
-									<a ng-click="common.array.remove(wearable, ability.kv.getValueByPath('Creature.AttachWearables', []))">
-										[X]
-									</a>
-								</th>
-								<th width="150">
-									<span class="ability-tip">Wearable{{$index + 1}}</span>
-									{{Locale('Wearable')}}{{$index + 1}}
+				<div ng-switch="attrunit.type">
+					<!-- Wearable Tab -->
+					<div ng-show="currentTab.name === 'Wearable'">
+						<table class="ability-table">
+							<tbody>
+								<tr ng-repeat="wearable in ability.kv.getValueByPath('Creature.AttachWearables', []) track by $index">
+									<th width="30">
+										<a ng-click="common.array.remove(wearable, ability.kv.getValueByPath('Creature.AttachWearables', []))">
+											[X]
+										</a>
+									</th>
+									<th width="150">
+										<span class="ability-tip">Wearable{{$index + 1}}</span>
+										{{Locale('Wearable')}}{{$index + 1}}
+									</th>
+									<td class="ability-form">
+										<input tipfield ng-model="wearable.bind('ItemDef')" ng-model-options="{getterSetter: true}" data-matchfuc="Unit.match" />
+										<div class="img-preview" ng-show="Unit.list[wearable.get('ItemDef')]">
+											<button class="btn btn-default fa fa-picture-o" ng-click="Unit.showWearablePreview(wearable.get('ItemDef'))"></button>
+										</div>
+									</td>
+								</tr>
+
+								<tr ng-if="ability.kv.getValueByPath('Creature.AttachWearables', []).length === 0">
+									<td>
+										<p>No Wearable 【没有饰品】</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<button class="btn btn-dark" ng-click="newWearable()">+ new wearable 【新建饰品】</button>
+					</div>
+
+					<!-- Unassigned KV Tab -->
+					<div ng-show="currentTab.name === 'Wearable'">
+						<table class="ability-table">
+							<tbody ng-repeat="list in currentTab.value track by $index">
+							<tr ng-repeat="unit in list track by $index" ng-if="unit.showFunc ? unit.showFunc(this) : true;">
+								<th width="200">
+									<span class="ability-tip">{{unit.attr}}</span>
+									{{Locale(unit.attr)}}
 								</th>
 								<td class="ability-form">
-									<input tipfield ng-model="wearable.bind('ItemDef')" ng-model-options="{getterSetter: true}" data-matchfuc="Unit.match" />
-									<div class="img-preview" ng-show="Unit.list[wearable.get('ItemDef')]">
-										<button class="btn btn-default fa fa-picture-o" ng-click="Unit.showWearablePreview(wearable.get('ItemDef'))"></button>
-									</div>
+									<div kvfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Unit"></div>
 								</td>
 							</tr>
+							</tbody>
+						</table>
+					</div>
 
-							<tr ng-if="ability.kv.getValueByPath('Creature.AttachWearables', []).length === 0">
-								<td>
-									<p>No Wearable 【没有饰品】</p>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-
-					<button class="btn btn-dark" ng-click="ability.kv.assumeKey('Creature.AttachWearables', true).value.push({})">+ new wearable 【新建饰品】</button>
-				</div>
-
+				</div><!-- End of Container -->
 			</div>
 		</div>
 	</div>
 </div>
+
+<!-- ====================================================================== -->
+<!-- =                            Ability Menu                            = -->
+<!-- ====================================================================== -->
+<ul id="abilityMenu" class="app-menu app-float-menu">
+	<li><a ng-click="setAbilityEditorAlias()">Editor Alias 【编辑器别名】</a></li>
+	<li class="app-submenu">
+		<a>Usage Marker 【功能标记】</a>
+		<ul class="app-menu">
+			<li><a ng-click="setAbilityMarkUsage('dummy');"> Dummy 【马甲】</a></li>
+			<li class="line"></li>
+			<li><a ng-click="setAbilityMarkUsage();"> No mark 【无标记】</a></li>
+		</ul>
+	</li>
+	<li class="app-submenu">
+		<a>Color Marker 【颜色标记】</a>
+		<ul class="app-menu">
+			<li><a ng-click="setAbilityMarkColor('#00a65a');"><span class="fa fa-circle sm" style="color: #00a65a;"></span> Green 【绿色】</a></li>
+			<li><a ng-click="setAbilityMarkColor('#00c0ef');"><span class="fa fa-circle sm" style="color: #00c0ef;"></span> Blue 【蓝色】</a></li>
+			<li><a ng-click="setAbilityMarkColor('#dd4b39');"><span class="fa fa-circle sm" style="color: #dd4b39;"></span> Red 【红色】</a></li>
+			<li><a ng-click="setAbilityMarkColor('#f39c12');"><span class="fa fa-circle sm" style="color: #f39c12;"></span> Yellow 【黄色】</a></li>
+			<li><a ng-click="setAbilityMarkColor('#666666');"><span class="fa fa-circle sm" style="color: #666666;"></span> Black 【黑色】</a></li>
+			<li class="line"></li>
+			<li><a ng-click="setAbilityMarkColor();"><span class="fa fa-circle sm" style="color: #cccccc;"></span> None 【还原】</a></li>
+		</ul>
+	</li>
+	<li><a ng-click="copyAbility()">Duplicate Ability 【复制技能】</a></li>
+	<li class="line"></li>
+	<li><a ng-click="deleteAbility()" class="danger">Delete Ability 【删除技能】</a></li>
+</ul>
