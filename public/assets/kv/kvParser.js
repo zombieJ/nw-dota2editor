@@ -5,6 +5,7 @@
 		this.key = key || "";
 		this.value = value || "";
 		this.comment = comment || "";
+		this.keep = false;
 
 		return this;
 	};
@@ -79,7 +80,7 @@
 			_write('"' + this.key + '"');
 			_write('{');
 			this.value.forEach(function(subKV) {
-				if(!keepEmpty && subKV.value === "") return;
+				if(!keepEmpty && subKV.value === "" && !subKV.keep) return;
 
 				_data = subKV._toString(_data, _lvl + 1, keepEmpty) + "\n";
 			});

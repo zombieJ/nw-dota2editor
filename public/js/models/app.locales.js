@@ -229,6 +229,7 @@ app.factory("Locale", function() {
 		streamKeyDesc: "用于访问Stream API获取Dota2数据，未填写只会影响少部分功能。",
 		applyStreamKey: "如果您还没有Stream API Key，可以通过该地址申请（中国部分地区需要通过VPN访问）：",
 		streamKeyNotSet: "未设置Stream API Key，您可能会遇到数据无法显示。于配置页设置/申请Stream API Key。",
+		saveKeepKV: '保存时保持所有的KV。如果不勾选，会忽略未赋值的键。例如"HasInventory" ""，会被忽略。【目前仅应用于单位和英雄存储】',
 	};
 
 	return Locale;

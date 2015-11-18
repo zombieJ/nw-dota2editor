@@ -26,6 +26,11 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 			}
 		});
 
+		// Force Keep Ability
+		for(var i = 1 ; i <= 16 ; i += 1) {
+			_my.kv.assumeKey("Ability" + i).keep = true;
+		};
+
 		return _my;
 	};
 
