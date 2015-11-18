@@ -68,7 +68,7 @@
 									{{Locale(unit.attr)}}
 								</th>
 								<td class="ability-form">
-									<div attrfield attrfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Unit"></div>
+									<div kvfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Unit"></div>
 								</td>
 							</tr>
 						</tbody>
@@ -79,9 +79,9 @@
 				<div ng-show="currentTab.name === 'Wearable'">
 					<table class="ability-table">
 						<tbody>
-							<tr ng-repeat="wearable in ability._wearableList track by $index">
+							<tr ng-repeat="wearable in ability.kv.getValueByPath('Creature.AttachWearables', []) track by $index">
 								<th width="30">
-									<a ng-click="common.array.remove(wearable, ability._wearableList)">
+									<a ng-click="common.array.remove(wearable, ability.kv.getValueByPath('Creature.AttachWearables', []))">
 										[X]
 									</a>
 								</th>
@@ -90,30 +90,24 @@
 									{{Locale('Wearable')}}{{$index + 1}}
 								</th>
 								<td class="ability-form">
-									<input tipfield ng-model="wearable.ItemDef" data-matchfuc="Unit.match" />
-									<!--div class="img-preview" ng-if="Unit.getWearableImagePath(wearable.ItemDef)">
-										<button class="btn btn-default fa fa-picture-o"></button>
-										<div class="img-preview-cntr">
-											<h2>{{Unit.list[wearable.ItemDef].name}}</h2>
-											<p>{{Unit.list[wearable.ItemDef].model_player}}</p>
-											<img ng-src="{{Unit.getWearableImagePath(wearable.ItemDef)}}">
-										</div>
-									</div-->
-									<div class="img-preview" ng-show="Unit.list[wearable.ItemDef]">
-										<button class="btn btn-default fa fa-picture-o" ng-click="Unit.showWearablePreview(wearable.ItemDef)"></button>
+									<input tipfield ng-model="wearable.bind('ItemDef')" ng-model-options="{getterSetter: true}" data-matchfuc="Unit.match" />
+									<div class="img-preview" ng-show="Unit.list[wearable.get('ItemDef')]">
+										<button class="btn btn-default fa fa-picture-o" ng-click="Unit.showWearablePreview(wearable.get('ItemDef'))"></button>
 									</div>
 								</td>
 							</tr>
 
-							<tr ng-if="ability._wearableList.length === 0">
+							<tr ng-if="ability.kv.getValueByPath('Creature.AttachWearables', []).length === 0">
 								<td>
 									<p>No Wearable 【没有饰品】</p>
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<button class="btn btn-dark" ng-click="ability._wearableList.push({})">+ new wearable 【新建饰品】</button>
+
+					<button class="btn btn-dark" ng-click="ability.kv.assumeKey('Creature.AttachWearables', true).value.push({})">+ new wearable 【新建饰品】</button>
 				</div>
+
 			</div>
 		</div>
 	</div>

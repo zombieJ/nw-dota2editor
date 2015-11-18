@@ -4,6 +4,8 @@ var _unitCtrl = function(isHero) {
 	return function ($scope, globalContent, NODE, Unit) {
 		if (!globalContent.isOpen) return;
 
+		window.scope = $scope;
+
 		$scope.isHero = isHero;
 		$scope.ready = false;
 		$scope.abilityList = [];

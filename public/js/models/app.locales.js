@@ -37,6 +37,7 @@ app.factory("Locale", function() {
 		Others: "其他",
 		Creature: "生物",
 		Wearable: "饰品",
+		Default: "默认",
 
 		// 属性
 		BaseClass: "基类",

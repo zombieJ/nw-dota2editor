@@ -3,28 +3,28 @@
 // ======================================================
 // =                        语言                        =
 // ======================================================
-app.factory("Unit", function($q, $http, FS, Locale) {
-	var Unit = function() {
+app.factory("Unit", function($q, $http, FS, Locale, KV) {
+	var Unit = function(kv) {
 		var _my = this;
+		_my.kv = kv || new KV("undefined", []);
 
 		// ========================================
-		// =                 属性                 =
+		// =                 Prop                 =
 		// ========================================
-		_my._name = "undefined";
-		_my._comment = "";
-
-		_my.HasInventory = "-";
-		_my.ConsideredHero = "-";
-		_my.AttackCapabilities = "-";
-		_my.AttackDamageType = "-";
-		_my.CanBeDominated = "-";
-		_my.AutoAttacksByDefault = "-";
-		_my.ShouldDoFlyHeightVisual = "-";
-
-		_my._wearableList = [];
-
-		// Creature
-		_my.Creature = {};
+		Object.defineProperty(_my, "_name", {
+			get: function() {
+				return _my.kv.key;
+			}, set: function(value) {
+				_my.kv.key = value;
+			}
+		});
+		Object.defineProperty(_my, "_comment", {
+			get: function() {
+				return _my.kv.comment;
+			}, set: function(value) {
+				_my.kv.comment = value;
+			}
+		});
 
 		return _my;
 	};
@@ -87,23 +87,34 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 		var $loading = $('<i class="fa fa-refresh fa-spin"></i>').prependTo($content);
 
 		if(_path) {
-			var _streamAPIKey = localStorage.getItem("streamAPIKey") || "";
-			if(!_streamAPIKey) {
-				$content.prepend($("<img>").attr("src", "http://git.oschina.net/zombiej/dota2-econ-heroes/raw/master/" + _path.replace("econ/heroes/", "") + ".png"));
-				$content.append($("<small class='text-warning'>").text(Locale('streamKeyNotSet')));
+			// Cache before reborn version
+			var $img = $("<img>");
+			$img.attr("src", "http://git.oschina.net/zombiej/dota2-econ-heroes/raw/master/" + _path.replace("econ/heroes/", "") + ".png");
+			$content.prepend($img);
+			$img.load(function() {
 				$loading.remove();
-			} else {
-				var _name = _item.image_inventory.match(/[^\/]*$/)[0].toLowerCase();
-				$http.get("https://api.steampowered.com/IEconDOTA2_570/GetItemIconPath/v1/?key=" + _streamAPIKey + "&iconname=" + _name).then(function (ret) {
-					var _path = common.getValueByPath(ret, "data.result.path");
-					var _url = "http://cdn.dota2.com/apps/570/" + _path;
-					$content.prepend($("<img>").attr("src", _url));
+			});
+
+			// Reborn version
+			$img.error(function() {
+				var _streamAPIKey = localStorage.getItem("streamAPIKey") || "";
+				if(!_streamAPIKey) {
+					$content.append($("<small class='text-warning'>").text(Locale('streamKeyNotSet')));
 					$loading.remove();
-				}, function() {
-					$content.prepend($("<p class='text-danger'>").text(Locale('connectionError')));
-					$loading.remove();
-				});
-			}
+				} else {
+					$img.hide();
+					var _name = _item.image_inventory.match(/[^\/]*$/)[0].toLowerCase();
+					$http.get("https://api.steampowered.com/IEconDOTA2_570/GetItemIconPath/v1/?key=" + _streamAPIKey + "&iconname=" + _name).then(function (ret) {
+						var _path = common.getValueByPath(ret, "data.result.path");
+						var _url = "http://cdn.dota2.com/apps/570/" + _path;
+						$img.attr("src", _url).show();
+						$loading.remove();
+					}, function() {
+						$content.prepend($("<p class='text-danger'>").text(Locale('connectionError')));
+						$loading.remove();
+					});
+				}
+			});
 		}
 
 		$.dialog({
@@ -116,7 +127,9 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 	// =                     解析                     =
 	// ================================================
 	Unit.parse = function(kvUnit) {
-		var _unit = new Unit();
+		var _unit = new Unit(kvUnit);
+		return _unit;
+		/*var _unit = new Unit();
 		_unit._name = kvUnit.key;
 		_unit._comment = kvUnit.comment;
 
@@ -183,7 +196,7 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 			}
 		});
 
-		return _unit;
+		return _unit;*/
 	};
 
 	// ================================================
@@ -349,22 +362,21 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 
 	Unit.AttrCreatureList = [
 		[
-			{group: "Common", attr: "DisableClumpingBehavior", type: "boolean"},
-			{group: "Common", attr: "CanRespawn", type: "boolean"},
-			{group: "Common", attr: "DisableResistance", type: "text"},
+			{group: "Common", path: "Creature", attr: "DisableClumpingBehavior", type: "boolean"},
+			{group: "Common", path: "Creature", attr: "CanRespawn", type: "boolean"},
+			{group: "Common", path: "Creature", attr: "DisableResistance", type: "text"},
 		],
 
 		[
-			{group: "Level", attr: "HPGain", type: "text"},
-			{group: "Level", attr: "DamageGain", type: "text"},
-			{group: "Level", attr: "ArmorGain", type: "text"},
-			{group: "Level", attr: "MagicResistGain", type: "text"},
-			{group: "Level", attr: "MoveSpeedGain", type: "text"},
-			{group: "Level", attr: "BountyGain", type: "text"},
-			{group: "Level", attr: "XPGain", type: "text"},
+			{group: "Level", path: "Creature", attr: "HPGain", type: "text"},
+			{group: "Level", path: "Creature", attr: "DamageGain", type: "text"},
+			{group: "Level", path: "Creature", attr: "ArmorGain", type: "text"},
+			{group: "Level", path: "Creature", attr: "MagicResistGain", type: "text"},
+			{group: "Level", path: "Creature", attr: "MoveSpeedGain", type: "text"},
+			{group: "Level", path: "Creature", attr: "BountyGain", type: "text"},
+			{group: "Level", path: "Creature", attr: "XPGain", type: "text"},
 		],
 	];
-	Unit.AttrCreatureList.path = "Creature";
 
 	Unit.AttrList = [
 		{name: "Common", value: Unit.AttrCommonList},
@@ -372,8 +384,8 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 		{name: "SoundAbility", value: Unit.AttrSoundAbilityList},
 		{name: "AttackDefenseSpeed", value: Unit.AttrAttackDefenseSpeedList},
 		{name: "HPMPVision", value: Unit.AttrHPMPVisionList},
-		{name: "Creature", value: Unit.AttrCreatureList, showFunc: function($scope) {return $scope.isHero || ($scope.ability && $scope.ability.BaseClass === "npc_dota_creature");}},
-		{name: "Wearable", showFunc: function($scope) {return $scope.ability && $scope.ability.BaseClass === "npc_dota_creature";}},
+		{name: "Creature", value: Unit.AttrCreatureList, showFunc: function($scope) {return $scope.ability && $scope.ability.kv.get("BaseClass", false) === "npc_dota_creature";}},
+		{name: "Wearable", showFunc: function($scope) {return $scope.ability && $scope.ability.kv.get("BaseClass", false) === "npc_dota_creature";}},
 		{name: "Others", value: Unit.AttrOtherList},
 	];
 
@@ -381,13 +393,11 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 	// =                     枚举                     =
 	// ================================================
 	Unit.HasInventory = Unit.ConsideredHero = Unit.CanBeDominated = Unit.AutoAttacksByDefault = Unit.ShouldDoFlyHeightVisual = [
-		["-","默认"],
 		["0","否"],
 		["1","是"],
 	];
 
 	Unit.BoundsHullName = [
-		["-","默认"],
 		["DOTA_HULL_SIZE_SMALL","8"],
 		["DOTA_HULL_SIZE_REGULAR","16"],
 		["DOTA_HULL_SIZE_SIEGE","16"],
@@ -400,7 +410,6 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 	];
 
 	Unit.AttackCapabilities = [
-		["-","默认"],
 		["DOTA_UNIT_CAP_NO_ATTACK","不能攻击"],
 		["DOTA_UNIT_CAP_MELEE_ATTACK","近战攻击"],
 		["DOTA_UNIT_CAP_RANGED_ATTACK","远程攻击"],
@@ -409,21 +418,18 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 	Unit.AttackDamageType = [];
 
 	Unit.AttributePrimary = [
-		["-", "默认"],
 		["DOTA_ATTRIBUTE_AGILITY", "敏捷"],
-			["DOTA_ATTRIBUTE_INTELLECT", "智力"],
-			["DOTA_ATTRIBUTE_STRENGTH", "力量"],
+		["DOTA_ATTRIBUTE_INTELLECT", "智力"],
+		["DOTA_ATTRIBUTE_STRENGTH", "力量"],
 	];
 
 	Unit.MovementCapabilities = [
-		["-", "默认"],
 		["DOTA_UNIT_CAP_MOVE_NONE", "不能移动"],
 		["DOTA_UNIT_CAP_MOVE_GROUND", "地面"],
 		["DOTA_UNIT_CAP_MOVE_FLY", "飞行"],
 	];
 
 	Unit.CombatClassAttack = [
-		["-", "默认"],
 		["DOTA_COMBAT_CLASS_ATTACK_BASIC", "普通"],
 		["DOTA_COMBAT_CLASS_ATTACK_HERO", "英雄"],
 		["DOTA_COMBAT_CLASS_ATTACK_LIGHT", "混乱"],
@@ -432,7 +438,6 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 	];
 
 	Unit.CombatClassDefend = [
-		["-", "默认"],
 		["DOTA_COMBAT_CLASS_DEFEND_BASIC", "普通"],
 		["DOTA_COMBAT_CLASS_DEFEND_HERO", "英雄"],
 		["DOTA_COMBAT_CLASS_DEFEND_SOFT", "轻型"],
@@ -442,7 +447,6 @@ app.factory("Unit", function($q, $http, FS, Locale) {
 	];
 
 	Unit.UnitRelationShipClass = [
-		["-", "默认"],
 		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT", "默认"],
 		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_BARRACKS", "兵营"],
 		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_BUILDING", "建筑"],

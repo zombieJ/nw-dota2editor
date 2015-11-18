@@ -31,8 +31,23 @@
 			return null;
 		}
 	};
+
+	KV.prototype.set = function(key, value) {
+		var _kv = this.getKV(key, false);
+		if(_kv) {
+			_kv.value = value;
+		} else {
+			_kv = new KV(key, value);
+			this.value.push(_kv);
+		}
+		return this;
+	};
+
+	KV.prototype.toString = function(keepEmpty) {
+		return this._toString(null, null, keepEmpty);
+	};
 	
-	KV.prototype.toString = function(_data, _lvl) {
+	KV.prototype._toString = function(_data, _lvl, keepEmpty) {
 		var _data = _data || "";
 		var _lvl = _lvl || 0;
 
@@ -64,7 +79,9 @@
 			_write('"' + this.key + '"');
 			_write('{');
 			this.value.forEach(function(subKV) {
-				_data = subKV.toString(_data, _lvl + 1) + "\n";
+				if(!keepEmpty && subKV.value === "") return;
+
+				_data = subKV._toString(_data, _lvl + 1, keepEmpty) + "\n";
 			});
 			_write('}');
 		}
