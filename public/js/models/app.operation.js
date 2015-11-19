@@ -115,7 +115,7 @@ app.factory("Operation", function(Sound) {
 							} else if(_tgtUnit.key.toUpperCase() === "LINE") {
 								// Code Specific: Target Group
 								_operation.attrs[unit.key]._action = "line";
-								var _lineMap = _tgtUnit.value.kvToMap();
+								var _lineMap = _tgtUnit.kvToMap();
 								_operation.attrs[unit.key][_tgtUnit.key] = {
 									Length: _lineMap.Length,
 									Thickness: _lineMap.Thickness,

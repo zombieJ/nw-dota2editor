@@ -3,7 +3,7 @@
 // ======================================================
 // =                        语言                        =
 // ======================================================
-app.factory("Language", function($q, KV, NODE) {
+app.factory("Language", function($q, KV, NODE, Config) {
 	var Language = function(fileName) {
 		var _deferred = $q.defer();
 		var _my = this;

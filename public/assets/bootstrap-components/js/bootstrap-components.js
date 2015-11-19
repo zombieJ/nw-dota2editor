@@ -1,4 +1,4 @@
-/*Bootstrap Components 3.1 - Created By ZombieJ*/
+/*Bootstrap Components 3.1.1 - Created By ZombieJ*/
 $.extend({_bc: new Object()});
 // init vars for bootstrap-component use
 $._bc.vals = new Object();
@@ -928,10 +928,17 @@ $.extend({
 		$modal.css("z-index", $._bc.vals.dialog.z_index+1);
 		$._bc.vals.dialog.z_index += 2;
 
+		// Fix dialog position if exist multi-modal
+		$back.one('bsTransitionEnd', function() {
+			if($(".modal.in").length > 1) {
+				$modal.css("padding-right", $("body").css("padding-right"));
+			}
+		});
+
 		// begin hide window, return callback
 		$modal.on('hide.bs.modal', function () {
 			if(_callback != null) {
-				return _callback.call($modal, _ret);
+				return [_callback.call($modal, _ret), _ret = 0][0];
 			}
 		});
 
@@ -939,7 +946,12 @@ $.extend({
 		$modal.on('hidden.bs.modal', function () {
 			$(this).remove();
 			$._bc.vals.dialog.z_index -= 2;
+
+			if($(".modal-backdrop").length) {
+				$("body").addClass("modal-open");
+			}
 		});
+
 		return $modal;
 	}
 });

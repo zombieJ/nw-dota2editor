@@ -34,7 +34,7 @@ app.config(function($routeProvider) {
 	});
 });
 
-app.factory("globalContent", function() {
+app.factory("globalContent", function(Config) {
 	var _globalContent = {
 		inlineMode: !window.require,
 
@@ -48,10 +48,16 @@ app.factory("globalContent", function() {
 		itemConfig: null,
 
 		languageList: [],
+		currentLanguage: null,
 
 		system: {
 			hideMenu: true,
 		},
+	};
+
+	// Get main language
+	_globalContent.mainLang = function() {
+		return common.array.find(Config.global.mainLang, _globalContent.languageList, "name", false, false) || _globalContent.languageList[0];
 	};
 
 	return _globalContent;
@@ -88,11 +94,11 @@ app.factory("FS", function() {
 	}
 });
 
-app.factory("UI", function($rootScope) {
+app.factory("UI", function($rootScope, Locale) {
 	var UI = function() {};
 
 	// Delete item from an array
-	UI.arrayDelete = function(item, array) {
+	UI.arrayDelete = function(item, array, callback) {
 		$.dialog({
 			title: "Delete Confirm",
 			content: "Are you sure to delete?",
@@ -101,14 +107,60 @@ app.factory("UI", function($rootScope) {
 			if(!ret) return;
 
 			common.array.remove(item, array);
+			if(callback) callback();
 			$rootScope.$apply();
 		});
+	};
+
+	UI.modal = function(element) {
+		UI.modal.highlight($(element).modal());
+	};
+	UI.modal.highlight = function(element, delay) {
+		setTimeout(function () {
+			$(element).find("input:first").focus();
+		}, delay || 500);
+	};
+
+	UI.modal.rename = function(entity, check, callback) {
+		var _oldName = entity._name;
+		var $input = $("<input type='text' class='form-control' />").val(_oldName);
+		var $content = $("<div>")
+			.append("<label>" + Locale('OldName') + "</label>")
+			.append("<p>" + entity._name + "</p>")
+			.append("<label>" + Locale('NewName') + "</label>")
+			.append($input);
+		UI.modal.highlight($.dialog({
+			title: Locale('Rename'),
+			content: $content,
+			confirm: true
+		}, function(ret) {
+			if(!ret) return;
+
+			var _dlg = this;
+			var _newName = $input.val().trim();
+			var _checkResult = check ? check(_newName, entity) : true;
+			if(_checkResult === true) {
+				entity._name = _newName;
+				if(callback) {
+					callback(_newName, _oldName, entity);
+				}
+				$rootScope.$apply();
+			} else {
+				$.dialog({
+					title: "OPS",
+					content: _checkResult
+				}, function() {
+					UI.modal.highlight(_dlg);
+				});
+				return false;
+			}
+		}));
 	};
 
 	return UI;
 });
 
-app.controller('main', function($scope, $route, $location, $q, UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE) {
+app.controller('main', function($scope, $route, $location, $q, UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config) {
 	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
 	window.Event = $scope.Event = Event;
@@ -118,10 +170,11 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 	window.Sound = $scope.Sound = Sound;
 	window.Unit = $scope.Unit = Unit;
 	window.UI = $scope.UI = UI;
+	window.Config = $scope.Config = Config;
 	$scope.common = common;
 	$scope.jQuery = $;
 
-	$scope.globalContent = globalContent;
+	$scope.globalContent = $scope.GC = globalContent;
 
 	NODE && NODE.init(globalContent, $q);
 
@@ -144,6 +197,7 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 				common.array.replace(globalContent.languageList, $.map(fileList, function(fileName) {
 					return new Language(fileName);
 				}));
+				globalContent.currentLanguage = globalContent.languageList[0];
 			}, function(){
 				common.array.replace(globalContent.languageList, []);
 			}).finally(function() {

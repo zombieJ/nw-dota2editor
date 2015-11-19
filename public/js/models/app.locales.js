@@ -38,6 +38,20 @@ app.factory("Locale", function() {
 		Creature: "生物",
 		Wearable: "饰品",
 		Default: "默认",
+		Unassigned: "未分配",
+		Error: "错误",
+
+		Key: "键",
+		Value: "值",
+		NewKV: "新建键值",
+		New: "新建",
+		Loading: "载入中",
+		Name: "名称",
+		Comment: "注释",
+		Unnamed: "【未命名】",
+		NewName: "新名称",
+		Rename: "重命名",
+		OldName: "原名称",
 
 		// 属性
 		BaseClass: "基类",
@@ -214,6 +228,9 @@ app.factory("Locale", function() {
 		FollowRange: "跟随距离",
 		vscripts: "脚本文件",
 
+		NoWearable: "没有饰品",
+		NoUnassigned: "没有未分配值",
+
 		// 英雄
 		override_hero: "替换英雄",
 		AttributePrimary: "主属性",
@@ -224,12 +241,33 @@ app.factory("Locale", function() {
 		AttributeBaseIntelligence: "基础智力",
 		AttributeIntelligenceGain: "升级智力获得",
 
+		// 菜单
+		EditorAlias: "编辑器别名",
+		UsageMarker: "功能标记",
+		Dummy: "马甲",
+		NoMark: "无标记",
+		ColorMarker: "颜色标记",
+		Duplicate: "复制",
+		Delete: "删除",
+		Green: "绿色",
+		Blue: "蓝色",
+		Red: "红色",
+		Yellow: "黄色",
+		Black: "黑色",
+		None: "无",
+
 		// 帮助
+		mainLanguage: "主语言设置会帮助你在编辑界面自动显示主语言对应的名称描述。",
 		connectionError: "网络连接错误，请重试",
 		streamKeyDesc: "用于访问Stream API获取Dota2数据，未填写只会影响少部分功能。",
 		applyStreamKey: "如果您还没有Stream API Key，可以通过该地址申请（中国部分地区需要通过VPN访问）：",
 		streamKeyNotSet: "未设置Stream API Key，您可能会遇到数据无法显示。于配置页设置/申请Stream API Key。",
 		saveKeepKV: '保存时保持所有的KV。如果不勾选，会忽略未赋值的键。例如"HasInventory" ""，会被忽略。【目前仅应用于单位和英雄存储】',
+		illegalCharacter: '输入不合法',
+		duplicateDefined: '字段被重复定义',
+		emptyList: "列表为空",
+		conflictName: "名称冲突",
+		noLanguageFile: "没有找到语言文件",
 	};
 
 	return Locale;

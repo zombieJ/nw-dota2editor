@@ -33,6 +33,10 @@
 		}
 	};
 
+	KV.prototype.isList = function() {
+		return (typeof this.value) !== "string";
+	};
+
 	KV.prototype.set = function(key, value) {
 		var _kv = this.getKV(key, false);
 		if(_kv) {

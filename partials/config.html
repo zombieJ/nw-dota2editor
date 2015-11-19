@@ -1,17 +1,25 @@
+<div class="form-group">
+	<label>
+		Main Language
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('mainLanguage')}}"></span>
+	</label>
+	<input type="text" class="form-control" ng-model="Config.global.mainLang">
+</div>
+
 <div class="checkbox">
 	<label>
-		<input type="checkbox" ng-checked="config.saveKeepKV" ng-click="config.saveKeepKV = !config.saveKeepKV">
+		<input type="checkbox" ng-checked="Config.global.saveKeepKV" ng-click="Config.global.saveKeepKV = !Config.global.saveKeepKV">
 		Saving Keep All KV
 		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('saveKeepKV')}}"></span>
 	</label>
 </div>
 
 <div class="form-group">
-	<label for="streamKey">
+	<label>
 		Stream API Key
 		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('streamKeyDesc')}}"></span>
 	</label>
-	<input type="text" class="form-control" id="streamKey" ng-model="config.streamAPIKey">
+	<input type="text" class="form-control" ng-model="Config.global.streamAPIKey">
 </div>
 <p class="text-muted">* {{Locale('applyStreamKey')}} https://steamcommunity.com/dev/apikey</p>
 

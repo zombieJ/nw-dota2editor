@@ -139,74 +139,6 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 	Unit.parse = function(kvUnit) {
 		var _unit = new Unit(kvUnit);
 		return _unit;
-		/*var _unit = new Unit();
-		_unit._name = kvUnit.key;
-		_unit._comment = kvUnit.comment;
-
-		$.each(kvUnit.value, function(i, kv) {
-			var _attr = null;
-			var _key = (kv.key || "").toUpperCase();
-
-			// Find attr key(common)
-			$.each(Unit.AttrList, function(i, attrList) {
-				if(!attrList.value || attrList.value.path) return;
-
-				$.each(attrList.value, function(i, attrGroup) {
-					$.each(attrGroup, function (j, attrUnit) {
-						if (attrUnit.attr.toUpperCase() === _key) {
-							_attr = attrUnit;
-							return false;
-						}
-					});
-
-					if(_attr) return false;
-				});
-
-				if(_attr) return false;
-			});
-
-			if(_attr) {
-				kv.key = _attr.attr;
-
-				if (typeof kv.value === "string") {
-					_unit[kv.key] = kv.value;
-				}
-			} else if(_key === "CREATURE") {
-				// Creature
-				$.each(kv.value, function(i, _ckv) {
-					var _cAttr;
-					$.each(Unit.AttrCreatureList, function(j, attrGroup) {
-						_cAttr = common.array.find(_ckv.key, attrGroup, "attr", false, false);
-						if(_cAttr) return false;
-					});
-
-					if(_cAttr) {
-						_unit[_cAttr.attr] = _ckv.value;
-					} else if(_ckv.key.toUpperCase() === "ATTACHWEARABLES") {
-						// Loop Wearable
-						$.each(_ckv.value, function(j, wearableKV) {
-							var _wearable = {};
-							// Loop Prop
-							$.each(wearableKV.value, function(k, prop) {
-								if(prop.key.toUpperCase() === "ITEMDEF") {
-									_wearable.ItemDef = prop.value;
-								} else {
-									_WARN("UNIT", 0, "Unmatched Unit Creature Wearable Key:", prop.key, prop.value);
-								}
-							});
-							_unit._wearableList.push(_wearable);
-						});
-					} else {
-						_WARN("UNIT", 0, "Unmatched Unit Creature type:", _ckv.key, _ckv.value);
-					}
-				});
-
-			} else {
-				_WARN("UNIT", 0, "Unmatched Unit type:", kv.key, kv.value);
-			}
-		});
-
-		return _unit;*/
 	};
 
 	// ================================================
@@ -226,9 +158,6 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 	// ================================================
 	// =                寻找未定义键值                =
 	// ================================================
-	//_my.unassignedList = [];
-	//_my.refreshUnassignedList();
-
 	Unit.prototype.refreshUnassignedList = function() {
 		var _my = this;
 		_my.unassignedList = [];
@@ -257,7 +186,6 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 				_my.unassignedList.push(kv);
 			}
 		});
-		console.log(_my.unassignedList);
 	};
 
 	// ================================================
@@ -448,6 +376,7 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 		{name: "Creature", value: Unit.AttrCreatureList, showFunc: function($scope) {return $scope.ability && $scope.ability.kv.get("BaseClass", false) === "npc_dota_creature";}},
 		{name: "Wearable", showFunc: function($scope) {return $scope.ability && $scope.ability.kv.get("BaseClass", false) === "npc_dota_creature";}},
 		{name: "Others", value: Unit.AttrOtherList},
+		{name: "Unassigned"},
 	];
 
 	// ================================================

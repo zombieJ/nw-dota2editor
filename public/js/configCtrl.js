@@ -1,14 +1,9 @@
 'use strict';
 
-hammerControllers.controller('configCtrl', function ($scope, globalContent) {
-	$scope.config = {
-		saveKeepKV: localStorage.getItem("saveKeepKV") === "true",
-		streamAPIKey: localStorage.getItem("streamAPIKey") || "",
-	};
-
+hammerControllers.controller('configCtrl', function ($scope, Config) {
 	$scope.saveConfig = function() {
-		localStorage.setItem("saveKeepKV", $scope.config.saveKeepKV);
-		localStorage.setItem("streamAPIKey", $scope.config.streamAPIKey);
+		Config.save();
+
 		$.dialog({
 			title: "OK",
 			content: "Save Successfully!",

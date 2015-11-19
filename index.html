@@ -61,6 +61,7 @@
 	<script src="public/js/models/app.sound.js"></script>
 	<script src="public/js/models/app.locales.js"></script>
 	<script src="public/js/models/app.unit.js"></script>
+	<script src="public/js/models/app.config.js"></script>
 
 	<script src="public/js/hammer.js"></script>
 	<script src="public/js/unitCtrl.js"></script>
@@ -93,7 +94,7 @@
 			</ul>
 			<ul class="nav navbar-nav pull-right">
 				<li ng-show="globalContent.isOpen">
-					<button type="button" class="btn btn-warning navbar-btn" ng-click="showSaveMDL()">Save 【保存】</button>
+					<button type="button" class="btn btn-warning navbar-btn" ng-click="showSaveMDL()">{{Locale('Save')}}</button>
 				</li>
 			</ul>
 		</div>

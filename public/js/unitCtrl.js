@@ -1,7 +1,7 @@
 'use strict';
 
 var _unitCtrl = function(isHero) {
-	return function ($scope, globalContent, NODE, Unit, KV) {
+	return function ($scope, globalContent, NODE, Unit, UI, KV, Locale, Config) {
 		if (!globalContent.isOpen) return;
 
 		window.scope = $scope;
@@ -10,6 +10,9 @@ var _unitCtrl = function(isHero) {
 		$scope.ready = false;
 		$scope.abilityList = [];
 		$scope.ability = null;
+
+		$scope._newUnassignedKey = "";
+		$scope._newUnassignedValue = "";
 
 		var _globalListKey = isHero ? "heroList" : "unitList";
 		var _globalConfigKey = isHero ? "heroConfig" : "unitConfig";
@@ -27,9 +30,48 @@ var _unitCtrl = function(isHero) {
 			$scope.ability = ability;
 		};
 
+		// ==========> Rename
+		$scope.renameCheck = function(newName) {
+			for(var i = 0 ; i < $scope.abilityList.length ; i += 1) {
+				if($scope.abilityList[i]._name === newName && $scope.abilityList[i] !== $scope.ability) {
+					return Locale('conflictName');
+				}
+			}
+
+			return true;
+		};
+
+		// ==========> Wearable
 		$scope.newWearable = function () {
 			var _wearable = new KV("wearable", [new KV("ItemDef")]);
 			$scope.ability.kv.assumeKey('Creature.AttachWearables', true).value.push(_wearable);
+		};
+
+		// ==========> Unassigned
+		$scope.newUnassigned = function () {
+			UI.modal("#newUnassignedMDL");
+		};
+		$scope.confirmNewUnassigned = function() {
+			if(!$scope._newUnassignedKey.match(/^[\w\d_]+$/)) {
+				$.dialog({
+					title: Locale('Error'),
+					content: Locale('illegalCharacter'),
+				});
+			} else if($scope.ability.kv.getKV($scope._newUnassignedKey, false)) {
+				$.dialog({
+					title: Locale('Error'),
+					content: Locale('duplicateDefined'),
+				});
+			} else {
+				$scope.ability.kv.value.push(new KV($scope._newUnassignedKey, $scope._newUnassignedValue));
+				$scope.ability.refreshUnassignedList();
+				$scope._newUnassignedKey = "";
+				$scope._newUnassignedValue = "";
+				$("#newUnassignedMDL").modal('hide');
+			}
+		};
+		$scope.refreshUnassigned = function () {
+			$scope.ability.refreshUnassignedList();
 		};
 
 		// ================================================================
