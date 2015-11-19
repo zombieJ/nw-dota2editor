@@ -52,6 +52,7 @@ app.factory("Locale", function() {
 		NewName: "新名称",
 		Rename: "重命名",
 		OldName: "原名称",
+		ForkLang: "复制多语言描述",
 
 		// 属性
 		BaseClass: "基类",

@@ -403,6 +403,11 @@ hr {
 	border: none;
 }
 
+.ability-cntr-header.noIcon .ability-cntr-header-desc textarea {
+	border-top: 1px solid #AAA;
+	margin-top: 10px;
+}
+
 /* Body */
 .ability-cntr-body {
 	font-family: "Microsoft YaHei",Î¢ÈíÑÅºÚ,"Microsoft JhengHei",»ªÎÄÏ¸ºÚ,STHeiti,MingLiu;

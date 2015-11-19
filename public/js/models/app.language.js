@@ -37,6 +37,14 @@ app.factory("Language", function($q, KV, NODE, Config) {
 		return Language.ModifierPrefix +modifierName + (attr ? '_' + attr : '')
 	};
 
+	Language.unitAttr = function(unit, attr) {
+		if(!unit) return null;
+
+		var _overrideHero = unit.kv.get("override_hero", false);
+		var abilityName = _overrideHero ? _overrideHero : unit._name;
+		return Language.UnitPrefix + abilityName + (attr ? '_' + attr : '');
+	};
+
 	// ================================================
 	// =                     常量                     =
 	// ================================================
@@ -61,6 +69,15 @@ app.factory("Language", function($q, KV, NODE, Config) {
 	Language.ModifierLang = [
 		{attr: "", desc: "名称", title: "Name", type: "text", frequent: true},
 		{attr: "Description", desc: "描述", type: "blob", frequent: true},
+	];
+
+	// ================================================
+	// =                     Unit                     =
+	// ================================================
+	Language.UnitPrefix = "";
+	Language.UnitLang = [
+		{attr: "", desc: "名称", title: "name", type: "text", frequent: true},
+		{attr: "bio", desc: "描述", type: "blob", frequent: true},
 	];
 
 	return Language;

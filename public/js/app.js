@@ -117,7 +117,7 @@ app.factory("UI", function($rootScope, Locale) {
 	};
 	UI.modal.highlight = function(element, delay) {
 		setTimeout(function () {
-			$(element).find("input:first").focus();
+			$(element).find("input:not([disabled]):first").focus();
 		}, delay || 500);
 	};
 
@@ -350,6 +350,8 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 					_writer.write('{');
 
 					$.each(language.map, function(key, value) {
+						if(value === undefined) return;
+
 						_writer.write('"$1"		"$2"', key, value);
 					});
 

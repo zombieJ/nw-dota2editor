@@ -14,7 +14,7 @@
 				<p class="desc">{{_ability._comment}}</p>
 			</div>
 		</div>
-		<button id="newItem" class="btn btn-primary" ng-click="newAbility()">+ {{::Locale('New')}}</button>
+		<button id="newItem" class="btn btn-primary" ng-click="newEntity()">+ {{::Locale('New')}}</button>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-show="!ready">
 		<h1>{{::Locale('Loading')}}...</h1>
@@ -41,7 +41,7 @@
 						{{globalContent.mainLang().map[ability._name] || Locale('Unnamed')}}
 						<small>
 							{{ability._name}}
-							<a class="fa fa-edit" ng-click="UI.modal.rename(ability, renameCheck)"></a>
+							<a class="fa fa-edit" ng-click="UI.modal.rename(ability, renameCheck, renameCallback)"></a>
 						</small>
 					</h1>
 				</div>
@@ -173,6 +173,23 @@
 						<!-- ========================= -->
 						<!-- =      Description      = -->
 						<!-- ========================= -->
+						<table class="ability-table" ng-show="language.ready">
+							<tbody>
+								<tr ng-repeat="langField in Language.UnitLang track by $index">
+									<th width="150">
+										<span class="ability-tip">{{langField.attr || langField.title}}</span>
+										{{langField.desc}}
+									</th>
+									<td>
+										<button class="btn btn-default fa fa-paint-brush color-picker"></button>
+										<input type="text" class="form-control" ng-if="langField.type === 'text'"
+										       ng-model="GC.currentLanguage.map[Language.unitAttr(ability, langField.attr)]"/>
+										<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
+										          ng-model="GC.currentLanguage.map[Language.unitAttr(ability, langField.attr)]"></textarea>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -213,6 +230,36 @@
 <!-- ====================================================================== -->
 <!-- =                             Modal List                             = -->
 <!-- ====================================================================== -->
+<!-- New Unit -->
+<div class="modal fade" id="newUnitMDL" tabindex="-1">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">{{::Locale('New')}}</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group" ng-show="_newUnitFork">
+					<label>* {{::Locale('OldName')}}</label>
+					<input type="text" class="form-control" ng-model="_newUnitFork._name" disabled="disabled" />
+				</div>
+				<div class="form-group">
+					<label>* {{::Locale('Name')}}</label>
+					<input type="text" class="form-control" ng-model="_newUnitName"/>
+				</div>
+				<div class="checkbox" ng-show="_newUnitFork">
+					<label>
+						<input type="checkbox" ng-checked="_newUnitForkLang" ng-click="_newUnitForkLang = !_newUnitForkLang"> {{::Locale('ForkLang')}}
+					</label>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="confirmNewEntity()">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- New Unassigned -->
 <div class="modal fade" id="newUnassignedMDL" tabindex="-1">
 	<div class="modal-dialog modal-lg" role="document">

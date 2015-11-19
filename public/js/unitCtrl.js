@@ -11,6 +11,10 @@ var _unitCtrl = function(isHero) {
 		$scope.abilityList = [];
 		$scope.ability = null;
 
+		$scope._newUnitFork = null;
+		$scope._newUnitForkLang = true;
+		$scope._newUnitName = "";
+
 		$scope._newUnassignedKey = "";
 		$scope._newUnassignedValue = "";
 
@@ -30,16 +34,81 @@ var _unitCtrl = function(isHero) {
 			$scope.ability = ability;
 		};
 
+		// ==========> New
+		$scope.newEntity = function(source) {
+			$scope._newUnitFork = source;
+			$scope._newUnitForkLang = true;
+			$scope._newUnitName = $scope._newUnitFork ? $scope._newUnitFork._name + "_clone" : "Undefined";
+
+			UI.modal("#newUnitMDL");
+		};
+
+		$scope.confirmNewEntity = function() {
+			var _checkResult = $scope.renameCheck($scope._newUnitName);
+
+			if(typeof _checkResult === "string") {
+				$.dialog({
+					title: "OPS",
+					content: _checkResult
+				}, function() {
+					UI.modal.highlight("#newUnitMDL");
+				});
+				return;
+			} else {
+				var _clone = new Unit($scope._newUnitFork ? $scope._newUnitFork.kv.clone() : null);
+				_clone._name = $scope._newUnitName;
+				_clone._changed = true;
+
+				if($scope._newUnitFork) {
+					// Clone Language
+					if($scope._newUnitForkLang) {
+						$.each(globalContent.languageList, function(i, lang) {
+							lang.map[Language.unitAttr(_clone, "")] = lang.map[Language.unitAttr($scope._newUnitFork, "")];
+							lang.map[Language.unitAttr(_clone, "bio")] = lang.map[Language.unitAttr($scope._newUnitFork, "bio")];
+						});
+					}
+
+					// Clone Configuration
+					var _abilities = $scope.config.abilities = $scope.config.abilities || {};
+					var _ability = _abilities[$scope._newUnitFork._name] = _abilities[$scope._newUnitFork._name] || {};
+					var _cloneEntity = _abilities[_clone._name] = _abilities[_clone._name] || {};
+					$.extend(_cloneEntity, _ability, true);
+					if (_cloneEntity.editorAliasName) {
+						_cloneEntity.editorAliasName += " copy";
+					}
+
+					var _index = $.inArray($scope._newUnitFork, $scope.abilityList);
+					$scope.abilityList.splice(_index + 1, 0, _clone);
+				} else {
+					$scope.abilityList.push(_clone);
+				}
+				$scope.setAbility(_clone);
+
+				$("#newUnitMDL").modal('hide');
+			}
+		};
+
 		// ==========> Rename
 		$scope.renameCheck = function(newName) {
 			for(var i = 0 ; i < $scope.abilityList.length ; i += 1) {
-				if($scope.abilityList[i]._name === newName && $scope.abilityList[i] !== $scope.ability) {
+				if($scope.abilityList[i]._name === newName) {
 					return Locale('conflictName');
 				}
 			}
-
 			return true;
 		};
+
+		$scope.renameCallback = function(newName, oldName, entity) {
+			if(entity.kv.get("override_hero", false)) return;
+
+			$.each(globalContent.languageList, function(i, lang) {
+				if(lang.map[oldName] !== undefined) lang.map[newName] = lang.map[oldName];
+				delete lang.map[oldName];
+
+				if(lang.map[oldName + "_bio"] !== undefined) lang.map[newName + "_bio"] = lang.map[oldName + "_bio"];
+				delete lang.map[oldName + "_bio"];
+			});
+		}
 
 		// ==========> Wearable
 		$scope.newWearable = function () {
@@ -187,15 +256,7 @@ var _unitCtrl = function(isHero) {
 		$scope.copyAbility = function() {
 			if(!_menuAbility) return;
 
-			/*var _writer = new KV.Writer();
-			_menuAbility.doWriter(_writer);
-			var _data = _writer._data;
-
-			// 复制技能
-			var _clone = Ability.parse(KV.parse(_data), isItem);
-			_clone._changed = true;
-			$scope.assignAutoID(_clone);*/
-			var _clone = new Unit(_menuAbility.kv.clone());
+			/*var _clone = new Unit(_menuAbility.kv.clone());
 			_clone._name += "_clone";
 			_clone._changed = true;
 
@@ -210,7 +271,8 @@ var _unitCtrl = function(isHero) {
 
 			var _index = $.inArray(_menuAbility, $scope.abilityList);
 			$scope.setAbility(_clone);
-			$scope.abilityList.splice(_index + 1, 0, $scope.ability);
+			$scope.abilityList.splice(_index + 1, 0, $scope.ability);*/
+			$scope.newEntity(_menuAbility);
 		};
 
 		$scope.deleteAbility = function() {
