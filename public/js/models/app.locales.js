@@ -40,6 +40,7 @@ app.factory("Locale", function() {
 		Default: "默认",
 		Unassigned: "未分配",
 		Error: "错误",
+		Exit: "退出",
 
 		Key: "键",
 		Value: "值",
@@ -269,6 +270,8 @@ app.factory("Locale", function() {
 		emptyList: "列表为空",
 		conflictName: "名称冲突",
 		noLanguageFile: "没有找到语言文件",
+		exitConfirm: "您确认要退出吗？",
+
 	};
 
 	return Locale;

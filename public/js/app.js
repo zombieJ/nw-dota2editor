@@ -613,6 +613,24 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 		}
 	});
 
+	// 关闭确认
+	try {
+		var gui = require('nw.gui');
+		var win = gui.Window.get();
+		win.on('close', function () {
+			var _my = this;
+			$.dialog({
+				title: Locale('Exit'),
+				content: Locale('exitConfirm'),
+				confirm: true,
+			}, function(ret) {
+				if(!ret) return;
+				_my.close(true);
+			});
+		});
+	} catch(err) {
+	}
+
 	// ================================================================
 	// =                            初始化                            =
 	// ================================================================
