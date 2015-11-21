@@ -8,13 +8,16 @@ components.directive('tipfield', function($compile) {
 			pagesize: "=?pagesize",
 			matchfuc: "=?matchfuc",
 		},
-		controller: function($scope, $element, $attrs) {
+		controller: function($scope, $element, $attrs, Locale) {
+			if($scope.alternative || $scope.matchfuc) console.log(">>>", $scope, $scope.alternative, $scope.matchfuc);
+
+			$scope.Locale = Locale;
 			$scope.currentList = [];
 			$scope.selected = -1;
 			$scope.pagesize = $scope.pagesize || 10;
 
 			$scope.selectItem = function(item) {
-				$element.val(item[0]);
+				$element.val(item.value);
 				$element.trigger('input');
 				$scope.currentList = [];
 			};
@@ -33,9 +36,9 @@ components.directive('tipfield', function($compile) {
 						if($scope.alternative) {
 							_val = _val.toUpperCase();
 							$scope.currentList = $.map($scope.alternative, function (item) {
-								var _itemKey = item[0] !== undefined ? item[0] : item.key;
+								var _itemKey = (item.value || "") + (item.key || "") + (item._key || "");
 								if (_itemKey.toUpperCase().indexOf(_val) !== -1) {
-									return [item];
+									return item;
 								}
 							});
 						} else if($scope.matchfuc) {
@@ -90,9 +93,9 @@ components.directive('tipfield', function($compile) {
 					$scope._alternativeCntr = $(
 						'<ul class="app-menu" ng-show="currentList.length">'+
 							'<li ng-repeat="item in currentList track by $index" ng-mousedown="selectItem(item)" ng-class="{selected: $index === selected}">' +
-								'<a>' +
-									'{{item.key || item[0]}} ' +
-									'<span ng-if="item[1]">[{{item[1]}}]</span>' +
+								'<a ng-class="{primary: item.suggest}">' +
+									'{{item.value}} ' +
+									'<span ng-if="item.key || item._key">[{{item.key ? Locale(item.key) : item._key}}]</span>' +
 								'</a>' +
 							'</li>'+
 						'</ul>'

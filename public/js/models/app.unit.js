@@ -78,7 +78,10 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 				(value.model_player || "").toUpperCase().indexOf(match) !== -1
 			) {
 				_maxMatch -= 1;
-				_matchList.push([key, value.name]);
+				_matchList.push({
+					value: key,
+					_key: value.name,
+				});
 
 				if(_maxMatch < 0) return false;
 			}
@@ -383,67 +386,67 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 	// =                     枚举                     =
 	// ================================================
 	Unit.HasInventory = Unit.ConsideredHero = Unit.CanBeDominated = Unit.AutoAttacksByDefault = Unit.ShouldDoFlyHeightVisual = [
-		["0","否"],
-		["1","是"],
+		["0"],
+		["1"],
 	];
 
 	Unit.BoundsHullName = [
-		["DOTA_HULL_SIZE_SMALL","8"],
-		["DOTA_HULL_SIZE_REGULAR","16"],
-		["DOTA_HULL_SIZE_SIEGE","16"],
-		["DOTA_HULL_SIZE_HERO","24"],
-		["DOTA_HULL_SIZE_HUGE","80"],
-		["DOTA_HULL_SIZE_BUILDING","81"],
-		["DOTA_HULL_SIZE_FILLER","96"],
-		["DOTA_HULL_SIZE_BARRACKS","144"],
-		["DOTA_HULL_SIZE_TOWER","144"],
+		{value: "DOTA_HULL_SIZE_SMALL", _key: "8"},
+		{value: "DOTA_HULL_SIZE_REGULAR", _key: "16"},
+		{value: "DOTA_HULL_SIZE_SIEGE", _key: "16"},
+		{value: "DOTA_HULL_SIZE_HERO", _key: "24"},
+		{value: "DOTA_HULL_SIZE_HUGE", _key: "80"},
+		{value: "DOTA_HULL_SIZE_BUILDING", _key: "81"},
+		{value: "DOTA_HULL_SIZE_FILLER", _key: "96"},
+		{value: "DOTA_HULL_SIZE_BARRACKS", _key: "144"},
+		{value: "DOTA_HULL_SIZE_TOWER", _key: "144"},
 	];
 
 	Unit.AttackCapabilities = [
-		["DOTA_UNIT_CAP_NO_ATTACK","不能攻击"],
-		["DOTA_UNIT_CAP_MELEE_ATTACK","近战攻击"],
-		["DOTA_UNIT_CAP_RANGED_ATTACK","远程攻击"],
+		["DOTA_UNIT_CAP_NO_ATTACK"],
+		["DOTA_UNIT_CAP_MELEE_ATTACK"],
+		["DOTA_UNIT_CAP_RANGED_ATTACK"],
 	];
 
 	Unit.AttackDamageType = [];
 
 	Unit.AttributePrimary = [
-		["DOTA_ATTRIBUTE_AGILITY", "敏捷"],
-		["DOTA_ATTRIBUTE_INTELLECT", "智力"],
-		["DOTA_ATTRIBUTE_STRENGTH", "力量"],
+		["DOTA_ATTRIBUTE_AGILITY"],
+		["DOTA_ATTRIBUTE_INTELLECT"],
+		["DOTA_ATTRIBUTE_STRENGTH"],
 	];
 
 	Unit.MovementCapabilities = [
-		["DOTA_UNIT_CAP_MOVE_NONE", "不能移动"],
-		["DOTA_UNIT_CAP_MOVE_GROUND", "地面"],
-		["DOTA_UNIT_CAP_MOVE_FLY", "飞行"],
+		["DOTA_UNIT_CAP_MOVE_NONE"],
+		["DOTA_UNIT_CAP_MOVE_GROUND"],
+		["DOTA_UNIT_CAP_MOVE_FLY"],
 	];
 
 	Unit.CombatClassAttack = [
-		["DOTA_COMBAT_CLASS_ATTACK_BASIC", "普通"],
-		["DOTA_COMBAT_CLASS_ATTACK_HERO", "英雄"],
-		["DOTA_COMBAT_CLASS_ATTACK_LIGHT", "混乱"],
-		["DOTA_COMBAT_CLASS_ATTACK_PIERCE", "穿刺"],
-		["DOTA_COMBAT_CLASS_ATTACK_SIEGE", "攻城"],
+		["DOTA_COMBAT_CLASS_ATTACK_BASIC"],
+		["DOTA_COMBAT_CLASS_ATTACK_HERO"],
+		["DOTA_COMBAT_CLASS_ATTACK_LIGHT"],
+		["DOTA_COMBAT_CLASS_ATTACK_PIERCE"],
+		["DOTA_COMBAT_CLASS_ATTACK_SIEGE"],
 	];
 
 	Unit.CombatClassDefend = [
-		["DOTA_COMBAT_CLASS_DEFEND_BASIC", "普通"],
-		["DOTA_COMBAT_CLASS_DEFEND_HERO", "英雄"],
-		["DOTA_COMBAT_CLASS_DEFEND_SOFT", "轻型"],
-		["DOTA_COMBAT_CLASS_DEFEND_STRONG", "重型"],
-		["DOTA_COMBAT_CLASS_DEFEND_STRUCTURE", "建筑"],
-		["DOTA_COMBAT_CLASS_DEFEND_WEAK", "脆弱"],
+		["DOTA_COMBAT_CLASS_DEFEND_BASIC"],
+		["DOTA_COMBAT_CLASS_DEFEND_HERO"],
+		["DOTA_COMBAT_CLASS_DEFEND_SOFT"],
+		["DOTA_COMBAT_CLASS_DEFEND_STRONG"],
+		["DOTA_COMBAT_CLASS_DEFEND_STRUCTURE"],
+		["DOTA_COMBAT_CLASS_DEFEND_WEAK"],
 	];
 
 	Unit.UnitRelationShipClass = [
-		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT", "默认"],
-		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_BARRACKS", "兵营"],
-		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_BUILDING", "建筑"],
-		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_COURIER", "信使"],
-		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_HERO", "英雄"],
-		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_SIEGE", "主城"],
-		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_WARD", "眼"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_BARRACKS"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_BUILDING"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_COURIER"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_HERO"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_SIEGE"],
+		["DOTA_NPC_UNIT_RELATIONSHIP_TYPE_WARD"],
 	];
 
 	return Unit;

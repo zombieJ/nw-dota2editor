@@ -240,6 +240,9 @@ label.checkbox input[type="checkbox"] {
 .app-menu > li > a.danger {
 	color: #dd4b39;
 }
+.app-menu > li > a.primary {
+	color: #337ab7;
+}
 .app-menu > li:hover > a.danger {
 	background: #dd4b39;
 	color: #FFF;

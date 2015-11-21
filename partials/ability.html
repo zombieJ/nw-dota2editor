@@ -80,7 +80,7 @@
 				<div>
 					<!-- ====================== 常规 ====================== -->
 					<div ng-if="currentTab === 'common'">
-						<table class="ability-table">
+						<!--table class="ability-table">
 							<tbody ng-repeat="group in ability._attrList track by $index">
 								<tr ng-repeat="unit in group.list track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
 									<th width="150">
@@ -91,6 +91,19 @@
 										<div attrfield attrfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
 									</td>
 								</tr>
+							</tbody>
+						</table-->
+						<table class="ability-table">
+							<tbody ng-repeat="grpLst in Ability.AttrList track by $index">
+							<tr ng-repeat="unit in grpLst track by $index" ng-if="unit.showFunc ? unit.showFunc(this) : true;">
+								<th width="200">
+									<span class="ability-tip">{{unit.attr}}</span>
+									{{::Locale(unit.attr)}}
+								</th>
+								<td class="ability-form">
+									<div kvfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
+								</td>
+							</tr>
 							</tbody>
 						</table>
 					</div>

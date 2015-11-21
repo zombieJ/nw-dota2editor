@@ -1,5 +1,7 @@
 'use strict';
 
+var components = angular.module('app.components', []);
+
 components.directive('kvfield', function($compile) {
 	return {
 		restrict: 'AE',
@@ -24,23 +26,25 @@ components.directive('kvfield', function($compile) {
 			$scope.getItemList = function () {
 				var _list = $scope.srctmpl[$scope.attrunit.attr];
 				if (!$.isArray(_list)) {
-					console.error("Not Array: ", $scope.attrunit.attr, $scope.srctmpl, _list);
+					console.error("Not Array: ", $scope.attrunit.attr);
+					console.error($scope.srctmpl, _list);
 				}
 				return _list;
 			};
 		},
 		template:
 		'<div ng-switch="attrunit.type" class="ability-form">' +
-			// Blob [X]
-			//'<textarea class="form-control" rows="5" ng-model="srcunit[getAttrPath()]" placeholder="[None]" ng-switch-when="blob"></textarea>'+
+			// Blob
+			'<textarea class="form-control" rows="5" ng-model="srcunit.kv.bind(getAttrPath())" ng-model-options="{getterSetter: true}" placeholder="[None]" ng-switch-when="blob"></textarea>'+
 
 			// Group [X]
 			//'<div groupselect data-ability="srcunit" data-attr="{{getAttrPath()}}" data-base="srctmpl" ng-switch-when="group"></div>' +
+			'<div kvgroup data-source="srctmpl" data-source-path="{{getAttrPath()}}" data-target="srcunit" ng-switch-when="group"></div>' +
 
 			// Single
 			'<select class="form-control" ng-model="srcunit.kv.bind(getAttrPath())" ng-model-options="{getterSetter: true}" ng-switch-when="single" >' +
-				'<option value="">Default 【{{Locale(\'Default\')}}】</option>'+
-				'<option ng-repeat="(i, item) in getItemList() track by $index" value="{{item[0]}}">{{item[0]}} 【{{item[1]}}】</option>'+
+				'<option value="">【{{Locale(\'Default\')}}】 Default</option>'+
+				'<option ng-repeat="(i, item) in getItemList() track by $index" value="{{item[0]}}">【{{Locale(item[0])}}】 {{item[0]}}</option>'+
 			'</select>'+
 
 			// Boolean
@@ -52,7 +56,7 @@ components.directive('kvfield', function($compile) {
 			'data-alternative="srctmpl[getAttrPath()]" data-matchfuc="attrunit.match(srcunit[getAttrPath()], ability)" />' +
 
 			// Default
-			'<p ng-switch-default>{{attrunit.type}}</p>' +
+			'<p ng-switch-default class="text-danger">【Type Not Match: {{attrunit.type}}】</p>' +
 		'</div>',
 		replace: true
 	};
