@@ -50,7 +50,9 @@ app.factory("Sound", function(NODE, FS) {
 				$.each(value, function(i, val) {
 					if (val.toUpperCase().indexOf(match) !== -1) {
 						_maxMatch -= 1;
-						_matchList.push([val]);
+						_matchList.push({
+							value: val
+						});
 					}
 				});
 			}
