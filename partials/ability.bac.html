@@ -72,7 +72,7 @@
 				<ul class="nav nav-pills">
 					<li ng-class="{active: currentTab === 'common'}"><a ng-click="currentTab = 'common'">Common【常规】</a></li>
 					<li ng-class="{active: currentTab === 'item'}" ng-show="isItem"><a ng-click="currentTab = 'item'">Item【物品】</a></li>
-					<li ng-class="{active: currentTab === 'events'}"><a ng-click="currentTab = 'events'">Events【事件】({{ability.getEventList().length}})</a></li>
+					<li ng-class="{active: currentTab === 'events'}"><a ng-click="currentTab = 'events'">Events【事件】({{ability._eventList.length}})</a></li>
 					<li ng-class="{active: currentTab === 'modifiers'}"><a ng-click="currentTab = 'modifiers'">Modifiers【修饰器】({{ability._modifierList.length}})</a></li>
 					<li ng-class="{active: currentTab === 'abilitySpecial'}"><a ng-click="currentTab = 'abilitySpecial'">Ability Special【自定义值】({{ability._abilitySpecialList.length}})</a></li>
 				</ul>
@@ -281,17 +281,6 @@
 													<a href="javascript:void(0)" ng-click="common.array.remove(currentModifier._eventList[_index], currentModifier._eventList)">
 														Delete
 													</a>
-												</td>
-											</tr>
-
-											<!-- Event Thinking Interval -->
-											<tr>
-												<th>
-													<span class="ability-tip">ThinkInterval</span>
-													{{Locale('ThinkInterval')}}
-												</th>
-												<td class="ability-form" colspan="2">
-													<input class="form-control" ng-model="currentModifier._eventList[_index].ThinkInterval" rows="3"/>
 												</td>
 											</tr>
 

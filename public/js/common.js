@@ -104,6 +104,12 @@ window._WARN = function (type, lvl) {
 	console.warn.apply(console, _args);
 };
 
+window._ERROR = function (type, lvl) {
+	var _args = Array.prototype.slice.call(arguments, 2);
+	_args.unshift("["+type+"]" + common.text.repeat("  ", lvl));
+	console.error.apply(console, _args);
+};
+
 // ======================= Text =======================
 common.text = {};
 
@@ -123,8 +129,18 @@ common.text.preFill = function(text, fillChar, length) {
 	return text;
 };
 
+common.text.equals = function(strA, strB) {
+	return (strA + "").toUpperCase() === (strB + "").toUpperCase();
+};
+
 // ====================== Array =======================
 common.array = {};
+
+/***
+ * Nevet Modify it!
+ * @type {Array}
+ */
+common.array.empty = [];
 
 /***
  * Create number array

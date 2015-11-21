@@ -5,6 +5,10 @@ var hammerControllers = angular.module('hammerControllers', ['ngRoute', 'app.com
 hammerControllers.controller('indexCtrl', function ($scope) {
 });
 
+
+(function() {
+return;
+
 var _abilityCtrl = function(isItem) {
 	return function ($scope, $http, $interval, $timeout, NODE, globalContent, KV, Ability, Event, Operation, Modifier) {
 		if (!globalContent.isOpen) return;
@@ -624,3 +628,5 @@ var _abilityCtrl = function(isItem) {
 
 hammerControllers.controller('abilityCtrl', _abilityCtrl(false));
 hammerControllers.controller('itemCtrl', _abilityCtrl(true));
+
+})();

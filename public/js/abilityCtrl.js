@@ -1,28 +1,29 @@
 'use strict';
 
-var _unitCtrl = function(isHero) {
-	return function ($scope, globalContent, NODE, Unit, UI, KV, Locale, Config) {
+var _abilityCtrl = function(isItem) {
+	return function ($scope, globalContent, NODE, Ability, UI, KV, Locale, Config) {
 		if (!globalContent.isOpen) return;
 
 		window.scope = $scope;
 
-		$scope.isHero = isHero;
+		$scope.isItem = isItem;
 		$scope.ready = false;
 		$scope.abilityList = [];
 		$scope.ability = null;
 
-		$scope._newUnitFork = null;
+		/*$scope._newUnitFork = null;
 		$scope._newUnitForkLang = true;
 		$scope._newUnitName = "";
 
 		$scope._newUnassignedKey = "";
-		$scope._newUnassignedValue = "";
+		$scope._newUnassignedValue = "";*/
 
-		var _globalListKey = isHero ? "heroList" : "unitList";
-		var _globalConfigKey = isHero ? "heroConfig" : "unitConfig";
-		var _filePath = isHero ? Unit.heroFilePath : Unit.filePath;
+		var _globalListKey = isItem ? "itemList" : "abilityList";
+		var _globalConfigKey = isItem ? "abilityConfig" : "itemConfig";
+		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
 
-		$scope.currentTab = Unit.AttrList[0];
+
+		$scope.currentTab = "common";
 		$scope.setCurrentTab = function (current) {
 			$scope.currentTab = current;
 		};
@@ -34,7 +35,7 @@ var _unitCtrl = function(isHero) {
 			$scope.ability = ability;
 		};
 
-		// ==========> New
+		/*// ==========> New
 		$scope.newEntity = function(source) {
 			$scope._newUnitFork = source;
 			$scope._newUnitForkLang = true;
@@ -141,14 +142,14 @@ var _unitCtrl = function(isHero) {
 		};
 		$scope.refreshUnassigned = function () {
 			$scope.ability.refreshUnassignedList();
-		};
+		};*/
 
 		// ================================================================
 		// =                        File Operation                        =
 		// ================================================================
 		// Read Config file
 		if (!globalContent[_globalConfigKey]) {
-			NODE.loadFile(Unit[_globalConfigKey], "utf8").then(function (data) {
+			NODE.loadFile(Ability[_globalConfigKey], "utf8").then(function (data) {
 				$scope.config = JSON.parse(data);
 			}, function () {
 				$scope.config = {};
@@ -159,14 +160,14 @@ var _unitCtrl = function(isHero) {
 			$scope.config = globalContent[_globalConfigKey];
 		}
 
-		// Read Unit file
+		// Read Ability file
 		if (!globalContent[_globalListKey]) {
 			NODE.loadFile(_filePath, "utf8").then(function (data) {
 				var _kv = KV.parse(data);
 				$.each(_kv.value, function (i, unit) {
 					if (typeof  unit.value !== "string") {
-						var _unit = Unit.parse(unit);
-						_LOG("Unit", 0, "实体：", _unit._name, _unit);
+						var _unit = Ability.parse(unit);
+						_LOG("Ability", 0, "实体：", _unit._name, _unit);
 
 						$scope.abilityList.push(_unit);
 					}
@@ -201,7 +202,7 @@ var _unitCtrl = function(isHero) {
 		// ================================================================
 		// =                     List Item Operation                      =
 		// ================================================================
-		$scope.setAbilityMarkUsage = function(usage) {
+		/*$scope.setAbilityMarkUsage = function(usage) {
 			if(!$scope.config) return;
 
 			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
@@ -256,22 +257,6 @@ var _unitCtrl = function(isHero) {
 		$scope.copyAbility = function() {
 			if(!_menuAbility) return;
 
-			/*var _clone = new Unit(_menuAbility.kv.clone());
-			_clone._name += "_clone";
-			_clone._changed = true;
-
-			// 复制配置
-			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
-			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
-			var _cloneAbility = _abilities[_clone._name] = _abilities[_clone._name] || {};
-			$.extend(_cloneAbility, _ability, true);
-			if(_cloneAbility.editorAliasName) {
-				_cloneAbility.editorAliasName += " copy";
-			}
-
-			var _index = $.inArray(_menuAbility, $scope.abilityList);
-			$scope.setAbility(_clone);
-			$scope.abilityList.splice(_index + 1, 0, $scope.ability);*/
 			$scope.newEntity(_menuAbility);
 		};
 
@@ -292,7 +277,7 @@ var _unitCtrl = function(isHero) {
 				}
 				$scope.$apply();
 			});
-		};
+		};*/
 
 		// ================================================================
 		// =                              UI                              =
@@ -364,5 +349,5 @@ var _unitCtrl = function(isHero) {
 	};
 };
 
-hammerControllers.controller('unitCtrl', _unitCtrl(false));
-hammerControllers.controller('heroCtrl', _unitCtrl(true));
+hammerControllers.controller('abilityCtrl', _abilityCtrl(false));
+hammerControllers.controller('UnitCtrl', _abilityCtrl(true));
