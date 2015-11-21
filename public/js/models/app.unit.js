@@ -288,8 +288,8 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 		],
 
 		[
-			{group: "Projectile", attr: "ProjectileModel", type: "text", showFunc: function($scope) {return $scope.ability.AttackCapabilities === "DOTA_UNIT_CAP_RANGED_ATTACK";}},
-			{group: "Projectile", attr: "ProjectileSpeed", type: "text", showFunc: function($scope) {return $scope.ability.AttackCapabilities === "DOTA_UNIT_CAP_RANGED_ATTACK";}},
+			{group: "Projectile", attr: "ProjectileModel", type: "text", showFunc: function($scope) {return $scope.ability.kv.get("AttackCapabilities", false)  === "DOTA_UNIT_CAP_RANGED_ATTACK";}},
+			{group: "Projectile", attr: "ProjectileSpeed", type: "text", showFunc: function($scope) {return $scope.ability.kv.get("AttackCapabilities", false) === "DOTA_UNIT_CAP_RANGED_ATTACK";}},
 		],
 
 		[
