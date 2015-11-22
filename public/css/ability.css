@@ -39,6 +39,33 @@ hr {
 	box-shadow: none;
 }
 
+.ability-form .d-checkbox {
+	padding-left: 5px;
+	line-height: 100%;
+}
+.ability-form .d-checkbox > div {
+	border: 2px solid #999;
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	margin-top: 2px;
+	position: relative;
+	border-radius: 4px;
+	-webkit-user-select:none;
+}
+.ability-form .d-checkbox > div > .fa {
+	font-size: 19px;
+	position: absolute;
+	left: 2px;
+	top: 1px;
+}
+.ability-form .d-checkbox > div > .fa.fa-check {
+	left: 0.5px;
+}
+.ability-form .d-checkbox > div > .fa.fa-square {
+	color: rgba(0,0,0,0.1);
+}
+
 .ability-form .ability-tip {
 	position: absolute;
 	right: 5px;
@@ -328,7 +355,7 @@ hr {
 
 /* Header */
 .ability-cntr-header {
-	font-family: "Microsoft YaHei",Î¢ÈíÑÅºÚ,"Microsoft JhengHei",»ªÎÄÏ¸ºÚ,STHeiti,MingLiu;
+	font-family: "Microsoft YaHei",Î¢ï¿½ï¿½ï¿½Åºï¿½,"Microsoft JhengHei",ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½,STHeiti,MingLiu;
 	margin-bottom: 10px;
 }
 
@@ -410,7 +437,7 @@ hr {
 
 /* Body */
 .ability-cntr-body {
-	font-family: "Microsoft YaHei",Î¢ÈíÑÅºÚ,"Microsoft JhengHei",»ªÎÄÏ¸ºÚ,STHeiti,MingLiu;
+	font-family: "Microsoft YaHei",Î¢ï¿½ï¿½ï¿½Åºï¿½,"Microsoft JhengHei",ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½,STHeiti,MingLiu;
 	margin-bottom: 10px;
 }
 

@@ -27,8 +27,21 @@ app.factory("Ability", function($q, Event, Modifier) {
 			}
 		});
 
+		// Set Default
+		if(!kv) {
+			_my.kv.setDefault("BaseClass", "ability_datadriven");
+			//_my.kv.setDefault("AbilityUnitTargetTeam", "DOTA_UNIT_TARGET_TEAM_NONE")
+			//_my.kv.setDefault("AbilityType", "DOTA_ABILITY_TYPE_BASIC")
+		}
+
 		// Event List
 		_my._eventList = [];
+
+		// Modifier
+		_my._modifier = _my.kv.assumeKey("Modifiers", true);
+
+		// Ability Special
+		_my._special = _my.kv.assumeKey("AbilitySpecial", true);
 
 		return _my;
 	};
@@ -58,7 +71,8 @@ app.factory("Ability", function($q, Event, Modifier) {
 		var _my = this;
 		_my._eventList.splice(0);
 		$.each(_my.kv.value, function(i, kv) {
-			if(common.array.find(kv.key, Event.ModifierEventList, "", false, false)) {
+			if(kv._isEvent || common.array.find(kv.key, Event.ModifierEventList, "value", false, false)) {
+				kv._isEvent = true;
 				_my._eventList.push(kv);
 			}
 		});
@@ -103,9 +117,6 @@ app.factory("Ability", function($q, Event, Modifier) {
 	 };
 
 	Ability.AttrList = [
-		/*[
-		 {group: "common", attr: "ConsideredHero", type: "single", showFunc: function($scope) {return !$scope.isHero;}},
-		 ],*/
 		[
 			{group: "common", attr: "BaseClass", type: "text", defaultValue: "ability_datadriven"},
 			{group: "common", attr: "AbilityTextureName", type: "text"},
@@ -154,31 +165,44 @@ app.factory("Ability", function($q, Event, Modifier) {
 	];
 
 	Ability.ItemAttrList = [
-		{group: "item", attr: "ID", type: "text"},
-		{group: "item", attr: "ItemCost", type: "text"},
-		{group: "item", attr: "ItemDroppable", type: "boolean", defaultValue: true},
-		{group: "item", attr: "ItemSellable", type: "boolean", defaultValue: true},
-		{group: "item", attr: "ItemShareability", type: "single"},
-		{group: "item", attr: "ItemPurchasable", type: "single"},
-		{group: "item", attr: "ItemDeclarations", type: "single"},
-		{group: "item", attr: "ItemKillable", type: "boolean", defaultValue: true},
-		{group: "item", attr: "ItemAlertable", type: "boolean", defaultValue: false},
-		{group: "item", attr: "ItemPermanent", type: "single"},
-		{group: "item", attr: "ItemInitialCharges", type: "text"},
-		{group: "item", attr: "ItemRequiresCharges", type: "single"},
-		{group: "item", attr: "ItemStackable", type: "boolean", defaultValue: false},
-		{group: "item", attr: "SideShop", type: "text"},
-		{group: "item", attr: "SecretShop", type: "text"},
-		{group: "item", attr: "ItemCastOnPickup", type: "boolean", defaultValue: false},
-		{group: "item", attr: "ItemQuality", type: "single"},
-		{group: "item", attr: "ItemShopTags", type: "text"},
-		{group: "item", attr: "ItemAliases", type: "text"},
-		{group: "item", attr: "MaxUpgradeLevel", type: "text"},
-		{group: "item", attr: "ItemBaseLevel", type: "text"},
-		{group: "item", attr: "ItemRecipe", type: "boolean", defaultValue: false},
-		{group: "item", attr: "ItemResult", type: "text"},
-		{group: "item", attr: "ItemRequirements", type: "blob"},  // TODO: 合成公式！
-		{group: "item", attr: "ItemDisassembleRule", type: "single"},
+		[
+			{group: "item", attr: "ID", type: "text"},
+			{group: "item", attr: "ItemQuality", type: "single"},
+			{group: "item", attr: "ItemCastOnPickup", type: "boolean", defaultValue: false},
+		],
+		[
+			{group: "item", attr: "ItemCost", type: "text"},
+			{group: "item", attr: "ItemDroppable", type: "boolean", defaultValue: true},
+			{group: "item", attr: "ItemSellable", type: "boolean", defaultValue: true},
+			{group: "item", attr: "ItemShareability", type: "single"},
+			{group: "item", attr: "ItemPurchasable", type: "single"},
+			{group: "item", attr: "ItemDeclarations", type: "single"},
+			{group: "item", attr: "ItemKillable", type: "boolean", defaultValue: true},
+			{group: "item", attr: "ItemAlertable", type: "boolean", defaultValue: false},
+			{group: "item", attr: "ItemPermanent", type: "single"},
+		],
+		[
+			{group: "item", attr: "ItemRequiresCharges", type: "single"},
+			{group: "item", attr: "ItemInitialCharges", type: "text"},
+			{group: "item", attr: "ItemStackable", type: "boolean", defaultValue: false},
+		],
+		[
+			{group: "item", attr: "SideShop", type: "text"},
+			{group: "item", attr: "SecretShop", type: "text"},
+			{group: "item", attr: "ItemShopTags", type: "text"},
+			{group: "item", attr: "ItemAliases", type: "text"},
+		],
+
+		[
+			{group: "item", attr: "MaxUpgradeLevel", type: "text"},
+			{group: "item", attr: "ItemBaseLevel", type: "text"},
+		],
+		[
+			{group: "item", attr: "ItemRecipe", type: "boolean", defaultValue: false},
+			{group: "item", attr: "ItemResult", type: "text"},
+			{group: "item", attr: "ItemRequirements", type: "blob"},  // TODO: 合成公式！
+			{group: "item", attr: "ItemDisassembleRule", type: "single"},
+		],
 	];
 
 	// ================================================

@@ -35,6 +35,12 @@ var _abilityCtrl = function(isItem) {
 			$scope.ability = ability;
 		};
 
+		$scope.addEvent = function(entity) {
+			var _kv = new KV("", []);
+			_kv._isEvent = true;
+			entity.value.push(_kv);
+		};
+
 		/*// ==========> New
 		$scope.newEntity = function(source) {
 			$scope._newUnitFork = source;
@@ -350,4 +356,4 @@ var _abilityCtrl = function(isItem) {
 };
 
 hammerControllers.controller('abilityCtrl', _abilityCtrl(false));
-hammerControllers.controller('UnitCtrl', _abilityCtrl(true));
+hammerControllers.controller('itemCtrl', _abilityCtrl(true));

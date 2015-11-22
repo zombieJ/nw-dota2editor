@@ -32,7 +32,7 @@ components.directive('kvgroup', function($compile) {
 				_selectedList.splice(0);
 
 				if ($scope.target) {
-					var _content = ($scope.target.kv.get(_tgtPath(), false) || "").trim();
+					var _content = ($scope.target.get(_tgtPath(), false) || "").trim();
 					$.each(_content.split("|"), function (i, line) {
 						if(line) _selectedList.push(line.trim());
 					});
@@ -67,7 +67,7 @@ components.directive('kvgroup', function($compile) {
 					$cntr.find("input:checked").each(function() {
 						_items.push($(this).attr("data-name"));
 					});
-					$scope.target.kv.set(_tgtPath(), _items.join(" | "));
+					$scope.target.set(_tgtPath(), _items.join(" | "));
 					$scope.$apply();
 				});
 			};
@@ -82,13 +82,6 @@ components.directive('kvgroup', function($compile) {
 			};
 		},
 		template :
-		/*'<a href="javascript: void(0);" ng-click="editGroup()" ng-switch-default>' +
-		'<span class="label label-default" ng-repeat="(unitName, unitValue) in ability[tgtattr || attr]" ng-if="unitValue">' +
-		'{{unitName.replace("DOTA_UNIT_TARGET_", "").replace("DECLARE_PURCHASES_", "").replace("FLAG_", "").replace("DOTA_ABILITY_BEHAVIOR_", "")}} ' +
-		'¡¾{{common.array.find(unitName, getItemList(), "0")[1]}}¡¿' +
-		'</span>'+
-		' <span class="glyphicon glyphicon-pencil"></span>'+
-		'</a>'*/
 		'<a ng-click="editGroup()">' +
 			'<span class="label label-default" ng-repeat="line in getSelectList()">' +
 				'{{Locale(line)}}' +

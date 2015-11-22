@@ -6,6 +6,8 @@
 	<input type="text" class="form-control" ng-model="Config.global.mainLang">
 </div>
 
+<hr/>
+
 <div class="checkbox">
 	<label>
 		<input type="checkbox" ng-checked="Config.global.saveKeepKV" ng-click="Config.global.saveKeepKV = !Config.global.saveKeepKV">
@@ -13,6 +15,8 @@
 		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('saveKeepKV')}}"></span>
 	</label>
 </div>
+
+<hr/>
 
 <div class="form-group">
 	<label>
@@ -22,5 +26,17 @@
 	<input type="text" class="form-control" ng-model="Config.global.streamAPIKey">
 </div>
 <p class="text-muted">* {{Locale('applyStreamKey')}} https://steamcommunity.com/dev/apikey</p>
+
+<hr/>
+
+<div class="checkbox">
+	<label>
+		<input type="checkbox" ng-checked="Config.global.eventUseText" ng-click="Config.global.eventUseText = !Config.global.eventUseText">
+		Ability/Item Event use text input
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('eventUseText')}}"></span>
+	</label>
+</div>
+
+<hr/>
 
 <button class="btn btn-primary" ng-click="saveConfig()">{{Locale('Save')}}</button>

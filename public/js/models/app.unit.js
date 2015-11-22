@@ -31,6 +31,11 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 			}
 		});
 
+		// Init
+		if(!kv) {
+			_my.kv.setDefault("BaseClass", "npc_dota_creature");
+		}
+
 		// Force Keep Ability
 		for(var i = 1 ; i <= 16 ; i += 1) {
 			_my.kv.assumeKey("Ability" + i).keep = true;

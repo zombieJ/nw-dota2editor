@@ -95,7 +95,7 @@ components.directive('tipfield', function($compile) {
 							'<li ng-repeat="item in currentList track by $index" ng-mousedown="selectItem(item)" ng-class="{selected: $index === selected}">' +
 								'<a ng-class="{primary: item.suggest}">' +
 									'{{item.value}} ' +
-									'<span ng-if="item.key || item._key">[{{item.key ? Locale(item.key) : item._key}}]</span>' +
+									'<span ng-if="item.key || item._key || Locale.hasKey(item.value)">[{{item.key ? Locale(item.key) : item._key || Locale(item.value)}}]</span>' +
 								'</a>' +
 							'</li>'+
 						'</ul>'

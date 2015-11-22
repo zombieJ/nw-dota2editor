@@ -6,6 +6,10 @@
 app.factory("KV", function(NODE, $q) {
 	var _KV = KV;
 
+	_KV.new = function(key, value, comment) {
+		return new _KV(key, value, comment);
+	};
+
 	_KV.prototype.assumeKey = function(key, valueIsList) {
 		var _kv = this;
 		var _split = key.split(".");
@@ -34,6 +38,12 @@ app.factory("KV", function(NODE, $q) {
 		});
 
 		return _kv ? _kv.value : defaultValue;
+	};
+
+	_KV.prototype.setDefault = function(key, value) {
+		if(!this.getKV(key)) {
+			this.set(key, value);
+		}
 	};
 
 	_KV.prototype.bind = function(key, valueIsList) {

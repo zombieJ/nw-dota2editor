@@ -17,6 +17,10 @@ app.factory("Locale", function() {
 	Locale.lang = "cn";
 	Locale.langMap = {};
 
+	Locale.hasKey = function(key) {
+		return !!Locale.langMap[Locale.lang][key];
+	};
+
 	// ========================================
 	// =                  CN                  =
 	// ========================================
@@ -381,6 +385,9 @@ app.factory("Locale", function() {
 		DOTA_NPC_UNIT_RELATIONSHIP_TYPE_WARD: "眼",
 
 		// 事件
+		NewEvent: "新建事件",
+		NoEvent: "没有事件",
+		EventType: "事件类型",
 		OnSpellStart: "开始施法",
 		OnAbilityStart: "技能开始",
 		OnAbilityExecuted: "释放技能",
@@ -428,6 +435,7 @@ app.factory("Locale", function() {
 		Orb: "法球",
 
 		// 操作
+		NewOperation: "新建操作",
 		ApplyModifier: "添加修饰器",
 		RemoveModifier: "移除修饰器",
 		AttachEffect: "添加特效",
@@ -492,6 +500,7 @@ app.factory("Locale", function() {
 		conflictName: "名称冲突",
 		noLanguageFile: "没有找到语言文件",
 		exitConfirm: "您确认要退出吗？",
+		eventUseText: "技能与物品的事件选项框改成带提示的文本，如果你对事件列表十分熟悉。推荐使用该模式。",
 
 	};
 

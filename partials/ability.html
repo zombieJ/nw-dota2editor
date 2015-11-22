@@ -80,19 +80,6 @@
 				<div>
 					<!-- ====================== 常规 ====================== -->
 					<div ng-if="currentTab === 'common'">
-						<!--table class="ability-table">
-							<tbody ng-repeat="group in ability._attrList track by $index">
-								<tr ng-repeat="unit in group.list track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
-									<th width="150">
-										<span class="ability-tip">{{unit.title || unit.attr}}</span>
-										{{Locale(unit.attr)}}
-									</th>
-									<td class="ability-form">
-										<div attrfield attrfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
-									</td>
-								</tr>
-							</tbody>
-						</table-->
 						<table class="ability-table">
 							<tbody ng-repeat="grpLst in Ability.AttrList track by $index">
 							<tr ng-repeat="unit in grpLst track by $index" ng-if="unit.showFunc ? unit.showFunc(this) : true;">
@@ -111,14 +98,14 @@
 					<!-- ====================== 物品 ====================== -->
 					<div ng-if="currentTab === 'item'">
 						<table class="ability-table">
-							<tbody ng-repeat="group in ability._attrItemList track by $index">
-							<tr ng-repeat="unit in group.list track by $index" ng-show="unit.showFunc ? unit.showFunc() : true;">
-								<th width="150">
-									<span class="ability-tip">{{unit.title || unit.attr}}</span>
-									{{Locale(unit.attr)}}
+							<tbody ng-repeat="grpLst in Ability.ItemAttrList track by $index">
+							<tr ng-repeat="unit in grpLst track by $index" ng-if="unit.showFunc ? unit.showFunc(this) : true;">
+								<th width="200">
+									<span class="ability-tip">{{unit.attr}}</span>
+									{{::Locale(unit.attr)}}
 								</th>
 								<td class="ability-form">
-									<div attrfield attrfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
+									<div kvfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>
 								</td>
 							</tr>
 							</tbody>
@@ -128,55 +115,56 @@
 					<!-- ====================== 事件 ====================== -->
 					<div ng-if="currentTab === 'events'">
 						<table class="ability-table">
-							<tbody ng-repeat="_index in optEventNum track by $index" ng-show="ability._eventList[_index]">
-								<!-- 事件类型 -->
-								<tr>
-									<th width="120">
-										<span class="ability-tip">Event Type</span>
-										事件类型
-									</th>
-									<td class="ability-form">
-										<select ng-model="ability._eventList[_index]._name">
-											<option ng-repeat="_event in Event.EventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>
-										</select>
-									</td>
-									<td width="60" class="text-center">
-										<a href="javascript:void(0)" ng-click="common.array.remove(ability._eventList[_index], ability._eventList)">
-											Delete
-										</a>
-									</td>
-								</tr>
-								<!-- 事件备注 -->
-								<tr>
-									<th>
-										<span class="ability-tip">Comment</span>
-										备注
-									</th>
-									<td class="ability-form" colspan="2">
-										<textarea class="form-control" ng-model="ability._eventList[_index]._comment" rows="3" placeholder="备注"></textarea>
-									</td>
-								</tr>
-								<!-- 操作 -->
-								<tr>
-									<th>
-										<span class="ability-tip">Operation</span>
-										操作
-									</th>
-									<td class="ability-form" colspan="2" style="background: #FFF">
-										<div eventoperation data-container="ability._eventList[_index]" data-path="_operationList" data-ability="ability" data-isitem="isItem"></div>
-									</td>
-								</tr>
+							<tbody ng-repeat="event in ability.getEventList() track by $index">
+							<!-- 事件类型 -->
+							<tr>
+								<th width="120">
+									<span class="ability-tip">Event Type</span>
+									{{Locale('EventType')}}
+								</th>
+								<td class="ability-form" ng-switch="Config.global.eventUseText">
+									<input tipfield type="text" ng-model="event.key" data-alternative="Event.EventList" ng-switch-when="true" />
+									<select ng-model="event.key" ng-switch-default>
+										<option ng-repeat="_event in Event.EventList track by $index" value="{{::_event.value}}">{{::_event.value}} 【{{::Locale(_event.value)}}】</option>
+									</select>
+								</td>
+								<td width="60" class="text-center">
+									<a ng-click="common.array.remove(event, ability.kv.value)">
+										Delete
+									</a>
+								</td>
+							</tr>
+							<!-- 事件备注 -->
+							<tr>
+								<th>
+									<span class="ability-tip">Comment</span>
+									{{Locale('Comment')}}
+								</th>
+								<td class="ability-form" colspan="2">
+									<textarea ng-model="event.comment" rows="3" placeholder="{{Locale('Comment')}}"></textarea>
+								</td>
+							</tr>
+							<!-- 操作 -->
+							<tr>
+								<th>
+									<span class="ability-tip">Operation</span>
+									{{::Locale('Operation')}}
+								</th>
+								<td class="ability-form" colspan="2" style="background: #FFF">
+									<div operationlist="event.value" data-alternative="isitem ? Operation.EventItemOperation : Operation.EventOperation" data-ability="ability"></div>
+								</td>
+							</tr>
 							</tbody>
 
-							<tbody ng-if="ability._eventList.length === 0">
-								<tr>
-									<td>
-										<p>No Event 【没有事件】</p>
-									</td>
-								</tr>
+							<tbody ng-if="ability.getEventList().length === 0">
+							<tr>
+								<td>
+									<p>{{::Locale('NoEvent')}}</p>
+								</td>
+							</tr>
 							</tbody>
 						</table>
-						<button class="btn btn-dark" ng-click="addEvent()">+ new event 【新建事件】</button>
+						<button class="btn btn-dark" ng-click="addEvent(ability.kv)">+ {{::Locale('NewEvent')}}</button>
 					</div>
 
 					<!-- ===================== 修饰器 ===================== -->
