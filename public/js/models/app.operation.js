@@ -239,7 +239,7 @@ app.factory("Operation", function(Sound) {
 	};
 
 	Operation.EventOperation = [
-		["ApplyModifier", "添加修饰器", true, ["Target", "ModifierName"]],
+		["ApplyModifier", "添加修饰器", true, ["Target", "ModifierName", "Duration"]],
 		["RemoveModifier", "移除修饰器", true, ["Target", "ModifierName"]],
 		["AttachEffect", "添加特效", true, ["EffectName","EffectAttachType","Target","ControlPoints", "ControlPointEntities"]],
 		["FireEffect", "触发特效", true, ["EffectName", "EffectAttachType", "Target", "ControlPoints", "ControlPointEntities"]],
