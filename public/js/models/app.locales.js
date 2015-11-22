@@ -462,6 +462,18 @@ app.factory("Locale", function() {
 		LinearProjectile: "线性投射物",
 		SpendCharge: "消耗物品",
 
+		CASTER: "施法者",
+		TARGET: "目标",
+		POINT: "点",
+		ATTACKER: "攻击者",
+		UNIT: "单位",
+		PROJECTILE: "投射物",
+
+		follow_origin: "跟随目标",
+		follow_overhead: "跟随头顶",
+		start_at_customorigin: "自定义位置",
+		world_origin: "世界的中心",
+
 		// 英雄
 		override_hero: "替换英雄",
 		AttributePrimary: "主属性",

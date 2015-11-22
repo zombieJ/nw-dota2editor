@@ -19,7 +19,7 @@ var _abilityCtrl = function(isItem) {
 		$scope._newUnassignedValue = "";*/
 
 		var _globalListKey = isItem ? "itemList" : "abilityList";
-		var _globalConfigKey = isItem ? "abilityConfig" : "itemConfig";
+		var _globalConfigKey = isItem ? "itemConfig" : "abilityConfig";
 		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
 
 

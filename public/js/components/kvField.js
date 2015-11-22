@@ -12,8 +12,9 @@ components.directive('kvfield', function($compile) {
 			ability: "=",		// Skill / Item Ability - Used for link
 			path: "@",			// Prepath. e.g. "lvl1" + attrunit.attr = "lvl1.attr"
 		},
-		controller: function($scope, $element, $attrs, Locale) {
+		controller: function($scope, $element, $attrs, Locale, Operation) {
 			$scope.Locale = Locale;
+			$scope.Operation = Operation;
 
 			$scope.getKV = function() {
 				if($scope.srcunit) {
@@ -33,10 +34,31 @@ components.directive('kvfield', function($compile) {
 			$scope.getItemList = function () {
 				var _list = $scope.srctmpl[$scope.attrunit.attr];
 				if (!$.isArray(_list)) {
-					console.error("Not Array: ", $scope.attrunit.attr);
-					console.error($scope.srctmpl, _list);
+					if($.isArray(_list.value)) {
+						_list = _list.value;
+					} else {
+						console.error("Not Array: ", $scope.attrunit.attr);
+						console.error($scope.srctmpl, _list);
+					}
 				}
 				return _list;
+			};
+		},
+		compile: function (element, attrs) {
+			var contents = element.contents().remove();
+			var compiledContents;
+
+			return {
+				post: function(scope, element){
+					// Compile the contents
+					if(!compiledContents){
+						compiledContents = $compile(contents);
+					}
+					// Re-add the compiled contents to the element
+					compiledContents(scope, function(clone){
+						element.append(clone);
+					});
+				},
 			};
 		},
 		template:
@@ -54,13 +76,21 @@ components.directive('kvfield', function($compile) {
 			'</select>'+
 
 			// Boolean
-			//'<input type="checkbox" ng-checked="getKV().getBoolValue(getAttrPath())" ng-model-options="{getterSetter: true}" ng-switch-when="boolean" ' +
-			//'ng-click="getKV().reverseBoolValue(getAttrPath())" />' +
 			'<div checkbox data-target="getKV()" data-target-path="{{getAttrPath()}}" ng-switch-when="boolean"></div>' +
 
 			// Text
 			'<input tipfield class="form-control" ng-model="getKV().bind(getAttrPath())" ng-model-options="{getterSetter: true}" ng-switch-when="text" ' +
 			'data-alternative="srctmpl[getAttrPath()]" data-matchfuc="attrunit.match(srcunit[getAttrPath()], ability)" />' +
+
+			// Unit Group
+			'<div kvunitgroup data-target="getKV()" data-target-path="{{getAttrPath()}}"  ng-switch-when="unitGroup"></div>'+
+
+			// Operation
+			'<div class="ability-form-operationList" ng-switch-when="operation">' +
+				//'<div eventoperation data-container="operation.attrs" data-path="{{opcol}}"></div>' +
+				//'{{getKV().assumeKeyList(getAttrPath())}}'+
+				'<div operationlist="getKV().assumeKey(getAttrPath(), true).value" data-alternative="Operation.EventItemOperation" data-ability="ability"></div>'+
+			'</div>' +
 
 			// Default
 			'<p ng-switch-default class="text-danger">【Type Not Match: {{attrunit.type}}】</p>' +

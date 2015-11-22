@@ -95,24 +95,29 @@ app.factory("Operation", function(Sound) {
 
 	//{group: "common", attr: "BaseClass", type: "text", defaultValue: "ability_datadriven"},
 	Operation.OperationAttrMap = {
-		Target: {type: "unitGroup", value: ["","CASTER","TARGET","POINT","ATTACKER","UNIT", "[Group Units]"]},
+		Target: {type: "unitGroup", value: ["CASTER", "TARGET", "POINT", "ATTACKER", "UNIT", "[Group Units]"]},
 		AbilityName: {type: "text"},
-		ModifierName: {type: "text", match: function(operation, ability) {
-			_match_ModifierName.ability = ability;
-			return _match_ModifierName;
-		}, link: function(value, operation, ability) {
-			var _modifier = common.array.find(value, ability._modifierList, "_name");
-			if(_modifier) {
-				_link_ModifierName.modifier = _modifier;
-				return _link_ModifierName;
+		ModifierName: {
+			type: "text", match: function (operation, ability) {
+				_match_ModifierName.ability = ability;
+				return _match_ModifierName;
+			}, link: function (value, operation, ability) {
+				var _modifier = common.array.find(value, ability._modifierList, "_name");
+				if (_modifier) {
+					_link_ModifierName.modifier = _modifier;
+					return _link_ModifierName;
+				}
+				return null;
 			}
-			return null;
-		}},
+		},
 		EffectName: {type: "text", match: _match_EffectName},
-		EffectAttachType: {type: "single", value: ["follow_origin", "follow_overhead", "start_at_customorigin", "world_origin"]},
+		EffectAttachType: {
+			type: "single",
+			value: [["follow_origin"], ["follow_overhead"], ["start_at_customorigin"], ["world_origin"]]
+		},
 		ControlPoints: {type: "blob"},
 		ControlPointEntities: {type: "blob"},
-		Type: {type: "single", value: ["DAMAGE_TYPE_MAGICAL","DAMAGE_TYPE_PHYSICAL","DAMAGE_TYPE_PURE"]},
+		Type: {type: "single", value: [["DAMAGE_TYPE_MAGICAL"], ["DAMAGE_TYPE_PHYSICAL"], ["DAMAGE_TYPE_PURE"]]},
 		MinDamage: {type: "text"},
 		MaxDamage: {type: "text"},
 		Damage: {type: "text"},
@@ -120,13 +125,13 @@ app.factory("Operation", function(Sound) {
 		MaxHealthPercentBasedDamage: {type: "text"},
 		Radius: {type: "text"},
 		HealAmount: {type: "text"},
-		Center: {type: "single", value: ["CASTER","TARGET","POINT","ATTACKER","UNIT", "PROJECTILE"]},
+		Center: {type: "single", value: [["CASTER"], ["TARGET"], ["POINT"], ["ATTACKER"], ["UNIT"], ["PROJECTILE"]]},
 		Duration: {type: "text"},
 		Delay: {type: "text"},
 		Distance: {type: "text"},
 		Height: {type: "text"},
-		IsFixedDistance: {type: "bool"},
-		ShouldStun: {type: "bool"},
+		IsFixedDistance: {type: "boolean"},
+		ShouldStun: {type: "boolean"},
 		ScriptFile: {type: "text"},
 		Function: {type: "text"},
 		CustomizeKV: {type: "blob", append: true},
@@ -136,13 +141,13 @@ app.factory("Operation", function(Sound) {
 		SpawnRadius: {type: "text"},
 		GrantsGold: {type: "text"},
 		GrantsXP: {type: "text"},
-		Dodgeable: {type: "bool"},
-		ProvidesVision: {type: "bool"},
+		Dodgeable: {type: "boolean"},
+		ProvidesVision: {type: "boolean"},
 		VisionRadius: {type: "text"},
 		MoveSpeed: {type: "text"},
 		SourceAttachment: {type: "text"},// TODO: hitloc?
 		Chance: {type: "text"},
-		PseudoRandom: {type: "bool"},
+		PseudoRandom: {type: "boolean"},
 		OnSuccess: {type: "operation"},
 		OnFailure: {type: "operation"},
 		Action: {type: "operation"},
@@ -153,43 +158,50 @@ app.factory("Operation", function(Sound) {
 		EndRadius: {type: "text"},
 		FixedDistance: {type: "text"},
 		StartPosition: {type: "text"},// TODO: hitloc? attach_attack1? attach_origin?
-		TargetTeams: {type: "single", value: ["DOTA_UNIT_TARGET_TEAM_BOTH","DOTA_UNIT_TARGET_TEAM_ENEMY","DOTA_UNIT_TARGET_TEAM_FRIENDLY","DOTA_UNIT_TARGET_TEAM_CUSTOM","DOTA_UNIT_TARGET_TEAM_NONE"]},
-		TargetTypes: {type: "group", value: [
-			["DOTA_UNIT_TARGET_HERO","英雄", true],
-			["DOTA_UNIT_TARGET_BASIC","基本", true],
-			["DOTA_UNIT_TARGET_ALL","所有"],
-			["DOTA_UNIT_TARGET_BUILDING","建筑"],
-			["DOTA_UNIT_TARGET_COURIER","信使"],
-			["DOTA_UNIT_TARGET_CREEP","野怪"],
-			["DOTA_UNIT_TARGET_CUSTOM","普通"],
-			["DOTA_UNIT_TARGET_MECHANICAL","机械"],
-			["DOTA_UNIT_TARGET_NONE","无"],
-			["DOTA_UNIT_TARGET_OTHER","其他"],
-			["DOTA_UNIT_TARGET_TREE","树木"],
-		]},
-		TargetFlags: {type: "group", value: [
-			["DOTA_UNIT_TARGET_FLAG_CHECK_DISABLE_HELP","检测玩家'禁用帮助'选项"],
-			["DOTA_UNIT_TARGET_FLAG_DEAD","已死亡"],
-			["DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE","*暂无说明*"],
-			["DOTA_UNIT_TARGET_FLAG_INVULNERABLE","无敌"],
-			["DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES","魔法免疫的敌人"],
-			["DOTA_UNIT_TARGET_FLAG_MANA_ONLY","*暂无说明*"],
-			["DOTA_UNIT_TARGET_FLAG_MELEE_ONLY","*暂无说明*"],
-			["DOTA_UNIT_TARGET_FLAG_NO_INVIS","不是隐形的"],
-			["DOTA_UNIT_TARGET_FLAG_NONE","无"],
-			["DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS","不是远古"],
-			["DOTA_UNIT_TARGET_FLAG_NOT_ATTACK_IMMUNE","不是攻击免疫"],
-			["DOTA_UNIT_TARGET_FLAG_NOT_CREEP_HERO","不是野怪"],
-			["DOTA_UNIT_TARGET_FLAG_NOT_DOMINATED","不可控制的"],
-			["DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS","不是幻象"],
-			["DOTA_UNIT_TARGET_FLAG_NOT_MAGIC_IMMUNE_ALLIES","不是魔法免疫的盟友"],
-			["DOTA_UNIT_TARGET_FLAG_NOT_NIGHTMARED","非被催眠的"],
-			["DOTA_UNIT_TARGET_FLAG_NOT_SUMMONED","非召唤的"],
-			["DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD","被放逐出世界的"],
-			["DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED","玩家控制的"],
-			["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY","范围唯一的"],
-		]},
-		HasFrontalCone:{type: "bool"},
+		TargetTeams: {
+			type: "single",
+			value: [["DOTA_UNIT_TARGET_TEAM_BOTH"], ["DOTA_UNIT_TARGET_TEAM_ENEMY"], ["DOTA_UNIT_TARGET_TEAM_FRIENDLY"], ["DOTA_UNIT_TARGET_TEAM_CUSTOM"], ["DOTA_UNIT_TARGET_TEAM_NONE"]]
+		},
+		TargetTypes: {
+			type: "group", value: [
+				["DOTA_UNIT_TARGET_HERO", "英雄", true],
+				["DOTA_UNIT_TARGET_BASIC", "基本", true],
+				["DOTA_UNIT_TARGET_ALL", "所有"],
+				["DOTA_UNIT_TARGET_BUILDING", "建筑"],
+				["DOTA_UNIT_TARGET_COURIER", "信使"],
+				["DOTA_UNIT_TARGET_CREEP", "野怪"],
+				["DOTA_UNIT_TARGET_CUSTOM", "普通"],
+				["DOTA_UNIT_TARGET_MECHANICAL", "机械"],
+				["DOTA_UNIT_TARGET_NONE", "无"],
+				["DOTA_UNIT_TARGET_OTHER", "其他"],
+				["DOTA_UNIT_TARGET_TREE", "树木"],
+			]
+		},
+		TargetFlags: {
+			type: "group", value: [
+				["DOTA_UNIT_TARGET_FLAG_CHECK_DISABLE_HELP", "检测玩家'禁用帮助'选项"],
+				["DOTA_UNIT_TARGET_FLAG_DEAD", "已死亡"],
+				["DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE", "*暂无说明*"],
+				["DOTA_UNIT_TARGET_FLAG_INVULNERABLE", "无敌"],
+				["DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES", "魔法免疫的敌人"],
+				["DOTA_UNIT_TARGET_FLAG_MANA_ONLY", "*暂无说明*"],
+				["DOTA_UNIT_TARGET_FLAG_MELEE_ONLY", "*暂无说明*"],
+				["DOTA_UNIT_TARGET_FLAG_NO_INVIS", "不是隐形的"],
+				["DOTA_UNIT_TARGET_FLAG_NONE", "无"],
+				["DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS", "不是远古"],
+				["DOTA_UNIT_TARGET_FLAG_NOT_ATTACK_IMMUNE", "不是攻击免疫"],
+				["DOTA_UNIT_TARGET_FLAG_NOT_CREEP_HERO", "不是野怪"],
+				["DOTA_UNIT_TARGET_FLAG_NOT_DOMINATED", "不可控制的"],
+				["DOTA_UNIT_TARGET_FLAG_NOT_ILLUSIONS", "不是幻象"],
+				["DOTA_UNIT_TARGET_FLAG_NOT_MAGIC_IMMUNE_ALLIES", "不是魔法免疫的盟友"],
+				["DOTA_UNIT_TARGET_FLAG_NOT_NIGHTMARED", "非被催眠的"],
+				["DOTA_UNIT_TARGET_FLAG_NOT_SUMMONED", "非召唤的"],
+				["DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD", "被放逐出世界的"],
+				["DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED", "玩家控制的"],
+				["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY", "范围唯一的"],
+			]
+		},
+		HasFrontalCone: {type: "boolean"},
 	};
 
 	$.each(Operation.OperationAttrMap, function(key, opAttr) {

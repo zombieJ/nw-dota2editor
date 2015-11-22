@@ -12,7 +12,6 @@ components.directive('operationlist', function($compile) {
 			$scope.Locale = Locale;
 			$scope.UI = UI;
 			$scope.KV = KV;
-			console.log($scope);
 		},
 		template:
 		'<div class="ability-operation-list">'+

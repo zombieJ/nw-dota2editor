@@ -5,7 +5,7 @@ components.directive('operation', function($compile) {
 		restrict: 'AE',
 		scope: {
 			operation: "=",		// KV Entity
-			ability: "=",
+			ability: "=",		// Source Ability
 		},
 		controller: function($scope, $element, $attrs, Operation) {
 			$scope.Operation = Operation;
@@ -17,7 +17,7 @@ components.directive('operation', function($compile) {
 				// TODO: Link '<a class="fa fa-link" ng-if="getOpColLink(_index)" ng-click="getOpColLink(_index)()"></a>'+
 
 				// Operation Attribute
-				'<div kvfield data-ability="ability" data-attrunit="unit" data-srcunit="ability" data-srctmpl="Ability"></div>' +
+				'<div kvfield data-ability="ability" data-attrunit="Operation.OperationAttrMap[opAttr]" data-srcunit="operation" data-srctmpl="Operation.OperationAttrMap"></div>' +
 			'</li>'+
 		'</ul>',
 		replace : true

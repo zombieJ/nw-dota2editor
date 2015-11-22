@@ -48,6 +48,16 @@
 		return this;
 	};
 
+	KV.prototype.delete = function(key, caseSensitive) {
+		var _key = key.toUpperCase();
+		for(var i = 0 ; i < this.value.length ; i += 1) {
+			if(this.value[i].key === key || (caseSensitive && this.value[i].key.toUpperCase() === _key)) {
+				this.value.splice(i, 1);
+				i -= 1;
+			}
+		}
+	};
+
 	KV.prototype.clone = function(keepEmpty) {
 		return KV.parse(this.toString(keepEmpty !== false));
 	};

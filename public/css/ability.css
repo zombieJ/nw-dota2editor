@@ -303,6 +303,21 @@ hr {
 	padding: 0 0 0 5px;
 }
 
+.ability-operation .ability-operation-body .ability-form .d-checkbox > div {
+	border-width: 1px;
+	width: 16px;
+	height: 16px;
+	border-radius: 2px;
+}
+.ability-operation .ability-operation-body .ability-form .d-checkbox > div > .fa {
+	font-size: 12px;
+	left: 2px;
+	top: 1px;
+}
+.ability-operation .ability-operation-body .ability-form .d-checkbox > div > .fa.fa-check {
+	left: 1px;
+}
+
 .ability-modifer-prop-list ul {
 	margin: 0;
 	padding: 0 0 0 5px;

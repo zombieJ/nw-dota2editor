@@ -9,7 +9,7 @@ components.directive('tipfield', function($compile) {
 			matchfuc: "=?matchfuc",
 		},
 		controller: function($scope, $element, $attrs, Locale) {
-			if($scope.alternative || $scope.matchfuc) console.log(">>>", $scope, $scope.alternative, $scope.matchfuc);
+			// TODO: if($scope.alternative || $scope.matchfuc) console.log(">>>", $scope, $scope.alternative, $scope.matchfuc);
 
 			$scope.Locale = Locale;
 			$scope.currentList = [];
