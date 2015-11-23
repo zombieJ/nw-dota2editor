@@ -4,17 +4,22 @@ components.directive('kvtree', function($compile) {
 	return {
 		restrict: 'AE',
 		scope: {
-			kvtree: "=",				// KV Entity
-			parentkv: "=?parentkv"		// Parent KV Entity
+			kvtree: "=",					// KV Entity
+			parentkv: "=?parentkv",			// Parent KV Entity
+			open: "=?open",					// Tree opened
+			convertable: "=?convertable",	// False if disable convert format
+			keyeditable: "=?keyeditable"	// Key editable
 		},
 		controller: function($scope, $element, KV, UI) {
-			$scope._open = false;
+			$scope.open = $scope.open || false;
 
 			$scope.toggleTree = function() {
-				$scope._open = !$scope._open;
+				$scope.open = !$scope.open;
 			};
 
 			$scope.editKV = function() {
+				if($scope.keyeditable === false) return;
+
 				UI.modal.input("EditKV",
 					$scope.kvtree.isList() ? "Key" : ["Key", "Value"],
 					$scope.kvtree.isList() ? $scope.kvtree.key : [$scope.kvtree.key, $scope.kvtree.value], function(key, value) {
@@ -63,9 +68,14 @@ components.directive('kvtree', function($compile) {
 			$scope.menu = function() {
 				_menu.splice(0);
 
-				_menu.push($scope.kvtree.isList() ? _menu_CTS : _menu_CTA);
-				_menu.push({type: 'separator'});
-				_menu.push(_menu_edit);
+				if($scope.convertable !== false) {
+					_menu.push($scope.kvtree.isList() ? _menu_CTS : _menu_CTA);
+					_menu.push({type: 'separator'});
+				}
+
+				if($scope.keyeditable !== false) {
+					_menu.push(_menu_edit);
+				}
 
 				if($scope.kvtree.isList()) {
 					_menu.push(_menu_new);
@@ -116,14 +126,14 @@ components.directive('kvtree', function($compile) {
 
 				// Tree Value
 				'<span ng-if="kvtree.isList()" class="kv-tree-link">' +
-					'<a class="fa" ng-class="{\'fa-chevron-circle-right\': !_open, \'fa-chevron-circle-down\': _open}" ng-click="toggleTree()"></a> ' +
+					'<a class="fa" ng-class="{\'fa-chevron-circle-right\': !open, \'fa-chevron-circle-down\': open}" ng-click="toggleTree()"></a> ' +
 					'<b class="kv-tree-key" ng-class="{\'text-muted\': !kvtree.key}">{{kvtree.key || "EMPTY KEY"}}</b>' +
 				'</span> '+
 			'</div>'+
 
 			// List
-			'<div ng-if="_open" class="kv-tree-list">' +
-				'<div kvtree="_kv" data-parentkv="kvtree" ng-repeat="_kv in kvtree.value"></div>' +
+			'<div ng-if="open" class="kv-tree-list">' +
+				'<div kvtree="_kv" data-parentkv="kvtree" data-convertable="convertable" ng-repeat="_kv in kvtree.value"></div>' +
 				'<span ng-if="kvtree.value.length === 0" class="text-muted">(empty list)</span>'+
 			'</div>' +
 		'</div>',

@@ -83,7 +83,10 @@ components.directive('kvfield', function($compile) {
 			'data-alternative="srctmpl[getAttrPath()]" data-matchfuc="attrunit.match(srcunit[getAttrPath()], ability)" />' +
 
 			// Unit Group
-			'<div kvunitgroup data-target="getKV()" data-target-path="{{getAttrPath()}}"  ng-switch-when="unitGroup"></div>'+
+			'<div kvunitgroup data-target="getKV()" data-target-path="{{getAttrPath()}}" ng-switch-when="unitGroup"></div>'+
+
+			// Tree
+			'<div kvtree="getKV().assumeKey(getAttrPath(), true)" data-convertable="false" data-keyeditable="false" data-open="true" ng-switch-when="tree"></div>'+
 
 			// Operation
 			'<div class="ability-form-operationList" ng-switch-when="operation">' +

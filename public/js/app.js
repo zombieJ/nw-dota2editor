@@ -167,6 +167,7 @@ app.factory("UI", function ($rootScope, Locale) {
 			callback = defalutValue;
 			defalutValue = [];
 		}
+		defalutValue = $.isArray(defalutValue) ? defalutValue : [defalutValue];
 
 		var $content = $("<div>");
 		var $inputList = $.map(description, function(key, i) {

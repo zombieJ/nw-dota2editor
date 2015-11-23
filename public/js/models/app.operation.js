@@ -76,6 +76,7 @@ app.factory("Operation", function(Sound) {
 	// =               Operation Attr                =
 	// ===============================================
 	var _match_EffectName = function(operation) {
+		if(!operation) return null;
 		return operation.name === "FireSound" ?  Sound.match : null;
 	};
 
