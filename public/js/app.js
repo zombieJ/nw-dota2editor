@@ -157,6 +157,27 @@ app.factory("UI", function($rootScope, Locale) {
 		}));
 	};
 
+	UI.modal.input = function(title, description, callback) {
+		var $input = $("<input type='text' class='form-control' />");
+		var $content = $("<div>")
+			.append("<label>" + description)
+			.append($input);
+
+		UI.modal.highlight($.dialog({
+			title: title,
+			content: $content,
+			confirm: true
+		}, function(ret) {
+			if (!ret) return;
+
+			if(callback) {
+				var _ret = callback($input.val());
+				$rootScope.$apply();
+				return _ret;
+			}
+		}));
+	};
+
 	return UI;
 });
 

@@ -21,6 +21,9 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 检测是否存在未填写描述的技能和修饰器
 
 ### TODO list
+* ability special adjust
+* DeleteOnHit 1
+* Empty operation not save
 * link each other
 * item compound formula auto generate
 * sound finder

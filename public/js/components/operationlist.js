@@ -12,15 +12,45 @@ components.directive('operationlist', function($compile) {
 			$scope.Locale = Locale;
 			$scope.UI = UI;
 			$scope.KV = KV;
+
+			$scope.changeOperation = function(operation, oldKey) {
+				operation._valueCache = operation._valueCache || {};
+				// Cache old list
+				if(oldKey) {
+					operation._valueCache[oldKey] = operation.value;
+				}
+				// Fetch if cache hit
+				if(operation._valueCache[operation.key]) {
+					operation.value = operation._valueCache[operation.key];
+				} else {
+					operation.value = [];
+				}
+			};
+
+			$scope.addCustomizeKV = function(operation) {
+				UI.modal.input("Add Customize KV", "Key Name", function(key) {
+					var _list = Operation.EventOperationMap[operation.key][2];
+					if(!key || common.array.find(key, _list, "", false, false)) {
+						$.dialog({
+							title: Locale('Error'),
+							content: Locale('conflictName'),
+						});
+						return false;
+					} else {
+						operation.value.push(new KV(key, ""));
+					}
+				});
+			};
 		},
 		template:
 		'<div class="ability-operation-list">'+
 			'<div ng-repeat="operation in operationlist track by $index" class="ability-operation">'+
 				'<div class="ability-operation-header">' +
 					'<a class="fa fa-trash" ng-click="UI.arrayDelete(operation, operationlist)"></a>' +
-					'<select class="form-control" ng-model="operation.key">'+
+					'<select class="form-control" ng-model="operation.key" ng-change="changeOperation(operation, \'{{operation.key}}\')">'+
 						'<option ng-repeat="_operation in alternative track by $index" value="{{_operation[0]}}">{{_operation[0]}} 【{{Locale(_operation[0])}}】</option>'+
 					'</select>'+
+					'<a class="fa fa-plus" ng-show="operation.key" ng-click="addCustomizeKV(operation)"></a>' +
 				'</div>'+
 				'<div operation="operation" data-ability="ability"></div>'+
 			'</div>'+

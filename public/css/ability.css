@@ -221,16 +221,17 @@ hr {
 }
 
 .ability-operation-list .ability-operation .ability-operation-header .fa {
-	float: left;
+	//float: left;
 	margin: 5px 8px 0 8px;
 	font-size: 20px;
 }
 
 .ability-operation-list .ability-operation .ability-operation-header select.form-control {
-	width: 450px;
+	width: auto;
 	background: #eee;
 	margin: 5px 0 0 0;
 	font-weight: bolder;
+	display: inline-block;
 }
 
 .ability-operation .ability-operation-body {
