@@ -45,6 +45,7 @@ app.factory("Locale", function() {
 		Unassigned: "未分配",
 		Error: "错误",
 		Exit: "退出",
+		KVEditor: "KV编辑器",
 
 		Key: "键",
 		Value: "值",

@@ -5,9 +5,9 @@ var APP_APP_NAME = "Dota2 Editor";
 var APP_APP_AUTHOR = "zombieJ";
 var APP_APP_GITHUB = "https://github.com/zombieJ/nw-dota2editor";
 
-var app = angular.module('app', ['ngRoute', 'hammerControllers', 'app.components', 'ui.sortable','ui.bootstrap']);
+var app = angular.module('app', ['ngRoute', 'hammerControllers', 'app.components', 'ui.sortable', 'ui.bootstrap']);
 
-app.config(function($routeProvider) {
+app.config(function ($routeProvider) {
 	$routeProvider.when('/index', {
 		templateUrl: 'partials/index.html',
 		controller: 'indexCtrl'
@@ -26,15 +26,18 @@ app.config(function($routeProvider) {
 	}).when('/language', {
 		templateUrl: 'partials/language.html',
 		controller: 'languageCtrl'
+	}).when('/kv', {
+		templateUrl: 'partials/kv.html',
+		controller: 'kvCtrl'
 	}).when('/config', {
 		templateUrl: 'partials/config.html',
 		controller: 'configCtrl'
 	}).otherwise({
-		redirectTo : '/index'
+		redirectTo: '/index'
 	});
 });
 
-app.factory("globalContent", function(Config) {
+app.factory("globalContent", function (Config) {
 	var _globalContent = {
 		inlineMode: !window.require,
 
@@ -56,27 +59,27 @@ app.factory("globalContent", function(Config) {
 	};
 
 	// Get main language
-	_globalContent.mainLang = function() {
+	_globalContent.mainLang = function () {
 		return common.array.find(Config.global.mainLang, _globalContent.languageList, "name", false, false) || _globalContent.languageList[0];
 	};
 
 	return _globalContent;
 });
 
-app.factory("NODE", function($http, globalContent) {
-	if(window.process) {
+app.factory("NODE", function ($http, globalContent) {
+	if (window.process) {
 		return window.process.mainModule.exports;
-	} else if(globalContent.inlineMode) {
+	} else if (globalContent.inlineMode) {
 		var _fakeNode = {};
 
 		// init
 		_fakeNode.init = $.noop;
 
 		// Fake load
-		_fakeNode.loadFile = function(path) {
+		_fakeNode.loadFile = function (path) {
 			_LOG("FAKE", 0, "Load file:", path);
 
-			return $http.get("fake/" + path).then(function(data) {
+			return $http.get("fake/" + path).then(function (data) {
 				return data.data;
 			});
 		};
@@ -86,42 +89,43 @@ app.factory("NODE", function($http, globalContent) {
 	return null;
 });
 
-app.factory("FS", function() {
-	if(window.require) {
+app.factory("FS", function () {
+	if (window.require) {
 		return require("fs");
 	} else {
 		return null;
 	}
 });
 
-app.factory("UI", function($rootScope, Locale) {
-	var UI = function() {};
+app.factory("UI", function ($rootScope, Locale) {
+	var UI = function () {
+	};
 
 	// Delete item from an array
-	UI.arrayDelete = function(item, array, callback) {
+	UI.arrayDelete = function (item, array, callback) {
 		$.dialog({
 			title: "Delete Confirm",
 			content: "Are you sure to delete?",
 			confirm: true
-		}, function(ret) {
-			if(!ret) return;
+		}, function (ret) {
+			if (!ret) return;
 
 			common.array.remove(item, array);
-			if(callback) callback();
+			if (callback) callback();
 			$rootScope.$apply();
 		});
 	};
 
-	UI.modal = function(element) {
+	UI.modal = function (element) {
 		UI.modal.highlight($(element).modal());
 	};
-	UI.modal.highlight = function(element, delay) {
+	UI.modal.highlight = function (element, delay) {
 		setTimeout(function () {
 			$(element).find("input:not([disabled]):first").focus();
 		}, delay || 500);
 	};
 
-	UI.modal.rename = function(entity, check, callback) {
+	UI.modal.rename = function (entity, check, callback) {
 		var _oldName = entity._name;
 		var $input = $("<input type='text' class='form-control' />").val(_oldName);
 		var $content = $("<div>")
@@ -133,15 +137,15 @@ app.factory("UI", function($rootScope, Locale) {
 			title: Locale('Rename'),
 			content: $content,
 			confirm: true
-		}, function(ret) {
-			if(!ret) return;
+		}, function (ret) {
+			if (!ret) return;
 
 			var _dlg = this;
 			var _newName = $input.val().trim();
 			var _checkResult = check ? check(_newName, entity) : true;
-			if(_checkResult === true) {
+			if (_checkResult === true) {
 				entity._name = _newName;
-				if(callback) {
+				if (callback) {
 					callback(_newName, _oldName, entity);
 				}
 				$rootScope.$apply();
@@ -149,7 +153,7 @@ app.factory("UI", function($rootScope, Locale) {
 				$.dialog({
 					title: "OPS",
 					content: _checkResult
-				}, function() {
+				}, function () {
 					UI.modal.highlight(_dlg);
 				});
 				return false;
@@ -157,21 +161,31 @@ app.factory("UI", function($rootScope, Locale) {
 		}));
 	};
 
-	UI.modal.input = function(title, description, callback) {
-		var $input = $("<input type='text' class='form-control' />");
-		var $content = $("<div>")
-			.append("<label>" + description)
-			.append($input);
+	UI.modal.input = function (title, description, defalutValue, callback) {
+		description = $.isArray(description) ? description : [description];
+		if(typeof defalutValue === "function") {
+			callback = defalutValue;
+			defalutValue = [];
+		}
+
+		var $content = $("<div>");
+		var $inputList = $.map(description, function(key, i) {
+			$content.append("<label>" + key + "</label>");
+			return $("<input type='text' class='form-control' />").val(defalutValue[i] || "").appendTo($content);
+		});
 
 		UI.modal.highlight($.dialog({
 			title: title,
 			content: $content,
 			confirm: true
-		}, function(ret) {
+		}, function (ret) {
 			if (!ret) return;
 
-			if(callback) {
-				var _ret = callback($input.val());
+			if (callback) {
+				var _val = $.map($inputList, function($input) {
+					return $input.val();
+				});
+				var _ret = callback.apply(this, _val);
 				$rootScope.$apply();
 				return _ret;
 			}
@@ -181,7 +195,7 @@ app.factory("UI", function($rootScope, Locale) {
 	return UI;
 });
 
-app.controller('main', function($scope, $route, $location, $q, UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config) {
+app.controller('main', function ($scope, $route, $location, $q, UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config) {
 	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
 	window.Event = $scope.Event = Event;
@@ -199,29 +213,29 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 
 	NODE && NODE.init(globalContent, $q);
 
-	$scope.navSelected = function(path) {
+	$scope.navSelected = function (path) {
 		return path === $location.path();
 	};
 
 	// 载入项目
-	$scope.loadProject = function() {
+	$scope.loadProject = function () {
 		var _promise = NODE.loadProject(globalContent.project);
 
-		_promise.then(function() {
+		_promise.then(function () {
 			localStorage.setItem("project", globalContent.project);
 			globalContent.isOpen = true;
 
 			// 总是读取多语言文件
 			var _listFilesPromise = NODE.listFiles(Language.folderPath, Language.fileNameRegex);
 			globalContent.languageList._promise = _listFilesPromise;
-			_listFilesPromise.then(function(fileList) {
-				common.array.replace(globalContent.languageList, $.map(fileList, function(fileName) {
+			_listFilesPromise.then(function (fileList) {
+				common.array.replace(globalContent.languageList, $.map(fileList, function (fileName) {
 					return new Language(fileName);
 				}));
 				globalContent.currentLanguage = globalContent.languageList[0];
-			}, function(){
+			}, function () {
 				common.array.replace(globalContent.languageList, []);
-			}).finally(function() {
+			}).finally(function () {
 				$route.reload();
 			});
 
@@ -235,19 +249,19 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 	};
 
 	// 测试模式
-	$scope.inlineMode = function() {
+	$scope.inlineMode = function () {
 		globalContent.isOpen = true;
 
 		var _langSChinese = new Language("addon_schinese.txt");
 		globalContent.languageList = [_langSChinese];
 		globalContent.languageList._promise = _langSChinese._promise;
 
-			$route.reload();
+		$route.reload();
 	};
 
 	// 保存项目
 	function saveUnitFunc(isHero) {
-		return function() {
+		return function () {
 			var _deferred_file = $q.defer();
 			var _deferred_config = $q.defer();
 			var _globalListKey = isHero ? "heroList" : "unitList";
@@ -255,35 +269,35 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 			var _filePath = isHero ? Unit.heroFilePath : Unit.filePath;
 
 			// File
-			if(!globalContent[_globalListKey]) {
+			if (!globalContent[_globalListKey]) {
 				_deferred_file.resolve(4);
 			} else {
 				var _writer = new KV.Writer();
 
-				if(isHero) {
+				if (isHero) {
 					_writer.withHeader("DOTAHeroes", {Version: 1});
 				} else {
 					_writer.withHeader("DOTAUnits", {Version: 1});
 				}
 
-				$.each(globalContent[_globalListKey], function(i, ability) {
+				$.each(globalContent[_globalListKey], function (i, ability) {
 					_writer.write('');
 					ability.doWriter(_writer);
 					ability._changed = false;
 				});
 				_writer.withEnd();
 
-				_writer.save(_filePath, "utf8",_deferred_file);
+				_writer.save(_filePath, "utf8", _deferred_file);
 			}
 
 			// Config
-			if(!globalContent[_globalConfigKey]) {
+			if (!globalContent[_globalConfigKey]) {
 				_deferred_config.resolve(4);
 			} else {
 				_deferred_config = NODE.saveFile(isHero ? Unit.heroConfig : Unit.unitConfig, "utf8", JSON.stringify(globalContent[_globalConfigKey], null, "\t"));
 			}
 
-			var _deferred_all = $q.all([_deferred_file.promise, _deferred_config.promise]).then(function(result) {
+			var _deferred_all = $q.all([_deferred_file.promise, _deferred_config.promise]).then(function (result) {
 				return result[0];
 			});
 
@@ -292,7 +306,7 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 	}
 
 	function saveAbilityFunc(isItem) {
-		return function() {
+		return function () {
 			var _deferred_file = $q.defer();
 			var _deferred_config = $q.defer();
 			var _globalListKey = isItem ? "itemList" : "abilityList";
@@ -300,29 +314,29 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 			var _filePath = isItem ? Ability.exportItemFilePath : Ability.exportFilePath;
 
 			// File
-			if(!globalContent[_globalListKey]) {
+			if (!globalContent[_globalListKey]) {
 				_deferred_file.resolve(4);
 			} else {
 				var _writer = new KV.Writer();
 				_writer.withHeader("DOTAAbilities", {Version: 1});
-				$.each(globalContent[_globalListKey], function(i, ability) {
+				$.each(globalContent[_globalListKey], function (i, ability) {
 					_writer.write('');
 					ability.doWriter(_writer);
 					ability._changed = false;
 				});
 				_writer.withEnd();
 
-				_writer.save(_filePath, "utf8",_deferred_file);
+				_writer.save(_filePath, "utf8", _deferred_file);
 			}
 
 			// Config
-			if(!globalContent[_globalConfigKey]) {
+			if (!globalContent[_globalConfigKey]) {
 				_deferred_config.resolve(4);
 			} else {
 				_deferred_config = NODE.saveFile(isItem ? Ability.itemConfig : Ability.abilityConfig, "utf8", JSON.stringify(globalContent[_globalConfigKey], null, "\t"));
 			}
 
-			var _deferred_all = $q.all([_deferred_file.promise, _deferred_config.promise]).then(function(result) {
+			var _deferred_all = $q.all([_deferred_file.promise, _deferred_config.promise]).then(function (result) {
 				return result[0];
 			});
 
@@ -356,22 +370,23 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 		// ===================================================================
 		// =                          保存 【语言】                          =
 		// ===================================================================
-		{name: "Language", desc: "语言", selected: true, saveFunc: function() {
+		{
+			name: "Language", desc: "语言", selected: true, saveFunc: function () {
 			var _deferred = $q.defer();
 
-			if(!globalContent.languageList || !globalContent.languageList.length) {
+			if (!globalContent.languageList || !globalContent.languageList.length) {
 				_deferred.resolve(4);
 			} else {
 				var _promiseList = [];
 
-				$.each(globalContent.languageList, function(i, language) {
+				$.each(globalContent.languageList, function (i, language) {
 					var _writer = new KV.Writer();
 					_writer.withHeader("lang", {Language: language.name});
 					_writer.write('"Tokens"');
 					_writer.write('{');
 
-					$.each(language.map, function(key, value) {
-						if(value === undefined) return;
+					$.each(language.map, function (key, value) {
+						if (value === undefined) return;
 
 						_writer.write('"$1"		"$2"', key, value);
 					});
@@ -380,41 +395,40 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 					_writer.withEnd();
 
 					_promiseList.push(_writer.save(Language.folderPath + "/" + language.fileName.replace(/^_/, "").replace(/\.bac/, ""), "ucs2"));
-					$q.all(_promiseList).then(function() {
+					$q.all(_promiseList).then(function () {
 						_deferred.resolve();
-					}, function() {
+					}, function () {
 						_deferred.reject();
 					});
 				});
 			}
 			return _deferred.promise;
-		}},
+		}
+		},
 	];
-
-
 
 
 	// 保存文件
 	// 状态码：0 初始化；1 运行中；2 成功；3 失败；4 未变更
-	$scope.saveFiles = function() {
+	$scope.saveFiles = function () {
 		$scope.saveLock = true;
 		var _promiseList = [];
 
-		$.each($scope.saveFileList, function(i, saveItem) {
-			if(!saveItem.selected || !saveItem.saveFunc) return;
+		$.each($scope.saveFileList, function (i, saveItem) {
+			if (!saveItem.selected || !saveItem.saveFunc) return;
 
 			saveItem.status = 1;
 			var _promise = saveItem.saveFunc();
 			_promiseList.push(_promise);
 
-			_promise.then(function(statusCode) {
+			_promise.then(function (statusCode) {
 				saveItem.status = statusCode !== undefined ? statusCode : 2;
-			},function() {
+			}, function () {
 				saveItem.status = 3;
 			});
 		});
 
-		$q.all(_promiseList).finally(function() {
+		$q.all(_promiseList).finally(function () {
 			$scope.saveMSG = "Finished! 【完成】";
 			$scope.saveLock = false;
 			$scope.$broadcast("AppSaved", "");
@@ -425,11 +439,11 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 	// =                              UI                              =
 	// ================================================================
 	// 弹出保存对话框
-	$scope.showSaveMDL = function() {
+	$scope.showSaveMDL = function () {
 		$("#saveMDL").modal();
 
 		$scope.saveMSG = "";
-		$.each($scope.saveFileList, function(i, saveItem) {
+		$.each($scope.saveFileList, function (i, saveItem) {
 			saveItem.status = 0;
 		});
 	};
@@ -441,7 +455,7 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 
 	// Show color picker dialog
 	var _colorTarget;
-	$(document).on("click", ".color-picker", function() {
+	$(document).on("click", ".color-picker", function () {
 		_colorTarget = $(this).closest("td").find("input, textarea");
 		$("#colorDisplayLayout").html(_colorTarget.val());
 		$("#colorPickerMDL").modal();
@@ -449,10 +463,10 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 
 	// Color picker
 	$("#colorPickerInput").colorpicker();
-	$("#colorPickerInput").keydown(function(e) {
-		if(e.which === 13){
+	$("#colorPickerInput").keydown(function (e) {
+		if (e.which === 13) {
 			var _val = ($(this).val() + "").trim();
-			if(_val.match(/^\#[abcdefABCDEF\d]{6}$/)) {
+			if (_val.match(/^\#[abcdefABCDEF\d]{6}$/)) {
 				$scope.selectColorPickerColor(_val);
 				$("#colorPickerInput").colorpicker('hide');
 			}
@@ -462,7 +476,7 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 	var _selection = null;
 	$("#colorDisplayLayout").mouseup(function () {
 		var _winSelect = window.getSelection();
-		if(!_winSelect || $(_winSelect.anchorNode).closest("#colorDisplayLayout").length === 0) return;
+		if (!_winSelect || $(_winSelect.anchorNode).closest("#colorDisplayLayout").length === 0) return;
 
 		var _range = _winSelect.getRangeAt(0);
 
@@ -475,7 +489,7 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 	});
 
 	// Save color picker text
-	$scope.confirmColoredText = function() {
+	$scope.confirmColoredText = function () {
 		$("#colorPickerMDL").modal('hide');
 
 		var _text = $("#colorDisplayLayout").html().replace(/"/g, "'");
@@ -483,18 +497,19 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 		_colorTarget.trigger("input");
 	};
 
-	$scope.selectColorPickerColor = function(color) {
-		if(!_selection) return;
+	$scope.selectColorPickerColor = function (color) {
+		if (!_selection) return;
 
 		function _getRootNode(node) {
-			if(node.parentNode.nodeName === "FONT") {
+			if (node.parentNode.nodeName === "FONT") {
 				return node.parentNode;
 			} else {
 				return node;
 			}
 		}
+
 		function _getText(node) {
-			if(node.nodeName === "FONT") {
+			if (node.nodeName === "FONT") {
 				return node.innerText;
 			} else {
 				return node.textContent;
@@ -513,7 +528,7 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 		var _lastNode = _getRootNode(_selection.lastNode);
 		var _nodeList = [];
 
-		if(_firstNode === _lastNode) {
+		if (_firstNode === _lastNode) {
 			// Only one selection
 			_content.first = [_getText(_firstNode).slice(0, _start), _firstNode];
 			_content.text = _getText(_firstNode).slice(_start, _end);
@@ -534,20 +549,20 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 				}
 
 				_nodeList.push(_currentNode);
-				if(_currentNode === _lastNode) break;
+				if (_currentNode === _lastNode) break;
 			}
 		}
 
 		// Process
 		function genNode(text, nodeName, preNode) {
-			if(!text) return null;
+			if (!text) return null;
 
 			var _node;
-			if(nodeName === "FONT") {
+			if (nodeName === "FONT") {
 				_node = document.createElement("font");
 				_node.innerText = text;
 
-				if(preNode && preNode.nodeName === "FONT") {
+				if (preNode && preNode.nodeName === "FONT") {
 					_node.color = preNode.color;
 				}
 			} else {
@@ -563,26 +578,26 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 
 		// Update
 		var _markPlace = $(_firstNode);
-		if(_genFirst) _markPlace.before(_genFirst);
-		if(_genMiddle) _markPlace.before(_genMiddle);
-		if(_genLast) _markPlace.before(_genLast);
+		if (_genFirst) _markPlace.before(_genFirst);
+		if (_genMiddle) _markPlace.before(_genMiddle);
+		if (_genLast) _markPlace.before(_genLast);
 
 		// Clean
-		$.each(_nodeList, function(i, node) {
+		$.each(_nodeList, function (i, node) {
 			_getRootNode(node).remove();
 		});
 
 		_selection = null;
 	};
 
-	$scope.clearColorPickerStyle = function() {
+	$scope.clearColorPickerStyle = function () {
 		$("#colorDisplayLayout").text($("#colorDisplayLayout").text());
 	};
 
 	// 隐藏菜单栏
 	$(document).on("click.hideMenu", function (e) {
-		setTimeout(function() {
-			if(globalContent.system.hideMenu) {
+		setTimeout(function () {
+			if (globalContent.system.hideMenu) {
 				$(".app-menu.app-float-menu").hide();
 			}
 			globalContent.system.hideMenu = true;
@@ -595,6 +610,7 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 	});
 
 	var _refreshMenuID;
+
 	function _refreshMenu(ele) {
 		ele = $(ele);
 
@@ -602,8 +618,8 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 		var _eleHeight = ele.outerHeight();
 		var _winHeight = $(window).height();
 
-		if(_offset.top + _eleHeight > _winHeight) {
-			common.ui.offsetWin(ele,{
+		if (_offset.top + _eleHeight > _winHeight) {
+			common.ui.offsetWin(ele, {
 				top: _winHeight - _eleHeight,
 				left: _offset.left
 			});
@@ -611,14 +627,15 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 
 		// Sub Menu
 		var _subMenu = ele.find(".app-menu:visible:first");
-		if(_subMenu.length) _refreshMenu(_subMenu);
+		if (_subMenu.length) _refreshMenu(_subMenu);
 	}
-	window.refreshMenu = function(ele) {
+
+	window.refreshMenu = function (ele) {
 		ele = $(ele);
 		clearInterval(_refreshMenuID);
 
-		_refreshMenuID = setInterval(function() {
-			if(ele.is(":visible")) {
+		_refreshMenuID = setInterval(function () {
+			if (ele.is(":visible")) {
 				_refreshMenu(ele);
 			} else {
 				ele.find(".app-menu").css("top", 0);
@@ -629,7 +646,7 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 
 	// 对话框确认
 	$(document).on("keydown.dialog", ".modal-dialog input[type='text']", function (e) {
-		if(e.which === 13) {
+		if (e.which === 13) {
 			$(this).closest(".modal-content").find(".modal-footer .btn-primary").click();
 		}
 	});
@@ -644,12 +661,12 @@ app.controller('main', function($scope, $route, $location, $q, UI, Locale, Abili
 				title: Locale('Exit'),
 				content: Locale('exitConfirm'),
 				confirm: true,
-			}, function(ret) {
-				if(!ret) return;
+			}, function (ret) {
+				if (!ret) return;
 				_my.close(true);
 			});
 		});
-	} catch(err) {
+	} catch (err) {
 	}
 
 	// ================================================================

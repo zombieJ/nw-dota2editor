@@ -281,3 +281,16 @@ label.checkbox input[type="checkbox"] {
 	background: #AAA;
 	color: #FFF;
 }
+
+/* KV Tree */
+.kv-tree .kv-tree-menu:hover {
+	background: rgba(0,0,0,0.05);
+}
+
+.kv-tree .kv-tree-kv {
+	width: 100%;
+}
+
+.kv-tree .kv-tree-list {
+	padding-left: 15px;
+}

@@ -21,6 +21,10 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 检测是否存在未填写描述的技能和修饰器
 
 ### TODO list
+* OnAttackStart
+* Modifier attribute support multi-attr
+* Search able of modifier attrs/states
+* XavierCHN：基类 模型 生命值 貌似就这三个是必定必须要有的
 * ability special adjust
 * DeleteOnHit 1
 * Empty operation not save

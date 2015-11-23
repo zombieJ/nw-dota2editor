@@ -241,6 +241,10 @@ common.array.remove = function(val, list) {
 	}
 };
 
+common.array.insert = function(val, list, index) {
+	list.splice(index, 0, val);
+};
+
 common.array.replace = function(ary1, ary2) {
 	ary1.splice(0);
 	ary1.push.apply(ary1, ary2);
