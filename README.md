@@ -1,25 +1,24 @@
 # Dota2 KV Editor - not finished yet
 Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi language support description with Visualization.
+ã€Dota2 KVç¼–è¾‘å™¨ æ˜¯ä¸€æ¬¾å¯ä»¥å¯è§†åŒ–ç¼–è¾‘KVæŠ€èƒ½åŠå…¶å¤šè¯­è¨€æè¿°çš„ç¼–è¾‘å™¨ã€‘
 
-¡¾Dota2 KV±à¼­Æ÷ ÊÇÒ»¿î¿ÉÒÔ¿ÉÊÓ»¯±à¼­KV¼¼ÄÜ¼°Æä¶àÓïÑÔÃèÊöµÄ±à¼­Æ÷¡¿
-
-ÒÑ¾­Íê³É£º
-* ÐÂ½¨¡¢¸´ÖÆ¡¢É¾³ý¼¼ÄÜ/ÎïÆ·
-* ÐÞ¸Ä¼¼ÄÜ¡¢ÐÞÊÎÆ÷Ãû³Æ»á×Ô¶¯¸Ä¶¯¶àÓïÑÔÃèÊö×Ö¶Î
-* ÖÇÄÜ¶ÁÈ¡ÓÎÏ·¼¼ÄÜ/ÎïÆ·Í¼±ê ºÍ ×Ô¶¨ÒåÍ¼±ê
-* Ö»»á±£´æÐÞ¸ÄµÄ¼¼ÄÜ
-* ²»ÐèÒªÊÖÐ´precache£¬»á×Ô¶¯ÌîÈë
-* ÉùÒôÎÄ¼þ×Ô¶¯Æ¥ÅäÃû³Æ
-* ¼¼ÄÜ/ÎïÆ·¿ÉÒÔ±ê¼ÇÑÕÉ«£¬ÅÅÐò
-* ÖÇÄÜ¼ì²â³åÍ»µÄ¼¼ÄÜÃû³Æ
-* ÎÄ×ÖÃèÊöµ÷É«ÅÌ
-* Èç¹ûÃ»ÓÐ¹´Ñ¡ÐÐÎª£¬½«Òþ²Ø¶ÔÓ¦µÄÊôÐÔ
-* ÎïÆ·×Ô¶¯·ÖÅäid
-* ¼òÒ×µÄ¼¼ÄÜÄ£°å
-* Ê÷×´½á¹¹¿ìËÙµ¼º½
-* Èç¹ûÐÞÊÎÆ÷±»ÉèÎªÒþ²Ø£¬Ôò¶àÓïÑÔ½çÃæÏÔÊ¾Òþ²Ø±ê¼Ç
-* ÓïÑÔ½çÃæÏÔÊ¾ËùÓÐÊ¹ÓÃµ½µÄÓïÑÔ
-* ¼ì²âÊÇ·ñ´æÔÚÎ´ÌîÐ´ÃèÊöµÄ¼¼ÄÜºÍÐÞÊÎÆ÷
+å·²ç»å®Œæˆï¼š
+æ–°å»ºã€å¤åˆ¶ã€åˆ é™¤æŠ€èƒ½/ç‰©å“
+ä¿®æ”¹æŠ€èƒ½ã€ä¿®é¥°å™¨åç§°ä¼šè‡ªåŠ¨æ”¹åŠ¨å¤šè¯­è¨€æè¿°å­—æ®µ
+æ™ºèƒ½è¯»å–æ¸¸æˆæŠ€èƒ½/ç‰©å“å›¾æ ‡ å’Œ è‡ªå®šä¹‰å›¾æ ‡
+åªä¼šä¿å­˜ä¿®æ”¹çš„æŠ€èƒ½
+ä¸éœ€è¦æ‰‹å†™precacheï¼Œä¼šè‡ªåŠ¨å¡«å…¥
+å£°éŸ³æ–‡ä»¶è‡ªåŠ¨åŒ¹é…åç§°
+æŠ€èƒ½/ç‰©å“å¯ä»¥æ ‡è®°é¢œè‰²ï¼ŒæŽ’åº
+æ™ºèƒ½æ£€æµ‹å†²çªçš„æŠ€èƒ½åç§°
+æ–‡å­—æè¿°è°ƒè‰²ç›˜
+å¦‚æžœæ²¡æœ‰å‹¾é€‰è¡Œä¸ºï¼Œå°†éšè—å¯¹åº”çš„å±žæ€§
+ç‰©å“è‡ªåŠ¨åˆ†é…id
+ç®€æ˜“çš„æŠ€èƒ½æ¨¡æ¿
+æ ‘çŠ¶ç»“æž„å¿«é€Ÿå¯¼èˆª
+å¦‚æžœä¿®é¥°å™¨è¢«è®¾ä¸ºéšè—ï¼Œåˆ™å¤šè¯­è¨€ç•Œé¢æ˜¾ç¤ºéšè—æ ‡è®°
+è¯­è¨€ç•Œé¢æ˜¾ç¤ºæ‰€æœ‰ä½¿ç”¨åˆ°çš„è¯­è¨€
+æ£€æµ‹æ˜¯å¦å­˜åœ¨æœªå¡«å†™æè¿°çš„æŠ€èƒ½å’Œä¿®é¥°å™¨
 
 ### TODO list
 * link each other
