@@ -265,6 +265,7 @@ app.factory("Operation", function(Sound) {
 		["CreateThinker", "创建计时器", false, ["Target", "ModifierName"]],
 		["LinearProjectile", "线性投射物", false, ["Target","EffectName","MoveSpeed","StartRadius","EndRadius","FixedDistance","StartPosition",
 													"TargetTeams","TargetTypes","TargetFlags","HasFrontalCone","ProvidesVision","VisionRadius"]],
+		["ApplyMotionController", "运动控制", false, ["Target","ScriptFile","HorizontalControlFunction","VerticalControlFunction","Duration"]],
 		];
 
 	Operation.EventItemOperation = [
@@ -415,6 +416,8 @@ app.factory("Operation", function(Sound) {
 			["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY","范围唯一的"],
 		]},
 		HasFrontalCone:{type: "bool"},
+		HorizontalControlFunction:{type: "text"},
+		VerticalControlFunction:{type: "text"},
 	};
 
 	Operation.UnitGroupColumns = [
