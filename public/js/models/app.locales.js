@@ -230,6 +230,7 @@ app.factory("Locale", function() {
 		ItemDisassembleRule: "可拆分",
 
 		// 修饰器
+		NewModifier: "新建修饰器",
 		_name: "名称",
 		_comment: "备注",
 		Attributes: "属性",
@@ -462,6 +463,7 @@ app.factory("Locale", function() {
 		CreateThinker: "创建计时器",
 		LinearProjectile: "线性投射物",
 		SpendCharge: "消耗物品",
+		ApplyMotionController: "运动控制",
 
 		CASTER: "施法者",
 		TARGET: "目标",

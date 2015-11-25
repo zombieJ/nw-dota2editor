@@ -73,7 +73,7 @@
 					<li ng-class="{active: currentTab === 'common'}"><a ng-click="currentTab = 'common'">Common【常规】</a></li>
 					<li ng-class="{active: currentTab === 'item'}" ng-show="isItem"><a ng-click="currentTab = 'item'">Item【物品】</a></li>
 					<li ng-class="{active: currentTab === 'events'}"><a ng-click="currentTab = 'events'">Events【事件】({{ability.getEventList().length}})</a></li>
-					<li ng-class="{active: currentTab === 'modifiers'}"><a ng-click="currentTab = 'modifiers'">Modifiers【修饰器】({{ability._modifierList.length}})</a></li>
+					<li ng-class="{active: currentTab === 'modifiers'}"><a ng-click="currentTab = 'modifiers'">Modifiers【修饰器】({{ability.getModifierList().length}})</a></li>
 					<li ng-class="{active: currentTab === 'abilitySpecial'}"><a ng-click="currentTab = 'abilitySpecial'">Ability Special【自定义值】({{ability._abilitySpecialList.length}})</a></li>
 				</ul>
 
@@ -138,7 +138,7 @@
 							<tr>
 								<th>
 									<span class="ability-tip">Comment</span>
-									{{Locale('Comment')}}
+									{{::Locale('Comment')}}
 								</th>
 								<td class="ability-form" colspan="2">
 									<textarea ng-model="event.comment" rows="3" placeholder="{{Locale('Comment')}}"></textarea>
@@ -172,27 +172,27 @@
 						<ul class="ability-modifer-list nav nav-pills">
 							<li class="active">
 								<a ng-click="addModifier()">
-									+ <span ng-show="!currentModifier">New Modifier 【新建修饰器】</span>
+									+ <span ng-show="!currentModifier">{{::Locale('NewModifier')}}</span>
 								</a>
 							</li>
-							<li ng-repeat="modifier in ability._modifierList" ng-class="{active: currentModifier === modifier}">
-								<a ng-click="setModifier(modifier)">{{modifier._name}}</a>
-								<a class="removeMark" ng-click="removeModifier(modifier)">[X] Delete</a>
+							<li ng-repeat="modifier in ability.getModifierList()" ng-class="{active: currentModifier === modifier}">
+								<a ng-click="setModifier(modifier)">{{modifier.key}}</a>
+								<a class="removeMark" ng-click="UI.arrayDelete(modifier, ability.getModifierList(), delModifierCallback)">[X] Delete</a>
 							</li>
 						</ul>
 
 						<table class="ability-table" ng-show="currentModifier">
 							<!-- Modifier: Common -->
-							<tbody ng-repeat="group in currentModifier._attrList track by $index">
-								<tr ng-repeat="unit in group.list track by $index" ng-if="unit.showFunc ? unit.showFunc() : true;">
+							<tbody ng-repeat="group in Modifier.AttrList track by $index">
+								<tr ng-repeat="unit in group track by $index" ng-if="unit.showFunc ? unit.showFunc() : true;">
 									<th width="150">
-										<span class="ability-tip">{{unit.title || unit.attr}}</span>
-										{{Locale(unit.attr)}}
+										<span class="ability-tip">{{unit.attr}}</span>
+										{{::Locale(unit.attr)}}
 									</th>
 									<td class="ability-form">
-										{{unit.link}}
-										<a class="fa fa-link" ng-if="unit.link && unit.link(currentModifier[unit.attr], ability)" ng-click="unit.link(currentModifier[unit.attr], ability)()"></a>
-										<div attrfield data-ability="ability" data-attrunit="unit" data-srcunit="currentModifier" data-srctmpl="Modifier"></div>
+										<!-- TODO: {{unit.link}} -->
+										<!-- a class="fa fa-link" ng-if="unit.link && unit.link(currentModifier[unit.attr], ability)" ng-click="unit.link(currentModifier[unit.attr], ability)()"></a -->
+										<div kvfield data-ability="ability" data-attrunit="unit" data-srcunit="currentModifier" data-srctmpl="Modifier"></div>
 									</td>
 								</tr>
 							</tbody>

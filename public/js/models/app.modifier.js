@@ -33,5 +33,23 @@ app.factory("Modifier", function(Event) {
 		return _my._eventList;
 	};
 
+	// ================================================
+	// =                  Attr List                   =
+	// ================================================
+	Modifier.AttrList = [
+		[
+			{group: "common", attr: "Attributes", type: "group"},
+			{group: "common", attr: "Duration", type: "text"},
+			{group: "common", attr: "Passive", type: "boolean"},
+			{group: "common", attr: "TextureName", type: "text"},
+		],
+		[
+			{group: "state", attr: "IsBuff", type: "boolean"},
+			{group: "state", attr: "IsDebuff", type: "boolean"},
+			{group: "state", attr: "IsHidden", type: "boolean"},
+			{group: "state", attr: "IsPurgable", type: "boolean"},
+		],
+	];
+
 	return Modifier;
 });

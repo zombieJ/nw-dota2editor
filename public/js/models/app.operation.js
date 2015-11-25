@@ -60,7 +60,7 @@ app.factory("Operation", function(Sound) {
 		["CreateThinker", false, ["Target", "ModifierName"]],
 		["LinearProjectile", false, ["Target","EffectName","MoveSpeed","StartRadius","EndRadius","FixedDistance","StartPosition",
 			"TargetTeams","TargetTypes","TargetFlags","HasFrontalCone","ProvidesVision","VisionRadius"]],
-		["ApplyMotionController", "运动控制", false, ["Target","ScriptFile","HorizontalControlFunction","VerticalControlFunction","Duration"]],
+		["ApplyMotionController", false, ["Target","ScriptFile","HorizontalControlFunction","VerticalControlFunction","Duration"]],
 	];
 
 	Operation.EventItemOperation = [
@@ -181,6 +181,8 @@ app.factory("Operation", function(Sound) {
 		CleavePercent: {type: "text"},
 		CleaveRadius: {type: "text"},
 		StartRadius: {type: "text"},
+		CleaveEffect: {type: "text"},
+		LifestealPercent: {type: "text"},
 		EndRadius: {type: "text"},
 		FixedDistance: {type: "text"},
 		StartPosition: {type: "text"},// TODO: hitloc? attach_attack1? attach_origin?
@@ -228,6 +230,8 @@ app.factory("Operation", function(Sound) {
 			]
 		},
 		HasFrontalCone: {type: "boolean"},
+		HorizontalControlFunction: {type: "text"},
+		VerticalControlFunction: {type: "text"},
 	};
 
 	$.each(Operation.OperationAttrMap, function(key, opAttr) {

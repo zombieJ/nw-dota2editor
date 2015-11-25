@@ -46,6 +46,7 @@ hr {
 .ability-form .d-checkbox > div {
 	border: 2px solid #999;
 	display: inline-block;
+	background: #FFF;
 	width: 24px;
 	height: 24px;
 	margin-top: 2px;

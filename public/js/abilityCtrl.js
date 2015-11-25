@@ -1,7 +1,7 @@
 'use strict';
 
 var _abilityCtrl = function(isItem) {
-	return function ($scope, globalContent, NODE, Ability, UI, KV, Locale, Config) {
+	return function ($scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config) {
 		if (!globalContent.isOpen) return;
 
 		window.scope = $scope;
@@ -10,6 +10,7 @@ var _abilityCtrl = function(isItem) {
 		$scope.ready = false;
 		$scope.abilityList = [];
 		$scope.ability = null;
+		$scope.currentModifier = null;
 
 		/*$scope._newUnitFork = null;
 		$scope._newUnitForkLang = true;
@@ -33,12 +34,38 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		$scope.setAbility = function (ability) {
 			$scope.ability = ability;
+			$scope.currentModifier = $scope.ability.getModifierList()[0];
+		};
+
+		$scope.setModifier = function(modifier) {
+			$scope.currentModifier = modifier;
 		};
 
 		$scope.addEvent = function(entity) {
 			var _kv = new KV("", []);
 			_kv._isEvent = true;
 			entity.value.push(_kv);
+		};
+
+		$scope.addModifier = function() {
+			var _modifierList = $scope.ability.kv.assumeKey("Modifiers", true);
+			var _oriName = "modifier_" + $scope.ability._name;
+			var _tgtName = _oriName;
+			var _index = 2;
+			while(common.array.find(_tgtName, _modifierList.value, "key")) {
+				_tgtName = _oriName + "_" + _index;
+				_index += 1;
+			}
+			var _modifier = new KV(_tgtName);
+			_modifierList.value.push(_modifier);
+
+			$scope.currentModifier = _modifier;
+		};
+
+		$scope.delModifierCallback = function(modifier) {
+			if($scope.currentModifier === modifier) {
+				$timeout(function() {$scope.currentModifier = $scope.ability.getModifierList()[0];});
+			}
 		};
 
 		/*// ==========> New

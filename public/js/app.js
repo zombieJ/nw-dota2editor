@@ -111,7 +111,7 @@ app.factory("UI", function ($rootScope, Locale) {
 			if (!ret) return;
 
 			common.array.remove(item, array);
-			if (callback) callback();
+			if (callback) callback(item);
 			$rootScope.$apply();
 		});
 	};
