@@ -6,3 +6,4 @@ zip -r dota2editor.nw *.html *.json public partials srv res
 
 
 #copy /b nw.exe+dota2editor.nw dota2editor.exe
+echo 'copy /b nw.exe+dota2editor.nw dota2editor.exe'
