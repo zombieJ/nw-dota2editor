@@ -62,11 +62,26 @@
 		return KV.parse(this.toString(keepEmpty !== false));
 	};
 
-	KV.prototype.toString = function(keepEmpty) {
-		return this._toString(null, null, keepEmpty);
+	/*
+	 * saveFunc:Function
+	 * keepEmpty:boolean
+	 */
+	KV.prototype.toString = function(saveFunc) {
+		var _func;
+		if(saveFunc === false) {
+			_func = function(kv) {
+				if(kv.value === "") return false;
+			};
+		} else if(typeof saveFunc === "function") {
+			_func = saveFunc;
+		} else {
+			_func = null;
+		}
+
+		return this._toString(null, null, _func);
 	};
 	
-	KV.prototype._toString = function(_data, _lvl, keepEmpty) {
+	KV.prototype._toString = function(_data, _lvl, saveFunc) {
 		var _data = _data || "";
 		var _lvl = _lvl || 0;
 
@@ -98,9 +113,9 @@
 			_write('"' + this.key + '"');
 			_write('{');
 			this.value.forEach(function(subKV) {
-				if(!keepEmpty && subKV.value === "" && !subKV.keep) return;
+				if(saveFunc && saveFunc(subKV) === false) return;
 
-				_data = subKV._toString(_data, _lvl + 1, keepEmpty) + "\n";
+				_data = subKV._toString(_data, _lvl + 1, saveFunc) + "\n";
 			});
 			_write('}');
 		}

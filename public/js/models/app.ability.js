@@ -106,6 +106,11 @@ app.factory("Ability", function($q, Event, Modifier) {
 	// =================================================
 	Ability.parse = function(kvUnit) {
 		var _unit = new Ability(kvUnit);
+
+		$.each(_unit.getModifierList(), function(i, modifierKV) {
+			Modifier(modifierKV);
+		});
+
 		return _unit;
 	};
 

@@ -78,6 +78,7 @@ components.directive('kvgroup', function($compile) {
 					.replace("DOTA_UNIT_TARGET_", "")
 					.replace("DECLARE_PURCHASES_", "")
 					.replace("FLAG_", "")
+					.replace("MODIFIER_ATTRIBUTE_", "")
 					.replace("DOTA_ABILITY_BEHAVIOR_", "");
 			};
 		},

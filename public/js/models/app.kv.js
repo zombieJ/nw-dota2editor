@@ -1,7 +1,7 @@
 'use strict';
 
 // ======================================================
-// =                        键值                        =
+// =                         KV                         =
 // ======================================================
 app.factory("KV", function(NODE, $q) {
 	var _KV = KV;
@@ -63,13 +63,6 @@ app.factory("KV", function(NODE, $q) {
 		_kv.value = _kv.value === "1" ? "0" : "1";
 	};
 
-	_KV.prototype.kvToString = function() {
-		var _str = $.map(this.value, function(kv) {
-			return '"'+kv.key+'"    "'+kv.value+'"';
-		}).join("\n");
-		return _str;
-	};
-
 	_KV.prototype.kvToMap = function() {
 		if(!this._map) {
 			var _map = this._map = {};
@@ -82,7 +75,7 @@ app.factory("KV", function(NODE, $q) {
 	};
 
 	// ================================================
-	// =                    格式化                    =
+	// =                    Writer                    =
 	// ================================================
 	_KV.Writer = function() {
 		this._writeTabIndex = 0;

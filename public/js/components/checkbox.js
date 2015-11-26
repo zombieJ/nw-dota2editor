@@ -4,8 +4,9 @@ components.directive('checkbox', function($compile) {
 	return {
 		restrict: 'AE',
 		scope: {
-			target: "=",
+			target: "=",			// KV Entity
 			targetPath: "@",
+			kvChange: "=?kvChange",
 		},
 		controller: function($scope) {
 			$scope.getVal = function() {
@@ -41,6 +42,9 @@ components.directive('checkbox', function($compile) {
 			$scope.check = function() {
 				if($scope.target) {
 					$scope.target.assumeKey($scope.targetPath, false).value = $scope.getBoolVal() ? "0" : "1";
+					if($scope.kvChange) {
+						$scope.kvChange($scope.target);
+					}
 				}
 			};
 		},

@@ -114,7 +114,7 @@ app.factory("Operation", function(Sound) {
 		EffectName: {type: "text", match: _match_EffectName},
 		EffectAttachType: {
 			type: "single",
-			value: [["follow_origin"], ["follow_overhead"], ["start_at_customorigin"], ["world_origin"]]
+			value: [["attach_hitloc"], ["follow_origin"], ["follow_overhead"], ["start_at_customorigin"], ["world_origin"], ["follow_chest"], ["follow_head"]]
 		},
 		ControlPoints: {type: "tree"},
 		ControlPointEntities: {type: "tree"},

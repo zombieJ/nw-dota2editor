@@ -160,7 +160,9 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 			_wearable.key = "Wearable" + (i + 1);
 		});
 
-		writer.writeContent(this.kv.toString(_keepKV));
+		writer.writeContent(this.kv.toString(_keepKV ? null : function(kv) {
+			if(kv.value === "" || kv.key.match(/^_/)) return false;
+		}));
 	};
 
 	// ================================================

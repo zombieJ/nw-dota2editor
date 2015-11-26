@@ -20,7 +20,6 @@ app.factory("Locale", function() {
 	Locale.hasKey = function(key) {
 		return !!Locale.langMap[Locale.lang][key];
 	};
-
 	// ========================================
 	// =                  CN                  =
 	// ========================================
@@ -256,6 +255,11 @@ app.factory("Locale", function() {
 		OverrideAnimation: "覆盖动画",
 		ThinkInterval: "计时间隔",
 
+		MODIFIER_ATTRIBUTE_NONE: "无",
+		MODIFIER_ATTRIBUTE_MULTIPLE: "可重复",
+		MODIFIER_ATTRIBUTE_PERMANENT: "死亡保持",
+		MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE: "无敌保持",
+
 		Properties: "属性",
 		States: "状态",
 		Events: "事件",
@@ -472,13 +476,17 @@ app.factory("Locale", function() {
 		UNIT: "单位",
 		PROJECTILE: "投射物",
 
+		attach_hitloc: "受伤点",
 		follow_origin: "跟随目标",
 		follow_overhead: "跟随头顶",
 		start_at_customorigin: "自定义位置",
 		world_origin: "世界的中心",
+		follow_head: "头部",
+		follow_chest: "胸部",
 
 		// 英雄
 		override_hero: "替换英雄",
+
 		AttributePrimary: "主属性",
 		AttributeBaseStrength: "基础力量",
 		AttributeStrengthGain: "升级力量获得",

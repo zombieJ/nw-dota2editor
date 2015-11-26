@@ -6,11 +6,11 @@ components.directive('kvfield', function($compile) {
 	return {
 		restrict: 'AE',
 		scope: {
-			srctmpl: "=",		// Entity Class
-			srcunit: "=",		// Entity
-			attrunit: "=",		// Attribute Unit
-			ability: "=",		// Skill / Item Ability - Used for link
-			path: "@",			// Prepath. e.g. "lvl1" + attrunit.attr = "lvl1.attr"
+			srctmpl: "=",			// Entity Class
+			srcunit: "=",			// Entity
+			attrunit: "=",			// Attribute Unit
+			ability: "=",			// Skill / Item Ability - Used for link
+			path: "@",				// Prepath. e.g. "lvl1" + attrunit.attr = "lvl1.attr"
 		},
 		controller: function($scope, $element, $attrs, Locale, Operation) {
 			$scope.Locale = Locale;
@@ -76,7 +76,7 @@ components.directive('kvfield', function($compile) {
 			'</select>'+
 
 			// Boolean
-			'<div checkbox data-target="getKV()" data-target-path="{{getAttrPath()}}" ng-switch-when="boolean"></div>' +
+			'<div checkbox data-target="getKV()" data-target-path="{{getAttrPath()}}" kv-change="attrunit.change" ng-switch-when="boolean"></div>' +
 
 			// Text
 			'<input tipfield class="form-control" ng-model="getKV().bind(getAttrPath())" ng-model-options="{getterSetter: true}" ng-switch-when="text" ' +

@@ -184,7 +184,7 @@
 						<table class="ability-table" ng-show="currentModifier">
 							<!-- Modifier: Common -->
 							<tbody ng-repeat="group in Modifier.AttrList track by $index">
-								<tr ng-repeat="unit in group track by $index" ng-if="unit.showFunc ? unit.showFunc() : true;">
+								<tr ng-repeat="unit in group track by $index" ng-if="unit.showFunc ? unit.showFunc(currentModifier) : true;">
 									<th width="150">
 										<span class="ability-tip">{{unit.attr}}</span>
 										{{::Locale(unit.attr)}}
@@ -202,7 +202,7 @@
 								<tr>
 									<th>
 										<span class="ability-tip">Properties</span>
-										{{Locale('Properties')}}
+										{{::Locale('Properties')}}
 									</th>
 									<td>
 										<div class="ability-modifer-prop-list">
