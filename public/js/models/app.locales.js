@@ -136,6 +136,7 @@ app.factory("Locale", function() {
 		StatusEffectName: "状态特效",
 		StatusEffectPriority: "状态特效优先级",
 		OverrideAnimation: "覆盖动画",
+		ThinkInterval: "计时间隔",
 
 		Properties: "属性",
 		States: "状态",
