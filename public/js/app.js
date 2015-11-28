@@ -206,6 +206,7 @@ app.controller('main', function ($scope, $route, $location, $q, UI, Locale, Abil
 	window.Sound = $scope.Sound = Sound;
 	window.Unit = $scope.Unit = Unit;
 	window.UI = $scope.UI = UI;
+	window.KV = $scope.KV = KV;
 	window.Config = $scope.Config = Config;
 	$scope.common = common;
 	$scope.jQuery = $;

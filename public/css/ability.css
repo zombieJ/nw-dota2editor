@@ -336,17 +336,27 @@ hr {
 	width: 10px;
 	word-break: keep-all;
 	white-space: nowrap;
+	padding-top: 3px;
 }
 .ability-modifer-prop-list ul li > .ability-modifer-item-select {
 	display: table-cell;
 	vertical-align: top;
+	width: 100%;
+	margin-bottom: 1px;
 }
 
-.ability-modifer-prop-list ul li > .ability-modifer-item-select select {
-	width: 100%;
-	height: auto;
-	outline: none;
+.ability-modifer-prop-list ul li > .ability-modifer-item-select .ability-modifer-item-select-inline {
+	position: relative;
+}
 
+.ability-modifer-prop-list ul li > .ability-modifer-item-select select,
+.ability-modifer-prop-list ul li > .ability-modifer-item-select input {
+	width: 100%;
+	height: 28px;
+	outline: none;
+}
+.ability-modifer-prop-list ul li > .ability-modifer-item-select input {
+	background: rgba(0,0,0,0.05);
 }
 .ability-modifer-prop-list ul li > input {
 	background: transparent;
@@ -372,7 +382,7 @@ hr {
 
 /* Header */
 .ability-cntr-header {
-	font-family: "Microsoft YaHei",΢���ź�,"Microsoft JhengHei",����ϸ��,STHeiti,MingLiu;
+	font-family: "Microsoft YaHei","Microsoft JhengHei", "STHeiti", "MingLiu";
 	margin-bottom: 10px;
 }
 

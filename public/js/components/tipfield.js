@@ -36,7 +36,7 @@ components.directive('tipfield', function($compile) {
 						if($scope.alternative) {
 							_val = _val.toUpperCase();
 							$scope.currentList = $.map($scope.alternative, function (item) {
-								var _itemKey = (item.value || "") + (item.key || "") + (item._key || "");
+								var _itemKey = (item.value || "") + (item.key || "") + (item._key || "") + Locale(item.value);
 								if (_itemKey.toUpperCase().indexOf(_val) !== -1) {
 									return item;
 								}
@@ -58,7 +58,7 @@ components.directive('tipfield', function($compile) {
 			// =======================================================
 			// Key press to show type ahead
 			$element.on("keyup", function(e) {
-				if((65 <= e.which && e.which <= 90) || (48 <= e.which && e.which <= 57) || e.which === 8 || e.which === 46) {
+				if((65 <= e.which && e.which <= 90) || (48 <= e.which && e.which <= 57) || e.which === 8 || e.which === 46 || e.which === 32) {
 					_updateList();
 				} else if(e.which === 38) {
 					$scope.selected -= 1;
@@ -84,6 +84,8 @@ components.directive('tipfield', function($compile) {
 			});
 
 			$scope.$on("$destroy",function() {
+				$element.off("keyup");
+				$element.off("blur");
 				$scope._alternativeCntr.remove();
 			});
 		},

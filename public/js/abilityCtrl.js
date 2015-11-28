@@ -42,6 +42,7 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		$scope.addEvent = function(entity) {
+			console.log(entity);
 			var _kv = new KV("", []);
 			_kv._isEvent = true;
 			entity.value.push(_kv);

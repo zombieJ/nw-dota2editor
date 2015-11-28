@@ -38,7 +38,7 @@
 
 				<div class="ability-cntr-header-name ability-form">
 					<h1>
-						{{globalContent.mainLang().map[ability._name] || Locale('Unnamed')}}
+						{{GC.mainLang().map[Language.unitAttr(ability, "")] || Locale('Unnamed')}}
 						<small>
 							{{ability._name}}
 							<a class="fa fa-edit" ng-click="UI.modal.rename(ability, renameCheck, renameCallback)"></a>

@@ -192,7 +192,7 @@ label.checkbox input[type="checkbox"] {
 	list-style: none;
 	border: 1px solid #999;
 	margin: 0;
-	padding: 0;
+	padding: 0!important;
 	display: inline-block;
 	min-width: 100px;
 	background: #FFF;

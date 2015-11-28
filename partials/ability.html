@@ -51,8 +51,13 @@
 				</ul>
 
 				<div class="ability-cntr-header-name ability-form">
-					<span class="ability-tip">Name 【名称】</span>
-					<input type="text" ng-model="ability._name" />
+					<h1>
+						{{GC.mainLang().map[Language.abilityAttr(ability._name, "")] || Locale('Unnamed')}}
+						<small>
+							{{ability._name}}
+							<a class="fa fa-edit" ng-click="UI.modal.rename(ability, renameCheck, renameCallback)"></a>
+						</small>
+					</h1>
 				</div>
 
 				<div class="ability-form">
@@ -207,19 +212,24 @@
 									<td>
 										<div class="ability-modifer-prop-list">
 											<ul>
-												<li ng-repeat="_prop in currentModifier._propertyList track by $index">
-													<a ng-click="common.array.remove(_prop, currentModifier._propertyList)">[X]</a>
+												<li ng-repeat="_prop in (currentModifier.get('Properties') || []) track by $index">
+													<a ng-click="common.array.remove(_prop, currentModifier.get('Properties'))">[X]</a>
 													<div class="ability-modifer-item-select">
-														<select ng-model="_prop[0]">
-															<option ng-repeat="item in Modifier.Properties track by $index" value="{{::item[0]}}">
-																{{item[0].replace("MODIFIER_PROPERTY_", "")}} 【{{item[1]}}】
-															</option>
-														</select>
+														<div class="ability-modifer-item-select-inline">
+															<!--select ng-model="_prop.key">
+																<option ng-repeat="item in Modifier.Properties track by $index" value="{{::item[0]}}">
+																	【{{::Locale(item[0])}}】 {{::item[0].replace("MODIFIER_PROPERTY_", "")}}
+																</option>
+															</select-->
+															<input tipfield ng-model="_prop.key" data-alternative="Modifier.Properties" />
+														</div>
 													</div>
-													<input type="text" class="form-control" ng-model="_prop[1]" />
+													<input type="text" class="form-control" ng-model="_prop.value" />
 												</li>
 											</ul>
-											<a class="add-link" ng-click="currentModifier._propertyList.push(['MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL', ''])">+ new Property 【添加属性】</a>
+											<a class="add-link" ng-click="currentModifier.assumeKey('Properties', true).value.push(KV.new('', ''))">
+												+ {{::Locale('NewProperty')}}
+											</a>
 										</div>
 									</td>
 								</tr>
@@ -230,28 +240,34 @@
 								<tr>
 									<th>
 										<span class="ability-tip">States</span>
-										{{Locale('States')}}
+										{{::Locale('States')}}
 									</th>
 									<td>
 										<div class="ability-modifer-prop-list">
 											<ul>
-												<li ng-repeat="_state in currentModifier._stateList track by $index">
-													<a ng-click="common.array.remove(_state, currentModifier._stateList)">[X]</a>
+												<li ng-repeat="_state in (currentModifier.get('States') || []) track by $index">
+													<a ng-click="common.array.remove(_state, currentModifier.get('States'))">[X]</a>
 													<div class="ability-modifer-item-select">
-														<select ng-model="_state[0]">
-															<option ng-repeat="item in Modifier.States track by $index" value="{{::item[0]}}">
-																{{item[0].replace("MODIFIER_STATE_", "")}} 【{{item[1]}}】
-															</option>
-														</select>
+														<div class="ability-modifer-item-select-inline">
+															<!--select ng-model="_state[0]">
+																<option ng-repeat="item in Modifier.States track by $index" value="{{::item[0]}}">
+																	{{item[0].replace("MODIFIER_STATE_", "")}} 【{{item[1]}}】
+																</option>
+															</select-->
+															<input tipfield ng-model="_state.key" data-alternative="Modifier.States" />
+														</div>
 													</div>
-													<select ng-model="_state[1]">
-														<option ng-repeat="item in Modifier.StateValues track by $index" value="{{::item[0]}}">
-															{{item[0].replace("MODIFIER_STATE_VALUE_", "")}} 【{{item[1]}}】
+													<select ng-model="_state.value">
+														<option ng-repeat="item in Modifier.StateValues track by $index" value="{{::item.value}}">
+															【{{::Locale(item.value)}}】
+															{{item.value.replace("MODIFIER_STATE_VALUE_", "")}}
 														</option>
 													</select>
 												</li>
 											</ul>
-											<a class="add-link" ng-click="currentModifier._stateList.push(['MODIFIER_STATE_ATTACK_IMMUNE', ''])">+ new State 【添加状态】</a>
+											<a class="add-link" ng-click="currentModifier.assumeKey('States', true).value.push(KV.new('', ''))">
+												+ {{::Locale('NewStates')}}
+											</a>
 										</div>
 									</td>
 								</tr>
@@ -262,37 +278,38 @@
 								<tr>
 									<th>
 										<span class="ability-tip">Events</span>
-										{{Locale('Events')}}
+										{{::Locale('Events')}}
 									</th>
 									<td style="padding: 5px">
 										<table class="ability-table">
-											<tbody ng-repeat="_index in optEventNum track by $index" ng-show="currentModifier._eventList[_index]">
+											<tbody ng-repeat="event in Modifier(currentModifier).getEventList() track by $index">
 											<!-- Event Type -->
 											<tr>
 												<th width="120">
 													<span class="ability-tip">Event Type</span>
 													{{Locale('Event Type')}}
 												</th>
-												<td class="ability-form">
-													<select ng-model="currentModifier._eventList[_index]._name">
-														<option ng-repeat="_event in Event.ModifierEventList track by $index" value="{{::_event[0]}}">{{::_event[0]}} 【{{::_event[1]}}】</option>
+												<td class="ability-form" ng-switch="Config.global.eventUseText">
+													<input tipfield type="text" ng-model="event.key" data-alternative="Event.ModifierEventList" ng-switch-when="true" />
+													<select ng-model="event.key" ng-switch-default>
+														<option ng-repeat="_event in Event.ModifierEventList track by $index" value="{{::_event.value}}">{{::_event.value}} 【{{::Locale(_event.value)}}】</option>
 													</select>
 												</td>
 												<td width="60" class="text-center">
-													<a href="javascript:void(0)" ng-click="common.array.remove(currentModifier._eventList[_index], currentModifier._eventList)">
+													<a href="javascript:void(0)" ng-click="UI.arrayDelete(event, currentModifier.value)">
 														Delete
 													</a>
 												</td>
 											</tr>
 
 											<!-- Event Thinking Interval -->
-											<tr>
+											<tr ng-if="event.key === 'OnIntervalThink'">
 												<th>
 													<span class="ability-tip">ThinkInterval</span>
 													{{Locale('ThinkInterval')}}
 												</th>
 												<td class="ability-form" colspan="2">
-													<input class="form-control" ng-model="currentModifier._eventList[_index].ThinkInterval" rows="3"/>
+													<input ng-model="currentModifier.bind('ThinkInterval')" ng-model-options="{getterSetter: true}" />
 												</td>
 											</tr>
 
@@ -300,10 +317,10 @@
 											<tr>
 												<th>
 													<span class="ability-tip">Comment</span>
-													{{Locale('_comment')}}
+													{{::Locale('_comment')}}
 												</th>
 												<td class="ability-form" colspan="2">
-													<textarea class="form-control" ng-model="currentModifier._eventList[_index]._comment" rows="3" placeholder="备注"></textarea>
+													<textarea ng-model="event.comment" rows="3" placeholder="{{::Locale('_comment')}}"></textarea>
 												</td>
 											</tr>
 
@@ -314,13 +331,13 @@
 													{{Locale('Operation')}}
 												</th>
 												<td class="ability-form" colspan="2" style="background: #FFF">
-													<div eventoperation data-container="currentModifier._eventList[_index]" data-path="_operationList" data-ability="ability" data-isitem="isItem"></div>
+													<div operationlist="event.value" data-alternative="isitem ? Operation.EventItemOperation : Operation.EventOperation" data-ability="ability"></div>
 												</td>
 											</tr>
 											</tbody>
 										</table>
 
-										<a ng-click="addEvent(currentModifier)">+ new event 【新建事件】</a>
+										<a ng-click="addEvent(currentModifier)">+ {{::Locale('NewEvent')}}</a>
 									</td>
 								</tr>
 							</tbody>
