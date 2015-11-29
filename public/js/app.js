@@ -41,7 +41,6 @@ app.factory("globalContent", function (Config) {
 	var _globalContent = {
 		inlineMode: !window.require,
 
-		project: localStorage.getItem("project"),
 		isOpen: false,
 
 		abilityList: null,
@@ -57,6 +56,16 @@ app.factory("globalContent", function (Config) {
 			hideMenu: true,
 		},
 	};
+
+	// Update config
+	Object.defineProperty(_globalContent, "project", {
+		get: function() {
+			return Config.projectPath;
+		}, set: function(value) {
+			Config.projectPath = value;
+		}
+	});
+	_globalContent.project = localStorage.getItem("project");
 
 	// Get main language
 	_globalContent.mainLang = function () {

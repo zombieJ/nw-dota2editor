@@ -5,7 +5,7 @@
 			     ng-class="{active: ability == _ability}"
 				 ng-mousedown="setAbilityMouseDown(_ability);">
 				<p class="title">
-					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.abilities[_ability._name].markColor || '#CCC'}}"></span>
+					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.get('abilities', _ability._name, 'markColor') || '#CCC'}}"></span>
 					<span class="fa fa-cubes sm" ng-if="config.abilities[_ability._name].markUsage === 'dummy'"></span>
 					{{config.abilities[_ability._name].editorAliasName || _ability._name}}
 					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
@@ -395,20 +395,17 @@
 			<!-- =                    描述                    = -->
 			<!-- ============================================== -->
 			<div data-id="description" class="tab-pane fade">
-				<!-- 没有语言文件 -->
-				<div ng-show="languageList.length === 0">
-					<h3>No Language File find</h3>
-					<h3>【没有找到语言文件】</h3>
-					<p>Please check your language file in {{::Language.folderPath}} folder.</p>
-					<p>【请检查{{::Language.folderPath}}目录下的语言文件】</p>
+				<!-- No Language File -->
+				<div ng-show="GC.languageList.length === 0">
+					<h3>{{Locale('noLanguageFile')}}</h3>
 				</div>
 
-				<!-- 拥有语言文件 -->
+				<!-- Has Language File -->
 				<div class="row" ng-show="languageList.length !== 0">
 					<div class="col-md-2">
 						<div class="listCntr">
-							<div ng-repeat="_lang in languageList track by $index" class="listItem"
-							     ng-class="{active: language == _lang}" ng-click="setLanguage(_lang);">
+							<div ng-repeat="_lang in GC.languageList track by $index" class="listItem"
+							     ng-class="{active: GC.currentLanguage == _lang}" ng-click="GC.currentLanguage = _lang;">
 								<p>{{_lang.name}}</p>
 							</div>
 						</div>
@@ -416,9 +413,9 @@
 					<div class="col-md-10">
 						<p ng-show="!language.ready">Loading...</p>
 
-						<!-- ========================== -->
-						<!-- =          描述          = -->
-						<!-- ========================== -->
+						<!-- ========================= -->
+						<!-- =      Description      = -->
+						<!-- ========================= -->
 						<div ng-if="language">
 							<h3>Description 【描述】</h3>
 							<table class="ability-table" ng-show="language.ready">
@@ -432,9 +429,9 @@
 										<td>
 											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
 											<input type="text" class="form-control" ng-if="langField.type === 'text'"
-											       ng-model="language.map[Language.abilityAttr(ability._name, langField.attr)]" />
+											       ng-model="GC.currentLanguage.map[Language.abilityAttr(ability._name, langField.attr)]" />
 											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
-											          ng-model="language.map[Language.abilityAttr(ability._name, langField.attr)]"></textarea>
+											          ng-model="GC.currentLanguage.map[Language.abilityAttr(ability._name, langField.attr)]"></textarea>
 										</td>
 									</tr>
 

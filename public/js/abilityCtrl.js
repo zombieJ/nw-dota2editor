@@ -1,7 +1,7 @@
 'use strict';
 
 var _abilityCtrl = function(isItem) {
-	return function ($scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config) {
+	return function ($scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config, Language) {
 		if (!globalContent.isOpen) return;
 
 		window.scope = $scope;
@@ -19,8 +19,10 @@ var _abilityCtrl = function(isItem) {
 		$scope._newUnassignedKey = "";
 		$scope._newUnassignedValue = "";*/
 
+		$scope.config = Config.fetch(isItem ? "item" : "ability");
+
 		var _globalListKey = isItem ? "itemList" : "abilityList";
-		var _globalConfigKey = isItem ? "itemConfig" : "abilityConfig";
+		//var _globalConfigKey = isItem ? "itemConfig" : "abilityConfig";
 		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
 
 
@@ -121,7 +123,7 @@ var _abilityCtrl = function(isItem) {
 
 				$("#newUnitMDL").modal('hide');
 			}
-		};
+		};*/
 
 		// ==========> Rename
 		$scope.renameCheck = function(newName) {
@@ -134,18 +136,17 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		$scope.renameCallback = function(newName, oldName, entity) {
-			if(entity.kv.get("override_hero", false)) return;
-
 			$.each(globalContent.languageList, function(i, lang) {
-				if(lang.map[oldName] !== undefined) lang.map[newName] = lang.map[oldName];
-				delete lang.map[oldName];
-
-				if(lang.map[oldName + "_bio"] !== undefined) lang.map[newName + "_bio"] = lang.map[oldName + "_bio"];
-				delete lang.map[oldName + "_bio"];
+				$.each(Language.AbilityLang, function(i, langField) {
+					var _oldKey = Language.abilityAttr(oldName, langField.attr);
+					var _newKey = Language.abilityAttr(newName, langField.attr);
+					if(lang.map[_oldKey] !== undefined) lang.map[_newKey] = lang.map[_oldKey];
+					delete lang.map[_oldKey];
+				});
 			});
 		}
 
-		// ==========> Wearable
+		/*// ==========> Wearable
 		$scope.newWearable = function () {
 			var _wearable = new KV("wearable", [new KV("ItemDef")]);
 			$scope.ability.kv.assumeKey('Creature.AttachWearables', true).value.push(_wearable);
@@ -182,7 +183,7 @@ var _abilityCtrl = function(isItem) {
 		// =                        File Operation                        =
 		// ================================================================
 		// Read Config file
-		if (!globalContent[_globalConfigKey]) {
+		/*if (!globalContent[_globalConfigKey]) {
 			NODE.loadFile(Ability[_globalConfigKey], "utf8").then(function (data) {
 				$scope.config = JSON.parse(data);
 			}, function () {
@@ -192,7 +193,7 @@ var _abilityCtrl = function(isItem) {
 			});
 		} else {
 			$scope.config = globalContent[_globalConfigKey];
-		}
+		}*/
 
 		// Read Ability file
 		if (!globalContent[_globalListKey]) {
@@ -258,9 +259,9 @@ var _abilityCtrl = function(isItem) {
 			} else {
 				delete _ability.markColor;
 			}
-		};
+		};*/
 
-		$scope.setAbilityEditorAlias = function() {
+		/*$scope.setAbilityEditorAlias = function() {
 			if(!$scope.config) return;
 
 			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
@@ -286,9 +287,9 @@ var _abilityCtrl = function(isItem) {
 			setTimeout(function() {
 				$input.focus();
 			}, 500);
-		};
+		};*/
 
-		$scope.copyAbility = function() {
+		/*$scope.copyAbility = function() {
 			if(!_menuAbility) return;
 
 			$scope.newEntity(_menuAbility);

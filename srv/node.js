@@ -33,7 +33,7 @@ exports.loadProject = function(projectPath) {
 			if (exist) {
 				_deferred.resolve();
 
-				// 创建Dota2Editor配置文件
+				// Dota2Editor Config
 				exports.assumeFolder(".dota2editor");
 			} else {
 				_deferred.reject();

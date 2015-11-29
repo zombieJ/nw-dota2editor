@@ -3,9 +3,36 @@
 // =====================================================
 // =                   Configuration                   =
 // =====================================================
-app.factory("Config", function() {
+app.factory("Config", function($q) {
+	var _configCache = {};
 	var Config = function () {
+		this._data = {};
+		this._pass = false;
+		this._cacheList = [];
+
+		return this;
 	};
+
+	Config.prototype.data = function(path, value) {
+		if(arguments.length === 2) {
+			if(!this._pass) {
+				this._cacheList.push({
+					path: path,
+					value: value
+				});
+			} else {
+				common.setValueByPath(this._data, path, value);
+			}
+		}
+		return common.getValueByPath(this._data, path);
+	};
+
+	Config.prototype.get = function() {
+		return this.data(Array.prototype.join.call(arguments, "."));
+	};
+
+	// Global Configuration
+	Config.projectPath = null;
 
 	Config.global = {
 		mainLang: localStorage.getItem("mainLang") || "SChinese",
@@ -19,6 +46,33 @@ app.factory("Config", function() {
 		localStorage.setItem("saveKeepKV", Config.global.saveKeepKV);
 		localStorage.setItem("streamAPIKey", Config.global.streamAPIKey);
 		localStorage.setItem("eventUseText", Config.global.eventUseText);
+	};
+
+	// Common configuration: ability, item, unit, hero
+	Config.fetch = function(type) {
+		var _config = _configCache[type];
+		if(!_config) {
+			_config = _configCache[type] = new Config();
+
+			require("fs").readFile(
+				require('path').normalize(Config.projectPath + "/.dota2editor/" + type + ".conf")
+				, "utf8", function (err, data) {
+					_config._pass = true;
+
+					try {
+						_config._data = JSON.parse(data);
+					} catch(err) {
+						_config._data = {};
+					}
+
+					// Fill cache list
+					$.each(_config._cacheList, function(i, cacheUnit) {
+						common.setValueByPath(_config._data, cacheUnit.path, cacheUnit.value);
+					});
+					_config._cacheList = null;
+				});
+		}
+		return _config;
 	};
 
 	return Config;

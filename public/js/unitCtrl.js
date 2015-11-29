@@ -108,7 +108,7 @@ var _unitCtrl = function(isHero) {
 				if(lang.map[oldName + "_bio"] !== undefined) lang.map[newName + "_bio"] = lang.map[oldName + "_bio"];
 				delete lang.map[oldName + "_bio"];
 			});
-		}
+		};
 
 		// ==========> Wearable
 		$scope.newWearable = function () {
