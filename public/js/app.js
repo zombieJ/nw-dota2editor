@@ -132,6 +132,7 @@ app.factory("UI", function ($rootScope, Locale) {
 		setTimeout(function () {
 			$(element).find("input:not([disabled]):first").focus();
 		}, delay || 500);
+		return element;
 	};
 
 	UI.modal.rename = function (entity, check, callback) {
@@ -142,7 +143,7 @@ app.factory("UI", function ($rootScope, Locale) {
 			.append("<p>" + entity._name + "</p>")
 			.append("<label>" + Locale('NewName') + "</label>")
 			.append($input);
-		UI.modal.highlight($.dialog({
+		var $mdl = UI.modal.highlight($.dialog({
 			title: Locale('Rename'),
 			content: $content,
 			confirm: true
@@ -152,12 +153,28 @@ app.factory("UI", function ($rootScope, Locale) {
 			var _dlg = this;
 			var _newName = $input.val().trim();
 			var _checkResult = check ? check(_newName, entity) : true;
-			if (_checkResult === true) {
+
+			function _changeName() {
 				entity._name = _newName;
 				if (callback) {
 					callback(_newName, _oldName, entity);
 				}
 				$rootScope.$apply();
+			}
+
+			if (_checkResult === true) {
+				_changeName();
+			} else if(_checkResult.type === "confirm") {
+				$.dialog({
+					title: "Confirm",
+					content: _checkResult.msg,
+					confirm: true
+				}, function(ret) {
+					if(!ret) return;
+					_changeName();
+					$mdl.modal('hide');
+				});
+				return false;
 			} else {
 				$.dialog({
 					title: "OPS",

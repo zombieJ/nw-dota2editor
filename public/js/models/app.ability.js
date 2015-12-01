@@ -114,6 +114,9 @@ app.factory("Ability", function($q, Event, Modifier) {
 		return _unit;
 	};
 
+	// Save: Precache
+	// Special Ability Id, var_type
+
 	// ================================================
 	// =                  Attr List                   =
 	// ================================================

@@ -9,6 +9,14 @@ app.factory("Modifier", function(Event) {
 
 		if(!kvUnit._entity) {
 			kvUnit._entity = new Mdf(kvUnit);
+
+			Object.defineProperty(kvUnit._entity, "_name", {
+				get: function() {
+					return kvUnit.key;
+				}, set: function(value) {
+					kvUnit.key = value;
+				}
+			});
 		}
 		return kvUnit._entity;
 	};

@@ -487,19 +487,22 @@ hr {
 	padding-top: 5px;
 }
 
-.ability-cntr-body .ability-modifer-list.nav.nav-pills li a.removeMark {
+.ability-cntr-body .ability-modifer-list.nav.nav-pills li .menu {
 	position: absolute;
 	background: rgba(0,0,0,0.6);
-	color: #FFF;
 	display: none;
-	padding: 3px 10px;
 	z-index: 2;
 }
-
-.ability-cntr-body .ability-modifer-list.nav.nav-pills li:hover a.removeMark {
+.ability-cntr-body .ability-modifer-list.nav.nav-pills li:hover .menu {
 	display: block;
 }
 
-.ability-cntr-body .ability-modifer-list.nav.nav-pills li:hover a.removeMark:hover {
-	background: rgba(0,0,0,0.8);
+.ability-cntr-body .ability-modifer-list.nav.nav-pills li .menu a {
+	background: transparent;
+	display: block;
+	padding: 3px 25px 3px 10px;
+}
+.ability-cntr-body .ability-modifer-list.nav.nav-pills li .menu a:hover {
+	text-decoration: none;
+	background: rgba(255,255,255,0.1);
 }

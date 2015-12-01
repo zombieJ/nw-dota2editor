@@ -256,22 +256,6 @@ var _unitCtrl = function(isHero) {
 		$scope.copyAbility = function() {
 			if(!_menuAbility) return;
 
-			/*var _clone = new Unit(_menuAbility.kv.clone());
-			_clone._name += "_clone";
-			_clone._changed = true;
-
-			// 复制配置
-			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
-			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
-			var _cloneAbility = _abilities[_clone._name] = _abilities[_clone._name] || {};
-			$.extend(_cloneAbility, _ability, true);
-			if(_cloneAbility.editorAliasName) {
-				_cloneAbility.editorAliasName += " copy";
-			}
-
-			var _index = $.inArray(_menuAbility, $scope.abilityList);
-			$scope.setAbility(_clone);
-			$scope.abilityList.splice(_index + 1, 0, $scope.ability);*/
 			$scope.newEntity(_menuAbility);
 		};
 

@@ -9,7 +9,7 @@
 					<span class="fa fa-cubes sm" ng-if="config.abilities[_ability._name].markUsage === 'dummy'"></span>
 					{{config.abilities[_ability._name].editorAliasName || globalContent.mainLang().map[_ability._name] || _ability._name}}
 					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
-					      uib-tooltip="{{Locale('conflictName')}}" tooltip-placement="right" tooltip-append-to-body="true"></span>
+					      uib-tooltip="{{::Locale('conflictName')}}" tooltip-placement="right" tooltip-append-to-body="true"></span>
 				</p>
 				<p class="desc">{{_ability._comment}}</p>
 			</div>

@@ -12,17 +12,16 @@ var _abilityCtrl = function(isItem) {
 		$scope.ability = null;
 		$scope.currentModifier = null;
 
-		/*$scope._newUnitFork = null;
-		$scope._newUnitForkLang = true;
-		$scope._newUnitName = "";
+		$scope._newAbilityFork = null;
+		$scope._newAbilityForkLang = true;
+		$scope._newAbilityName = "";
 
-		$scope._newUnassignedKey = "";
+		/*$scope._newUnassignedKey = "";
 		$scope._newUnassignedValue = "";*/
 
 		$scope.config = Config.fetch(isItem ? "item" : "ability");
 
 		var _globalListKey = isItem ? "itemList" : "abilityList";
-		//var _globalConfigKey = isItem ? "itemConfig" : "abilityConfig";
 		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
 
 
@@ -71,59 +70,66 @@ var _abilityCtrl = function(isItem) {
 			}
 		};
 
-		/*// ==========> New
-		$scope.newEntity = function(source) {
-			$scope._newUnitFork = source;
-			$scope._newUnitForkLang = true;
-			$scope._newUnitName = $scope._newUnitFork ? $scope._newUnitFork._name + "_clone" : "Undefined";
+		$scope.addAbilitySpecial = function() {
+			$scope.ability.kv.assumeKey("AbilitySpecial", true).value.push(new KV("00", [
+				new KV("var_type", "FIELD_INTEGER"),
+				new KV(),
+			]));
+		};
 
-			UI.modal("#newUnitMDL");
+		// ==========> New
+		$scope.newEntity = function(source) {
+			$scope._newAbilityFork = source;
+			$scope._newAbilityForkLang = true;
+			$scope._newAbilityName = $scope._newAbilityFork ? $scope._newAbilityFork._name + "_clone" : "Undefined";
+
+			UI.modal("#newAbilityMDL");
 		};
 
 		$scope.confirmNewEntity = function() {
-			var _checkResult = $scope.renameCheck($scope._newUnitName);
+			var _checkResult = $scope.renameCheck($scope._newAbilityName);
 
 			if(typeof _checkResult === "string") {
 				$.dialog({
 					title: "OPS",
 					content: _checkResult
 				}, function() {
-					UI.modal.highlight("#newUnitMDL");
+					UI.modal.highlight("#newAbilityMDL");
 				});
 				return;
 			} else {
-				var _clone = new Unit($scope._newUnitFork ? $scope._newUnitFork.kv.clone() : null);
-				_clone._name = $scope._newUnitName;
+				var _clone = new Ability($scope._newAbilityFork ? $scope._newAbilityFork.kv.clone() : null);
+				_clone._name = $scope._newAbilityName;
 				_clone._changed = true;
 
-				if($scope._newUnitFork) {
+				if($scope._newAbilityFork) {
 					// Clone Language
-					if($scope._newUnitForkLang) {
+					if($scope._newAbilityForkLang) {
 						$.each(globalContent.languageList, function(i, lang) {
-							lang.map[Language.unitAttr(_clone, "")] = lang.map[Language.unitAttr($scope._newUnitFork, "")];
-							lang.map[Language.unitAttr(_clone, "bio")] = lang.map[Language.unitAttr($scope._newUnitFork, "bio")];
+							$.each(Language.AbilityLang, function(i, langField) {
+								var _oriKey = Language.abilityAttr($scope._newAbilityFork._name, langField.attr);
+								var _tgtKey = Language.abilityAttr(_clone._name, langField.attr);
+								lang.map[_tgtKey] = lang.map[_oriKey];
+							});
 						});
 					}
 
 					// Clone Configuration
-					var _abilities = $scope.config.abilities = $scope.config.abilities || {};
-					var _ability = _abilities[$scope._newUnitFork._name] = _abilities[$scope._newUnitFork._name] || {};
-					var _cloneEntity = _abilities[_clone._name] = _abilities[_clone._name] || {};
-					$.extend(_cloneEntity, _ability, true);
-					if (_cloneEntity.editorAliasName) {
-						_cloneEntity.editorAliasName += " copy";
-					}
+					var _oriConfig = $scope.config.get("abilities", $scope._newAbilityFork._name) || {};
+					var _tgtConfig = $scope.config.get("abilities", _clone._name) || {};
+					$.extend(_tgtConfig, _oriConfig, true);
+					$scope.config.data("abilities." + _clone._name, _tgtConfig);
 
-					var _index = $.inArray($scope._newUnitFork, $scope.abilityList);
+					var _index = $.inArray($scope._newAbilityFork, $scope.abilityList);
 					$scope.abilityList.splice(_index + 1, 0, _clone);
 				} else {
 					$scope.abilityList.push(_clone);
 				}
 				$scope.setAbility(_clone);
 
-				$("#newUnitMDL").modal('hide');
+				$("#newAbilityMDL").modal('hide');
 			}
-		};*/
+		};
 
 		// ==========> Rename
 		$scope.renameCheck = function(newName) {
@@ -144,7 +150,33 @@ var _abilityCtrl = function(isItem) {
 					delete lang.map[_oldKey];
 				});
 			});
-		}
+		};
+
+		// ==========> Rename
+		$scope.renameModifierCheck = function(newName) {
+			var _matched = false;
+			$.each($scope.abilityList, function(i, _ability) {
+				if(common.array.find(newName, _ability.getModifierList(), "key")) {
+					_matched = true;
+					return false;
+				}
+			});
+			if(_matched) return {msg: Locale('conflictNameConfirm'), type: "confirm"};
+			return true;
+		};
+
+		$scope.renameModifierCallback = function(newName, oldName, entity) {
+			var _conflict = !!$scope.renameModifierCheck(newName).type;
+
+			$.each(globalContent.languageList, function(i, lang) {
+				$.each(Language.ModifierLang, function(i, langField) {
+					var _oldKey = Language.modifierAttr(oldName, langField.attr);
+					var _newKey = Language.modifierAttr(newName, langField.attr);
+					if(lang.map[_oldKey] !== undefined) lang.map[_newKey] = lang.map[_oldKey];
+					if(!_conflict) delete lang.map[_oldKey];
+				});
+			});
+		};
 
 		/*// ==========> Wearable
 		$scope.newWearable = function () {
@@ -182,19 +214,6 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                        File Operation                        =
 		// ================================================================
-		// Read Config file
-		/*if (!globalContent[_globalConfigKey]) {
-			NODE.loadFile(Ability[_globalConfigKey], "utf8").then(function (data) {
-				$scope.config = JSON.parse(data);
-			}, function () {
-				$scope.config = {};
-			}).finally(function () {
-				globalContent[_globalConfigKey] = $scope.config;
-			});
-		} else {
-			$scope.config = globalContent[_globalConfigKey];
-		}*/
-
 		// Read Ability file
 		if (!globalContent[_globalListKey]) {
 			NODE.loadFile(_filePath, "utf8").then(function (data) {
@@ -289,7 +308,7 @@ var _abilityCtrl = function(isItem) {
 			}, 500);
 		};*/
 
-		/*$scope.copyAbility = function() {
+		$scope.copyAbility = function() {
 			if(!_menuAbility) return;
 
 			$scope.newEntity(_menuAbility);
@@ -299,7 +318,7 @@ var _abilityCtrl = function(isItem) {
 			if(!_menuAbility) return;
 
 			$.dialog({
-				title: "Delete Confirm 【删除确认】",
+				title: "Delete Confirm",
 				content: "Do you want to delete '"+_menuAbility._name+"'",
 				confirm: true
 			}, function(ret) {
@@ -312,7 +331,7 @@ var _abilityCtrl = function(isItem) {
 				}
 				$scope.$apply();
 			});
-		};*/
+		};
 
 		// ================================================================
 		// =                              UI                              =

@@ -48,6 +48,7 @@ app.factory("Locale", function() {
 
 		Key: "键",
 		Value: "值",
+		Type: "类型",
 		NewKV: "新建键值",
 		New: "新建",
 		Loading: "载入中",
@@ -58,6 +59,9 @@ app.factory("Locale", function() {
 		Rename: "重命名",
 		OldName: "原名称",
 		ForkLang: "复制多语言描述",
+		NoSpecialValue: "无自定义值",
+		Modifiers: "修饰器",
+		AbilitySpecial: "键值",
 
 		// 属性
 		BaseClass: "基类",
@@ -229,6 +233,7 @@ app.factory("Locale", function() {
 		ItemDisassembleRule: "可拆分",
 
 		// 修饰器
+		Hidden: "隐藏的",
 		NewModifier: "新建修饰器",
 		_name: "名称",
 		_comment: "备注",
@@ -657,6 +662,7 @@ app.factory("Locale", function() {
 		duplicateDefined: '字段被重复定义',
 		emptyList: "列表为空",
 		conflictName: "名称冲突",
+		conflictNameConfirm: "名称冲突，确定复用吗？",
 		noLanguageFile: "没有找到语言文件",
 		exitConfirm: "您确认要退出吗？",
 		eventUseText: "技能与物品的事件选项框改成带提示的文本，如果你对事件列表十分熟悉。推荐使用该模式。",

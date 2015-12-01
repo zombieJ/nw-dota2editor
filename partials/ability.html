@@ -6,15 +6,15 @@
 				 ng-mousedown="setAbilityMouseDown(_ability);">
 				<p class="title">
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.get('abilities', _ability._name, 'markColor') || '#CCC'}}"></span>
-					<span class="fa fa-cubes sm" ng-if="config.abilities[_ability._name].markUsage === 'dummy'"></span>
-					{{config.abilities[_ability._name].editorAliasName || _ability._name}}
+					<span class="fa fa-cubes sm" ng-if="config.get('abilities', _ability._name, 'markUsage') === 'dummy'"></span>
+					{{config.get('abilities', _ability._name, 'editorAliasName') || _ability._name}}
 					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
-						  uib-tooltip="Conflict name 【名称冲突】" tooltip-placement="right" tooltip-append-to-body="true"></span>
+						  uib-tooltip="{{::Locale('conflictName')}}" tooltip-placement="right" tooltip-append-to-body="true"></span>
 				</p>
 				<p class="desc">{{_ability._comment}}</p>
 			</div>
 		</div>
-		<button id="newItem" class="btn btn-primary" ng-click="newAbility()">+ New 【新建】</button>
+		<button id="newItem" class="btn btn-primary" ng-click="newEntity()">+ {{::Locale('New')}}</button>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-show="!ready">
 		<h1>Loading... 【载入中】</h1>
@@ -75,11 +75,11 @@
 		<div class="tab-content ability-cntr-body">
 			<div data-id="ability" class="tab-pane fade in active">
 				<ul class="nav nav-pills">
-					<li ng-class="{active: currentTab === 'common'}"><a ng-click="currentTab = 'common'">Common【常规】</a></li>
-					<li ng-class="{active: currentTab === 'item'}" ng-show="isItem"><a ng-click="currentTab = 'item'">Item【物品】</a></li>
-					<li ng-class="{active: currentTab === 'events'}"><a ng-click="currentTab = 'events'">Events【事件】({{ability.getEventList().length}})</a></li>
-					<li ng-class="{active: currentTab === 'modifiers'}"><a ng-click="currentTab = 'modifiers'">Modifiers【修饰器】({{ability.getModifierList().length}})</a></li>
-					<li ng-class="{active: currentTab === 'abilitySpecial'}"><a ng-click="currentTab = 'abilitySpecial'">Ability Special【自定义值】({{ability._abilitySpecialList.length}})</a></li>
+					<li ng-class="{active: currentTab === 'common'}"><a ng-click="currentTab = 'common'">{{Locale('Common')}}</a></li>
+					<li ng-class="{active: currentTab === 'item'}" ng-show="isItem"><a ng-click="currentTab = 'item'">{{Locale('Item')}}</a></li>
+					<li ng-class="{active: currentTab === 'events'}"><a ng-click="currentTab = 'events'">{{Locale('Events')}} ({{ability.getEventList().length}})</a></li>
+					<li ng-class="{active: currentTab === 'modifiers'}"><a ng-click="currentTab = 'modifiers'">{{Locale('Modifiers')}} ({{ability.getModifierList().length}})</a></li>
+					<li ng-class="{active: currentTab === 'abilitySpecial'}"><a ng-click="currentTab = 'abilitySpecial'">{{Locale('AbilitySpecial')}} ({{ability.getSpecialList().length}})</a></li>
 				</ul>
 
 				<div>
@@ -182,7 +182,10 @@
 							</li>
 							<li ng-repeat="modifier in ability.getModifierList()" ng-class="{active: currentModifier === modifier}">
 								<a ng-click="setModifier(modifier)">{{modifier.key}}</a>
-								<a class="removeMark" ng-click="UI.arrayDelete(modifier, ability.getModifierList(), delModifierCallback)">[X] Delete</a>
+								<div class="menu">
+									<a ng-click="UI.modal.rename(Modifier(modifier), renameModifierCheck, renameModifierCallback)"><span class="fa fa-pencil"></span> | Rename</a>
+									<a ng-click="UI.arrayDelete(modifier, ability.getModifierList(), delModifierCallback)"><span class="fa fa-trash"></span> | Delete</a>
+								</div>
 							</li>
 						</ul>
 
@@ -352,40 +355,40 @@
 							<thead>
 								<tr>
 									<th width="34"></th>
-									<th>Key 【变量名】</th>
-									<th>type 【类型】</th>
-									<th>Value 【变量值】</th>
+									<th>{{Locale('Key')}}</th>
+									<th>{{Locale('Type')}}</th>
+									<th>{{Locale('Value')}}</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="_abilitySpecial in ability._abilitySpecialList track by $index">
+								<tr ng-repeat="_abilitySpecial in ability.getSpecialList() track by $index">
 									<th>
-										<a href="javascript:void(0)" ng-click="common.array.remove(_abilitySpecial, ability._abilitySpecialList)">[X]</a>
+										<a ng-click="common.array.remove(_abilitySpecial, ability.kv.get('AbilitySpecial'))">[X]</a>
 									</th>
 									<td class="ability-form">
-										<input type="text" ng-model="_abilitySpecial[0]" />
+										<input type="text" ng-model="_abilitySpecial.value[1].key" />
 									</td>
 									<td class="ability-form">
-										<select ng-model="_abilitySpecial[1]">
+										<select ng-model="_abilitySpecial.value[0].value">
 											<option ng-repeat="type in Ability.AbilitySpecialType track by $index" value="{{::type[0]}}">
-												{{type[0]}}
-												【{{type[1]}}】
+												{{::type[0]}}
+												【{{::Locale(type[0])}}】
 											</option>
 										</select>
 									</td>
 									<td class="ability-form">
-										<input type="text" ng-model="_abilitySpecial[2]" />
+										<input type="text" ng-model="_abilitySpecial.value[1].value" />
 									</td>
 								</tr>
-								<tr ng-if="ability._abilitySpecialList.length === 0">
+								<tr ng-if="ability.getSpecialList().length === 0">
 									<td colspan="4">
-										<p>No value 【没有自定义值】</p>
+										<p>{{::Locale('NoSpecialValue')}}</p>
 									</td>
 								</tr>
 							</tbody>
 						</table>
 
-						<button class="btn btn-dark" ng-click="ability._abilitySpecialList.push([])">+ new Key Value 【新建键值】</button>
+						<button class="btn btn-dark" ng-click="addAbilitySpecial()">+ {{::Locale('NewKV')}}</button>
 					</div>
 
 				</div>
@@ -446,7 +449,7 @@
 										<td>
 											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
 											<input type="text" class="form-control"
-												   ng-model="language.map[Language.abilityAttr(ability._name, ability._abilitySpecialList[_index][0])]"
+												   ng-model="GC.currentLanguage.map[Language.abilityAttr(ability._name, ability._abilitySpecialList[_index][0])]"
 													/>
 										</td>
 									</tr>
@@ -458,11 +461,11 @@
 							<!-- ========================== -->
 							<h3>Modifiers 【修饰器】</h3>
 							<table class="ability-table" ng-show="language.ready">
-								<tbody ng-repeat="_index in optLangModifierNum track by $index" ng-show="ability._modifierList[_index]">
+								<tbody ng-repeat="modifier in ability.getModifierList() track by $index">
 									<tr>
 										<th colspan="2" class="success">
-											<span class="glyphicon glyphicon-tag"></span> {{ability._modifierList[_index]._name}}
-											<span ng-if="ability._modifierList[_index].IsHidden === '1'" class="label label-info">Hidden 【隐藏】</span>
+											<span class="glyphicon glyphicon-tag"></span> {{modifier._name}}
+											<span ng-if="modifier.get('IsHidden') === '1'" class="label label-info">{{Locale('Hidden')}}</span>
 										</th>
 									</tr>
 									<tr ng-repeat="langField in Language.ModifierLang track by $index">
@@ -473,9 +476,9 @@
 										<td>
 											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
 											<input type="text" class="form-control" ng-if="langField.type === 'text'"
-													ng-model="language.map[Language.modifierAttr(ability._modifierList[_index]._name, langField.attr)]" />
+													ng-model="GC.currentLanguage.map[Language.modifierAttr(modifier.key, langField.attr)]" />
 											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
-													ng-model="language.map[Language.modifierAttr(ability._modifierList[_index]._name, langField.attr)]"></textarea>
+													ng-model="GC.currentLanguage.map[Language.modifierAttr(modifier.key, langField.attr)]"></textarea>
 										</td>
 									</tr>
 								</tbody>
@@ -513,14 +516,43 @@
 			<li><a ng-click="setAbilityMarkColor();"><span class="fa fa-circle sm" style="color: #cccccc;"></span> None 【还原】</a></li>
 		</ul>
 	</li>
-	<li><a ng-click="copyAbility()">Duplicate Ability 【复制技能】</a></li>
+	<li><a ng-click="copyAbility()">{{Locale('Duplicate')}}</a></li>
 	<li class="line"></li>
-	<li><a ng-click="deleteAbility()" class="danger">Delete Ability 【删除技能】</a></li>
+	<li><a ng-click="deleteAbility()" class="danger">{{Locale('Delete')}}</a></li>
 </ul>
 
 <!-- ====================================================================== -->
-<!-- =                           新建技能对话框                           = -->
+<!-- =                             Modal List                             = -->
 <!-- ====================================================================== -->
+<!-- New Unit -->
+<div class="modal fade" id="newAbilityMDL" tabindex="-1">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">{{::Locale('New')}}</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group" ng-show="_newAbilityFork">
+					<label>* {{::Locale('OldName')}}</label>
+					<input type="text" class="form-control" ng-model="_newAbilityFork._name" disabled="disabled" />
+				</div>
+				<div class="form-group">
+					<label>* {{::Locale('Name')}}</label>
+					<input type="text" class="form-control" ng-model="_newAbilityName"/>
+				</div>
+				<div class="checkbox" ng-show="_newAbilityFork">
+					<label>
+						<input type="checkbox" ng-checked="_newAbilityForkLang" ng-click="_newAbilityForkLang = !_newAbilityForkLang"> {{::Locale('ForkLang')}}
+					</label>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="confirmNewEntity()">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="modal fade" id="newMDL" tabindex="-1">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
