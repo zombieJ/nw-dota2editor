@@ -17,10 +17,10 @@
 		<button id="newItem" class="btn btn-primary" ng-click="newEntity()">+ {{::Locale('New')}}</button>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-show="!ready">
-		<h1>Loading... 【载入中】</h1>
+		<h1>{{::Locale('Loading')}}...</h1>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ready && !ability}" ng-show="ready && !ability">
-		<h1>No Ability Yet 【还未创建Ability】</h1>
+		<h1>{{::Locale('emptyList')}}</h1>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ability}" ng-show="ability">
 		<!-- ================================================================== -->
@@ -34,20 +34,20 @@
 				<ul class="nav nav-pills pull-right">
 					<li class="active">
 						<a data-toggle="tab" class="fa fa-file-code-o" href="[data-id='ability']"></a>
-						<span class="nav-tip">Ability 【能力】</span>
+						<span class="nav-tip">{{::Locale('Ability')}}</span>
 					</li>
 					<li>
 						<a data-toggle="tab" class="fa fa-book" href="[data-id='description']"></a>
-						<span class="nav-tip">Language 【语言】</span>
+						<span class="nav-tip">{{::Locale('Language')}}</span>
 					</li>
 					<li>
 						<a class="fa fa-check-circle-o" ng-click="abilitiesCheck()"></a>
-						<span class="nav-tip">Inspection 【检测】</span>
+						<span class="nav-tip">{{::Locale('Inspection')}}</span>
 					</li>
-					<li ng-show="isItem">
+					<!--li ng-show="isItem">
 						<a class="fa fa-print" ng-click="itemPrecacheList()"></a>
 						<span class="nav-tip">Precache Script 【预载脚本】</span>
-					</li>
+					</li-->
 				</ul>
 
 				<div class="ability-cntr-header-name ability-form">
@@ -61,8 +61,8 @@
 				</div>
 
 				<div class="ability-form">
-					<span class="ability-tip">Comment 【注释】</span>
-					<textarea class="ability-form" ng-model="ability._comment" placeholder="Comment 【注释】..."></textarea>
+					<span class="ability-tip">{{::Locale('Comment')}}</span>
+					<textarea class="ability-form" ng-model="ability._comment" placeholder="{{::Locale('Comment')}}..."></textarea>
 				</div>
 			</div>
 		</div>
@@ -80,6 +80,7 @@
 					<li ng-class="{active: currentTab === 'events'}"><a ng-click="currentTab = 'events'">{{Locale('Events')}} ({{ability.getEventList().length}})</a></li>
 					<li ng-class="{active: currentTab === 'modifiers'}"><a ng-click="currentTab = 'modifiers'">{{Locale('Modifiers')}} ({{ability.getModifierList().length}})</a></li>
 					<li ng-class="{active: currentTab === 'abilitySpecial'}"><a ng-click="currentTab = 'abilitySpecial'">{{Locale('AbilitySpecial')}} ({{ability.getSpecialList().length}})</a></li>
+					<li ng-class="{active: currentTab === 'unassigned'}"><a ng-click="currentTab = 'unassigned'">{{Locale('Unassigned')}} ({{ability.unassignedList.length}})</a></li>
 				</ul>
 
 				<div>
@@ -391,6 +392,33 @@
 						<button class="btn btn-dark" ng-click="addAbilitySpecial()">+ {{::Locale('NewKV')}}</button>
 					</div>
 
+					<!-- ==================== Unassigned KV ==================== -->
+					<div ng-if="currentTab === 'unassigned'">
+						<table class="ability-table">
+							<tbody>
+							<tr ng-repeat="kv in ability.unassignedList track by $index">
+								<th width="35" class="text-center">
+									<a ng-click="UI.arrayDelete(kv, ability.kv.value, refreshUnassigned)">[X]</a>
+								</th>
+								<th width="200">
+									{{kv.key}}
+								</th>
+								<td class="ability-form">
+									<input type="text" ng-model="kv.value" ng-if="!kv.isList()" />
+									<pre ng-if="kv.isList()">{{kv.toString()}}</pre>
+								</td>
+							</tr>
+							<tr ng-if="ability.unassignedList.length === 0">
+								<td>
+									<p>{{::Locale('NoUnassigned')}}</p>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+
+						<button class="btn btn-dark" ng-click="newUnassigned()">+ {{::Locale('New')}}</button>
+					</div>
+
 				</div>
 			</div>
 
@@ -464,7 +492,7 @@
 								<tbody ng-repeat="modifier in ability.getModifierList() track by $index">
 									<tr>
 										<th colspan="2" class="success">
-											<span class="glyphicon glyphicon-tag"></span> {{modifier._name}}
+											<span class="glyphicon glyphicon-tag"></span> {{modifier.key}}
 											<span ng-if="modifier.get('IsHidden') === '1'" class="label label-info">{{Locale('Hidden')}}</span>
 										</th>
 									</tr>
@@ -495,25 +523,25 @@
 <!-- =                              技能菜单                              = -->
 <!-- ====================================================================== -->
 <ul id="abilityMenu" class="app-menu app-float-menu">
-	<li><a ng-click="setAbilityEditorAlias()">Editor Alias 【编辑器别名】</a></li>
+	<li><a ng-click="setAbilityEditorAlias()">{{Locale('EditorAlias')}}</a></li>
 	<li class="app-submenu">
-		<a>Usage Marker 【功能标记】</a>
+		<a>{{Locale('UsageMarker')}}</a>
 		<ul class="app-menu">
-			<li><a ng-click="setAbilityMarkUsage('dummy');"> Dummy Ability 【马甲技能】</a></li>
+			<li><a ng-click="setAbilityMarkUsage('dummy');">{{Locale('Dummy')}}</a></li>
 			<li class="line"></li>
-			<li><a ng-click="setAbilityMarkUsage();"> No mark 【无标记】</a></li>
+			<li><a ng-click="setAbilityMarkUsage();">{{Locale('NoMark')}}</a></li>
 		</ul>
 	</li>
 	<li class="app-submenu">
-		<a>Color Marker 【颜色标记】</a>
+		<a>{{Locale('ColorMarker')}}</a>
 		<ul class="app-menu">
-			<li><a ng-click="setAbilityMarkColor('#00a65a');"><span class="fa fa-circle sm" style="color: #00a65a;"></span> Green 【绿色】</a></li>
-			<li><a ng-click="setAbilityMarkColor('#00c0ef');"><span class="fa fa-circle sm" style="color: #00c0ef;"></span> Blue 【蓝色】</a></li>
-			<li><a ng-click="setAbilityMarkColor('#dd4b39');"><span class="fa fa-circle sm" style="color: #dd4b39;"></span> Red 【红色】</a></li>
-			<li><a ng-click="setAbilityMarkColor('#f39c12');"><span class="fa fa-circle sm" style="color: #f39c12;"></span> Yellow 【黄色】</a></li>
-			<li><a ng-click="setAbilityMarkColor('#666666');"><span class="fa fa-circle sm" style="color: #666666;"></span> Black 【黑色】</a></li>
+			<li><a ng-click="setAbilityMarkColor('#00a65a');"><span class="fa fa-circle sm" style="color: #00a65a;"></span> {{Locale('Green')}}</a></li>
+			<li><a ng-click="setAbilityMarkColor('#00c0ef');"><span class="fa fa-circle sm" style="color: #00c0ef;"></span> {{Locale('Blue')}}</a></li>
+			<li><a ng-click="setAbilityMarkColor('#dd4b39');"><span class="fa fa-circle sm" style="color: #dd4b39;"></span> {{Locale('Red')}}</a></li>
+			<li><a ng-click="setAbilityMarkColor('#f39c12');"><span class="fa fa-circle sm" style="color: #f39c12;"></span> {{Locale('Yellow')}}</a></li>
+			<li><a ng-click="setAbilityMarkColor('#666666');"><span class="fa fa-circle sm" style="color: #666666;"></span> {{Locale('Black')}}</a></li>
 			<li class="line"></li>
-			<li><a ng-click="setAbilityMarkColor();"><span class="fa fa-circle sm" style="color: #cccccc;"></span> None 【还原】</a></li>
+			<li><a ng-click="setAbilityMarkColor();"><span class="fa fa-circle sm" style="color: #cccccc;"></span> {{Locale('None')}}</a></li>
 		</ul>
 	</li>
 	<li><a ng-click="copyAbility()">{{Locale('Duplicate')}}</a></li>
@@ -586,6 +614,31 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary" ng-click="newAbility.confirm()">Create</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- New Unassigned -->
+<div class="modal fade" id="newUnassignedMDL" tabindex="-1">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">{{::Locale('NewKV')}}</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>* {{::Locale('Key')}}</label>
+					<input type="text" class="form-control" ng-model="_newUnassignedKey"/>
+				</div>
+				<div class="form-group">
+					<label>{{::Locale('Value')}}</label>
+					<input type="text" class="form-control" ng-model="_newUnassignedValue"/>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="confirmNewUnassigned()">OK</button>
 			</div>
 		</div>
 	</div>

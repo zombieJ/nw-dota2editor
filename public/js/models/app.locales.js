@@ -45,6 +45,7 @@ app.factory("Locale", function() {
 		Error: "错误",
 		Exit: "退出",
 		KVEditor: "KV编辑器",
+		Inspection: "检测",
 
 		Key: "键",
 		Value: "值",

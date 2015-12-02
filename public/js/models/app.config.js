@@ -31,6 +31,23 @@ app.factory("Config", function($q) {
 		return this.data(Array.prototype.join.call(arguments, "."));
 	};
 
+	Config.prototype.set = function() {
+		var _args = $.makeArray(arguments);
+		var _value = _args.pop();
+		this.data(_args.join("."), _value);
+	};
+
+	Config.prototype.assumeObject = function() {
+		var _args = $.makeArray(arguments);
+		var _obj = this.get.apply(this, _args);
+		if(!_obj) {
+			_obj = {};
+			_args.push(_obj);
+			this.set.apply(this, _args)
+		}
+		return _obj;
+	};
+
 	// Global Configuration
 	Config.projectPath = null;
 

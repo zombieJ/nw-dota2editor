@@ -9,6 +9,10 @@ app.factory("Ability", function($q, Event, Modifier) {
 		_my.kv = kv || new KV("undefined", []);
 		_my._changed = false;
 
+		// Refresh un-assigned list
+		_my.unassignedList = [];
+		_my.refreshUnassignedList();
+
 		// ========================================
 		// =                 Prop                 =
 		// ========================================
@@ -87,6 +91,19 @@ app.factory("Ability", function($q, Event, Modifier) {
 	// Get Ability Special
 	Ability.prototype.getSpecialList = function() {
 		return this.kv.get("AbilitySpecial", false) || common.array.empty;
+	};
+
+	// Get unassigned list
+	Ability.prototype.refreshUnassignedList = function() {
+		var _my = this;
+		var _attrList = Ability.getCommonAttrList();
+		var _unassignedList = _my.unassignedList = [];
+
+		$.each(this.kv.value, function(i, kv) {
+			if(!common.array.find(kv.key, _attrList, "", false, false)) {
+				_unassignedList.push(kv);
+			}
+		});
 	};
 
 	// =================================================
@@ -212,6 +229,27 @@ app.factory("Ability", function($q, Event, Modifier) {
 			{group: "item", attr: "ItemDisassembleRule", type: "single"},
 		],
 	];
+
+	// Flatten for easy usage
+	Ability.getCommonAttrList = function() {
+		var _list = [];
+		$.each(Ability.AttrList.concat(Ability.ItemAttrList), function(i, grpList) {
+			$.each(grpList, function(j, attrField) {
+				_list.push(attrField.attr);
+			});
+		});
+
+		// Events
+		$.each(Event.ModifierEventList, function(i, event) {
+			_list.push(event.value);
+		});
+
+		//_list.push("precache");
+		_list.push("Modifiers");
+		_list.push("AbilitySpecial");
+
+		return _list;
+	};
 
 	// ================================================
 	// =                     Enum                     =

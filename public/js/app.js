@@ -187,18 +187,18 @@ app.factory("UI", function ($rootScope, Locale) {
 		}));
 	};
 
-	UI.modal.input = function (title, description, defalutValue, callback) {
+	UI.modal.input = function (title, description, defaultValue, callback) {
 		description = $.isArray(description) ? description : [description];
-		if(typeof defalutValue === "function") {
-			callback = defalutValue;
-			defalutValue = [];
+		if(typeof defaultValue === "function") {
+			callback = defaultValue;
+			defaultValue = [];
 		}
-		defalutValue = $.isArray(defalutValue) ? defalutValue : [defalutValue];
+		defaultValue = $.isArray(defaultValue) ? defaultValue : [defaultValue];
 
 		var $content = $("<div>");
 		var $inputList = $.map(description, function(key, i) {
 			$content.append("<label>" + key + "</label>");
-			return $("<input type='text' class='form-control' />").val(defalutValue[i] || "").appendTo($content);
+			return $("<input type='text' class='form-control' />").val(defaultValue[i] || "").appendTo($content);
 		});
 
 		UI.modal.highlight($.dialog({

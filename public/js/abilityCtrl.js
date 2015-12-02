@@ -16,8 +16,8 @@ var _abilityCtrl = function(isItem) {
 		$scope._newAbilityForkLang = true;
 		$scope._newAbilityName = "";
 
-		/*$scope._newUnassignedKey = "";
-		$scope._newUnassignedValue = "";*/
+		$scope._newUnassignedKey = "";
+		$scope._newUnassignedValue = "";
 
 		$scope.config = Config.fetch(isItem ? "item" : "ability");
 
@@ -182,7 +182,7 @@ var _abilityCtrl = function(isItem) {
 		$scope.newWearable = function () {
 			var _wearable = new KV("wearable", [new KV("ItemDef")]);
 			$scope.ability.kv.assumeKey('Creature.AttachWearables', true).value.push(_wearable);
-		};
+		};*/
 
 		// ==========> Unassigned
 		$scope.newUnassigned = function () {
@@ -209,7 +209,7 @@ var _abilityCtrl = function(isItem) {
 		};
 		$scope.refreshUnassigned = function () {
 			$scope.ability.refreshUnassignedList();
-		};*/
+		};
 
 		// ================================================================
 		// =                        File Operation                        =
@@ -256,11 +256,8 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                     List Item Operation                      =
 		// ================================================================
-		/*$scope.setAbilityMarkUsage = function(usage) {
-			if(!$scope.config) return;
-
-			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
-			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+		$scope.setAbilityMarkUsage = function(usage) {
+			var _ability = $scope.config.assumeObject("abilities", _menuAbility._name);
 			if(usage) {
 				_ability.markUsage = usage;
 			} else {
@@ -269,44 +266,25 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		$scope.setAbilityMarkColor = function(color) {
-			if(!$scope.config) return;
-
-			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
-			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
+			var _ability = $scope.config.assumeObject("abilities", _menuAbility._name);
 			if(color) {
 				_ability.markColor = color;
 			} else {
 				delete _ability.markColor;
 			}
-		};*/
+		};
 
-		/*$scope.setAbilityEditorAlias = function() {
-			if(!$scope.config) return;
+		$scope.setAbilityEditorAlias = function() {
+			var _ability = $scope.config.assumeObject("abilities", _menuAbility._name);
 
-			var _abilities = $scope.config.abilities = $scope.config.abilities || {};
-			var _ability = _abilities[_menuAbility._name] = _abilities[_menuAbility._name] || {};
-
-			var $input = $("<input type='text' class='form-control' />");
-			$input.val(_ability.editorAliasName || "");
-			$.dialog({
-				title: "Alias Name in Editor 【编辑器中的别名】",
-				content: $input,
-				confirm: true
-			}, function(ret) {
-				if(!ret) return;
-
-				var _alias = $input.val();
+			UI.modal.input(Locale('EditorAlias'), "", _ability.editorAliasName, function(_alias) {
 				if(_alias) {
 					_ability.editorAliasName = _alias;
 				} else {
 					delete _ability.editorAliasName;
 				}
-				$scope.$apply();
 			});
-			setTimeout(function() {
-				$input.focus();
-			}, 500);
-		};*/
+		};
 
 		$scope.copyAbility = function() {
 			if(!_menuAbility) return;

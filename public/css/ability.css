@@ -499,8 +499,10 @@ hr {
 
 .ability-cntr-body .ability-modifer-list.nav.nav-pills li .menu a {
 	background: transparent;
+	color: #FFF;
 	display: block;
 	padding: 3px 25px 3px 10px;
+	white-space: nowrap;
 }
 .ability-cntr-body .ability-modifer-list.nav.nav-pills li .menu a:hover {
 	text-decoration: none;
