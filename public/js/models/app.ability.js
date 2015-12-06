@@ -93,6 +93,11 @@ app.factory("Ability", function($q, Event, Modifier) {
 		return this.kv.get("AbilitySpecial", false) || common.array.empty;
 	};
 
+	// Get Pre-cache
+	Ability.prototype.getPrecacheList = function() {
+		return this.kv.get("precache", false) || common.array.empty;
+	};
+
 	// Get unassigned list
 	Ability.prototype.refreshUnassignedList = function() {
 		var _my = this;
@@ -131,8 +136,11 @@ app.factory("Ability", function($q, Event, Modifier) {
 		return _unit;
 	};
 
+	// TODO: Save Logic
+	// Read: Remove Precache
 	// Save: Precache
 	// Special Ability Id, var_type
+	// Order
 
 	// ================================================
 	// =                  Attr List                   =
@@ -244,7 +252,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 			_list.push(event.value);
 		});
 
-		//_list.push("precache");
+		_list.push("precache");
 		_list.push("Modifiers");
 		_list.push("AbilitySpecial");
 

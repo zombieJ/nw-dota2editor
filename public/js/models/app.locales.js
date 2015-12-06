@@ -46,6 +46,7 @@ app.factory("Locale", function() {
 		Exit: "退出",
 		KVEditor: "KV编辑器",
 		Inspection: "检测",
+		Precache: "预载入",
 
 		Key: "键",
 		Value: "值",
@@ -61,6 +62,7 @@ app.factory("Locale", function() {
 		OldName: "原名称",
 		ForkLang: "复制多语言描述",
 		NoSpecialValue: "无自定义值",
+		NoPrecache: "无预载入值",
 		Modifiers: "修饰器",
 		AbilitySpecial: "键值",
 
@@ -667,7 +669,7 @@ app.factory("Locale", function() {
 		noLanguageFile: "没有找到语言文件",
 		exitConfirm: "您确认要退出吗？",
 		eventUseText: "技能与物品的事件选项框改成带提示的文本，如果你对事件列表十分熟悉。推荐使用该模式。",
-
+		originNoPrecache: "在KV中引用到的特效保存时将被自动添加，不需要手动添加precache。"
 	};
 
 	return Locale;

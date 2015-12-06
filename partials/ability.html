@@ -80,6 +80,7 @@
 					<li ng-class="{active: currentTab === 'events'}"><a ng-click="currentTab = 'events'">{{Locale('Events')}} ({{ability.getEventList().length}})</a></li>
 					<li ng-class="{active: currentTab === 'modifiers'}"><a ng-click="currentTab = 'modifiers'">{{Locale('Modifiers')}} ({{ability.getModifierList().length}})</a></li>
 					<li ng-class="{active: currentTab === 'abilitySpecial'}"><a ng-click="currentTab = 'abilitySpecial'">{{Locale('AbilitySpecial')}} ({{ability.getSpecialList().length}})</a></li>
+					<li ng-class="{active: currentTab === 'precache'}"><a ng-click="currentTab = 'precache'">{{Locale('Precache')}} ({{ability.getPrecacheList().length}})</a></li>
 					<li ng-class="{active: currentTab === 'unassigned'}"><a ng-click="currentTab = 'unassigned'">{{Locale('Unassigned')}} ({{ability.unassignedList.length}})</a></li>
 				</ul>
 
@@ -350,6 +351,42 @@
 						<p ng-if="ability._modifierList.length === 0">No Modifier 【没有修饰器】</p>
 					</div>
 
+					<!-- ==================== PreCache ==================== -->
+					<div ng-if="currentTab === 'precache'">
+						<table class="ability-table">
+							<thead>
+								<tr>
+									<th width="34"></th>
+									<th width="110">{{Locale('Type')}}</th>
+									<th>{{Locale('Value')}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="_precache in ability.getPrecacheList() track by $index">
+									<th>
+										<a ng-click="common.array.remove(_precache, ability.kv.get('precache'))">[X]</a>
+									</th>
+									<td class="ability-form">
+										<select ng-model="_precache.key">
+											<option ng-repeat="_type in ['particle','soundfile','model']">{{_type}}</option>
+										</select>
+									</td>
+									<td class="ability-form">
+										<input type="text" ng-model="_precache.value" />
+									</td>
+								</tr>
+								<!-- Empty List -->
+								<tr ng-if="ability.getPrecacheList().length === 0">
+									<td colspan="3">
+										<p>{{::Locale('NoPrecache')}}</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<p class="text-info">* {{::Locale('originNoPrecache')}}</p>
+						<button class="btn btn-dark" ng-click="ability.kv.assumeKey('precache', true).value.push(KV.new('particle'))">+ {{::Locale('NewKV')}}</button>
+					</div>
+
 					<!-- ==================== 自定义值 ==================== -->
 					<div ng-if="currentTab === 'abilitySpecial'">
 						<table class="ability-table">
@@ -396,20 +433,20 @@
 					<div ng-if="currentTab === 'unassigned'">
 						<table class="ability-table">
 							<tbody>
-							<tr ng-repeat="kv in ability.unassignedList track by $index">
-								<th width="35" class="text-center">
-									<a ng-click="UI.arrayDelete(kv, ability.kv.value, refreshUnassigned)">[X]</a>
-								</th>
-								<td class="ability-form" style="padding-left: 5px;">
-									<div kvtree="kv" data-keyeditable="false" data-open="true"></div>
-								</td>
-							</tr>
-							<!-- Empty List -->
-							<tr ng-if="ability.unassignedList.length === 0">
-								<td>
-									<p>{{::Locale('NoUnassigned')}}</p>
-								</td>
-							</tr>
+								<tr ng-repeat="kv in ability.unassignedList track by $index">
+									<th width="35" class="text-center">
+										<a ng-click="UI.arrayDelete(kv, ability.kv.value, refreshUnassigned)">[X]</a>
+									</th>
+									<td class="ability-form" style="padding-left: 5px;">
+										<div kvtree="kv" data-keyeditable="false" data-open="true"></div>
+									</td>
+								</tr>
+								<!-- Empty List -->
+								<tr ng-if="ability.unassignedList.length === 0">
+									<td>
+										<p>{{::Locale('NoUnassigned')}}</p>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 
