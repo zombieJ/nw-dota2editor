@@ -4,11 +4,12 @@ components.directive('kvtree', function($compile) {
 	return {
 		restrict: 'AE',
 		scope: {
-			kvtree: "=",					// KV Entity
-			parentkv: "=?parentkv",			// Parent KV Entity
-			open: "=?open",					// Tree opened
-			convertable: "=?convertable",	// False if disable convert format
-			keyeditable: "=?keyeditable"	// Key editable
+			kvtree: "=",						// KV Entity
+			parentkv: "=?parentkv",				// Parent KV Entity
+			open: "=?open",						// Tree opened
+			convertable: "=?convertable",		// False if disable convert format
+			keyeditable: "=?keyeditable",		// Key editable
+			valueeditable: "=?valueeditable"	// Value editable
 		},
 		controller: function($scope, $element, KV, UI) {
 			$scope.open = $scope.open || false;
@@ -18,16 +19,22 @@ components.directive('kvtree', function($compile) {
 			};
 
 			$scope.editKV = function() {
-				if($scope.keyeditable === false) return;
+				if($scope.keyeditable === false && $scope.valueeditable === false) return;
 
-				UI.modal.input("EditKV",
-					$scope.kvtree.isList() ? "Key" : ["Key", "Value"],
-					$scope.kvtree.isList() ? $scope.kvtree.key : [$scope.kvtree.key, $scope.kvtree.value], function(key, value) {
+				if($scope.keyeditable !== false && ($scope.kvtree.isList() || $scope.valueeditable === false)) {
+					UI.modal.input("EditKV", "Key", $scope.kvtree.key, function(key) {
 						$scope.kvtree.key = key;
-						if(!$scope.kvtree.isList()) {
-							$scope.kvtree.value = value;
-						}
-				});
+					});
+				} else if($scope.keyeditable === false && (!$scope.kvtree.isList() && $scope.valueeditable !== false)) {
+					UI.modal.input("EditKV", "Value", $scope.kvtree.value, function(value) {
+						$scope.kvtree.value = value;
+					});
+				} else if($scope.keyeditable !== false && (!$scope.kvtree.isList() && $scope.valueeditable !== false)) {
+					UI.modal.input("EditKV",  ["Key", "Value"], [$scope.kvtree.key, $scope.kvtree.value], function(key, value) {
+						$scope.kvtree.key = key;
+						$scope.kvtree.value = value;
+					});
+				}
 			};
 
 			// Menu
@@ -92,6 +99,11 @@ components.directive('kvtree', function($compile) {
 					_menu.push({type: 'separator'});
 					_menu.push(_menu_del);
 				}
+
+				// Clean unused separator
+				if(_menu[_menu.length - 1].type === 'separator') {
+					_menu.pop();
+				}
 				return _menu;
 			};
 		},
@@ -132,8 +144,8 @@ components.directive('kvtree', function($compile) {
 			'</div>'+
 
 			// List
-			'<div ng-if="open" class="kv-tree-list">' +
-				'<div kvtree="_kv" data-parentkv="kvtree" data-convertable="convertable" ng-repeat="_kv in kvtree.value"></div>' +
+			'<div ng-if="open && kvtree.isList()" class="kv-tree-list">' +
+				'<div kvtree="_kv" data-parentkv="kvtree" data-convertable="convertable" ng-repeat="_kv in kvtree.value track by $index"></div>' +
 				'<span ng-if="kvtree.value.length === 0" class="text-muted">(empty list)</span>'+
 			'</div>' +
 		'</div>',

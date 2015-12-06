@@ -287,6 +287,10 @@ label.checkbox input[type="checkbox"] {
 	background: rgba(0,0,0,0.05);
 }
 
+.kv-tree .kv-tree-link {
+	white-space: nowrap;
+}
+
 .kv-tree .kv-tree-kv {
 	width: 100%;
 }

@@ -400,14 +400,11 @@
 								<th width="35" class="text-center">
 									<a ng-click="UI.arrayDelete(kv, ability.kv.value, refreshUnassigned)">[X]</a>
 								</th>
-								<th width="200">
-									{{kv.key}}
-								</th>
-								<td class="ability-form">
-									<input type="text" ng-model="kv.value" ng-if="!kv.isList()" />
-									<pre ng-if="kv.isList()">{{kv.toString()}}</pre>
+								<td class="ability-form" style="padding-left: 5px;">
+									<div kvtree="kv" data-keyeditable="false" data-open="true"></div>
 								</td>
 							</tr>
+							<!-- Empty List -->
 							<tr ng-if="ability.unassignedList.length === 0">
 								<td>
 									<p>{{::Locale('NoUnassigned')}}</p>
