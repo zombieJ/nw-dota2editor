@@ -16,6 +16,8 @@ var _abilityCtrl = function(isItem) {
 		$scope._newAbilityForkLang = true;
 		$scope._newAbilityName = "";
 
+		$scope._newTmplAbility = {};
+
 		$scope._newUnassignedKey = "";
 		$scope._newUnassignedValue = "";
 
@@ -43,7 +45,6 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		$scope.addEvent = function(entity) {
-			console.log(entity);
 			var _kv = new KV("", []);
 			_kv._isEvent = true;
 			entity.value.push(_kv);
@@ -58,7 +59,7 @@ var _abilityCtrl = function(isItem) {
 				_tgtName = _oriName + "_" + _index;
 				_index += 1;
 			}
-			var _modifier = new KV(_tgtName);
+			var _modifier = new KV(_tgtName, []);
 			_modifierList.value.push(_modifier);
 
 			$scope.currentModifier = _modifier;
@@ -73,8 +74,39 @@ var _abilityCtrl = function(isItem) {
 		$scope.addAbilitySpecial = function() {
 			$scope.ability.kv.assumeKey("AbilitySpecial", true).value.push(new KV("00", [
 				new KV("var_type", "FIELD_INTEGER"),
-				new KV(),
+				new KV()
 			]));
+		};
+
+		// ==========> Ability Icon
+		var _iconStep = 0;
+		$scope.$watch('ability.get("AbilityTextureName")', function() {
+			if(!$scope.ability) return "";
+
+			_iconStep = 0;
+			var _path = "";
+			if(isItem) {
+				_path = globalContent.project + "/resource/flash3/images/items/" + ($scope.ability.get("AbilityTextureName") || "").replace(/^item_/, "") + ".png";
+			} else {
+				_path = globalContent.project + "/resource/flash3/images/spellicons/" + ($scope.ability.get("AbilityTextureName") || "") + ".png";
+			}
+			$(".ability-img").attr("src", _path);
+		});
+		window.iconError = function() {
+			if(_iconStep === 0) {
+				_iconStep = 1;
+
+				var _path = "";
+				if(isItem) {
+					_path = "https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/items/" + ($scope.ability.get("AbilityTextureName") || "").replace(/^item_/, "") + ".png";
+				} else {
+					_path = "https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/spellicons/" + ($scope.ability.get("AbilityTextureName") || "") + ".png";
+				}
+
+				$(".ability-img").attr("src", _path);
+			} else {
+				$(".ability-img").attr("src", 'public/img/logo.jpg');
+			}
 		};
 
 		// ==========> New
@@ -96,7 +128,6 @@ var _abilityCtrl = function(isItem) {
 				}, function() {
 					UI.modal.highlight("#newAbilityMDL");
 				});
-				return;
 			} else {
 				var _clone = new Ability($scope._newAbilityFork ? $scope._newAbilityFork.kv.clone() : null);
 				_clone._name = $scope._newAbilityName;
@@ -126,8 +157,85 @@ var _abilityCtrl = function(isItem) {
 					$scope.abilityList.push(_clone);
 				}
 				$scope.setAbility(_clone);
+				$scope.assignAutoID(_clone);
 
 				$("#newAbilityMDL").modal('hide');
+			}
+		};
+
+		// ==========> New Template
+		$scope.newTmplAbility = function() {
+			if(!$scope.abilityList) return;
+
+			UI.modal.highlight($("#newTmplMDL").modal());
+			$scope._newTmplAbility._type = "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET";
+			$scope._newTmplAbility._target = "DOTA_UNIT_TARGET_TEAM_ENEMY";
+			$scope._newTmplAbility._channelled = false;
+			$scope._newTmplAbility._autoID = true;
+
+			var _oriName = "newAbility";
+			var _tgtName = _oriName;
+			var _index = 2;
+			while(common.array.find(_tgtName, $scope.abilityList, "_name")) {
+				_tgtName = _oriName + "_" + _index;
+				_index += 1;
+			}
+			$scope._newTmplAbility._name = _tgtName;
+		};
+		$scope.newTmplAbility.confirm = function() {
+			var _newAbility = new Ability();
+			_newAbility._changed = true;
+			$scope.abilityList.push(_newAbility);
+			$scope.setAbility(_newAbility);
+
+			// Type
+			$scope.ability._name = $scope._newTmplAbility._name;
+			$scope.ability.kv.set("AbilityBehavior", $scope._newTmplAbility._type);
+			if($scope._newTmplAbility._type !== "DOTA_ABILITY_BEHAVIOR_PASSIVE") {
+				// Target type
+				$scope.ability.kv.set("AbilityUnitTargetType", "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC");
+
+				// Target team
+				$scope.ability.kv.set("AbilityUnitTargetTeam", $scope._newTmplAbility._target);
+
+				// Channel
+				if($scope._newTmplAbility._channelled) {
+					$scope.ability.kv.set("AbilityBehavior", $scope.ability.kv.get("AbilityBehavior") + " | DOTA_ABILITY_BEHAVIOR_CHANNELLED");
+				}
+			}
+
+			if($scope._newTmplAbility._autoID) $scope.assignAutoID($scope.ability);
+
+			setTimeout(function() {
+				$("#listCntr").scrollTop(9999999);
+			}, 10);
+			$("#newTmplMDL").modal('hide');
+		};
+		$scope._newTmplAbility.type = [
+			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET",
+			"DOTA_ABILITY_BEHAVIOR_NO_TARGET",
+			"DOTA_ABILITY_BEHAVIOR_POINT",
+			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		];
+		$scope._newTmplAbility.target = [
+			"DOTA_UNIT_TARGET_TEAM_ENEMY",
+			"DOTA_UNIT_TARGET_TEAM_FRIENDLY",
+			"DOTA_UNIT_TARGET_TEAM_BOTH"
+		];
+
+		$scope.assignAutoID = function(ability) {
+			if(!isItem) return;
+
+			var _IDs = [];
+			$.each($scope.abilityList, function(i, _ability) {
+				_IDs[_ability.ID] = true;
+			});
+
+			for(var _id = 1500 ; _id < 5000 ; _id += 1) {
+				if(_IDs[_id] !== true) {
+					ability.kv.set("ID", _id + "");
+					break;
+				}
 			}
 		};
 
@@ -178,12 +286,6 @@ var _abilityCtrl = function(isItem) {
 			});
 		};
 
-		/*// ==========> Wearable
-		$scope.newWearable = function () {
-			var _wearable = new KV("wearable", [new KV("ItemDef")]);
-			$scope.ability.kv.assumeKey('Creature.AttachWearables', true).value.push(_wearable);
-		};*/
-
 		// ==========> Unassigned
 		$scope.newUnassigned = function () {
 			UI.modal("#newUnassignedMDL");
@@ -192,12 +294,12 @@ var _abilityCtrl = function(isItem) {
 			if(!$scope._newUnassignedKey.match(/^[\w\d_]+$/)) {
 				$.dialog({
 					title: Locale('Error'),
-					content: Locale('illegalCharacter'),
+					content: Locale('illegalCharacter')
 				});
 			} else if($scope.ability.kv.getKV($scope._newUnassignedKey, false)) {
 				$.dialog({
 					title: Locale('Error'),
-					content: Locale('duplicateDefined'),
+					content: Locale('duplicateDefined')
 				});
 			} else {
 				$scope.ability.kv.value.push(new KV($scope._newUnassignedKey, $scope._newUnassignedValue));
@@ -236,7 +338,7 @@ var _abilityCtrl = function(isItem) {
 			}, function () {
 				$.dialog({
 					title: "OPS!",
-					content: "Can't find "+_filePath+" <br/> 【打开"+_filePath+"失败】",
+					content: "Can't find "+_filePath+" <br/> 【打开"+_filePath+"失败】"
 				});
 			}).finally(function () {
 				$scope.ready = true;

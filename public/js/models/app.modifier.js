@@ -41,6 +41,18 @@ app.factory("Modifier", function(Event) {
 			return _my._eventList;
 		};
 
+		// Get Pre-Cache list
+		_my.getKVPrecacheList = function() {
+			var _list = [];
+
+			if(kvUnit.get("EffectName")) _list.push(new KV("particle", kvUnit.get("EffectName")));
+			$.each(_my.getEventList(), function(i, eventKV) {
+				_list = _list.concat(Event(eventKV).getKVPrecacheList());
+			});
+
+			return _list;
+		};
+
 		return _my;
 	};
 

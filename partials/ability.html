@@ -14,7 +14,7 @@
 				<p class="desc">{{_ability._comment}}</p>
 			</div>
 		</div>
-		<button id="newItem" class="btn btn-primary" ng-click="newEntity()">+ {{::Locale('New')}}</button>
+		<button id="newItem" class="btn btn-primary" ng-click="newTmplAbility()">+ {{::Locale('New')}}</button>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-show="!ready">
 		<h1>{{::Locale('Loading')}}...</h1>
@@ -615,39 +615,44 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="newMDL" tabindex="-1">
+<div class="modal fade" id="newTmplMDL" tabindex="-1">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Select Template 【选择技能模板】</h4>
+				<h4 class="modal-title">{{::Locale('New')}}</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<label>Type 【类型】</label>
-					<select class="form-control" ng-model="newAbility._type">
-						<option ng-repeat="_type in newAbility.type" value="{{::_type[2]}}">{{::_type[0]}} 【{{::_type[1]}}】</option>
+					<label>{{::Locale('Name')}}</label>
+						<input type="text" class="form-control" ng-model="_newTmplAbility._name" />
+				</div>
+				<div class="form-group">
+					<label>{{::Locale('Type')}}</label>
+					<select class="form-control" ng-model="_newTmplAbility._type">
+						<option ng-repeat="_type in _newTmplAbility.type" value="{{::_type}}">{{::Locale(_type)}} 【{{::_type}}】</option>
 					</select>
 				</div>
-				<div class="form-group" ng-show="newAbility._type !== 'Passive'">
-					<label>Target 【目标】</label>
-					<select class="form-control" ng-model="newAbility._target">
-						<option ng-repeat="_target in newAbility.target" value="{{::_target[2]}}">{{::_target[0]}} 【{{::_target[1]}}】</option>
+				<div class="form-group" ng-show="_newTmplAbility._type !== 'Passive'">
+					<label>{{::Locale('Target')}}</label>
+					<select class="form-control" ng-model="_newTmplAbility._target">
+						<option ng-repeat="_target in _newTmplAbility.target" value="{{::_target}}">{{::Locale(_target)}} 【{{::_target}}】</option>
 					</select>
 				</div>
-				<div class="checkbox" ng-show="newAbility._type !== 'Passive'">
+				<div class="checkbox" ng-show="_newTmplAbility._type !== 'Passive'">
 					<label>
-						<input type="checkbox" ng-checked="newAbility._channelled" ng-click="newAbility._channelled = !newAbility._channelled;"> Channelled 【持续施法】
+						<input type="checkbox" ng-checked="_newTmplAbility._channelled" ng-click="_newTmplAbility._channelled = !_newTmplAbility._channelled;"> {{::Locale('Channelled')}}
 					</label>
 				</div>
 				<div class="checkbox" ng-show="isItem">
-					<label uib-tooltip="Will auto find no conflict ID between 1000 to 5000 【会自动寻找1000~5000中未使用过的ID】" tooltip-placement="right" tooltip-append-to-body="true">
-						<input type="checkbox" ng-checked="newAbility._autoID" ng-click="newAbility._autoID = !newAbility._autoID;"> Item auto assign ID 【物品自动分配ID】
+					<label uib-tooltip="{{Locale('itemAutoIDTip')}}" tooltip-placement="right" tooltip-append-to-body="true">
+						<input type="checkbox" ng-checked="_newTmplAbility._autoID" ng-click="_newTmplAbility._autoID = !_newTmplAbility._autoID;">
+						{{::Locale('itemAutoID')}}
 					</label>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" ng-click="newAbility.confirm()">Create</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">{{::Locale('Close')}}</button>
+				<button type="button" class="btn btn-primary" ng-click="newTmplAbility.confirm()">{{::Locale('Create')}}</button>
 			</div>
 		</div>
 	</div>

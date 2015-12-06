@@ -34,8 +34,6 @@ app.factory("Ability", function($q, Event, Modifier) {
 		// Set Default
 		if(!kv) {
 			_my.kv.setDefault("BaseClass", "ability_datadriven");
-			//_my.kv.setDefault("AbilityUnitTargetTeam", "DOTA_UNIT_TARGET_TEAM_NONE")
-			//_my.kv.setDefault("AbilityType", "DOTA_ABILITY_TYPE_BASIC")
 		}
 
 		// Event List
@@ -85,17 +83,17 @@ app.factory("Ability", function($q, Event, Modifier) {
 
 	// Get Modifiers
 	Ability.prototype.getModifierList = function() {
-		return this.kv.get("Modifiers", false) || common.array.empty;
+		return this.kv.get("Modifiers", false) || [];
 	};
 
 	// Get Ability Special
 	Ability.prototype.getSpecialList = function() {
-		return this.kv.get("AbilitySpecial", false) || common.array.empty;
+		return this.kv.get("AbilitySpecial", false) || [];
 	};
 
 	// Get Pre-cache
 	Ability.prototype.getPrecacheList = function() {
-		return this.kv.get("precache", false) || common.array.empty;
+		return this.kv.get("precache", false) || [];
 	};
 
 	// Get unassigned list
@@ -109,6 +107,25 @@ app.factory("Ability", function($q, Event, Modifier) {
 				_unassignedList.push(kv);
 			}
 		});
+	};
+
+	// Get KV Pre-cache list
+	Ability.prototype.getKVPrecacheList = function() {
+		var _list = [];
+
+		// Particle File
+		// Sound File
+		// TODO: model File
+
+		$.each(this.getEventList(), function(i, eventKV) {
+			_list = _list.concat(Event(eventKV).getKVPrecacheList());
+		});
+
+		$.each(this.getModifierList(), function(i, modifierKV) {
+			_list = _list.concat(Modifier(modifierKV).getKVPrecacheList());
+		});
+
+		return _list;
 	};
 
 	// =================================================
@@ -129,18 +146,56 @@ app.factory("Ability", function($q, Event, Modifier) {
 	Ability.parse = function(kvUnit) {
 		var _unit = new Ability(kvUnit);
 
+		// Init modifier
 		$.each(_unit.getModifierList(), function(i, modifierKV) {
 			Modifier(modifierKV);
+		});
+
+		// Clean kv pre-cache
+		var _precacheList = _unit.getPrecacheList();
+		var _kvPrecacheList = _unit.getKVPrecacheList();
+		$.each(_kvPrecacheList, function(i, kv) {
+			var _precache = common.array.find(kv.value, _precacheList, "value");
+			common.array.remove(_precache, _precacheList);
 		});
 
 		return _unit;
 	};
 
+	// ================================================
+	// =                    Format                    =
+	// ================================================
 	// TODO: Save Logic
-	// Read: Remove Precache
-	// Save: Precache
-	// Special Ability Id, var_type
 	// Order
+
+	Ability.prototype.doWriter = function(writer) {
+		var _keepKV = localStorage.getItem("saveKeepKV") === "true";
+
+		// ==========> Prepare
+		// Pre-Cache
+		var _pre_precacheList = this.getPrecacheList();
+		var _pre_kvPrecacheList = this.getKVPrecacheList();
+		var _merge_precacheList = _pre_precacheList.concat(_pre_kvPrecacheList);
+		if(_merge_precacheList.length === 0) {
+			this.kv.delete("precache");
+		} else {
+			this.kv.assumeKey("precache", true).value = _merge_precacheList;
+		}
+
+		// Special Ability
+		$.each(this.getSpecialList(), function(i, specialKV) {
+			specialKV.key = common.text.preFill((i + 1), "0", 2);
+		});
+
+
+		writer.writeContent(this.kv.toString(_keepKV ? null : function(kv) {
+			if(kv.value === "" || kv.key.match(/^_/)) return false;
+		}));
+
+		// ==========> Clean Up
+		// Pre-Cache
+		this.kv.assumeKey("precache", true).value = _pre_precacheList;
+	};
 
 	// ================================================
 	// =                  Attr List                   =

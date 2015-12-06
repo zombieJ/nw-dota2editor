@@ -347,6 +347,7 @@ app.controller('main', function ($scope, $route, $location, $q, UI, Locale, Abil
 			} else {
 				var _writer = new KV.Writer();
 				_writer.withHeader("DOTAAbilities", {Version: 1});
+
 				$.each(globalContent[_globalListKey], function (i, ability) {
 					_writer.write('');
 					ability.doWriter(_writer);

@@ -5,6 +5,8 @@
 // ======================================================
 app.factory("Locale", function() {
 	var Locale = function(key) {
+		if(!key) return "";
+
 		var _lang = Locale.langMap[Locale.lang][key];
 		if(_lang) {
 			return _lang;
@@ -51,6 +53,7 @@ app.factory("Locale", function() {
 		Key: "键",
 		Value: "值",
 		Type: "类型",
+		Target: "目标",
 		NewKV: "新建键值",
 		New: "新建",
 		Loading: "载入中",
@@ -65,6 +68,9 @@ app.factory("Locale", function() {
 		NoPrecache: "无预载入值",
 		Modifiers: "修饰器",
 		AbilitySpecial: "键值",
+		Channelled: "持续施法",
+		Create: "创建",
+		Close: "关闭",
 
 		// 属性
 		BaseClass: "基类",
@@ -669,7 +675,9 @@ app.factory("Locale", function() {
 		noLanguageFile: "没有找到语言文件",
 		exitConfirm: "您确认要退出吗？",
 		eventUseText: "技能与物品的事件选项框改成带提示的文本，如果你对事件列表十分熟悉。推荐使用该模式。",
-		originNoPrecache: "在KV中引用到的特效保存时将被自动添加，不需要手动添加precache。"
+		originNoPrecache: "在KV中引用到的特效保存时将被自动添加，不需要手动添加precache。",
+		itemAutoID: "物品自动分配ID",
+		itemAutoIDTip: "会自动寻找1500~5000中未使用过的ID作为物品ID"
 	};
 
 	return Locale;

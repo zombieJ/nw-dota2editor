@@ -3,12 +3,9 @@
 // ======================================================
 // =                        操作                        =
 // ======================================================
-app.factory("Operation", function(Sound) {
+app.factory("Operation", function(KV, Sound) {
 	var Operation = function(kvUnit) {
-		if(!kvUnit._entity) {
-			kvUnit._entity = new Op(kvUnit);
-		}
-		return kvUnit._entity;
+		return new Op(kvUnit);
 	};
 
 	var Op = function(kvUnit) {
@@ -19,15 +16,30 @@ app.factory("Operation", function(Sound) {
 	};
 
 	// ===============================================
-	// =             Operation Attr List             =
+	// =                PreCache List                =
 	// ===============================================
-	Op.prototype.getAttrList = function() {
-		var OP = common.array.find(this.kv.key, Operation.EventItemOperation, "0", false, false);
-		if(!OP) {
-			_ERROR("Operation", 0, "Operation not found:", this.kv.key, this.kv)
+	Op.prototype.getKVPrecacheList = function() {
+		var _kv = this.kv;
+
+		if(_kv.key === "AttachEffect" || _kv.key === "FireEffect" || _kv.key === "TrackingProjectile" || _kv.key === "LinearProjectile") {
+			return _kv.get("EffectName") ? [new KV("particle", _kv.get("EffectName"))] : null;
+		} else if(_kv.key === "FireSound") {
+			return _kv.get("EffectName") ? [new KV("soundfile", _kv.get("EffectName"))] : null;
 		} else {
-			return OP[2];
+			var _operation = common.array.find(_kv.key, Operation.EventItemOperation, "0", false, false);
+			if(_operation) {
+				var _list = $.map(_operation[2], function(optAttr) {
+					if(Operation.OperationAttrMap[optAttr].type !== "operation") return;
+					return $.map(_kv.get(optAttr) || [], function(_operation) {
+						return Operation(_operation).getKVPrecacheList();
+					});
+				});
+				return _list;
+			} else {
+				_WARN("Operation", 0, "Precache Operation not find:", _kv.key);
+			}
 		}
+		// TODO: Model
 	};
 
 	// ===============================================
@@ -60,11 +72,11 @@ app.factory("Operation", function(Sound) {
 		["CreateThinker", false, ["Target", "ModifierName"]],
 		["LinearProjectile", false, ["Target","EffectName","MoveSpeed","StartRadius","EndRadius","FixedDistance","StartPosition",
 			"TargetTeams","TargetTypes","TargetFlags","HasFrontalCone","ProvidesVision","VisionRadius"]],
-		["ApplyMotionController", false, ["Target","ScriptFile","HorizontalControlFunction","VerticalControlFunction","Duration"]],
+		["ApplyMotionController", false, ["Target","ScriptFile","HorizontalControlFunction","VerticalControlFunction","Duration"]]
 	];
 
 	Operation.EventItemOperation = [
-		["SpendCharge", true, []],
+		["SpendCharge", true, []]
 	].concat(Operation.EventOperation);
 
 	Operation.EventOperationMap = {};
@@ -172,7 +184,7 @@ app.factory("Operation", function(Sound) {
 			["DOTA_PSEUDO_RANDOM_SKELETONKING_CRIT"],
 			["DOTA_PSEUDO_RANDOM_SLARDAR_BASH"],
 			["DOTA_PSEUDO_RANDOM_SNIPER_HEADSHOT"],
-			["DOTA_PSEUDO_RANDOM_TROLL_BASH"],
+			["DOTA_PSEUDO_RANDOM_TROLL_BASH"]
 		]},
 		OnSuccess: {type: "operation"},
 		OnFailure: {type: "operation"},
@@ -202,7 +214,7 @@ app.factory("Operation", function(Sound) {
 				["DOTA_UNIT_TARGET_MECHANICAL", "机械"],
 				["DOTA_UNIT_TARGET_NONE", "无"],
 				["DOTA_UNIT_TARGET_OTHER", "其他"],
-				["DOTA_UNIT_TARGET_TREE", "树木"],
+				["DOTA_UNIT_TARGET_TREE", "树木"]
 			]
 		},
 		TargetFlags: {
@@ -226,12 +238,12 @@ app.factory("Operation", function(Sound) {
 				["DOTA_UNIT_TARGET_FLAG_NOT_SUMMONED", "非召唤的"],
 				["DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD", "被放逐出世界的"],
 				["DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED", "玩家控制的"],
-				["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY", "范围唯一的"],
+				["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY", "范围唯一的"]
 			]
 		},
 		HasFrontalCone: {type: "boolean"},
 		HorizontalControlFunction: {type: "text"},
-		VerticalControlFunction: {type: "text"},
+		VerticalControlFunction: {type: "text"}
 	};
 
 	$.each(Operation.OperationAttrMap, function(key, opAttr) {

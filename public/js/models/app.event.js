@@ -3,8 +3,28 @@
 // =======================================================
 // =                        Event                        =
 // =======================================================
-app.factory("Event", function() {
-	var Event = function() {};
+app.factory("Event", function(Operation) {
+	var Event = function(kvUnit) {
+		return new Evnt(kvUnit);
+	};
+
+	var Evnt = function(kvUnit) {
+		this.kv = kvUnit;
+		return this;
+	};
+
+	Evnt.prototype.getKVPrecacheList = function() {
+		var _list = [];
+
+		$.each(this.kv.value, function(i, operation) {
+			var _effectList = Operation(operation).getKVPrecacheList();
+			if(_effectList) {
+				_list.push.apply(_list, _effectList);
+			}
+		});
+
+		return _list;
+	};
 
 	// ================================================
 	// =                  Event List                  =
@@ -45,7 +65,7 @@ app.factory("Event", function() {
 		{value: "OnToggleOff"},
 		{value: "OnToggleOn"},
 		{value: "OnUnitMoved"},
-		{value: "OnUpgrade"},
+		{value: "OnUpgrade"}
 	];
 
 	Event.ModifierEventList = [
@@ -60,7 +80,7 @@ app.factory("Event", function() {
 		{value: "OnOrbFire"},
 		{value: "OnOrbImpact"},
 		{value: "OnTakeDamage"},
-		{value: "Orb"},
+		{value: "Orb"}
 	].concat(Event.EventList);
 
 	return Event;
