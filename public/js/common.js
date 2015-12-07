@@ -233,12 +233,15 @@ common.array.count = function(list, val, path) {
 };
 
 common.array.remove = function(val, list) {
+	var _item = null;
 	for(var i = 0 ; i < list.length ; i += 1) {
 		if(list[i] === val) {
+			_item = list[i];
 			list.splice(i, 1);
 			i -= 1;
 		}
 	}
+	return _item;
 };
 
 common.array.insert = function(val, list, index) {

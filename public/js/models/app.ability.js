@@ -182,6 +182,21 @@ app.factory("Ability", function($q, Event, Modifier) {
 			this.kv.assumeKey("precache", true).value = _merge_precacheList;
 		}
 
+		// Order
+		var _ori_kvList = this.kv.value;
+		var commonAttrList = Ability.getCommonAttrList();
+		var _kvList = _ori_kvList.slice();
+		var _orderList = [];
+		$.each(commonAttrList, function(i, attr) {
+			// Match attr
+			$.each(common.array.find(attr, _kvList, "key", true, false), function(i, attrItem) {
+				_orderList.push(attrItem);
+				common.array.remove(attrItem, _kvList);
+			});
+		}.bind(this));
+		_orderList = _orderList.concat(_kvList);
+		this.kv.value = _orderList;
+
 		// Special Ability
 		$.each(this.getSpecialList(), function(i, specialKV) {
 			specialKV.key = common.text.preFill((i + 1), "0", 2);
@@ -194,7 +209,14 @@ app.factory("Ability", function($q, Event, Modifier) {
 
 		// ==========> Clean Up
 		// Pre-Cache
-		this.kv.assumeKey("precache", true).value = _pre_precacheList;
+		if(_pre_precacheList.length) {
+			this.kv.assumeKey("precache", true).value = _pre_precacheList;
+		} else {
+			this.kv.delete("precache");
+		}
+
+		// Order
+		this.kv.value = _ori_kvList;
 	};
 
 	// ================================================
