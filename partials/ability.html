@@ -158,6 +158,10 @@
 									{{::Locale('Operation')}}
 								</th>
 								<td class="ability-form" colspan="2" style="background: #FFF">
+									<div ng-if="event.key === 'OnProjectileHitUnit'" class="checkbox">
+										<span>{{::Locale('DeleteOnHit')}}</span>
+										<span checkbox data-target="event" data-target-path="DeleteOnHit"></span>
+									</div>
 									<div operationlist="event.value" data-alternative="isitem ? Operation.EventItemOperation : Operation.EventOperation" data-ability="ability"></div>
 								</td>
 							</tr>
@@ -336,6 +340,10 @@
 													{{Locale('Operation')}}
 												</th>
 												<td class="ability-form" colspan="2" style="background: #FFF">
+													<div ng-if="event.key === 'OnProjectileHitUnit'" class="checkbox">
+														<span>{{::Locale('DeleteOnHit')}}</span>
+														<span checkbox data-target="event" data-target-path="DeleteOnHit"></span>
+													</div>
 													<div operationlist="event.value" data-alternative="isitem ? Operation.EventItemOperation : Operation.EventOperation" data-ability="ability"></div>
 												</td>
 											</tr>
@@ -387,12 +395,12 @@
 						<button class="btn btn-dark" ng-click="ability.kv.assumeKey('precache', true).value.push(KV.new('particle'))">+ {{::Locale('NewKV')}}</button>
 					</div>
 
-					<!-- ==================== 自定义值 ==================== -->
+					<!-- ==================== Ability Special ==================== -->
 					<div ng-if="currentTab === 'abilitySpecial'">
 						<table class="ability-table">
 							<thead>
 								<tr>
-									<th width="34"></th>
+									<th width="70"></th>
 									<th>{{Locale('Key')}}</th>
 									<th>{{Locale('Type')}}</th>
 									<th>{{Locale('Value')}}</th>
@@ -400,8 +408,10 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="_abilitySpecial in ability.getSpecialList() track by $index">
-									<th>
-										<a ng-click="common.array.remove(_abilitySpecial, ability.kv.get('AbilitySpecial'))">[X]</a>
+									<th class="text-center">
+										<a class="fa fa-trash" ng-click="UI.arrayDelete(_abilitySpecial, ability.kv.get('AbilitySpecial'))"></a> |
+										<a class="fa fa-chevron-up" ng-click="common.array.moveOffset(_abilitySpecial, ability.kv.get('AbilitySpecial'), -1)"></a>
+										<a class="fa fa-chevron-down" ng-click="common.array.moveOffset(_abilitySpecial, ability.kv.get('AbilitySpecial'), 1)"></a>
 									</th>
 									<td class="ability-form">
 										<input type="text" ng-model="_abilitySpecial.value[1].key" />

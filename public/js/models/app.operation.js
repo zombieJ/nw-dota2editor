@@ -243,7 +243,8 @@ app.factory("Operation", function(KV, Sound) {
 		},
 		HasFrontalCone: {type: "boolean"},
 		HorizontalControlFunction: {type: "text"},
-		VerticalControlFunction: {type: "text"}
+		VerticalControlFunction: {type: "text"},
+		DeleteOnHit: {type: "boolean"},
 	};
 
 	$.each(Operation.OperationAttrMap, function(key, opAttr) {

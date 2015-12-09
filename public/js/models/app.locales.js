@@ -591,6 +591,7 @@ app.factory("Locale", function() {
 		Orb: "法球",
 
 		// 操作
+		DeleteOnHit: "命中时删除",
 		NewOperation: "新建操作",
 		ApplyModifier: "添加修饰器",
 		RemoveModifier: "移除修饰器",

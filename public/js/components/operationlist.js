@@ -13,6 +13,16 @@ components.directive('operationlist', function($compile) {
 			$scope.UI = UI;
 			$scope.KV = KV;
 
+			$scope.getOperationlist = function() {
+				return $.grep($scope.operationlist || [], function(operation) {
+					var _listOperation = operation.isList();
+					if(!_listOperation && operation.key !== "DeleteOnHit") {
+						_WARN("Operation", 0, "Not an group operation.", operation);
+					}
+					return _listOperation;
+				});
+			};
+
 			$scope.changeOperation = function(operation, oldKey) {
 				operation._valueCache = operation._valueCache || {};
 				// Cache old list
@@ -44,7 +54,7 @@ components.directive('operationlist', function($compile) {
 		},
 		template:
 		'<div class="ability-operation-list">'+
-			'<div ng-repeat="operation in operationlist track by $index" class="ability-operation">'+
+			'<div ng-repeat="operation in getOperationlist() track by $index" class="ability-operation">'+
 				'<div class="ability-operation-header">' +
 					'<a class="fa fa-trash" ng-click="UI.arrayDelete(operation, operationlist)"></a>' +
 					'<select class="form-control" ng-model="operation.key" ng-change="changeOperation(operation, \'{{operation.key}}\')">'+
