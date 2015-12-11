@@ -25,7 +25,7 @@ app.factory("Operation", function(KV, Sound) {
 		if(_kv.key === "AttachEffect" || _kv.key === "FireEffect" || _kv.key === "TrackingProjectile" || _kv.key === "LinearProjectile") {
 			return _kv.get("EffectName") ? [new KV("particle", _kv.get("EffectName"))] : null;
 		} else if(_kv.key === "FireSound") {
-			return _kv.get("EffectName") ? [new KV("soundfile", _kv.get("EffectName"))] : null;
+			return _kv.get("EffectName") ? [new KV("soundfile", Sound._nameMap[_kv.get("EffectName")])] : null;
 		} else {
 			var _operation = common.array.find(_kv.key, Operation.EventItemOperation, "0", false, false);
 			if(_operation) {
