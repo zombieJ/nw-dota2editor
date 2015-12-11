@@ -80,7 +80,7 @@ components.directive('kvfield', function($compile) {
 
 			// Text
 			'<input tipfield class="form-control" ng-model="getKV().bind(getAttrPath())" ng-model-options="{getterSetter: true}" ng-switch-when="text" ' +
-			'data-alternative="srctmpl[getAttrPath()]" data-matchfuc="attrunit.match(srcunit[getAttrPath()], ability)" />' +
+			'data-alternative="srctmpl[getAttrPath()]" data-matchfuc="attrunit.match(srcunit, ability)" />' +
 
 			// Unit Group
 			'<div kvunitgroup data-target="getKV()" data-target-path="{{getAttrPath()}}" ng-switch-when="unitGroup"></div>'+

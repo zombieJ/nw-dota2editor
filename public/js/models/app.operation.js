@@ -90,7 +90,7 @@ app.factory("Operation", function(KV, Sound) {
 	// ===============================================
 	var _match_EffectName = function(operation) {
 		if(!operation) return null;
-		return operation.name === "FireSound" ?  Sound.match : null;
+		return operation.key === "FireSound" ? Sound.match : null;
 	};
 
 	var _match_ModifierName = function(match) {
@@ -107,7 +107,6 @@ app.factory("Operation", function(KV, Sound) {
 		$scope.currentModifier = _link_ModifierName.modifier;
 	};
 
-	//{group: "common", attr: "BaseClass", type: "text", defaultValue: "ability_datadriven"},
 	Operation.OperationAttrMap = {
 		Target: {type: "unitGroup", value: ["CASTER", "TARGET", "POINT", "ATTACKER", "UNIT", "[Group Units]"]},
 		AbilityName: {type: "text"},

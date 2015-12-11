@@ -33,7 +33,9 @@ components.directive('tipfield', function($compile) {
 					if(!_val) {
 						$scope.currentList = [];
 					} else {
-						if($scope.alternative) {
+						if($scope.matchfuc) {
+							$scope.currentList = $scope.matchfuc(_val);
+						} else if($scope.alternative) {
 							_val = _val.toUpperCase();
 							$scope.currentList = $.map($scope.alternative, function (item) {
 								var _itemKey = (item.value || "") + (item.key || "") + (item._key || "") + Locale(item.value);
@@ -41,8 +43,6 @@ components.directive('tipfield', function($compile) {
 									return item;
 								}
 							});
-						} else if($scope.matchfuc) {
-							$scope.currentList = $scope.matchfuc(_val);
 						}
 					}
 
@@ -103,7 +103,7 @@ components.directive('tipfield', function($compile) {
 						'</ul>'
 					);
 					$scope._alternativeCntr.css({
-						position: "absolute",
+						position: "absolute"
 					});
 
 					// Add list
