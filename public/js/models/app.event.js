@@ -26,6 +26,12 @@ app.factory("Event", function(Operation) {
 		return _list;
 	};
 
+	Evnt.prototype.saveProcess = function() {
+		this.kv.value = $.grep(this.kv.value, function(operationKV) {
+			return (operationKV.key + "").trim() !== "";
+		});
+	};
+
 	// ================================================
 	// =                  Event List                  =
 	// ================================================

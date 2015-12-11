@@ -50,6 +50,9 @@ app.factory("Locale", function() {
 		Inspection: "检测",
 		Precache: "预载入",
 
+		VersionCheck: "版本检测",
+		versionCheckError: "版本检测失败，部分功能将无法使用。请将以下错误信息发送与我，以帮助修复该错误：",
+
 		Key: "键",
 		Value: "值",
 		Type: "类型",

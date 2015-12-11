@@ -69,6 +69,9 @@
 	<script src="public/js/models/app.locales.js"></script>
 	<script src="public/js/models/app.unit.js"></script>
 	<script src="public/js/models/app.config.js"></script>
+	<script src="public/js/models/app.sequence.js"></script>
+
+	<script src="public/js/services/appVersionSrv.js"></script>
 
 	<script src="public/js/hammer.js"></script>
 	<script src="public/js/abilityCtrl.js"></script>
@@ -121,6 +124,14 @@
 	</div>
 	<div ng-show="globalContent.isOpen" ng-view></div>
 </div>
+
+	<!-- ==================================================================== -->
+	<!-- =                          Version Check                           = -->
+	<!-- ==================================================================== -->
+	<div id="versionCheck" ng-if="!AppVersionSrv.ready">
+		<h1>{{::Locale('VersionCheck')}}</h1>
+		<p>{{AppVersionSrv.stateMSG}}...</p>
+	</div>
 
 	<!-- ==================================================================== -->
 	<!-- =                              Modal                               = -->

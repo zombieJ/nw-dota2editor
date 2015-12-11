@@ -106,6 +106,14 @@ app.factory("FS", function () {
 	}
 });
 
+app.factory("PATH", function () {
+	if (window.require) {
+		return require("path");
+	} else {
+		return null;
+	}
+});
+
 app.factory("UI", function ($rootScope, Locale) {
 	var UI = function () {
 	};
@@ -222,7 +230,8 @@ app.factory("UI", function ($rootScope, Locale) {
 	return UI;
 });
 
-app.controller('main', function ($scope, $route, $location, $q, UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config) {
+app.controller('main', function ($scope, $route, $location, $q,
+	UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config, Sequence, AppVersionSrv) {
 	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
 	window.Event = $scope.Event = Event;
@@ -234,6 +243,8 @@ app.controller('main', function ($scope, $route, $location, $q, UI, Locale, Abil
 	window.UI = $scope.UI = UI;
 	window.KV = $scope.KV = KV;
 	window.Config = $scope.Config = Config;
+	window.Sequence = $scope.Sequence = Sequence;
+	window.AppVersionSrv = $scope.AppVersionSrv = AppVersionSrv;
 	$scope.common = common;
 	$scope.jQuery = $;
 
@@ -701,6 +712,6 @@ app.controller('main', function ($scope, $route, $location, $q, UI, Locale, Abil
 	// ================================================================
 	// =                            初始化                            =
 	// ================================================================
-	Sound.init();
+	//Sound.init();
 	Unit.init();
 });

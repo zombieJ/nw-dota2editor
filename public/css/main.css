@@ -298,3 +298,21 @@ label.checkbox input[type="checkbox"] {
 .kv-tree .kv-tree-list {
 	padding-left: 15px;
 }
+
+
+/**************** Version Check ****************/
+#versionCheck {
+	background: rgba(0,0,0,0.8);
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1050;
+	color: #FFF;
+	text-align: center;
+}
+
+#versionCheck h1 {
+	margin-top: 150px;
+}

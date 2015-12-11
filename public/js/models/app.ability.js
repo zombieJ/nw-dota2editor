@@ -202,7 +202,18 @@ app.factory("Ability", function($q, Event, Modifier) {
 			specialKV.key = common.text.preFill((i + 1), "0", 2);
 		});
 
+		// Event process
+		$.each(this.getEventList(), function(i, event) {
+			if(!(event.key + "").trim()) return;
+			Event(event).saveProcess();
+		});
 
+		// Modifier process
+		$.each(this.getModifierList(), function(i, modifier) {
+			Modifier(modifier).saveProcess();
+		});
+
+		// ==========> Write
 		writer.writeContent(this.kv.toString(_keepKV ? null : function(kv) {
 			if(kv.value === "" || kv.key.match(/^_/)) return false;
 		}));

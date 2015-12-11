@@ -53,6 +53,15 @@ app.factory("Modifier", function(Event) {
 			return _list;
 		};
 
+		// Save process
+		_my.saveProcess = function() {
+			$.each(_my.getEventList(), function(i, event) {
+				if(!(event.key + "").trim()) common.array.remove(event, kvUnit.value);
+
+				Event(event).saveProcess();
+			});
+		};
+
 		return _my;
 	};
 

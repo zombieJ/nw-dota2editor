@@ -20,6 +20,7 @@ app.factory("Operation", function(KV, Sound) {
 	// ===============================================
 	Op.prototype.getKVPrecacheList = function() {
 		var _kv = this.kv;
+		if((_kv.key + "").trim() === "") return null;
 
 		if(_kv.key === "AttachEffect" || _kv.key === "FireEffect" || _kv.key === "TrackingProjectile" || _kv.key === "LinearProjectile") {
 			return _kv.get("EffectName") ? [new KV("particle", _kv.get("EffectName"))] : null;

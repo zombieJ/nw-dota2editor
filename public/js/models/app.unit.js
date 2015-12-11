@@ -214,6 +214,7 @@ app.factory("Unit", function($q, $http, FS, Locale, KV) {
 		[
 			{group: "common", attr: "BaseClass", type: "text"},
 			{group: "common", attr: "Model", type: "text"},
+			{group: "common", attr: "Skin", type: "text"},
 			{group: "common", attr: "ModelScale", type: "text"},
 			{group: "common", attr: "Level", type: "text"},
 			{group: "common", attr: "HasInventory", type: "single"},
