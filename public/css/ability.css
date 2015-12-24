@@ -236,12 +236,17 @@ hr {
 	font-size: 20px;
 }
 
-.ability-operation-list .ability-operation .ability-operation-header select.form-control {
+.ability-operation-list .ability-operation .ability-operation-header .ability-operation-selector {
 	width: auto;
-	background: #eee;
+	min-width: 200px;
 	margin: 5px 0 0 0;
-	font-weight: bolder;
 	display: inline-block;
+	position: relative;
+}
+
+.ability-operation-list .ability-operation .ability-operation-header .ability-operation-selector .form-control {
+	background: #eee;
+	font-weight: bolder;
 }
 
 .ability-operation .ability-operation-body {

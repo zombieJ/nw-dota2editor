@@ -194,6 +194,7 @@ app.factory("Locale", function() {
 		DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD: "被放逐出世界的",
 		DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED: "玩家控制的",
 		DOTA_UNIT_TARGET_FLAG_RANGED_ONLY: "范围唯一的",
+		DOTA_UNIT_TARGET_FLAG_PREFER_ENEMIES: "更倾向敌人",
 
 		DAMAGE_TYPE_MAGICAL: "魔法伤害",
 		DAMAGE_TYPE_PHYSICAL: "物理伤害",
@@ -381,6 +382,14 @@ app.factory("Locale", function() {
 		MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS: "动作修改？",
 		MODIFIER_PROPERTY_TRANSLATE_ATTACK_SOUND: "攻击音效修改？",
 		MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE: "百分比修改转向速度",
+		MODIFIER_PROPERTY_MAGICDAMAGEOUTGOING_PERCENTAGE: "魔法输出百分比",
+		MODIFIER_PROPERTY_INCOMING_PHYSICAL_DAMAGE_CONSTANT: "所受物理伤害数值",
+		MODIFIER_PROPERTY_NEGATIVE_EVASION_CONSTANT: "降低闪避概率",
+		MODIFIER_PROPERTY_CAST_RANGE_BONUS: "施法距离增益",
+		MODIFIER_PROPERTY_ATTACK_RANGE_BONUS_UNIQUE: "攻击距离增益，不叠加",
+		MODIFIER_PROPERTY_MAX_ATTACK_RANGE: "最大攻击距离增益",
+		MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE_STACKING: "冷却时间堆叠",
+		MODIFIER_PROPERTY_SUPER_ILLUSION_WITH_ULTIMATE: "终极幻象-VS大招",
 
 		// 修饰器 - 状态
 		NewStates: "新建状态",
@@ -505,6 +514,7 @@ app.factory("Locale", function() {
 		HasAggressiveStance: "拥有侵略姿势",
 		FollowRange: "跟随距离",
 		vscripts: "脚本文件",
+		Skin: "皮肤",
 
 		NoWearable: "没有饰品",
 		NoUnassigned: "没有未分配值",
@@ -591,6 +601,7 @@ app.factory("Locale", function() {
 		OnOrbFire: "法球被释放",
 		OnOrbImpact: "法球命中",
 		OnTakeDamage: "受到伤害",
+		OnSpellTargetReady: "当技能选定目标",
 		Orb: "法球",
 
 		// 操作
@@ -679,6 +690,7 @@ app.factory("Locale", function() {
 		noLanguageFile: "没有找到语言文件",
 		exitConfirm: "您确认要退出吗？",
 		eventUseText: "技能与物品的事件选项框改成带提示的文本，如果你对事件列表十分熟悉。推荐使用该模式。",
+		operationUseText: "技能与物品的操作选项框改成带提示的文本，如果你对操作列表十分熟悉。推荐使用该模式。",
 		originNoPrecache: "在KV中引用到的特效保存时将被自动添加，不需要手动添加precache。",
 		itemAutoID: "物品自动分配ID",
 		itemAutoIDTip: "会自动寻找1500~5000中未使用过的ID作为物品ID"

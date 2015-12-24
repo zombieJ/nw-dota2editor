@@ -7,7 +7,7 @@
 				<p class="title">
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.get('abilities', _ability._name, 'markColor') || '#CCC'}}"></span>
 					<span class="fa fa-cubes sm" ng-if="config.get('abilities', _ability._name, 'markUsage') === 'dummy'"></span>
-					{{config.get('abilities', _ability._name, 'editorAliasName') || _ability._name}}
+					{{config.get('abilities', _ability._name, 'editorAliasName') || globalContent.mainLang().map[Language.abilityAttr(_ability._name, '')] || _ability._name}}
 					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
 						  uib-tooltip="{{::Locale('conflictName')}}" tooltip-placement="right" tooltip-append-to-body="true"></span>
 				</p>
@@ -136,7 +136,7 @@
 									</select>
 								</td>
 								<td width="60" class="text-center">
-									<a ng-click="common.array.remove(event, ability.kv.value)">
+									<a ng-click="UI.arrayDelete(event, ability.kv.value)">
 										Delete
 									</a>
 								</td>
@@ -162,7 +162,7 @@
 										<span>{{::Locale('DeleteOnHit')}}</span>
 										<span checkbox data-target="event" data-target-path="DeleteOnHit"></span>
 									</div>
-									<div operationlist="event.value" data-alternative="isitem ? Operation.EventItemOperation : Operation.EventOperation" data-ability="ability"></div>
+									<div operationlist="event.value" data-alternative="isItem ? Operation.OperationItemList : Operation.OperationList" data-ability="ability"></div>
 								</td>
 							</tr>
 							</tbody>

@@ -245,10 +245,11 @@ app.controller('main', function ($scope, $route, $location, $q,
 	window.Config = $scope.Config = Config;
 	window.Sequence = $scope.Sequence = Sequence;
 	window.AppVersionSrv = $scope.AppVersionSrv = AppVersionSrv;
+	window._NODE = $scope.NODE = NODE;
 	$scope.common = common;
 	$scope.jQuery = $;
 
-	$scope.globalContent = $scope.GC = globalContent;
+	window.GC = $scope.globalContent = $scope.GC = globalContent;
 
 	NODE && NODE.init(globalContent, $q);
 
@@ -712,6 +713,8 @@ app.controller('main', function ($scope, $route, $location, $q,
 	// ================================================================
 	// =                            初始化                            =
 	// ================================================================
-	//Sound.init();
-	Unit.init();
+	NODE.initReady().then(function() {
+		AppVersionSrv.check();
+		Unit.init();
+	});
 });

@@ -15,7 +15,7 @@ components.directive('kvunitgroup', function($compile) {
 			Object.defineProperty($scope, "key", {
 				get: function() {
 					var _kv = $scope.target.assumeKey($scope.targetPath);
-					_kv.value = _kv.value || Operation.OperationAttrMap.Target.value[0];
+					_kv.value = _kv.value || "";
 					return typeof _kv.value === "string" ? _kv.value : "[Group Units]";
 				}, set: function(value) {
 					if(value === "[Group Units]") {
@@ -44,6 +44,7 @@ components.directive('kvunitgroup', function($compile) {
 		template :
 		'<div>' +
 			'<select ng-model="key">' +
+				'<option value="">None</option>'+
 				'<option ng-repeat="opVal in Operation.OperationAttrMap.Target.value track by $index">{{::opVal}}</option>' +
 			'</select>' +
 

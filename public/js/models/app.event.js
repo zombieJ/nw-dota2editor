@@ -28,7 +28,13 @@ app.factory("Event", function(Operation) {
 
 	Evnt.prototype.saveProcess = function() {
 		this.kv.value = $.grep(this.kv.value, function(operationKV) {
-			return (operationKV.key + "").trim() !== "";
+			// Ignore empty key
+			if((operationKV.key + "").trim() === "") {
+				return false;
+			} else {
+				Operation(operationKV).saveProcess();
+			}
+			return true;
 		});
 	};
 
@@ -85,6 +91,7 @@ app.factory("Event", function(Operation) {
 		{value: "OnDeath"},
 		{value: "OnOrbFire"},
 		{value: "OnOrbImpact"},
+		{value: "OnSpellTargetReady"},
 		{value: "OnTakeDamage"},
 		{value: "Orb"}
 	].concat(Event.EventList);

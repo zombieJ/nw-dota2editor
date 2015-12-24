@@ -37,6 +37,14 @@
 	</label>
 </div>
 
+<div class="checkbox">
+	<label>
+		<input type="checkbox" ng-checked="Config.global.operationUseText" ng-click="Config.global.operationUseText = !Config.global.operationUseText">
+		Ability/Item Operation use text input
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('operationUseText')}}"></span>
+	</label>
+</div>
+
 <hr/>
 
 <button class="btn btn-primary" ng-click="saveConfig()">{{Locale('Save')}}</button>

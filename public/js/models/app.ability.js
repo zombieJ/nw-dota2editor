@@ -103,7 +103,11 @@ app.factory("Ability", function($q, Event, Modifier) {
 		var _unassignedList = _my.unassignedList = [];
 
 		$.each(this.kv.value, function(i, kv) {
-			if(!common.array.find(kv.key, _attrList, "", false, false)) {
+			if(
+				!common.array.find(kv.key, _attrList, "", false, false) &&
+				!common.array.find(kv.key, Event.ModifierEventList, "value", false, false) &&
+				!kv._isEvent
+			) {
 				_unassignedList.push(kv);
 			}
 		});
@@ -188,11 +192,21 @@ app.factory("Ability", function($q, Event, Modifier) {
 		var _kvList = _ori_kvList.slice();
 		var _orderList = [];
 		$.each(commonAttrList, function(i, attr) {
-			// Match attr
-			$.each(common.array.find(attr, _kvList, "key", true, false), function(i, attrItem) {
-				_orderList.push(attrItem);
-				common.array.remove(attrItem, _kvList);
-			});
+			if(attr === "_EVENT_LIST") {
+				// Event special process to keep the event order
+				$.each(_kvList.slice(), function(j, attrItem) {
+					if(common.array.find(attrItem.key, Event.ModifierEventList, "value", false, false) || attrItem._isEvent) {
+						_orderList.push(attrItem);
+						common.array.remove(attrItem, _kvList);
+					}
+				});
+			} else {
+				// Match attr
+				$.each(common.array.find(attr, _kvList, "key", true, false), function (i, attrItem) {
+					_orderList.push(attrItem);
+					common.array.remove(attrItem, _kvList);
+				});
+			}
 		}.bind(this));
 		_orderList = _orderList.concat(_kvList);
 		this.kv.value = _orderList;
@@ -209,9 +223,18 @@ app.factory("Ability", function($q, Event, Modifier) {
 		});
 
 		// Modifier process
-		$.each(this.getModifierList(), function(i, modifier) {
-			Modifier(modifier).saveProcess();
-		});
+		if(this.getModifierList().length !== 0) {
+			$.each(this.getModifierList(), function (i, modifier) {
+				Modifier(modifier).saveProcess();
+			});
+		} else {
+			this.kv.delete("Modifiers");
+		}
+
+		// Ability Special
+		if((this.kv.get("AbilitySpecial") || []).length === 0) {
+			this.kv.delete("AbilitySpecial");
+		}
 
 		// ==========> Write
 		writer.writeContent(this.kv.toString(_keepKV ? null : function(kv) {
@@ -220,11 +243,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 
 		// ==========> Clean Up
 		// Pre-Cache
-		if(_pre_precacheList.length) {
-			this.kv.assumeKey("precache", true).value = _pre_precacheList;
-		} else {
-			this.kv.delete("precache");
-		}
+		this.kv.assumeKey("precache", true).value = _pre_precacheList;
 
 		// Order
 		this.kv.value = _ori_kvList;
@@ -335,12 +354,11 @@ app.factory("Ability", function($q, Event, Modifier) {
 			});
 		});
 
-		// Events
-		$.each(Event.ModifierEventList, function(i, event) {
-			_list.push(event.value);
-		});
-
 		_list.push("precache");
+
+		// Events
+		_list.push("_EVENT_LIST");
+
 		_list.push("Modifiers");
 		_list.push("AbilitySpecial");
 
@@ -456,6 +474,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 		["DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD"],
 		["DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED"],
 		["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY"],
+		["DOTA_UNIT_TARGET_FLAG_PREFER_ENEMIES"]
 	];
 
 	Ability.AbilityUnitDamageType = [

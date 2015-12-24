@@ -8,8 +8,9 @@ components.directive('operationlist', function($compile) {
 			alternative: "=",		// Provide alternative operation items
 			ability: "=",
 		},
-		controller: function($scope, $element, $attrs, Locale, UI, KV) {
+		controller: function($scope, $element, $attrs, Locale, UI, KV, Config) {
 			$scope.Locale = Locale;
+			$scope.Config = Config;
 			$scope.UI = UI;
 			$scope.KV = KV;
 
@@ -57,9 +58,12 @@ components.directive('operationlist', function($compile) {
 			'<div ng-repeat="operation in getOperationlist() track by $index" class="ability-operation">'+
 				'<div class="ability-operation-header">' +
 					'<a class="fa fa-trash" ng-click="UI.arrayDelete(operation, operationlist)"></a>' +
-					'<select class="form-control" ng-model="operation.key" ng-change="changeOperation(operation, \'{{operation.key}}\')">'+
-						'<option ng-repeat="_operation in alternative track by $index" value="{{_operation[0]}}">{{_operation[0]}} 【{{Locale(_operation[0])}}】</option>'+
-					'</select>'+
+					'<div class="ability-operation-selector" ng-switch="Config.global.operationUseText">' +
+						'<input tipfield class="form-control" type="text" ng-model="operation.key" data-alternative="alternative" ng-switch-when="true" />' +
+						'<select class="form-control" ng-model="operation.key" ng-change="changeOperation(operation, \'{{operation.key}}\')" ng-switch-default >'+
+							'<option ng-repeat="_operation in alternative track by $index" value="{{_operation.value}}">{{_operation.value}} 【{{Locale(_operation.value)}}】</option>'+
+						'</select>'+
+					'</div>'+
 					'<a class="fa fa-plus" ng-show="operation.key" ng-click="addCustomizeKV(operation)"></a>' +
 				'</div>'+
 				'<div operation="operation" data-ability="ability"></div>'+

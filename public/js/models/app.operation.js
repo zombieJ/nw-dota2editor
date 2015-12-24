@@ -44,6 +44,15 @@ app.factory("Operation", function(KV, Sound) {
 	};
 
 	// ===============================================
+	// =                Save Process                 =
+	// ===============================================
+	Op.prototype.saveProcess = function() {
+		this.kv.value = $.grep(this.kv.value, function(attrKV) {
+			return !attrKV.isList() || attrKV.value.length;
+		});
+	};
+
+	// ===============================================
 	// =               Operation List                =
 	// ===============================================
 	Operation.EventOperation = [
@@ -83,6 +92,14 @@ app.factory("Operation", function(KV, Sound) {
 	Operation.EventOperationMap = {};
 	$.each(Operation.EventItemOperation, function(i, item) {
 		Operation.EventOperationMap[item[0]] = item;
+	});
+
+	// Parse operation list for operation select usage
+	Operation.OperationList = $.map(Operation.EventOperation, function(operation) {
+		return {value: operation[0]};
+	});
+	Operation.OperationItemList = $.map(Operation.EventItemOperation, function(operation) {
+		return {value: operation[0]};
 	});
 
 	// ===============================================
@@ -238,7 +255,8 @@ app.factory("Operation", function(KV, Sound) {
 				["DOTA_UNIT_TARGET_FLAG_NOT_SUMMONED", "非召唤的"],
 				["DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD", "被放逐出世界的"],
 				["DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED", "玩家控制的"],
-				["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY", "范围唯一的"]
+				["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY", "范围唯一的"],
+				["DOTA_UNIT_TARGET_FLAG_PREFER_ENEMIES", "更倾向敌人"]
 			]
 		},
 		HasFrontalCone: {type: "boolean"},
