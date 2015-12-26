@@ -19,8 +19,6 @@ var PATH = require('path');
 exports.init = function(globalContent, _q) {
 	content = globalContent;
 	$q = _q;
-
-	exports.initReady();
 };
 
 exports.loadProject = function(projectPath) {
@@ -104,25 +102,3 @@ exports.listFiles = function(path, regex) {
 	});
 	return _deferred.promise;
 };
-
-// ===========================================================
-// =                    Environment Check                    =
-// ===========================================================
-// Res Path
-exports.__resPath = "";
-
-(function() {
-	var _readyDeferred;
-	exports.initReady = function() {
-		if(!_readyDeferred) {
-			_readyDeferred = $q.defer();
-			FS.exists("res", function(exist) {
-				if(!exist) {
-					exports.__resPath = process.execPath.replace(/\w+\.exe$/, '');
-				}
-				_readyDeferred.resolve(exports.__resPath);
-			});
-		}
-		return _readyDeferred.promise;
-	};
-})();

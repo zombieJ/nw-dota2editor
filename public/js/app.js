@@ -713,7 +713,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 	// ================================================================
 	// =                            初始化                            =
 	// ================================================================
-	NODE.initReady().then(function() {
+	AppVersionSrv.pathPromise().then(function() {
 		AppVersionSrv.check();
 		Unit.init();
 	});

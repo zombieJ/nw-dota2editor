@@ -1,14 +1,31 @@
-app.factory("AppVersionSrv", function ($timeout, FS, PATH, Sequence, Sound, KV, Locale, NODE) {
+app.factory("AppVersionSrv", function ($q, $timeout, FS, PATH, Sequence, Sound, KV, Locale) {
 	var AppVersionSrv = function () {
 	};
 
+	// Init Environment check
+	AppVersionSrv.resPath = "";
+	var FS = require("fs");
+	if(!AppVersionSrv._readyDeferred) {
+		AppVersionSrv._readyDeferred = $q.defer();
+		FS.exists("res", function(exist) {
+			if(!exist) {
+				AppVersionSrv.resPath = process.execPath.replace(/\w+\.exe$/, '');
+			}
+			AppVersionSrv._readyDeferred.resolve(AppVersionSrv.resPath);
+		});
+	}
+	AppVersionSrv.pathPromise = function() {
+		return AppVersionSrv._readyDeferred.promise;
+	};
+
+	// Application check
 	AppVersionSrv.ready = false;
 	AppVersionSrv.stateMSG = "Loading...";
 
 	AppVersionSrv.check = function () {
 		console.log("Start Application Version Service.");
-		var _sound_src_file_path = PATH.normalize(NODE.__resPath + Sound.srcFilePath);
-		var _sound_tgt_file_path = PATH.normalize(NODE.__resPath + Sound.filePath);
+		var _sound_src_file_path = PATH.normalize(AppVersionSrv.resPath + Sound.srcFilePath);
+		var _sound_tgt_file_path = PATH.normalize(AppVersionSrv.resPath + Sound.filePath);
 		try {
 			new Sequence(function (defer) {
 				// ===========================================================

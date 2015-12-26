@@ -112,8 +112,8 @@ app.factory("Operation", function(KV, Sound) {
 
 	var _match_ModifierName = function(match) {
 		match = (match || "").toUpperCase();
-		var _list = $.map(_match_ModifierName.ability._modifierList, function(modifier) {
-			if((modifier._name || "").toUpperCase().indexOf(match) !== -1) return [[modifier._name]];
+		var _list = $.map(_match_ModifierName.ability.getModifierList(), function(modifierKV) {
+			if((modifierKV.key || "").toUpperCase().indexOf(match) !== -1) return {value: modifierKV.key};
 		});
 		return _list;
 	};
@@ -122,6 +122,23 @@ app.factory("Operation", function(KV, Sound) {
 		var $scope = angular.element("#listCntr").scope();
 		$scope.currentTab = "modifiers";
 		$scope.currentModifier = _link_ModifierName.modifier;
+	};
+
+	var _match_AbilitySpecial = function(operation, ability) {
+		_match_AbilitySpecial.ability = ability;
+		return _match_AbilitySpecialFunc;
+	};
+	var _match_AbilitySpecialFunc = function(match) {
+		match = (match || "").toUpperCase();
+		if(!match.match(/^%/) || !_match_AbilitySpecial.ability) return [];
+
+		match = match.slice(1);
+		var _list =  $.map(_match_AbilitySpecial.ability.getSpecialList(), function(kv) {
+			if((kv.value[1].key || "").toUpperCase().indexOf(match) !== -1) {
+				return {value: "%" + kv.value[1].key};
+			}
+		});
+		return _list;
 	};
 
 	Operation.OperationAttrMap = {
@@ -148,34 +165,34 @@ app.factory("Operation", function(KV, Sound) {
 		ControlPoints: {type: "tree"},
 		ControlPointEntities: {type: "tree"},
 		Type: {type: "single", value: [["DAMAGE_TYPE_MAGICAL"], ["DAMAGE_TYPE_PHYSICAL"], ["DAMAGE_TYPE_PURE"]]},
-		MinDamage: {type: "text"},
-		MaxDamage: {type: "text"},
-		Damage: {type: "text"},
-		CurrentHealthPercentBasedDamage: {type: "text"},
-		MaxHealthPercentBasedDamage: {type: "text"},
-		Radius: {type: "text"},
-		HealAmount: {type: "text"},
+		MinDamage: {type: "text", match: _match_AbilitySpecial},
+		MaxDamage: {type: "text", match: _match_AbilitySpecial},
+		Damage: {type: "text", match: _match_AbilitySpecial},
+		CurrentHealthPercentBasedDamage: {type: "text", match: _match_AbilitySpecial},
+		MaxHealthPercentBasedDamage: {type: "text", match: _match_AbilitySpecial},
+		Radius: {type: "text", match: _match_AbilitySpecial},
+		HealAmount: {type: "text", match: _match_AbilitySpecial},
 		Center: {type: "single", value: [["CASTER"], ["TARGET"], ["POINT"], ["ATTACKER"], ["UNIT"], ["PROJECTILE"]]},
-		Duration: {type: "text"},
-		Delay: {type: "text"},
-		Distance: {type: "text"},
-		Height: {type: "text"},
+		Duration: {type: "text", match: _match_AbilitySpecial},
+		Delay: {type: "text", match: _match_AbilitySpecial},
+		Distance: {type: "text", match: _match_AbilitySpecial},
+		Height: {type: "text", match: _match_AbilitySpecial},
 		IsFixedDistance: {type: "boolean"},
 		ShouldStun: {type: "boolean"},
 		ScriptFile: {type: "text"},
 		Function: {type: "text"},
 		UnitName: {type: "text"},
-		UnitCount: {type: "text"},
-		UnitLimit: {type: "text"},
-		SpawnRadius: {type: "text"},
-		GrantsGold: {type: "text"},
-		GrantsXP: {type: "text"},
+		UnitCount: {type: "text", match: _match_AbilitySpecial},
+		UnitLimit: {type: "text", match: _match_AbilitySpecial},
+		SpawnRadius: {type: "text", match: _match_AbilitySpecial},
+		GrantsGold: {type: "text", match: _match_AbilitySpecial},
+		GrantsXP: {type: "text", match: _match_AbilitySpecial},
 		Dodgeable: {type: "boolean"},
 		ProvidesVision: {type: "boolean"},
-		VisionRadius: {type: "text"},
-		MoveSpeed: {type: "text"},
+		VisionRadius: {type: "text", match: _match_AbilitySpecial},
+		MoveSpeed: {type: "text", match: _match_AbilitySpecial},
 		SourceAttachment: {type: "text"},// TODO: hitloc?
-		Chance: {type: "text"},
+		Chance: {type: "text", match: _match_AbilitySpecial},
 		PseudoRandom: {type: "text", value: [
 			["DOTA_PSEUDO_RANDOM_BREWMASTER_CRIT"],
 			["DOTA_PSEUDO_RANDOM_CHAOS_CRIT"],
@@ -207,13 +224,13 @@ app.factory("Operation", function(KV, Sound) {
 		OnFailure: {type: "operation"},
 		Action: {type: "operation"},
 		OnSpawn: {type: "operation"},
-		CleavePercent: {type: "text"},
-		CleaveRadius: {type: "text"},
-		StartRadius: {type: "text"},
+		CleavePercent: {type: "text", match: _match_AbilitySpecial},
+		CleaveRadius: {type: "text", match: _match_AbilitySpecial},
+		StartRadius: {type: "text", match: _match_AbilitySpecial},
 		CleaveEffect: {type: "text"},
-		LifestealPercent: {type: "text"},
-		EndRadius: {type: "text"},
-		FixedDistance: {type: "text"},
+		LifestealPercent: {type: "text", match: _match_AbilitySpecial},
+		EndRadius: {type: "text", match: _match_AbilitySpecial},
+		FixedDistance: {type: "text", match: _match_AbilitySpecial},
 		StartPosition: {type: "text"},// TODO: hitloc? attach_attack1? attach_origin?
 		TargetTeams: {
 			type: "single",

@@ -3,7 +3,7 @@
 // ======================================================
 // =                        语言                        =
 // ======================================================
-app.factory("Unit", function($q, $http, FS, Locale, KV, NODE, PATH) {
+app.factory("Unit", function($q, $http, FS, Locale, KV, AppVersionSrv, PATH) {
 	var Unit = function(kv) {
 		var _my = this;
 		_my.kv = kv || new KV("undefined", []);
@@ -51,7 +51,7 @@ app.factory("Unit", function($q, $http, FS, Locale, KV, NODE, PATH) {
 
 		if(!FS) return;
 
-		FS.readFile(PATH.normalize(NODE.__resPath + "res/items_game.json"), "utf8", function (err, data) {
+		FS.readFile(PATH.normalize(AppVersionSrv.resPath + "res/items_game.json"), "utf8", function (err, data) {
 			if(err) {
 				$.dialog({
 					title: "OPS!",
