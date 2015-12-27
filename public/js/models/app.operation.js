@@ -3,7 +3,7 @@
 // ======================================================
 // =                        操作                        =
 // ======================================================
-app.factory("Operation", function(KV, Sound) {
+app.factory("Operation", function(KV, Sound, AppFileSrv) {
 	var Operation = function(kvUnit) {
 		return new Op(kvUnit);
 	};
@@ -105,11 +105,13 @@ app.factory("Operation", function(KV, Sound) {
 	// ===============================================
 	// =               Operation Attr                =
 	// ===============================================
+	// Effect Name
 	var _match_EffectName = function(operation) {
 		if(!operation) return null;
 		return operation.key === "FireSound" ? Sound.match : null;
 	};
 
+	// Modifier Name
 	var _match_ModifierName = function(match) {
 		match = (match || "").toUpperCase();
 		var _list = $.map(_match_ModifierName.ability.getModifierList(), function(modifierKV) {
@@ -124,6 +126,7 @@ app.factory("Operation", function(KV, Sound) {
 		$scope.currentModifier = _link_ModifierName.modifier;
 	};
 
+	// Ability Special
 	var _match_AbilitySpecial = function(operation, ability) {
 		_match_AbilitySpecial.ability = ability;
 		return _match_AbilitySpecialFunc;
@@ -139,6 +142,27 @@ app.factory("Operation", function(KV, Sound) {
 			}
 		});
 		return _list;
+	};
+
+	// Script file
+	var _match_ScriptFile = function(match) {
+		match = (match || "").toUpperCase();
+		return $.map(AppFileSrv.fileMatchList, function(item) {
+			return (item.value || "").toUpperCase().indexOf(match) !== -1 ? item : null;
+		});
+	};
+
+	// Function
+	var _match_Function_Entity = function(operation) {
+		this.matchFunc = function(match) {
+			match = (match || "").toUpperCase();
+			var _path = operation.get("ScriptFile");
+
+			return $.map(AppFileSrv.prepareFuncMatchList(_path), function(funcName) {
+				return (funcName.value || "").toUpperCase().indexOf(match) !== -1 ? funcName : null;
+			});
+		};
+		return this;
 	};
 
 	Operation.OperationAttrMap = {
@@ -179,8 +203,11 @@ app.factory("Operation", function(KV, Sound) {
 		Height: {type: "text", match: _match_AbilitySpecial},
 		IsFixedDistance: {type: "boolean"},
 		ShouldStun: {type: "boolean"},
-		ScriptFile: {type: "text"},
-		Function: {type: "text"},
+		ScriptFile: {type: "text", match: function() {return _match_ScriptFile;}},
+		Function: {type: "text", match: function(operation, ability) {
+			operation._match_function_entity = operation._match_function_entity || new _match_Function_Entity(operation);
+			return operation._match_function_entity.matchFunc;
+		}},
 		UnitName: {type: "text"},
 		UnitCount: {type: "text", match: _match_AbilitySpecial},
 		UnitLimit: {type: "text", match: _match_AbilitySpecial},

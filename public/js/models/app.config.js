@@ -57,6 +57,7 @@ app.factory("Config", function($q) {
 		streamAPIKey: localStorage.getItem("streamAPIKey") || "",
 		eventUseText: localStorage.getItem("eventUseText") === "true",
 		operationUseText: localStorage.getItem("operationUseText") === "true",
+		loopCheckFolder: localStorage.getItem("loopCheckFolder") !== "false",
 	};
 
 	Config.save = function() {
@@ -65,6 +66,7 @@ app.factory("Config", function($q) {
 		localStorage.setItem("streamAPIKey", Config.global.streamAPIKey);
 		localStorage.setItem("eventUseText", Config.global.eventUseText);
 		localStorage.setItem("operationUseText", Config.global.operationUseText);
+		localStorage.setItem("loopCheckFolder", Config.global.loopCheckFolder);
 	};
 
 	// Common configuration: ability, item, unit, hero

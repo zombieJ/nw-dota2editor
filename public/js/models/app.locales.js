@@ -681,7 +681,7 @@ app.factory("Locale", function() {
 		streamKeyDesc: "用于访问Stream API获取Dota2数据，未填写只会影响少部分功能。",
 		applyStreamKey: "如果您还没有Stream API Key，可以通过该地址申请（中国部分地区需要通过VPN访问）：",
 		streamKeyNotSet: "未设置Stream API Key，您可能会遇到数据无法显示。于配置页设置/申请Stream API Key。",
-		saveKeepKV: '保存时保持所有的KV。如果不勾选，会忽略未赋值的键。例如"HasInventory" ""，会被忽略。【目前仅应用于单位和英雄存储】',
+		saveKeepKV: '保存时保持所有的KV。如果不勾选，会忽略未赋值的键。例如"HasInventory" ""，会被忽略。',
 		illegalCharacter: '输入不合法',
 		duplicateDefined: '字段被重复定义',
 		emptyList: "列表为空",
@@ -693,7 +693,8 @@ app.factory("Locale", function() {
 		operationUseText: "技能与物品的操作选项框改成带提示的文本，如果你对操作列表十分熟悉。推荐使用该模式。",
 		originNoPrecache: "在KV中引用到的特效保存时将被自动添加，不需要手动添加precache。",
 		itemAutoID: "物品自动分配ID",
-		itemAutoIDTip: "会自动寻找1500~5000中未使用过的ID作为物品ID"
+		itemAutoIDTip: "会自动寻找1500~5000中未使用过的ID作为物品ID",
+		loopCheckFolder: "保持检查项目所在文件夹，用于Function的自动补全。关闭后不会持续检查目录变化。"
 	};
 
 	return Locale;

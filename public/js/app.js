@@ -231,7 +231,7 @@ app.factory("UI", function ($rootScope, Locale) {
 });
 
 app.controller('main', function ($scope, $route, $location, $q,
-	UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config, Sequence, AppVersionSrv) {
+	UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config, Sequence, AppVersionSrv, AppFileSrv) {
 	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
 	window.Event = $scope.Event = Event;
@@ -245,6 +245,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 	window.Config = $scope.Config = Config;
 	window.Sequence = $scope.Sequence = Sequence;
 	window.AppVersionSrv = $scope.AppVersionSrv = AppVersionSrv;
+	window.AppFileSrv = $scope.AppFileSrv = AppFileSrv;
 	window._NODE = $scope.NODE = NODE;
 	$scope.common = common;
 	$scope.jQuery = $;

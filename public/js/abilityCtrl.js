@@ -1,7 +1,7 @@
 'use strict';
 
 var _abilityCtrl = function(isItem) {
-	return function ($scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config, Language) {
+	return function ($scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config, Language, AppFileSrv) {
 		if (!globalContent.isOpen) return;
 
 		window.scope = $scope;
@@ -31,6 +31,8 @@ var _abilityCtrl = function(isItem) {
 		$scope.setCurrentTab = function (current) {
 			$scope.currentTab = current;
 		};
+
+		AppFileSrv.watchFolder();
 
 		// ================================================================
 		// =                           Function                           =
@@ -479,6 +481,7 @@ var _abilityCtrl = function(isItem) {
 			$(window).off("resize.abilityList");
 			$("#listCntr").off("mousewheel.abilityList");
 			$(document).off("contextmenu.abilityList");
+			AppFileSrv.stopWatch();
 		});
 	};
 };

@@ -45,6 +45,14 @@
 	</label>
 </div>
 
+<div class="checkbox">
+	<label>
+		<input type="checkbox" ng-checked="Config.global.loopCheckFolder" ng-click="Config.global.loopCheckFolder = !Config.global.loopCheckFolder">
+		Keep monitoring project folder
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('loopCheckFolder')}}"></span>
+	</label>
+</div>
+
 <hr/>
 
 <button class="btn btn-primary" ng-click="saveConfig()">{{Locale('Save')}}</button>
