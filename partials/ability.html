@@ -344,7 +344,7 @@
 														<span>{{::Locale('DeleteOnHit')}}</span>
 														<span checkbox data-target="event" data-target-path="DeleteOnHit"></span>
 													</div>
-													<div operationlist="event.value" data-alternative="isitem ? Operation.EventItemOperation : Operation.EventOperation" data-ability="ability"></div>
+													<div operationlist="event.value" data-alternative="isitem ? Operation.OperationItemList : Operation.OperationList" data-ability="ability"></div>
 												</td>
 											</tr>
 											</tbody>
@@ -516,12 +516,12 @@
 											AbilitySpecial 【自定义值】
 										</th>
 									</tr>
-									<tr ng-repeat="_index in optLangAbilitySpecialNum track by $index" ng-show="ability._abilitySpecialList[_index]">
-										<th>{{ability._abilitySpecialList[_index][0]}}</th>
+									<tr ng-repeat="_abilitySpecial in ability.getSpecialList() track by $index">
+										<th>{{_abilitySpecial.value[1].key}}</th>
 										<td>
 											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
 											<input type="text" class="form-control"
-												   ng-model="GC.currentLanguage.map[Language.abilityAttr(ability._name, ability._abilitySpecialList[_index][0])]"
+												   ng-model="GC.currentLanguage.map[Language.abilityAttr(ability._name, _abilitySpecial.value[1].key)]"
 													/>
 										</td>
 									</tr>

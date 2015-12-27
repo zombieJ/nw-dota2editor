@@ -83,6 +83,7 @@ app.factory("Config", function($q) {
 					try {
 						_config._data = JSON.parse(data);
 					} catch(err) {
+						console.warn("[" + type + "] Config fetch error:", err);
 						_config._data = {};
 					}
 

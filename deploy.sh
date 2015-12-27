@@ -15,7 +15,7 @@ read answer
 if echo "$answer" | grep -iq "^y" ;then
 	echo "Compress..."
 	#zip -r "dist_$(date +%Y%m%d).zip" dist
-	7za a -t7z -r "dist_$(date +%Y%m%d).zip" dist/*
+	7za a -t7z -r "dist_$(date +%Y%m%d).7z" dist/*
 else
 	echo "Exit"
 fi
