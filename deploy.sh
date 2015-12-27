@@ -14,7 +14,8 @@ echo -n "Compress the dist file (y/n)? "
 read answer
 if echo "$answer" | grep -iq "^y" ;then
 	echo "Compress..."
-	zip -r "dist_$(date +%Y%m%d).zip" dist
+	#zip -r "dist_$(date +%Y%m%d).zip" dist
+	7za a -t7z -r "dist_$(date +%Y%m%d).zip" dist/*
 else
 	echo "Exit"
 fi
