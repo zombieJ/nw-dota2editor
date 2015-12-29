@@ -453,14 +453,36 @@ hr {
 }
 .ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1 small {
 	color: #999;
+	position: relative;
 }
-.ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1 small a {
+/*.ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1 small a {
 	font-size: 16px;
 	color: #999;
+	position: absolute;
 	display: none;
 }
 .ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1:hover small a {
-	display: inline;
+	display: block;
+}*/
+.ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1 small a {
+	color: #FFFFFF;
+	background: rgba(0,0,0,0.8);
+	padding: 2px 5px;
+	display: none;
+	position: absolute;
+	left: 0;
+	top: -14px;
+	white-space: nowrap;
+	z-index: 1;
+	text-decoration: none;
+	font-size: 14px;
+}
+.ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1:hover small a {
+	display: block;
+	opacity: 0.3;
+}
+.ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1:hover small a:hover {
+	opacity: 1;
 }
 
 .ability-cntr-header .ability-cntr-header-desc input {
@@ -478,7 +500,7 @@ hr {
 
 /* Body */
 .ability-cntr-body {
-	font-family: "Microsoft YaHei",΢���ź�,"Microsoft JhengHei",����ϸ��,STHeiti,MingLiu;
+	font-family: "Microsoft YaHei","Microsoft JhengHei",STHeiti,MingLiu;
 	margin-bottom: 10px;
 }
 

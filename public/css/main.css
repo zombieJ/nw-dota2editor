@@ -152,6 +152,9 @@ div:hover::-webkit-scrollbar-thumb {
 	height: 30px;
 	resize:none;
 }
+.table.table-tiny textarea.form-control {
+	height: auto;
+}
 
 .table.table-tiny .label {
 	margin-right: 5px;

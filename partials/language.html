@@ -14,17 +14,18 @@
 		<div id="floatTool" style="position: fixed; top: 50px;padding-top: 10px; background: #FFF; height: 125px; border-bottom: 1px solid #DDD;" class="row">
 			<div class="col-sm-7 col-md-7">
 				<div class="form-group">
-					<label>Create Text 【创建词条】</label>
-					<input type="text" class="form-control" placeholder="Key 【键】" ng-model="createKey" />
+					<label>Create Text</label>
+					<input type="text" class="form-control" placeholder="Key" ng-model="createKey" />
 				</div>
-				<button class="btn btn-primary" ng-click="create()">Create 【创建】</button>
+				<button class="btn btn-primary" ng-click="create()">Create</button>
 			</div>
 			<div class="col-sm-5 col-md-5">
 				<div class="form-group">
-					<label>Search Text 【搜索词条】</label>
-					<input type="text" class="form-control" placeholder="Key or Value 【键 或 值】" ng-model="searchKey" />
+					<label>Search Text</label>
+					<input type="text" class="form-control" placeholder="Key or Value" ng-model="searchKey" />
 				</div>
-				<button class="btn btn-primary" ng-click="search()">Search 【搜索】</button>
+				<button class="btn btn-primary" ng-click="search()">Search</button>
+				<button class="btn btn-warning" ng-click="search(true)">Search Empty Value</button>
 			</div>
 		</div>
 		
@@ -32,15 +33,18 @@
 			<thead>
 			<tr>
 				<th width="20"></th>
-				<th width="200">Key 【键】</th>
-				<th>Value 【值】</th>
+				<th width="200">Key</th>
+				<th>Value</th>
 			</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="key in keyList track by $index" data-key="{{key}}">
 					<th class="text-center"><a href="javascript:void(0)" ng-click="removeKey(key)">[X]</a></th>
 					<th style="word-break:break-all;">{{key}}</th>
-					<td><textarea class="form-control" rows="5" ng-model="lang.map[key]"></textarea></td>
+					<td>
+						<textarea class="form-control" rows="5" ng-model="GC.currentLanguage.kv.bind(key)"
+						          ng-model-options="{getterSetter: true}"></textarea>
+					</td>
 				</tr>
 			</tbody>
 		</table>

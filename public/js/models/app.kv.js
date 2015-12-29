@@ -47,11 +47,16 @@ app.factory("KV", function(NODE, $q) {
 	};
 
 	_KV.prototype.bind = function(key, valueIsList) {
-		var _kv = this.assumeKey(key, valueIsList);
+		var _kv = this.getKV(key);
 
 		return function(value) {
-			return (arguments.length ? (_kv.value = value) : _kv.value) || "";
-		};
+			if(arguments.length === 0) {
+				return _kv ? (_kv.value || "") : "";
+			} else {
+				if(!_kv) _kv = this.assumeKey(key, valueIsList);
+				return _kv.value = value;
+			}
+		}.bind(this);
 	};
 
 	_KV.prototype.getBoolValue = function(key) {

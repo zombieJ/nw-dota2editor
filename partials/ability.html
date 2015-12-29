@@ -7,7 +7,7 @@
 				<p class="title">
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.get('abilities', _ability._name, 'markColor') || '#CCC'}}"></span>
 					<span class="fa fa-cubes sm" ng-if="config.get('abilities', _ability._name, 'markUsage') === 'dummy'"></span>
-					{{config.get('abilities', _ability._name, 'editorAliasName') || globalContent.mainLang().map[Language.abilityAttr(_ability._name, '')] || _ability._name}}
+					{{config.get('abilities', _ability._name, 'editorAliasName') || globalContent.mainLang().kv.get(Language.abilityAttr(_ability._name, '')) || _ability._name}}
 					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
 						  uib-tooltip="{{::Locale('conflictName')}}" tooltip-placement="right" tooltip-append-to-body="true"></span>
 				</p>
@@ -52,10 +52,13 @@
 
 				<div class="ability-cntr-header-name ability-form">
 					<h1>
-						{{GC.mainLang().map[Language.abilityAttr(ability._name, "")] || Locale('Unnamed')}}
+						{{GC.mainLang().kv.get(Language.abilityAttr(ability._name, "")) || Locale('Unnamed')}}
 						<small>
+							<a ng-click="UI.modal.rename(ability, renameCheck, renameCallback)">
+								<span class="fa fa-edit"></span>
+								{{::Locale('Rename')}}
+							</a>
 							{{ability._name}}
-							<a class="fa fa-edit" ng-click="UI.modal.rename(ability, renameCheck, renameCallback)"></a>
 						</small>
 					</h1>
 				</div>
@@ -491,7 +494,7 @@
 						<!-- ========================= -->
 						<!-- =      Description      = -->
 						<!-- ========================= -->
-						<div ng-if="language">
+						<div ng-if="language && ability">
 							<h3>Description 【描述】</h3>
 							<table class="ability-table" ng-show="language.ready">
 								<tbody>
@@ -503,10 +506,10 @@
 										</th>
 										<td>
 											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
-											<input type="text" class="form-control" ng-if="langField.type === 'text'"
-											       ng-model="GC.currentLanguage.map[Language.abilityAttr(ability._name, langField.attr)]" />
-											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
-											          ng-model="GC.currentLanguage.map[Language.abilityAttr(ability._name, langField.attr)]"></textarea>
+											<input type="text" ng-model="GC.currentLanguage.kv.bind(Language.abilityAttr(ability._name, langField.attr))"
+											       ng-model-options="{getterSetter: true}" class="form-control" ng-if="langField.type === 'text'"/>
+											<textarea ng-model="GC.currentLanguage.kv.bind(Language.abilityAttr(ability._name, langField.attr))"
+											          ng-model-options="{getterSetter: true}" class="form-control" ng-if="langField.type === 'blob'"></textarea>
 										</td>
 									</tr>
 
@@ -520,9 +523,8 @@
 										<th>{{_abilitySpecial.value[1].key}}</th>
 										<td>
 											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
-											<input type="text" class="form-control"
-												   ng-model="GC.currentLanguage.map[Language.abilityAttr(ability._name, _abilitySpecial.value[1].key)]"
-													/>
+											<input type="text" ng-model="GC.currentLanguage.kv.bind(Language.abilityAttr(ability._name, _abilitySpecial.value[1].key))"
+											       ng-model-options="{getterSetter: true}" class="form-control" />
 										</td>
 									</tr>
 								</tbody>
@@ -547,10 +549,10 @@
 										</th>
 										<td>
 											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
-											<input type="text" class="form-control" ng-if="langField.type === 'text'"
-													ng-model="GC.currentLanguage.map[Language.modifierAttr(modifier.key, langField.attr)]" />
-											<textarea class="form-control" ng-if="langField.type === 'blob'" rows="5"
-													ng-model="GC.currentLanguage.map[Language.modifierAttr(modifier.key, langField.attr)]"></textarea>
+											<input type="text" ng-model="GC.currentLanguage.kv.bind(Language.modifierAttr(modifier.key, langField.attr))"
+											       ng-model-options="{getterSetter: true}" class="form-control" ng-if="langField.type === 'text'"/>
+											<textarea ng-model="GC.currentLanguage.kv.bind(Language.modifierAttr(modifier.key, langField.attr))"
+											          ng-model-options="{getterSetter: true}" class="form-control" ng-if="langField.type === 'blob'"></textarea>
 										</td>
 									</tr>
 								</tbody>

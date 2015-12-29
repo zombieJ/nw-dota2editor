@@ -63,8 +63,8 @@ var _unitCtrl = function(isHero) {
 					// Clone Language
 					if($scope._newUnitForkLang) {
 						$.each(globalContent.languageList, function(i, lang) {
-							lang.map[Language.unitAttr(_clone, "")] = lang.map[Language.unitAttr($scope._newUnitFork, "")];
-							lang.map[Language.unitAttr(_clone, "bio")] = lang.map[Language.unitAttr($scope._newUnitFork, "bio")];
+							lang.kv.set(Language.unitAttr(_clone, ""), lang.kv.get(Language.unitAttr($scope._newUnitFork, "")));
+							lang.kv.set(Language.unitAttr(_clone, "bio"), lang.kv.get(Language.unitAttr($scope._newUnitFork, "bio")));
 						});
 					}
 
@@ -102,11 +102,11 @@ var _unitCtrl = function(isHero) {
 			if(entity.kv.get("override_hero", false)) return;
 
 			$.each(globalContent.languageList, function(i, lang) {
-				if(lang.map[oldName] !== undefined) lang.map[newName] = lang.map[oldName];
-				delete lang.map[oldName];
+				if(!lang.kv.get(oldName)) lang.kv.set(newName, lang.kv.get(oldName));
+				lang.map.kv.delete(oldName);
 
-				if(lang.map[oldName + "_bio"] !== undefined) lang.map[newName + "_bio"] = lang.map[oldName + "_bio"];
-				delete lang.map[oldName + "_bio"];
+				if(!lang.kv.get(oldName + "_bio")) lang.kv.set(newName + "_bio", lang.kv.get(oldName + "_bio"));
+				lang.map.kv.delete(oldName + "_bio");
 			});
 		};
 

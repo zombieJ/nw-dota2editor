@@ -9,7 +9,7 @@ app.factory("Language", function($q, KV, NODE, Config) {
 		var _my = this;
 		_my.fileName = fileName;
 		_my.name = _my.fileName.replace(/^addon_(\w+)\.txt$/i, "$1");
-		_my.map = null;
+		//_my.map = null;
 		_my.ready = false;
 		_my._promise = _deferred.promise;
 
@@ -17,9 +17,12 @@ app.factory("Language", function($q, KV, NODE, Config) {
 			var _kv = KV.parse(data.substr(1));
 
 			_my.name = _kv.get("Language", false);
-			_my.map = _kv.getKV("Tokens", false).kvToMap();
+			//_my.map = _kv.getKV("Tokens", false).kvToMap();
+			_my.kv = _kv.getKV("Tokens", false);
+			_my._oriKV = _kv;
 
 			_my.ready = true;
+
 			_deferred.resolve();
 		});
 

@@ -142,7 +142,7 @@ var _abilityCtrl = function(isItem) {
 							$.each(Language.AbilityLang, function(i, langField) {
 								var _oriKey = Language.abilityAttr($scope._newAbilityFork._name, langField.attr);
 								var _tgtKey = Language.abilityAttr(_clone._name, langField.attr);
-								lang.map[_tgtKey] = lang.map[_oriKey];
+								lang.kv.set(_tgtKey, lang.kv.get(_oriKey));
 							});
 						});
 					}
@@ -206,7 +206,11 @@ var _abilityCtrl = function(isItem) {
 				}
 			}
 
-			if($scope._newTmplAbility._autoID) $scope.assignAutoID($scope.ability);
+			// Item
+			_newAbility.kv.set("BaseClass", "item_datadriven");
+			if($scope._newTmplAbility._autoID) {
+				$scope.assignAutoID($scope.ability);
+			}
 
 			setTimeout(function() {
 				$("#listCntr").scrollTop(9999999);
@@ -228,9 +232,9 @@ var _abilityCtrl = function(isItem) {
 		$scope.assignAutoID = function(ability) {
 			if(!isItem) return;
 
-			var _IDs = [];
+			var _IDs = {};
 			$.each($scope.abilityList, function(i, _ability) {
-				_IDs[_ability.ID] = true;
+				_IDs[_ability.get("ID")] = true;
 			});
 
 			for(var _id = 1500 ; _id < 5000 ; _id += 1) {
@@ -256,8 +260,8 @@ var _abilityCtrl = function(isItem) {
 				$.each(Language.AbilityLang, function(i, langField) {
 					var _oldKey = Language.abilityAttr(oldName, langField.attr);
 					var _newKey = Language.abilityAttr(newName, langField.attr);
-					if(lang.map[_oldKey] !== undefined) lang.map[_newKey] = lang.map[_oldKey];
-					delete lang.map[_oldKey];
+					if(!lang.kv.get(_oldKey)) lang.kv.set(_newKey, lang.kv.get(_oldKey));
+					lang.kv.delete(_oldKey);
 				});
 			});
 		};
@@ -282,8 +286,8 @@ var _abilityCtrl = function(isItem) {
 				$.each(Language.ModifierLang, function(i, langField) {
 					var _oldKey = Language.modifierAttr(oldName, langField.attr);
 					var _newKey = Language.modifierAttr(newName, langField.attr);
-					if(lang.map[_oldKey] !== undefined) lang.map[_newKey] = lang.map[_oldKey];
-					if(!_conflict) delete lang.map[_oldKey];
+					if(!lang.kv.get(_oldKey)) lang.kv.set(_newKey, lang.kv.get(_oldKey));
+					if(!_conflict) lang.kv.delete(_oldKey);
 				});
 			});
 		};

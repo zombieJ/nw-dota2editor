@@ -12,20 +12,20 @@ hammerControllers.controller('languageCtrl', function ($scope, globalContent) {
 	};
 
 	$scope.removeKey = function(key) {
-		delete $scope.lang.map[key];
+		delete $scope.lang.kv.delete(key);
 		$scope.search();
 	};
 
 	$scope.create = function() {
 		var _key = $scope.createKey;
-		if($scope.lang.map[$scope.createKey] !== undefined) {
+		if($scope.lang.kv.get($scope.createKey) !== null) {
 			$.dialog({
 				title: "OPS!",
 				content: "Key already exist! 【键值已存在】"
 			});
 		} else {
 			$scope.searchKey = "";
-			$scope.lang.map[$scope.createKey] = "";
+			$scope.lang.kv.set($scope.createKey, "");
 			$scope.createKey = "";
 			$scope.search();
 
@@ -38,15 +38,25 @@ hammerControllers.controller('languageCtrl', function ($scope, globalContent) {
 		}
 	};
 
-	$scope.search = function() {
+	$scope.search = function(emptyValue) {
 		if(!$scope.lang) return;
 
 		var _key = $scope.searchKey;
-		$scope.keyList = $.map($scope.lang.map, function(value, key) {
-			if(key.indexOf(_key) !== -1 || (value || "").indexOf(_key) !== -1) {
-				return key;
-			}
-		});
+		if(!emptyValue) {
+			$scope.keyList = $.map($scope.lang.kv.value, function (kv) {
+				var key = kv.key;
+				var value = kv.value;
+				if (key.indexOf(_key) !== -1 || (value || "").indexOf(_key) !== -1) {
+					return key;
+				}
+			});
+		} else {
+			$scope.keyList = $.map($scope.lang.kv.value, function (kv) {
+				if((kv.value || "").trim() === "") {
+					return kv.key;
+				}
+			});
+		}
 	};
 
 	// ================================================================

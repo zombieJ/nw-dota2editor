@@ -273,7 +273,8 @@ app.controller('main', function ($scope, $route, $location, $q,
 				common.array.replace(globalContent.languageList, $.map(fileList, function (fileName) {
 					return new Language(fileName);
 				}));
-				globalContent.currentLanguage = globalContent.languageList[0];
+				// Set default language
+				globalContent.currentLanguage = common.array.find(Config.global.mainLang, globalContent.languageList, "name", false, false) || globalContent.languageList[0];
 			}, function () {
 				common.array.replace(globalContent.languageList, []);
 			}).finally(function () {
@@ -424,18 +425,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 
 				$.each(globalContent.languageList, function (i, language) {
 					var _writer = new KV.Writer();
-					_writer.withHeader("lang", {Language: language.name});
-					_writer.write('"Tokens"');
-					_writer.write('{');
-
-					$.each(language.map, function (key, value) {
-						if (value === undefined) return;
-
-						_writer.write('"$1"		"$2"', key, value);
-					});
-
-					_writer.write('}');
-					_writer.withEnd();
+					_writer.writeContent(language._oriKV.toString());
 
 					_promiseList.push(_writer.save(Language.folderPath + "/" + language.fileName.replace(/^_/, "").replace(/\.bac/, ""), "ucs2"));
 					$q.all(_promiseList).then(function () {
