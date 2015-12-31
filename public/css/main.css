@@ -285,6 +285,31 @@ label.checkbox input[type="checkbox"] {
 	color: #FFF;
 }
 
+/* Simple Navigation bar */
+.simple-nav-bar {
+	-webkit-user-select:none;
+}
+
+.simple-nav-bar li {
+	margin-bottom: 5px;
+}
+
+.simple-nav-bar li a {
+	padding: 0px 6px;
+	border-radius: 3px;
+	min-width: 35px;
+	display: inline-block;
+	text-align: center;
+}
+.simple-nav-bar li a:hover {
+	background: rgba(0,0,0,0.1);
+	text-decoration: none;
+}
+.simple-nav-bar li.disabled a {
+	color: #FFFFFF;
+	background: rgba(0,0,0,0.3);
+}
+
 /* KV Tree */
 .kv-tree .kv-tree-menu:hover {
 	background: rgba(0,0,0,0.05);

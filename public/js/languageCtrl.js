@@ -1,91 +1,91 @@
 'use strict';
 
-hammerControllers.controller('languageCtrl', function ($scope, globalContent) {
-	$scope.languageList = globalContent.languageList;
-	$scope.lang = $scope.languageList[0];
-	$scope.keyList = [];
+hammerControllers.controller('languageCtrl', function ($scope, Locale, globalContent) {
+	$scope.filteredList = [];
 	$scope.searchKey = "";
+	$scope.pageSize = 10;
+	$scope.pageNumber = 0;
+	$scope.currentList = [];
+	var _lastSearchEmptyValue = false;
 
-	$scope.setLang = function(lang) {
-		$scope.lang = lang;
-		$scope.search();
-	};
+	$scope.newKV = function() {
+		UI.modal.input(Locale('New'), Locale('Key'), '', function(key) {
+			var _kv = globalContent.currentLanguage.kv.getKV(key);
+			if(_kv) return false;
 
-	$scope.removeKey = function(key) {
-		delete $scope.lang.kv.delete(key);
-		$scope.search();
-	};
-
-	$scope.create = function() {
-		var _key = $scope.createKey;
-		if($scope.lang.kv.get($scope.createKey) !== null) {
-			$.dialog({
-				title: "OPS!",
-				content: "Key already exist! 【键值已存在】"
-			});
-		} else {
+			// Fill KV
+			_kv = globalContent.currentLanguage.kv.assumeKey(key);
 			$scope.searchKey = "";
-			$scope.lang.kv.set($scope.createKey, "");
-			$scope.createKey = "";
-			$scope.search();
+			$scope.search(false);
+
+			// Focus
+			var _totalPageCount = $scope.navPages().length;
+			$scope.updateCurrentList(_totalPageCount - 1);
+			$scope.$apply();
 
 			setTimeout(function() {
-				var ele = $("[data-key='" + _key + "']");
-				console.log(ele);
-				common.ui.scrollTo(ele);
-				ele.find("textarea").focus();
-			}, 10);
-		}
+				$("textarea[data-key='" + _kv.key + "']").focus();
+			}, 100);
+		});
 	};
 
 	$scope.search = function(emptyValue) {
-		if(!$scope.lang) return;
+		if(!GC.currentLanguage) return;
+		_lastSearchEmptyValue = emptyValue;
 
 		var _key = $scope.searchKey;
 		if(!emptyValue) {
-			$scope.keyList = $.map($scope.lang.kv.value, function (kv) {
+			$scope.filteredList = $.map(GC.currentLanguage.kv.value, function (kv) {
 				var key = kv.key;
 				var value = kv.value;
 				if (key.indexOf(_key) !== -1 || (value || "").indexOf(_key) !== -1) {
-					return key;
+					return kv;
 				}
 			});
 		} else {
-			$scope.keyList = $.map($scope.lang.kv.value, function (kv) {
+			$scope.filteredList = $.map(GC.currentLanguage.kv.value, function (kv) {
 				if((kv.value || "").trim() === "") {
-					return kv.key;
+					return kv;
 				}
 			});
 		}
+
+		$scope.updateCurrentList(0);
 	};
 
-	// ================================================================
-	// =                              UI                              =
-	// ================================================================
-	// 列表框布局
-	var winWidth;
-	$(window).on("resize.abilityList", function() {
-		setTimeout(function() {
-			var _winWidth = $(window).width();
-			if(_winWidth !== winWidth) {
-				var _left = $(".languageCntr").offset().left;
-				$("#listCntr").outerWidth(_left - 15);
-				$("#floatTool").outerWidth($(".languageCntr").outerWidth());
-			}
-			winWidth = _winWidth;
-		}, 100);
-	}).resize();
+	$scope.updateCurrentList = function(pageNum) {
+		$scope.pageNumber = pageNum;
+		$scope.currentList = $scope.filteredList.slice($scope.pageNumber * $scope.pageSize, ($scope.pageNumber + 1) * $scope.pageSize);
+	};
 
-	$scope.$on("$destroy",function() {
-		$(window).off("resize.abilityList");
-	});
+	$scope.navPages = function() {
+		return common.array.num(Math.ceil($scope.filteredList.length / $scope.pageSize));
+	};
+
+	$scope.refresh = function() {
+		$scope.search(_lastSearchEmptyValue);
+	};
 
 	// ================================================================
 	// =                           Start Up                           =
 	// ================================================================
-	if($scope.lang) {
-		$scope.lang._promise.then(function() {
+	if(GC.currentLanguage) {
+		GC.currentLanguage._promise.then(function() {
 			$scope.search();
 		});
 	}
+
+	// ================================================================
+	// =                          Global Key                          =
+	// ================================================================
+	globalContent.hotKey($scope, {
+		N: function() {
+			$scope.newKV();
+		},
+		_N: "Create new KV",
+		F: function() {
+			$("#search").focus();
+		},
+		_F: "Search KV"
+	});
 });

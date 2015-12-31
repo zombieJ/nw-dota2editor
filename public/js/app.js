@@ -72,6 +72,44 @@ app.factory("globalContent", function (Config) {
 		return common.array.find(Config.global.mainLang, _globalContent.languageList, "name", false, false) || _globalContent.languageList[0];
 	};
 
+	// Hot key
+	_globalContent.hotKey = function($scope, funcMapping) {
+		$(document).on("keydown.global", function(e) {
+			if(e.ctrlKey) {
+				var _key = (String.fromCharCode(e.which) || "").toUpperCase();
+				if(funcMapping[_key]) {
+					// Hot key
+					funcMapping[_key](e);
+				} else if(_key === 'H') {
+					// Help list
+					var $div = $("<div>");
+					$.each(funcMapping, function(key, func) {
+						if(/^_\w/.test(key)) return;
+
+						$div.append(
+							$("<p>")
+								.append("<label>Ctrl + " + key + ":</label> ")
+								.append("<span>" + funcMapping["_" + key] + "</span>")
+						);
+					});
+
+					$.dialog({
+						title: "Hot Key List",
+						content: $div
+					});
+				}
+			}
+
+			if(window._DEBUG) {
+				console.log(e.which, e);
+			}
+		});
+
+		$scope.$on("$destroy",function() {
+			$(document).off("keydown.global");
+		});
+	};
+
 	return _globalContent;
 });
 
@@ -232,6 +270,7 @@ app.factory("UI", function ($rootScope, Locale) {
 
 app.controller('main', function ($scope, $route, $location, $q,
 	UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config, Sequence, AppVersionSrv, AppFileSrv) {
+	window._DEBUG = false;
 	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
 	window.Event = $scope.Event = Event;

@@ -368,7 +368,7 @@
 							<thead>
 								<tr>
 									<th width="34"></th>
-									<th width="110">{{Locale('Type')}}</th>
+									<th width="150">{{Locale('Type')}}</th>
 									<th>{{Locale('Value')}}</th>
 								</tr>
 							</thead>
@@ -379,7 +379,7 @@
 									</th>
 									<td class="ability-form">
 										<select ng-model="_precache.key">
-											<option ng-repeat="_type in ['particle','soundfile','model']">{{_type}}</option>
+											<option ng-repeat="_type in ['particle','soundfile','model','particle_folder','soundfile_folder','model_folder']">{{_type}}</option>
 										</select>
 									</td>
 									<td class="ability-form">

@@ -660,6 +660,11 @@ app.factory("Locale", function() {
 		AttributeBaseIntelligence: "基础智力",
 		AttributeIntelligenceGain: "升级智力获得",
 
+		// 语言
+		ShowAll: "显示全部",
+		ShowEmpty: "显示空值",
+		Search: "搜索",
+
 		// 菜单
 		EditorAlias: "编辑器别名",
 		UsageMarker: "功能标记",

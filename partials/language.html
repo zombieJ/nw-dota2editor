@@ -1,36 +1,29 @@
 <div class="row">
-	<div class="col-sm-2 col-md-2">
-		<div id="listCntr" class="listCntr noSelect">
-			<div ng-repeat="_lang in languageList track by $index" class="listItem"
-			     ng-class="{active: lang == _lang}" ng-click="setLang(_lang);">
+	<div class="col-sm-3 col-md-2">
+		<div class="listCntr noSelect">
+			<div ng-repeat="_lang in GC.languageList track by $index" class="listItem"
+			     ng-class="{active: GC.currentLanguage == _lang}" ng-click="GC.currentLanguage = _lang;refresh();">
 				<p class="title">
-					{{config.languages[_lang.name].editorAliasName || _lang.name}}
+					{{_lang.name}}
 				</p>
-				<p class="desc">{{_lang.name}}</p>
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-9 col-md-10 languageCntr" ng-show="lang">
-		<div id="floatTool" style="position: fixed; top: 50px;padding-top: 10px; background: #FFF; height: 125px; border-bottom: 1px solid #DDD;" class="row">
-			<div class="col-sm-7 col-md-7">
-				<div class="form-group">
-					<label>Create Text</label>
-					<input type="text" class="form-control" placeholder="Key" ng-model="createKey" />
+	<div class="col-sm-9 col-md-10 languageCntr">
+		<div class="row">
+			<div class="col-sm-6 col-md-7">
+				<div class="btn-group" role="group">
+					<button class="btn btn-primary" ng-click="searchKey='';search(false);">{{Locale('ShowAll')}}</button>
+					<button class="btn btn-primary" ng-click="search(true)">{{Locale('ShowEmpty')}}</button>
 				</div>
-				<button class="btn btn-primary" ng-click="create()">Create</button>
+				<button class="btn btn-primary" ng-click="newKV()">{{Locale('New')}}</button>
 			</div>
-			<div class="col-sm-5 col-md-5">
-				<div class="form-group">
-					<label>Search Text</label>
-					<input type="text" class="form-control" placeholder="Key or Value" ng-model="searchKey" />
-				</div>
-				<button class="btn btn-primary" ng-click="search()">Search</button>
-				<button class="btn btn-warning" ng-click="search(true)">Search Empty Value</button>
+			<div class="col-sm-6 col-md-5">
+				<input type="text" class="form-control" placeholder="{{Locale('Search')}}" ng-model="searchKey" ng-change="search()" id="search" />
 			</div>
 		</div>
-		
-		<table class="table table-condensed table-bordered table-tiny" style="margin-top: 125px;">
-			<thead>
+
+		<table class="table table-condensed table-bordered table-tiny" style="margin-top: 10px;">
 			<tr>
 				<th width="20"></th>
 				<th width="200">Key</th>
@@ -38,16 +31,26 @@
 			</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="key in keyList track by $index" data-key="{{key}}">
-					<th class="text-center"><a href="javascript:void(0)" ng-click="removeKey(key)">[X]</a></th>
-					<th style="word-break:break-all;">{{key}}</th>
-					<td>
-						<textarea class="form-control" rows="5" ng-model="GC.currentLanguage.kv.bind(key)"
-						          ng-model-options="{getterSetter: true}"></textarea>
-					</td>
-				</tr>
-			</tbody>
+			<tr ng-repeat="kv in currentList track by $index" data-key="{{key}}">
+				<th class="text-center"><a ng-click="UI.arrayDelete(kv, GC.currentLanguage.kv.value, refresh)">[X]</a></th>
+				<th style="word-break:break-all; padding: 3px;line-height: 110%;">{{kv.key}}</th>
+				<td>
+					<textarea class="form-control" rows="3" ng-model="kv.value" data-key="{{kv.key}}"></textarea>
+				</td>
+			</tr>
+
+			<tr ng-show="currentList.length === 0">
+				<td colspan="3" class="text-muted">Empty List</td>
+			</tr>
 		</table>
+
+		<ul class="list-inline simple-nav-bar">
+			<li><a ng-click="updateCurrentList(pageNumber <= 1 ? 0 : pageNumber - 1)">&lt;</a></li>
+			<li ng-class="{disabled: pageNumber === page}" ng-repeat="page in navPages() track by $index">
+				<a ng-click="updateCurrentList(page)">{{page + 1}}</a>
+			</li>
+			<li><a ng-click="updateCurrentList(pageNumber >= navPages().length - 1 ? navPages().length - 1 : pageNumber + 1)">&gt;</a></li>
+		</ul>
 	</div>
 </div>
 
