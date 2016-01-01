@@ -565,6 +565,19 @@
 	</div>
 </div>
 
+
+<!-- ====================================================================== -->
+<!-- =                               Search                               = -->
+<!-- ====================================================================== -->
+<div class="top-box" ng-show="searchBox">
+	<div class="row">
+		<div class="col-md-12">
+			<input tipfield type="text" id="search" data-matchfuc="searchMatch" ng-model="searchKey"
+			       class="form-control" placeholder="{{Locale('Search')}}..." ng-keyup="searchPress($event)">
+		</div>
+	</div>
+</div>
+
 <!-- ====================================================================== -->
 <!-- =                              技能菜单                              = -->
 <!-- ====================================================================== -->

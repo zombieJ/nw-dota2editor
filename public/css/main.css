@@ -310,6 +310,23 @@ label.checkbox input[type="checkbox"] {
 	background: rgba(0,0,0,0.3);
 }
 
+/* Top box */
+.top-box {
+	width: 100%;
+	position: fixed;
+	top: 50px;
+	left: 0;
+	background: #FFFFFF;
+	padding: 10px 15px;
+	border-bottom: 1px solid #999;
+	box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+}
+
+.top-box .app-menu {
+	top: 33px;
+	left: 15px;
+}
+
 /* KV Tree */
 .kv-tree .kv-tree-menu:hover {
 	background: rgba(0,0,0,0.05);

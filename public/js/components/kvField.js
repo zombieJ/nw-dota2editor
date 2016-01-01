@@ -90,9 +90,7 @@ components.directive('kvfield', function($compile) {
 
 			// Operation
 			'<div class="ability-form-operationList" ng-switch-when="operation">' +
-				//'<div eventoperation data-container="operation.attrs" data-path="{{opcol}}"></div>' +
-				//'{{getKV().assumeKeyList(getAttrPath())}}'+
-				'<div operationlist="getKV().assumeKey(getAttrPath(), true).value" data-alternative="Operation.EventItemOperation" data-ability="ability"></div>'+
+				'<div operationlist="getKV().assumeKey(getAttrPath(), true).value" data-alternative="Operation.OperationItemList" data-ability="ability"></div>'+
 			'</div>' +
 
 			// Default

@@ -133,6 +133,12 @@ common.text.equals = function(strA, strB) {
 	return (strA + "").toUpperCase() === (strB + "").toUpperCase();
 };
 
+common.text.contains = function(oriStr, subStr) {
+	oriStr = (oriStr || "").toUpperCase();
+	subStr = (subStr || "").toUpperCase();
+	return oriStr.indexOf(subStr) !== -1;
+};
+
 // ====================== Array =======================
 common.array = {};
 

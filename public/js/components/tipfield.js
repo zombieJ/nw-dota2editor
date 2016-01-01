@@ -18,7 +18,8 @@ components.directive('tipfield', function($compile) {
 
 			$scope.selectItem = function(item) {
 				$element.val(item.value);
-				$element.trigger('input');
+				$element.trigger('input', item);
+				$element.trigger('selected', item);
 				$scope.currentList = [];
 			};
 

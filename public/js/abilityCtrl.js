@@ -420,6 +420,47 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		// ================================================================
+		// =                            Search                            =
+		// ================================================================
+		$scope.searchBox = false;
+
+		$scope.searchPress = function($event) {
+			if($event.which === 27) {
+				$scope.searchBox = false;
+			}
+		};
+
+		$scope.searchMatch = function(match) {
+			match = (match || "").toUpperCase();
+			var _mainLangKV = globalContent.mainLang().kv;
+
+			var _list = $.map($scope.abilityList, function(_ability) {
+				if(
+					common.text.contains(_ability._name, match) ||															// Name
+					common.text.contains(_ability.kv.comment, match) ||														// Comment
+					common.text.contains($scope.config.get('abilities', _ability._name, 'editorAliasName'), match) ||		// Alias
+					common.text.contains(_mainLangKV.get(Language.abilityAttr(_ability._name, '')), match) ||				// Main language name
+					common.text.contains(_mainLangKV.get(Language.abilityAttr(_ability._name, 'Description')), match)		// Main language description
+				) {
+					return {
+						_key: $scope.config.get('abilities', _ability._name, 'editorAliasName') || globalContent.mainLang().kv.get(Language.abilityAttr(_ability._name, '')) || null,
+						value: _ability._name,
+						ability: _ability
+					};
+				}
+			});
+			return _list;
+		};
+
+		$("#search").on("selected.search", function(e, item) {
+			var _ability = item.ability;
+			if(_ability) {
+				$scope.ability = _ability;
+				$scope.searchBox = false;
+			}
+		});
+
+		// ================================================================
 		// =                              UI                              =
 		// ================================================================
 		// Select ability
@@ -474,6 +515,24 @@ var _abilityCtrl = function(isItem) {
 			return false;
 		});
 
+		// ================================================================
+		// =                          Global Key                          =
+		// ================================================================
+		globalContent.hotKey($scope, {
+			N: function() {
+				$scope.newTmplAbility();
+			},
+			_N: "Create new template ability",
+			F: function() {
+				$scope.searchKey = "";
+				$scope.searchBox = true;
+				setTimeout(function () {
+					$("#search").focus();
+				}, 100);
+			},
+			_F: "Search ability"
+		});
+
 		// =================================================================
 		// =                          Application                          =
 		// =================================================================
@@ -485,6 +544,7 @@ var _abilityCtrl = function(isItem) {
 			$(window).off("resize.abilityList");
 			$("#listCntr").off("mousewheel.abilityList");
 			$(document).off("contextmenu.abilityList");
+			$("#search").off("selected.search");
 			AppFileSrv.stopWatch();
 		});
 	};

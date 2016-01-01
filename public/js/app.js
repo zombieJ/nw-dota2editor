@@ -80,6 +80,7 @@ app.factory("globalContent", function (Config) {
 				if(funcMapping[_key]) {
 					// Hot key
 					funcMapping[_key](e);
+					$scope.$apply();
 				} else if(_key === 'H') {
 					// Help list
 					var $div = $("<div>");
