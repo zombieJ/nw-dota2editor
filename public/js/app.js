@@ -725,16 +725,21 @@ app.controller('main', function ($scope, $route, $location, $q,
 	});
 
 	// 关闭确认
+	var _closeDlg = false;
 	try {
 		var gui = require('nw.gui');
 		var win = gui.Window.get();
 		win.on('close', function () {
+			if(_closeDlg) this.close(true);
+
 			var _my = this;
+			_closeDlg = true;
 			$.dialog({
 				title: Locale('Exit'),
 				content: Locale('exitConfirm'),
 				confirm: true,
 			}, function (ret) {
+				_closeDlg = false;
 				if (!ret) return;
 				_my.close(true);
 			});

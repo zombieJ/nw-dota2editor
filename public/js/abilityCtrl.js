@@ -461,6 +461,84 @@ var _abilityCtrl = function(isItem) {
 		});
 
 		// ================================================================
+		// =                        Ability Check                         =
+		// ================================================================
+		$scope.checkReportFilter = "";
+		$scope.checkReport = [];
+		$scope.checkReportFilteredList = [];
+
+		$scope.abilitiesCheck = function() {
+			$scope.checkReportFilter = "";
+			$scope.checkReportFilteredList = $scope.checkReport = [];
+
+			$.each($scope.abilityList, function(i, _ability) {
+				var _markUsage = $scope.config.get('abilities', _ability._name, 'markUsage');
+				if(_markUsage === 'dummy' || _markUsage === 'test') return;
+
+				// Language check
+				$.each(globalContent.languageList, function(j, lang) {
+					// Ability
+					$.each(Language.AbilityLang, function(k, langField) {
+						if(!langField.frequent) return;
+						if(!lang.kv.get(Language.abilityAttr(_ability._name, langField.attr))) {
+							$scope.checkReport.push({
+								ability: _ability,
+								language: lang,
+								langField: langField
+							});
+						}
+					});
+
+					// Modifier
+					$.each(_ability.getModifierList(), function (k, modifierKV) {
+						if(modifierKV.get('IsHidden') === '1') return;
+
+						$.each(Language.ModifierLang, function(l, langField) {
+							if(!langField.frequent) return;
+							if(!lang.kv.get(Language.modifierAttr(modifierKV.key, langField.attr))) {
+								$scope.checkReport.push({
+									ability: _ability,
+									modifier: modifierKV,
+									language: lang,
+									langField: langField
+								});
+							}
+						});
+					});
+				});
+
+				if($scope.checkReport.length >= 100) return false;
+			});
+
+			$("#checkReportMDL").modal();
+			console.log($scope.checkReport);
+		};
+
+		$scope.checkReportFilterChange = function() {
+			var _keys = $scope.checkReportFilter.split(/\s+/);
+			$scope.checkReportFilteredList = $.grep($scope.checkReport, function(item) {
+				var _has = true;
+				$.each(_keys, function(i, key) {
+					if(
+						// Language
+						common.text.contains(item.language.name, key) ||
+						common.text.contains(item.langField.attr || 'Title', key) ||
+						// Ability
+						common.text.contains(item.ability._name, key) ||
+						// Modifier
+						common.text.contains(common.getValueByPath(item, "modifier.key"), key) ||
+						common.text.contains(item.modifier && "modifier", key)
+					) {} else {
+						_has = false;
+						return false;
+					}
+				});
+
+				return _has;
+			});
+		};
+
+		// ================================================================
 		// =                              UI                              =
 		// ================================================================
 		// Select ability
@@ -518,7 +596,7 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                          Global Key                          =
 		// ================================================================
-		globalContent.hotKey($scope, {
+		var _hotKeySetting = {
 			N: function() {
 				$scope.newTmplAbility();
 			},
@@ -530,8 +608,27 @@ var _abilityCtrl = function(isItem) {
 					$("#search").focus();
 				}, 100);
 			},
-			_F: "Search ability"
+			_F: "Search ability",
+			L: function() {
+				$("#descriptionTab").click();
+			},
+			_L: "Switch to Tab [Language]"
+		};
+
+		// Fast Tab
+		var _tabList = [["O", "common"],["E", "events"],["M", "modifiers"],["S", "abilitySpecial"],["P", "precache"],["U", "unassigned"]];
+		if(isItem) _tabList.push(["I", "item"]);
+		$.each(_tabList, function(i, tabEntity) {
+			var _key = tabEntity[0];
+			var _tab = tabEntity[1];
+			_hotKeySetting[_key] = function() {
+				$scope.currentTab = _tab;
+				$("#abilityTab").click();
+			};
+			_hotKeySetting["_"+_key] = "Switch to Tab [" + _tab + "]";
 		});
+
+		globalContent.hotKey($scope, _hotKeySetting);
 
 		// =================================================================
 		// =                          Application                          =

@@ -7,6 +7,7 @@
 				<p class="title">
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.get('abilities', _ability._name, 'markColor') || '#CCC'}}"></span>
 					<span class="fa fa-cubes sm" ng-if="config.get('abilities', _ability._name, 'markUsage') === 'dummy'"></span>
+					<span class="fa fa-rocket sm" ng-if="config.get('abilities', _ability._name, 'markUsage') === 'test'"></span>
 					{{config.get('abilities', _ability._name, 'editorAliasName') || globalContent.mainLang().kv.get(Language.abilityAttr(_ability._name, '')) || _ability._name}}
 					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
 						  uib-tooltip="{{::Locale('conflictName')}}" tooltip-placement="right" tooltip-append-to-body="true"></span>
@@ -33,21 +34,17 @@
 			<div class="ability-cntr-header-desc">
 				<ul class="nav nav-pills pull-right">
 					<li class="active">
-						<a data-toggle="tab" class="fa fa-file-code-o" href="[data-id='ability']"></a>
+						<a data-toggle="tab" class="fa fa-file-code-o" href="[data-id='ability']" id="abilityTab"></a>
 						<span class="nav-tip">{{::Locale('Ability')}}</span>
 					</li>
 					<li>
-						<a data-toggle="tab" class="fa fa-book" href="[data-id='description']"></a>
+						<a data-toggle="tab" class="fa fa-book" href="[data-id='description']" id="descriptionTab"></a>
 						<span class="nav-tip">{{::Locale('Language')}}</span>
 					</li>
 					<li>
 						<a class="fa fa-check-circle-o" ng-click="abilitiesCheck()"></a>
 						<span class="nav-tip">{{::Locale('Inspection')}}</span>
 					</li>
-					<!--li ng-show="isItem">
-						<a class="fa fa-print" ng-click="itemPrecacheList()"></a>
-						<span class="nav-tip">Precache Script 【预载脚本】</span>
-					</li-->
 				</ul>
 
 				<div class="ability-cntr-header-name ability-form">
@@ -587,6 +584,7 @@
 		<a>{{Locale('UsageMarker')}}</a>
 		<ul class="app-menu">
 			<li><a ng-click="setAbilityMarkUsage('dummy');">{{Locale('Dummy')}}</a></li>
+			<li><a ng-click="setAbilityMarkUsage('test');">{{Locale('Test')}}</a></li>
 			<li class="line"></li>
 			<li><a ng-click="setAbilityMarkUsage();">{{Locale('NoMark')}}</a></li>
 		</ul>
@@ -713,22 +711,41 @@
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Check Report 【检测报告】</h4>
+				<input type="text" class="form-control pull-right" style="width: 30%;"
+				       ng-model="checkReportFilter" ng-change="checkReportFilterChange()" placeholder="{{Locale('Filter')}}" />
+
+				<h4 class="modal-title">{{Locale('CheckReport')}}</h4>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
-					<label>Filter 【过滤】</label>
-					<input type="text" class="form-control" ng-model="checkReportFilter"/>
-				</div>
-
 				<ul>
-					<li ng-repeat="item in checkReport.language | filter: checkReportFilter">
+					<li ng-repeat="item in checkReportFilteredList track by $index">
 						[{{item.language.name}}]
-						<a href="javascript:void(0)" ng-click="setAbility(item.ability);">{{item.ability._name}}</a>
-						<span ng-if="item.modifier">-> {{item.modifier._name}}</span>:
-						<span ng-if="item.field.attr">[{{item.field.attr}}]</span> miss
+						<a ng-click="setAbility(item.ability);" class="fa fa-link"></a>
+						<b>{{item.ability._name}}</b>,
+
+						<!-- Tips -->
+						<span ng-if="!item.modifier"><span class="text-info">{{item.langField.attr || 'Title'}}</span> miss</span>
+						<span ng-if="item.modifier">
+							Modifier:
+							<b class="text-success">{{item.modifier.key}}</b>
+							<span class="text-info">{{item.langField.attr || 'Title'}}</span>
+							miss
+						</span>
+						<a class="fa fa-pencil-square" ng-click="item.showEdit = !item.showEdit"></a>
+						<span class="fa fa-check text-success" ng-if="!item.modifier && item.language.kv.get(Language.abilityAttr(item.ability._name, item.langField.attr))"></span>
+						<span class="fa fa-check text-success" ng-if="item.modifier && item.language.kv.get(Language.modifierAttr(item.modifier.key, item.langField.attr))"></span>
+
+						<!-- Editable -->
+						<div ng-if="item.showEdit">
+							<textarea ng-model="item.language.kv.bind(Language.abilityAttr(item.ability._name, item.langField.attr))"
+							          ng-model-options="{getterSetter: true}" class="form-control" ng-if="!item.modifier"></textarea>
+							<textarea ng-model="item.language.kv.bind(Language.modifierAttr(item.modifier.key, item.langField.attr))"
+							          ng-model-options="{getterSetter: true}" class="form-control" ng-if="item.modifier"></textarea>
+						</div>
 					</li>
 				</ul>
+				<p ng-show="checkReportFilteredList.length === 0" class="text-success">{{Locale('NothingNeedFix')}}</p>
+				<p ng-hide="checkReportFilteredList.length === 0" class="text-muted">{{Locale('reportLimit')}}</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

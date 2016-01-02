@@ -161,7 +161,7 @@ app.factory("Unit", function($q, $http, FS, Locale, KV, AppVersionSrv, PATH) {
 		});
 
 		writer.writeContent(this.kv.toString(_keepKV ? null : function(kv) {
-			if(kv.value === "" || kv.key.match(/^_/)) return false;
+			if(!kv.keep && (kv.value === "" || kv.key.match(/^_/))) return false;
 		}));
 	};
 

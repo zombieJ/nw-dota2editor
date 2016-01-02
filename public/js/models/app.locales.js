@@ -553,6 +553,10 @@ app.factory("Locale", function() {
 		DOTA_NPC_UNIT_RELATIONSHIP_TYPE_SIEGE: "主城",
 		DOTA_NPC_UNIT_RELATIONSHIP_TYPE_WARD: "眼",
 
+		// 检测
+		CheckReport: "检测报告",
+		Filter: "过滤",
+
 		// 事件
 		NewEvent: "新建事件",
 		NoEvent: "没有事件",
@@ -669,6 +673,7 @@ app.factory("Locale", function() {
 		EditorAlias: "编辑器别名",
 		UsageMarker: "功能标记",
 		Dummy: "马甲",
+		Test: "测试",
 		NoMark: "无标记",
 		ColorMarker: "颜色标记",
 		Duplicate: "复制",
@@ -679,6 +684,7 @@ app.factory("Locale", function() {
 		Yellow: "黄色",
 		Black: "黑色",
 		None: "无",
+		NothingNeedFix: "没有需要修改的建议",
 
 		// 帮助
 		mainLanguage: "主语言设置会帮助你在编辑界面自动显示主语言对应的名称描述。",
@@ -699,7 +705,8 @@ app.factory("Locale", function() {
 		originNoPrecache: "在KV中引用到的特效保存时将被自动添加，不需要手动添加precache。",
 		itemAutoID: "物品自动分配ID",
 		itemAutoIDTip: "会自动寻找1500~5000中未使用过的ID作为物品ID",
-		loopCheckFolder: "保持检查项目所在文件夹，用于Function的自动补全。关闭后不会持续检查目录变化。"
+		loopCheckFolder: "保持检查项目所在文件夹，用于Function的自动补全。关闭后不会持续检查目录变化。",
+		reportLimit: "检测报告在检测到100个问题后会停止继续检测，以避免过多性能消耗"
 	};
 
 	return Locale;
