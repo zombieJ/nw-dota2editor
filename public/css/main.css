@@ -344,6 +344,19 @@ label.checkbox input[type="checkbox"] {
 	padding-left: 15px;
 }
 
+/* Tree View */
+.tree-view .tree-head {
+	padding: 0 0 0 5px;
+	display: block;
+}
+.tree-view .tree-head.tree-folder:hover {
+	background: rgba(0,0,0,0.1);
+	text-decoration: none;
+}
+
+.tree-view .tree-list {
+	margin-left: 15px;
+}
 
 /**************** Version Check ****************/
 #versionCheck {

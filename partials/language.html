@@ -13,13 +13,13 @@
 		<div class="row">
 			<div class="col-sm-6 col-md-7">
 				<div class="btn-group" role="group">
-					<button class="btn btn-primary" ng-click="searchKey='';search(false);">{{Locale('ShowAll')}}</button>
-					<button class="btn btn-primary" ng-click="search(true)">{{Locale('ShowEmpty')}}</button>
+					<button class="btn btn-primary" ng-click="searchKey='';search(false);">{{::Locale('ShowAll')}}</button>
+					<button class="btn btn-primary" ng-click="search(true)">{{::Locale('ShowEmpty')}}</button>
 				</div>
-				<button class="btn btn-primary" ng-click="newKV()">{{Locale('New')}}</button>
+				<button class="btn btn-primary" ng-click="newKV()">{{::Locale('New')}}</button>
 			</div>
 			<div class="col-sm-6 col-md-5">
-				<input type="text" class="form-control" placeholder="{{Locale('Search')}}" ng-model="searchKey" ng-change="search()" id="search" />
+				<input type="text" class="form-control" placeholder="{{::Locale('Search')}}" ng-model="searchKey" ng-change="search()" id="search" />
 			</div>
 		</div>
 

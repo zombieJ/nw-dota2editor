@@ -27,10 +27,12 @@ app.factory("Config", function($q) {
 		return common.getValueByPath(this._data, path);
 	};
 
+	// Get function. Arguments combine the path
 	Config.prototype.get = function() {
 		return this.data(Array.prototype.join.call(arguments, "."));
 	};
 
+	// Set function. Arguments combine the path. Last argument is the setting object
 	Config.prototype.set = function() {
 		var _args = $.makeArray(arguments);
 		var _value = _args.pop();

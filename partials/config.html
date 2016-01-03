@@ -1,7 +1,7 @@
 <div class="form-group">
 	<label>
 		Main Language
-		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('mainLanguage')}}"></span>
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('mainLanguage')}}"></span>
 	</label>
 	<input type="text" class="form-control" ng-model="Config.global.mainLang">
 </div>
@@ -12,7 +12,7 @@
 	<label>
 		<input type="checkbox" ng-checked="Config.global.saveKeepKV" ng-click="Config.global.saveKeepKV = !Config.global.saveKeepKV">
 		Saving Keep All KV
-		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('saveKeepKV')}}"></span>
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('saveKeepKV')}}"></span>
 	</label>
 </div>
 
@@ -21,11 +21,11 @@
 <div class="form-group">
 	<label>
 		Stream API Key
-		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('streamKeyDesc')}}"></span>
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('streamKeyDesc')}}"></span>
 	</label>
 	<input type="text" class="form-control" ng-model="Config.global.streamAPIKey">
 </div>
-<p class="text-muted">* {{Locale('applyStreamKey')}} https://steamcommunity.com/dev/apikey</p>
+<p class="text-muted">* {{::Locale('applyStreamKey')}} https://steamcommunity.com/dev/apikey</p>
 
 <hr/>
 
@@ -33,7 +33,7 @@
 	<label>
 		<input type="checkbox" ng-checked="Config.global.eventUseText" ng-click="Config.global.eventUseText = !Config.global.eventUseText">
 		Ability/Item Event use text input
-		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('eventUseText')}}"></span>
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('eventUseText')}}"></span>
 	</label>
 </div>
 
@@ -41,7 +41,7 @@
 	<label>
 		<input type="checkbox" ng-checked="Config.global.operationUseText" ng-click="Config.global.operationUseText = !Config.global.operationUseText">
 		Ability/Item Operation use text input
-		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('operationUseText')}}"></span>
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('operationUseText')}}"></span>
 	</label>
 </div>
 
@@ -49,10 +49,10 @@
 	<label>
 		<input type="checkbox" ng-checked="Config.global.loopCheckFolder" ng-click="Config.global.loopCheckFolder = !Config.global.loopCheckFolder">
 		Keep monitoring project folder
-		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{Locale('loopCheckFolder')}}"></span>
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('loopCheckFolder')}}"></span>
 	</label>
 </div>
 
 <hr/>
 
-<button class="btn btn-primary" ng-click="saveConfig()">{{Locale('Save')}}</button>
+<button class="btn btn-primary" ng-click="saveConfig()">{{::Locale('Save')}}</button>

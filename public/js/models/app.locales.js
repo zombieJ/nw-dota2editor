@@ -59,6 +59,7 @@ app.factory("Locale", function() {
 		Target: "目标",
 		NewKV: "新建键值",
 		New: "新建",
+		FolderName: "文件夹名称",
 		Loading: "载入中",
 		Name: "名称",
 		Comment: "注释",
@@ -557,6 +558,9 @@ app.factory("Locale", function() {
 		CheckReport: "检测报告",
 		Filter: "过滤",
 
+		// 树状检视
+		TreeView: "树状视图",
+
 		// 事件
 		NewEvent: "新建事件",
 		NoEvent: "没有事件",
@@ -706,7 +710,8 @@ app.factory("Locale", function() {
 		itemAutoID: "物品自动分配ID",
 		itemAutoIDTip: "会自动寻找1500~5000中未使用过的ID作为物品ID",
 		loopCheckFolder: "保持检查项目所在文件夹，用于Function的自动补全。关闭后不会持续检查目录变化。",
-		reportLimit: "检测报告在检测到100个问题后会停止继续检测，以避免过多性能消耗"
+		reportLimit: "检测报告在检测到100个问题后会停止继续检测，以避免过多性能消耗",
+		virtualView: "这是虚拟视图，并不会影响真实的文件顺序"
 	};
 
 	return Locale;

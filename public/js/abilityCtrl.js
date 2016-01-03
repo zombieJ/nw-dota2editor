@@ -511,7 +511,6 @@ var _abilityCtrl = function(isItem) {
 			});
 
 			$("#checkReportMDL").modal();
-			console.log($scope.checkReport);
 		};
 
 		$scope.checkReportFilterChange = function() {
@@ -612,7 +611,58 @@ var _abilityCtrl = function(isItem) {
 			L: function() {
 				$("#descriptionTab").click();
 			},
-			_L: "Switch to Tab [Language]"
+			_L: "Switch to Tab [Language]",
+			T: function() {
+				// Initialize tree view
+				if(!$scope.treeView) {
+					$scope.treeView = $scope.config.assumeObject("treeView");
+					$scope.treeView.name = $scope.treeView.name || "root";
+					$scope.treeView.list = $scope.treeView.list || [];
+				}
+
+				// Loop abilities
+				var _list = [];
+				function _loopAbilities(item) {
+					if(item.list) {
+						$.each(item.list.slice(), function(i, _item) {
+							if(_item.list) {
+								// ============== Folder ==============
+								if(!_item.ability || common.array.find(_item.name, $scope.abilityList, "_name")) {
+									_loopAbilities(_item);
+								} else {
+									common.array.remove(_item, item.list);
+								}
+							} else {
+								// ============= Ability =============
+								if(common.array.find(_item.name, $scope.abilityList, "_name")) {
+									_loopAbilities(_item);
+								} else {
+									common.array.remove(_item, item.list);
+								}
+							}
+						});
+					} else {
+						_list.push(item);
+					}
+				}
+				_loopAbilities($scope.treeView);
+				console.log(_list.length);
+
+				// Fill rest abilities
+				$.each($scope.abilityList, function (i, _ability) {
+					if(!common.array.find(_ability._name, _list, "name")) {
+						$scope.treeView.list.push({
+							name: _ability._name,
+							ability: true
+						});
+					}
+				});
+
+
+
+				$("#treeViewMDL").modal();
+			},
+			_T: "Display tree view"
 		};
 
 		// Fast Tab
