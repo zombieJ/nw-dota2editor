@@ -257,13 +257,13 @@
 												<li ng-repeat="_state in (currentModifier.get('States') || []) track by $index">
 													<a ng-click="common.array.remove(_state, currentModifier.get('States'))">[X]</a>
 													<div class="ability-modifer-item-select">
-														<div class="ability-modifer-item-select-inline">
-															<!--select ng-model="_state[0]">
-																<option ng-repeat="item in Modifier.States track by $index" value="{{::item[0]}}">
-																	{{item[0].replace("MODIFIER_STATE_", "")}} 【{{item[1]}}】
+														<div class="ability-modifer-item-select-inline" ng-switch="Config.global.operationUseText">
+															<input tipfield ng-model="_state.key" data-alternative="Modifier.States" ng-switch-when="true" />
+															<select ng-model="_state.key" ng-switch-default>
+																<option ng-repeat="item in Modifier.States track by $index" value="{{::item.value}}">
+																	{{item.value.replace("MODIFIER_STATE_", "")}} 【{{::Locale(item.value)}}】
 																</option>
-															</select-->
-															<input tipfield ng-model="_state.key" data-alternative="Modifier.States" />
+															</select>
 														</div>
 													</div>
 													<select ng-model="_state.value">
@@ -771,11 +771,8 @@
 				</h4>
 			</div>
 			<div class="modal-body">
-				<div tree-view="treeView"></div>
-				<hr/>
-				<div tree-view="{name: 'root', list: [{name: 'c1'},{name: 'c2'}]}"></div>
-				<div tree-view="{name: 'no'}"></div>
-				<div tree-view="{name: 'no2', list: []}"></div>
+				<p class="text-info pull-right">* {{::Locale('abilityTreeViewSelect')}}</p>
+				<div tree-view="treeView" data-click="treeItemClick"></div>
 			</div>
 			<div class="modal-footer">
 			</div>

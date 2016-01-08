@@ -212,7 +212,7 @@ app.factory("Unit", function($q, $http, FS, Locale, KV, AppVersionSrv, PATH) {
 	// ================================================
 	Unit.AttrCommonList = [
 		[
-			{group: "common", attr: "BaseClass", type: "text"},
+			{group: "common", attr: "BaseClass", type: "text", showFunc: function($scope) {return !$scope.isHero;}},
 			{group: "common", attr: "Model", type: "text"},
 			{group: "common", attr: "Skin", type: "text"},
 			{group: "common", attr: "ModelScale", type: "text"},

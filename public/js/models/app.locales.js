@@ -711,7 +711,9 @@ app.factory("Locale", function() {
 		itemAutoIDTip: "会自动寻找1500~5000中未使用过的ID作为物品ID",
 		loopCheckFolder: "保持检查项目所在文件夹，用于Function的自动补全。关闭后不会持续检查目录变化。",
 		reportLimit: "检测报告在检测到100个问题后会停止继续检测，以避免过多性能消耗",
-		virtualView: "这是虚拟视图，并不会影响真实的文件顺序"
+		virtualView: "这是虚拟视图，并不会影响真实的文件顺序",
+		folderNotEmpty: "文件夹不为空",
+		abilityTreeViewSelect: "按住Ctrl+点击，选择技能"
 	};
 
 	return Locale;

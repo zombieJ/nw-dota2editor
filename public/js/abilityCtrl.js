@@ -618,11 +618,13 @@ var _abilityCtrl = function(isItem) {
 					$scope.treeView = $scope.config.assumeObject("treeView");
 					$scope.treeView.name = $scope.treeView.name || "root";
 					$scope.treeView.list = $scope.treeView.list || [];
+					$scope.treeView._id = +new Date();
 				}
 
 				// Loop abilities
 				var _list = [];
 				function _loopAbilities(item) {
+					// Loop folder
 					if(item.list) {
 						$.each(item.list.slice(), function(i, _item) {
 							if(_item.list) {
@@ -641,26 +643,29 @@ var _abilityCtrl = function(isItem) {
 								}
 							}
 						});
-					} else {
+					}
+					// Check item
+					if(item.ability) {
 						_list.push(item);
 					}
 				}
 				_loopAbilities($scope.treeView);
-				console.log(_list.length);
 
 				// Fill rest abilities
+				var _id = 0;
 				$.each($scope.abilityList, function (i, _ability) {
 					if(!common.array.find(_ability._name, _list, "name")) {
 						$scope.treeView.list.push({
+							_id : +new Date() + "_" + (_id++),
 							name: _ability._name,
 							ability: true
 						});
 					}
 				});
 
-
-
-				$("#treeViewMDL").modal();
+				setTimeout(function() {
+					$("#treeViewMDL").modal();
+				}, 100);
 			},
 			_T: "Display tree view"
 		};
@@ -679,6 +684,14 @@ var _abilityCtrl = function(isItem) {
 		});
 
 		globalContent.hotKey($scope, _hotKeySetting);
+
+		// Tree View
+		$scope.treeItemClick = function(e, item, parent) {
+			console.log(e, item, parent);
+			if(e.ctrlKey && item.ability) {
+				$scope.ability = common.array.find(item.name, $scope.abilityList, "_name");
+			}
+		};
 
 		// =================================================================
 		// =                          Application                          =

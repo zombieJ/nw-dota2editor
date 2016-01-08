@@ -346,6 +346,7 @@ label.checkbox input[type="checkbox"] {
 
 /* Tree View */
 .tree-view .tree-head {
+	font-size: 20px;
 	padding: 0 0 0 5px;
 	display: block;
 }
@@ -355,10 +356,13 @@ label.checkbox input[type="checkbox"] {
 }
 
 .tree-view .tree-list {
-	margin-left: 15px;
+	margin-left: 10px;
+	padding-left: 5px;
+	min-height: 15px;
+	border-left: 3px solid #CCC;
 }
 
-/**************** Version Check ****************/
+	/**************** Version Check ****************/
 #versionCheck {
 	background: rgba(0,0,0,0.8);
 	position: fixed;
