@@ -392,7 +392,6 @@ app.controller('main', function ($scope, $route, $location, $q,
 			var _deferred_file = $q.defer();
 			var _deferred_config = $q.defer();
 			var _globalListKey = isItem ? "itemList" : "abilityList";
-			var _globalConfigKey = isItem ? "abilityConfig" : "itemConfig";
 			var _filePath = isItem ? Ability.exportItemFilePath : Ability.exportFilePath;
 			var _config = Config.fetch(isItem ? "item" : "ability");
 
@@ -417,7 +416,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 			if($.isEmptyObject(_config._data)) {
 				_deferred_config.resolve(4);
 			} else {
-				_deferred_config = NODE.saveFile(isItem ? Ability.itemConfig : Ability.abilityConfig, "utf8", JSON.stringify(_config._data, null, "\t"));
+				_deferred_config = NODE.saveFile(isItem ? Ability.itemConfig : Ability.abilityConfig, "utf8", JSON.stringify(_config.exportData(), null, "\t"));
 			}
 
 			var _deferred_all = $q.all([_deferred_file.promise, _deferred_config.promise]).then(function (result) {

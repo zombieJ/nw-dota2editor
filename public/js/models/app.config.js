@@ -9,6 +9,7 @@ app.factory("Config", function($q) {
 		this._data = {};
 		this._pass = false;
 		this._cacheList = [];
+		this.exportFunction = null;
 
 		return this;
 	};
@@ -50,6 +51,14 @@ app.factory("Config", function($q) {
 		return _obj;
 	};
 
+	Config.prototype.exportData = function() {
+		if(!this.exportFunction) {
+			return this._data;
+		} else {
+			return this.exportFunction(this._data);
+		}
+	};
+
 	// Global Configuration
 	Config.projectPath = null;
 
@@ -72,10 +81,13 @@ app.factory("Config", function($q) {
 	};
 
 	// Common configuration: ability, item, unit, hero
-	Config.fetch = function(type) {
+	Config.fetch = function(type, initFunc) {
 		var _config = _configCache[type];
+		var _deferred;
 		if(!_config) {
+			_deferred = $q.defer();
 			_config = _configCache[type] = new Config();
+			_config.promise = _deferred.promise;
 
 			require("fs").readFile(
 				require('path').normalize(Config.projectPath + "/.dota2editor/" + type + ".conf")
@@ -84,6 +96,9 @@ app.factory("Config", function($q) {
 
 					try {
 						_config._data = JSON.parse(data);
+						if(initFunc) {
+							_config._data = initFunc(_config._data);
+						}
 					} catch(err) {
 						console.warn("[" + type + "] Config fetch error:", err);
 						_config._data = {};
@@ -94,6 +109,9 @@ app.factory("Config", function($q) {
 						common.setValueByPath(_config._data, cacheUnit.path, cacheUnit.value);
 					});
 					_config._cacheList = null;
+
+					// Promise finished
+					_deferred.resolve();
 				});
 		}
 		return _config;

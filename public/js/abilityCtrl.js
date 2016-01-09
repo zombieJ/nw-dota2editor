@@ -1,7 +1,7 @@
 'use strict';
 
 var _abilityCtrl = function(isItem) {
-	return function ($scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config, Language, AppFileSrv) {
+	return function ($q, $scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config, Language, AppFileSrv) {
 		if (!globalContent.isOpen) return;
 
 		window.scope = $scope;
@@ -21,10 +21,13 @@ var _abilityCtrl = function(isItem) {
 		$scope._newUnassignedKey = "";
 		$scope._newUnassignedValue = "";
 
-		$scope.config = Config.fetch(isItem ? "item" : "ability");
+		$scope.config = Config.fetch(isItem ? "item" : "ability", configInitFunc);
+		$scope.config.exportFunction = configExportFunc;
 
 		var _globalListKey = isItem ? "itemList" : "abilityList";
 		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
+
+		var _abilityListDeferred = $q.defer();
 
 
 		$scope.currentTab = "common";
@@ -255,7 +258,7 @@ var _abilityCtrl = function(isItem) {
 			return true;
 		};
 
-		$scope.renameCallback = function(newName, oldName, entity) {
+		$scope.renameCallback = function(newName, oldName) {
 			$.each(globalContent.languageList, function(i, lang) {
 				$.each(Language.AbilityLang, function(i, langField) {
 					var _oldKey = Language.abilityAttr(oldName, langField.attr);
@@ -279,7 +282,7 @@ var _abilityCtrl = function(isItem) {
 			return true;
 		};
 
-		$scope.renameModifierCallback = function(newName, oldName, entity) {
+		$scope.renameModifierCallback = function(newName, oldName) {
 			var _conflict = !!$scope.renameModifierCheck(newName).type;
 
 			$.each(globalContent.languageList, function(i, lang) {
@@ -320,6 +323,61 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		// ================================================================
+		// =                        Config Function                       =
+		// ================================================================
+		function _registerAbilityTreeItem(item, ability) {
+			Object.defineProperties(item, {
+				name: {
+					get: function() {
+						var _desc = globalContent.mainLang().kv.get(Language.abilityAttr(ability._name, ''));
+						return ability._name + (_desc ? " [" + _desc + "]" : "");
+					}
+				},
+				ability: {
+					get: function() {return ability;}
+				}
+			});
+			return item;
+		}
+
+		function _configInitTreeView(item) {
+			if(item._name) {
+				var _ability = common.array.find(item._name, $scope.abilityList, "_name");
+				_registerAbilityTreeItem(item, _ability);
+			}
+			$.each(item.list || [], function(i, subItem) {
+				_configInitTreeView(subItem);
+			});
+		};
+
+		function _configExportTreeView(item) {
+			if(item.ability) {
+				item._name = item.ability._name;
+			}
+			$.each(item.list || [], function(i, subItem) {
+				_configExportTreeView(subItem);
+			});
+		};
+
+		function configInitFunc(configData) {
+			// Tree View
+			if(configData.treeView) {
+				_abilityListDeferred.promise.then(function() {
+					_configInitTreeView(configData.treeView);
+				});
+			}
+			return configData;
+		}
+
+		function configExportFunc(configData) {
+			// Tree View
+			if(configData.treeView) {
+				_configExportTreeView(configData.treeView);
+			}
+			return configData;
+		}
+
+		// ================================================================
 		// =                        File Operation                        =
 		// ================================================================
 		// Read Ability file
@@ -348,11 +406,13 @@ var _abilityCtrl = function(isItem) {
 				});
 			}).finally(function () {
 				$scope.ready = true;
+				_abilityListDeferred.resolve();
 			});
 		} else {
 			$scope.abilityList = globalContent[_globalListKey];
 			$scope.setAbility($scope.abilityList[0]);
 			$scope.ready = true;
+			_abilityListDeferred.resolve();
 		}
 
 		// 多语言支持
@@ -434,7 +494,7 @@ var _abilityCtrl = function(isItem) {
 			match = (match || "").toUpperCase();
 			var _mainLangKV = globalContent.mainLang().kv;
 
-			var _list = $.map($scope.abilityList, function(_ability) {
+			return $.map($scope.abilityList, function(_ability) {
 				if(
 					common.text.contains(_ability._name, match) ||															// Name
 					common.text.contains(_ability.kv.comment, match) ||														// Comment
@@ -449,7 +509,6 @@ var _abilityCtrl = function(isItem) {
 					};
 				}
 			});
-			return _list;
 		};
 
 		$("#search").on("selected.search", function(e, item) {
@@ -629,14 +688,14 @@ var _abilityCtrl = function(isItem) {
 						$.each(item.list.slice(), function(i, _item) {
 							if(_item.list) {
 								// ============== Folder ==============
-								if(!_item.ability || common.array.find(_item.name, $scope.abilityList, "_name")) {
+								if(!_item.ability || common.array.find(_item.ability, $scope.abilityList)) {
 									_loopAbilities(_item);
 								} else {
 									common.array.remove(_item, item.list);
 								}
 							} else {
 								// ============= Ability =============
-								if(common.array.find(_item.name, $scope.abilityList, "_name")) {
+								if(common.array.find(_item.ability, $scope.abilityList)) {
 									_loopAbilities(_item);
 								} else {
 									common.array.remove(_item, item.list);
@@ -654,12 +713,12 @@ var _abilityCtrl = function(isItem) {
 				// Fill rest abilities
 				var _id = 0;
 				$.each($scope.abilityList, function (i, _ability) {
-					if(!common.array.find(_ability._name, _list, "name")) {
-						$scope.treeView.list.push({
-							_id : +new Date() + "_" + (_id++),
-							name: _ability._name,
-							ability: true
-						});
+					if(!common.array.find(_ability, _list, "ability")) {
+						var _item = {
+							_id : +new Date() + "_" + (_id++)
+						};
+						_registerAbilityTreeItem(_item, _ability);
+						$scope.treeView.list.push(_item);
 					}
 				});
 
@@ -686,10 +745,10 @@ var _abilityCtrl = function(isItem) {
 		globalContent.hotKey($scope, _hotKeySetting);
 
 		// Tree View
-		$scope.treeItemClick = function(e, item, parent) {
-			console.log(e, item, parent);
+		$scope.treeItemClick = function(e, item) {
 			if(e.ctrlKey && item.ability) {
 				$scope.ability = common.array.find(item.name, $scope.abilityList, "_name");
+				$("#treeViewMDL").modal('hide');
 			}
 		};
 

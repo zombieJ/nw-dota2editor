@@ -134,6 +134,7 @@ components.directive('treeView', function($compile) {
 		'<div class="tree-view">'+
 			'<a menu="menu()" class="tree-head noSelect" ng-class="{\'tree-folder\': treeView.list}" ng-click="folderTrigger()">'+
 				'<span class="fa" ng-class="getIconClass()"></span> '+
+				'<span ng-if="treeView.list">({{treeView.list.length}})</span> '+
 				'<span>{{treeView.name}}</span>'+
 			'</a>'+
 			'<div ui-sortable="sortableOptions" class="tree-list" ng-model="treeView.list" ng-if="treeView.open">'+
