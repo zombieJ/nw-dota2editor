@@ -67,7 +67,7 @@ components.directive('kvunitgroup', function($compile) {
 				'<li>'+
 					'<span class="text-muted">Center:</span>'+
 					'<select ng-model="target.getKV(targetPath).bind(\'Center\')" ng-model-options="{getterSetter: true}">' +
-						'<option ng-repeat="opVal in Operation.OperationAttrMap.Center.value track by $index">{{::opVal}}</option>' +
+						'<option ng-repeat="opVal in Operation.OperationAttrMap.Center.value track by $index">{{::opVal[0]}}</option>' +
 					'</select>' +
 				'</li>'+
 

@@ -713,7 +713,7 @@ app.factory("Locale", function() {
 		reportLimit: "检测报告在检测到100个问题后会停止继续检测，以避免过多性能消耗",
 		virtualView: "这是虚拟视图，并不会影响真实的文件顺序",
 		folderNotEmpty: "文件夹不为空",
-		abilityTreeViewSelect: "按住Ctrl+点击，选择技能。打开文件夹进行拖拽"
+		abilityTreeViewSelect: "按住Ctrl+点击，选择技能"
 	};
 
 	return Locale;

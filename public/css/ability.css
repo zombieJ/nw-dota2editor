@@ -85,7 +85,7 @@ hr {
 	padding: 3px 8px;
 	border-radius: 3px;
 	display: none;
-	pointer-events:none;
+	pointer-events: none;
 	z-index: 1;
 }
 

@@ -44,7 +44,10 @@ components.directive('treeView', function($compile) {
 			});
 			$element.on("mouseup.treeView", "> .tree-head", function(e) {
 				if(+new Date() - _mouseDownTime <= 500) {
-					if($scope.click) $scope.click(e, $scope.treeView, $scope.parentNode);
+					var _ret;
+					if($scope.click) _ret = $scope.click(e, $scope.treeView, $scope.parentNode);
+					if(_ret !== false) $scope.folderTrigger();
+					$scope.$apply();
 				}
 				_mouseDownTime = 0;
 			});
@@ -132,14 +135,14 @@ components.directive('treeView', function($compile) {
 		},
 		template:
 		'<div class="tree-view">'+
-			'<a menu="menu()" class="tree-head noSelect" ng-class="{\'tree-folder\': treeView.list}" ng-click="folderTrigger()">'+
+			'<a menu="menu()" class="tree-head noSelect" ng-class="{\'tree-folder\': treeView.list}">'+
 				'<span class="fa" ng-class="getIconClass()"></span> '+
 				'<span ng-if="treeView.list">({{treeView.list.length}})</span> '+
 				'<span>{{treeView.name}}</span>'+
 			'</a>'+
-			'<div ui-sortable="sortableOptions" class="tree-list" ng-model="treeView.list" ng-if="treeView.open">'+
+			'<div ui-sortable="sortableOptions" class="tree-list" ng-class="{open: treeView.open}" ng-model="treeView.list" ng-if="treeView.list">'+
 				'<div ng-repeat="item in treeView.list track by item._id">' +
-					'<div tree-view="item" data-parent-node="treeView" data-click="click"></div>'+
+					'<div tree-view="item" ng-if="treeView.open" data-parent-node="treeView" data-click="click"></div>'+
 				'</div>'+
 			'</div>'+
 		'</div>',

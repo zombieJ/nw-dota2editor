@@ -263,7 +263,9 @@ var _abilityCtrl = function(isItem) {
 				$.each(Language.AbilityLang, function(i, langField) {
 					var _oldKey = Language.abilityAttr(oldName, langField.attr);
 					var _newKey = Language.abilityAttr(newName, langField.attr);
-					if(!lang.kv.get(_oldKey)) lang.kv.set(_newKey, lang.kv.get(_oldKey));
+					if(lang.kv.get(_oldKey)) {
+						lang.kv.set(_newKey, lang.kv.get(_oldKey));
+					}
 					lang.kv.delete(_oldKey);
 				});
 			});
@@ -747,8 +749,9 @@ var _abilityCtrl = function(isItem) {
 		// Tree View
 		$scope.treeItemClick = function(e, item) {
 			if(e.ctrlKey && item.ability) {
-				$scope.ability = common.array.find(item.name, $scope.abilityList, "_name");
+				$scope.ability = item.ability;
 				$("#treeViewMDL").modal('hide');
+				return false;
 			}
 		};
 
