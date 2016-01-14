@@ -74,6 +74,12 @@ app.factory("globalContent", function (Config) {
 
 	// Hot key
 	_globalContent.hotKey = function($scope, funcMapping) {
+		$(document).on("keydown.globalSave", function(e) {
+			if(e.ctrlKey && e.which === 83) {
+				$("#saveProject").click();
+			}
+		});
+
 		$(document).on("keydown.global", function(e) {
 			if(e.ctrlKey) {
 				var _key = (String.fromCharCode(e.which) || "").toUpperCase();
@@ -501,9 +507,20 @@ app.controller('main', function ($scope, $route, $location, $q,
 		});
 
 		$q.all(_promiseList).finally(function () {
-			$scope.saveMSG = "Finished! 【完成】";
+			$scope.saveMSG = "Finished!";
 			$scope.saveLock = false;
 			$scope.$broadcast("AppSaved", "");
+
+			setTimeout(function() {
+				$("#saveMDL").modal('hide');
+				setTimeout(function() {
+					$.notify({
+						type: "success",
+						title: Locale('Done'),
+						content: Locale('saveSuccess'),
+					});
+				}, 500);
+			}, 100);
 		});
 	};
 
@@ -529,7 +546,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 	var _colorTarget;
 	$(document).on("click", ".color-picker", function () {
 		_colorTarget = $(this).closest("td").find("input, textarea");
-		$("#colorDisplayLayout").html(_colorTarget.val());
+		$("#colorDisplayLayout").html(_colorTarget.val().replace(/\\n/g, "<br>").replace(/\\"/g, '"'));
 		$("#colorPickerMDL").modal();
 	});
 
@@ -564,7 +581,12 @@ app.controller('main', function ($scope, $route, $location, $q,
 	$scope.confirmColoredText = function () {
 		$("#colorPickerMDL").modal('hide');
 
-		var _text = $("#colorDisplayLayout").html().replace(/"/g, "'");
+		var _text = $("#colorDisplayLayout").html()
+			.replace(/"/g, '\\"')
+			.replace(/<div>/g, '<br>')
+			.replace(/<\/div>/g, '')
+			.replace(/<br>/g, '\\n')
+			;
 		_colorTarget.val(_text);
 		_colorTarget.trigger("input");
 	};

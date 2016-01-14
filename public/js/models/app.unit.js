@@ -393,6 +393,29 @@ app.factory("Unit", function($q, $http, FS, Locale, KV, AppVersionSrv, PATH) {
 	// ================================================
 	// =                     枚举                     =
 	// ================================================
+	Unit.BaseClass = [
+		{value: "npc_dota_base"},
+		{value: "npc_dota_base_additive"},
+		{value: "npc_dota_creature"},
+		{value: "npc_dota_companion"},
+		{value: "npc_dota_courier"},
+		{value: "npc_dota_flying_courier"},
+		{value: "npc_dota_fort"},
+		{value: "npc_dota_thinker"},
+		{value: "npc_dota_building"},
+		{value: "npc_dota_tower"},
+		{value: "npc_dota_tusk_frozen_sigil"},
+		{value: "npc_dota_roshan"},
+		{value: "npc_dota_elder_titan_ancestral_spirit"},
+		{value: "npc_dota_creep"},
+		{value: "npc_dota_creep_lane"},
+		{value: "npc_dota_creep_siege"},
+		{value: "npc_dota_creep_neutral"},
+		{value: "npc_dota_ward_base"},
+		{value: "npc_dota_ward_base_truesight"},
+		{value: "ent_dota_fountain"},
+	];
+
 	Unit.HasInventory = Unit.ConsideredHero = Unit.CanBeDominated = Unit.AutoAttacksByDefault = Unit.ShouldDoFlyHeightVisual = [
 		["0"],
 		["1"],

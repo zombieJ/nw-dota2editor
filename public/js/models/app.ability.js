@@ -368,6 +368,11 @@ app.factory("Ability", function($q, Event, Modifier) {
 	// ================================================
 	// =                     Enum                     =
 	// ================================================
+	Ability.BaseClass = [
+		{value: "ability_datadriven"},
+		{value: "ability_lua"}
+	];
+
 	Ability.ItemShareability = [
 		["ITEM_FULLY_SHAREABLE"],
 		["ITEM_FULLY_SHAREABLE_STACKING"],

@@ -42,11 +42,6 @@
 	<link rel="stylesheet" href="public/css/main.css">
 	<link rel="stylesheet" href="public/css/ability.css">
 
-	<!--script src="public/js/components/groupSelect.js"></script>
-	<script src="public/js/components/attrField.js"></script>
-	<script src="public/js/components/operation.js"></script>
-	<script src="public/js/components/operationGroup.js"></script>
-	<script src="public/js/components/operationField.js"></script-->
 	<script src="public/js/components/kvField.js"></script>
 	<script src="public/js/components/kvGroup.js"></script>
 	<script src="public/js/components/kvUnitGroup.js"></script>
@@ -104,12 +99,12 @@
 				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/ability')}"><a href="#/ability">{{Locale('Ability')}}</a></li>
 				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/item')}"><a href="#/item">{{Locale('Item')}}</a></li>
 				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/language')}"><a href="#/language">{{Locale('Language')}}</a></li>
-				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/kv')}"><a href="#/kv">{{Locale('KVEditor')}}</a></li>
+				<!--li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/kv')}"><a href="#/kv">{{Locale('KVEditor')}}</a></li-->
 				<li ng-show="globalContent.isOpen" ng-class="{active: navSelected('/config')}"><a href="#/config">{{Locale('Config')}}</a></li>
 			</ul>
 			<ul class="nav navbar-nav pull-right">
 				<li ng-show="globalContent.isOpen">
-					<button type="button" class="btn btn-warning navbar-btn" ng-click="showSaveMDL()">{{Locale('Save')}}</button>
+					<button type="button" class="btn btn-warning navbar-btn" id="saveProject" ng-click="showSaveMDL()">{{Locale('Save')}}</button>
 				</li>
 			</ul>
 		</div>

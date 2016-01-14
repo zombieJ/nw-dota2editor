@@ -32,6 +32,7 @@ app.factory("Locale", function() {
 		Hero: "英雄",
 		Ability: "技能",
 		Save: "保存",
+		Done: "完成",
 		Item: "物品",
 		Config: "配置",
 		Language: "语言",
@@ -49,6 +50,7 @@ app.factory("Locale", function() {
 		KVEditor: "KV编辑器",
 		Inspection: "检测",
 		Precache: "预载入",
+		Editor: "编辑器",
 
 		VersionCheck: "版本检测",
 		versionCheckError: "版本检测失败，部分功能将无法使用。请将以下错误信息发送与我，以帮助修复该错误：",
@@ -106,6 +108,27 @@ app.factory("Locale", function() {
 		AOERadius: "AOE范围",
 
 		// 属性 - 描述
+		"ability_datadriven": "数据驱动技能",
+		"ability_lua": "LUA技能",
+
+		"npc_dota_base": "基本",
+		"npc_dota_creature": "生物",
+		"npc_dota_companion": "同伴",
+		"npc_dota_courier": "信使",
+		"npc_dota_flying_courier": "飞信信使",
+		"npc_dota_fort": "堡垒",
+		"npc_dota_thinker": "马甲",
+		"npc_dota_building": "建筑",
+		"npc_dota_tower": "塔",
+		"npc_dota_roshan": "肉山",
+		"npc_dota_creep": "爬行",
+		"npc_dota_creep_lane": "地面爬行",
+		"npc_dota_creep_siege": "围攻爬行",
+		"npc_dota_creep_neutral": "中立爬行",
+		"npc_dota_ward_base": "基本守卫",
+		"npc_dota_ward_base_truesight": "真视守卫",
+		"ent_dota_fountain": "泉水",
+
 		"0": "否",
 		"1": "是",
 
@@ -691,6 +714,11 @@ app.factory("Locale", function() {
 		NothingNeedFix: "没有需要修改的建议",
 
 		// 帮助
+		title: "Dota2 KV编辑器（β测试版）",
+		description: "欢迎使用Dota2 KV编辑器。这是由AMHC论坛提供的可视化Dota2 KV文件编辑器。支持单位、英雄、技能、物品以及多语言编辑功能。由于目前处于β测试版本，请使用时备份您的数据。",
+		feedback: "如果您发现了问题，欢迎通过以下方式进行反馈，我们会进行修正：",
+		bbs: "论坛：AMHC BBS Url: http://www.dota2rpg.com/",
+		qqGroup: "QQ群：346172518",
 		mainLanguage: "主语言设置会帮助你在编辑界面自动显示主语言对应的名称描述。",
 		connectionError: "网络连接错误，请重试",
 		streamKeyDesc: "用于访问Stream API获取Dota2数据，未填写只会影响少部分功能。",
@@ -713,7 +741,8 @@ app.factory("Locale", function() {
 		reportLimit: "检测报告在检测到100个问题后会停止继续检测，以避免过多性能消耗",
 		virtualView: "这是虚拟视图，并不会影响真实的文件顺序",
 		folderNotEmpty: "文件夹不为空",
-		abilityTreeViewSelect: "按住Ctrl+点击，选择技能"
+		abilityTreeViewSelect: "按住Ctrl+点击，选择技能",
+		saveSuccess: "保存成功！"
 	};
 
 	return Locale;

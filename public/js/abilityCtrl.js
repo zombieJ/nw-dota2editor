@@ -732,7 +732,7 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		// Fast Tab
-		var _tabList = [["O", "common"],["E", "events"],["M", "modifiers"],["S", "abilitySpecial"],["P", "precache"],["U", "unassigned"]];
+		var _tabList = [["O", "common"],["E", "events"],["M", "modifiers"],["K", "abilitySpecial"],["P", "precache"],["U", "unassigned"]];
 		if(isItem) _tabList.push(["I", "item"]);
 		$.each(_tabList, function(i, tabEntity) {
 			var _key = tabEntity[0];
