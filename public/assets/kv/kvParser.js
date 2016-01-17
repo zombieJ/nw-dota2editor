@@ -82,8 +82,8 @@
 	};
 
 	KV.prototype._toString = function(_data, _lvl, saveFunc) {
-		var _data = _data || "";
-		var _lvl = _lvl || 0;
+		_data = _data || "";
+		_lvl = _lvl || 0;
 
 		var _write = function(text) {
 			var _des = _lvl;
@@ -142,7 +142,10 @@
 	var STATE_VALUE_LIST = KV.STATE_VALUE_LIST = 6;
 
 	KV.parse = function(text, startLoc) {
-		if(!text) throw "Text can't be empty!";
+		if(!text) {
+			console.error("KV Parser can't process empty text!");
+			throw "Text can't be empty";
+		}
 
 		var _preState = STATE_NORMAL;
 		var _state = STATE_NORMAL;
@@ -152,7 +155,6 @@
 		var _endLoc;
 		var _comment = "";
 		var _key = "";
-		var _keyStart = 0;
 		var _value = null;
 
 		if(typeof startLoc === "boolean") {
@@ -177,7 +179,7 @@
 			return false;
 		}
 
-		for(var _i = _startLoc || 0 ; _i < _len ; _i += 1) {
+		for(_i = _startLoc || 0 ; _i < _len ; _i += 1) {
 			_c = text[_i];
 
 			switch(_state) {

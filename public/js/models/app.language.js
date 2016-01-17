@@ -3,7 +3,7 @@
 // ======================================================
 // =                        语言                        =
 // ======================================================
-app.factory("Language", function($q, KV, NODE, Config) {
+app.factory("Language", function($q, KV, NODE, Locale) {
 	var Language = function(fileName) {
 		var _deferred = $q.defer();
 		var _my = this;
@@ -14,15 +14,27 @@ app.factory("Language", function($q, KV, NODE, Config) {
 		_my._promise = _deferred.promise;
 
 		NODE.loadFile(Language.folderPath + "/" + fileName, "ucs2").then(function(data) {
-			var _kv = KV.parse(data.substr(1));
+			try {
+				var _kv = KV.parse(data.substr(1));
 
-			_my.name = _kv.get("Language", false);
-			//_my.map = _kv.getKV("Tokens", false).kvToMap();
-			_my.kv = _kv.getKV("Tokens", false);
-			_my._oriKV = _kv;
+				_my.name = _kv.get("Language", false);
+				_my.kv = _kv.getKV("Tokens", false);
+				_my._oriKV = _kv;
+			} catch (err) {
+				$.dialog({
+					title: Locale('Warning'),
+					content: common.template(Locale('languageParseError'), {file: fileName})
+				});
+
+				if(!_my._oriKV) {
+					_my._oriKV = new KV("lang", []);
+					_my._oriKV.assumeKey("Language");
+					_my._oriKV.set("Language", _my.name);
+					_my.kv = _my._oriKV.assumeKey("Tokens", []);
+				}
+			}
 
 			_my.ready = true;
-
 			_deferred.resolve();
 		});
 

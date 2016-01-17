@@ -17,6 +17,12 @@ div:hover::-webkit-scrollbar-thumb {
 ::-webkit-scrollbar-corner {
 }
 
+/* Body */
+body, p,
+h1, h2, h3, h4, h5 {
+	font-family: "Microsoft YaHei","Microsoft JhengHei",STHeiti,MingLiu;
+}
+
 /* No Select */
 .noSelect {
 	user-select: none;

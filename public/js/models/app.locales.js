@@ -26,7 +26,6 @@ app.factory("Locale", function() {
 	// =                  CN                  =
 	// ========================================
 	Locale.langMap["cn"] = {
-		AppName: "Dota2 KV 编辑器",
 		Home: "首页",
 		Unit: "单位",
 		Hero: "英雄",
@@ -51,6 +50,10 @@ app.factory("Locale", function() {
 		Inspection: "检测",
 		Precache: "预载入",
 		Editor: "编辑器",
+		ProjectFolder: "项目路径",
+		OpenProject: "载入项目",
+		RecentProject: "最近打开的项目",
+		Warning: "警告",
 
 		VersionCheck: "版本检测",
 		versionCheckError: "版本检测失败，部分功能将无法使用。请将以下错误信息发送与我，以帮助修复该错误：",
@@ -714,6 +717,7 @@ app.factory("Locale", function() {
 		NothingNeedFix: "没有需要修改的建议",
 
 		// 帮助
+		projectFolder: "项目路径，例如：C:\\Steam\\steamapps\\common\\dota 2 beta\\game\\dota_addons\\sampleGame",
 		title: "Dota2 KV编辑器（β测试版）",
 		description: "欢迎使用Dota2 KV编辑器。这是由AMHC论坛提供的可视化Dota2 KV文件编辑器。支持单位、英雄、技能、物品以及多语言编辑功能。由于目前处于β测试版本，请使用时备份您的数据。",
 		feedback: "如果您发现了问题，欢迎通过以下方式进行反馈，我们会进行修正：",
@@ -742,7 +746,8 @@ app.factory("Locale", function() {
 		virtualView: "这是虚拟视图，并不会影响真实的文件顺序",
 		folderNotEmpty: "文件夹不为空",
 		abilityTreeViewSelect: "按住Ctrl+点击，选择技能",
-		saveSuccess: "保存成功！"
+		saveSuccess: "保存成功！",
+		languageParseError: "检测到无法解析的语言文件：${file}，保存时将被覆盖。如果你不想被覆盖，请检查该文件格式。"
 	};
 
 	return Locale;

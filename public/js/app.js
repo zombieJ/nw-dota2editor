@@ -58,14 +58,7 @@ app.factory("globalContent", function (Config) {
 	};
 
 	// Update config
-	Object.defineProperty(_globalContent, "project", {
-		get: function() {
-			return Config.projectPath;
-		}, set: function(value) {
-			Config.projectPath = value;
-		}
-	});
-	_globalContent.project = localStorage.getItem("project");
+	_globalContent.project = Config.projectList[0] || "";
 
 	// Get main language
 	_globalContent.mainLang = function () {
@@ -309,7 +302,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 		var _promise = NODE.loadProject(globalContent.project);
 
 		_promise.then(function () {
-			localStorage.setItem("project", globalContent.project);
+			Config.addProjectPath(globalContent.project);
 			globalContent.isOpen = true;
 
 			// 总是读取多语言文件
@@ -462,6 +455,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 		{
 			name: "Language", desc: "语言", selected: true, saveFunc: function () {
 			var _deferred = $q.defer();
+			var _saveLangCount = 0;
 
 			if (!globalContent.languageList || !globalContent.languageList.length) {
 				_deferred.resolve(4);
@@ -470,6 +464,11 @@ app.controller('main', function ($scope, $route, $location, $q,
 
 				$.each(globalContent.languageList, function (i, language) {
 					var _writer = new KV.Writer();
+					if(!language._oriKV) {
+						_ERROR("Language",0, "File not provide origin KV!", language.name, language);
+						return;
+					}
+					_saveLangCount += 1;
 					_writer.writeContent(language._oriKV.toString());
 
 					_promiseList.push(_writer.save(Language.folderPath + "/" + language.fileName.replace(/^_/, "").replace(/\.bac/, ""), "ucs2"));
@@ -479,6 +478,10 @@ app.controller('main', function ($scope, $route, $location, $q,
 						_deferred.reject();
 					});
 				});
+
+				if(_saveLangCount === 0) {
+					_deferred.reject();
+				}
 			}
 			return _deferred.promise;
 		}

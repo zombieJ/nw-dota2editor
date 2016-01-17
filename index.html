@@ -89,7 +89,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#/">{{Locale('AppName')}}</a>
+			<a class="navbar-brand" href="#/">{{Locale('title')}}</a>
 		</div>
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
@@ -112,13 +112,22 @@
 	</div>
 </nav>
 <div id="content" class="container-fluid">
-	<div ng-show="!globalContent.isOpen">
-		<h1>Project Folder 【项目路径】</h1>
+	<div ng-if="!globalContent.isOpen">
+		<h1>{{::Locale('ProjectFolder')}}</h1>
 		<input type="text" class="form-control" ng-model="globalContent.project"
-		       placeholder="项目路径，例如：C:\Steam\steamapps\common\dota 2 beta\game\dota_addons\sampleGame" />
+		       placeholder="{{::Locale('projectFolder')}}" />
 		<br/>
-		<button class="btn btn-primary" ng-click="loadProject()">Open【载入】</button>
+		<button class="btn btn-primary" ng-click="loadProject()">{{::Locale('OpenProject')}}</button>
 		<button class="btn btn-primary" ng-click="inlineMode()" ng-if="globalContent.inlineMode">Inline mode</button>
+
+		<hr/>
+		<label>{{::Locale('RecentProject')}}:</label>
+		<ul>
+			<li ng-repeat="prj in Config.projectList">
+				[<a class="fa fa-times" ng-click="Config.deleteProjectPath(prj)"></a>]
+				<a ng-click="globalContent.project = prj; loadProject();">{{prj}}</a>
+			</li>
+		</ul>
 	</div>
 	<div ng-show="globalContent.isOpen" ng-view></div>
 </div>

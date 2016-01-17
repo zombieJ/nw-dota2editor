@@ -42,7 +42,7 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		$scope.setAbility = function (ability) {
 			$scope.ability = ability;
-			$scope.currentModifier = $scope.ability.getModifierList()[0];
+			$scope.currentModifier = $scope.ability ? $scope.ability.getModifierList()[0] : null;
 		};
 
 		$scope.setModifier = function(modifier) {

@@ -47,9 +47,12 @@ app.factory("Operation", function(KV, Sound, AppFileSrv) {
 	// =                Save Process                 =
 	// ===============================================
 	Op.prototype.saveProcess = function() {
-		this.kv.value = $.grep(this.kv.value, function(attrKV) {
-			return !attrKV.isList() || attrKV.value.length;
-		});
+		var _oriValue = this.kv.value;
+		if($.isArray(_oriValue)) {
+			this.kv.value = $.grep(_oriValue, function(attrKV) {
+				return !attrKV.isList() || attrKV.value.length;
+			});
+		}
 	};
 
 	// ===============================================

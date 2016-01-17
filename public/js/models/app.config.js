@@ -14,6 +14,8 @@ app.factory("Config", function($q) {
 		return this;
 	};
 
+	Config.SPLIT_PROJECT = "___PROJECT_SPLIT___";
+
 	Config.prototype.data = function(path, value) {
 		if(arguments.length === 2) {
 			if(!this._pass) {
@@ -60,8 +62,6 @@ app.factory("Config", function($q) {
 	};
 
 	// Global Configuration
-	Config.projectPath = null;
-
 	Config.global = {
 		mainLang: localStorage.getItem("mainLang") || "SChinese",
 		saveKeepKV: localStorage.getItem("saveKeepKV") === "true",
@@ -78,6 +78,20 @@ app.factory("Config", function($q) {
 		localStorage.setItem("eventUseText", Config.global.eventUseText);
 		localStorage.setItem("operationUseText", Config.global.operationUseText);
 		localStorage.setItem("loopCheckFolder", Config.global.loopCheckFolder);
+	};
+
+	// Project list
+	var _projectList = localStorage.getItem("project") || "";
+	Config.projectList = _projectList ? _projectList.split(Config.SPLIT_PROJECT) : [];
+
+	Config.addProjectPath = function(prjPath) {
+		Config.projectList.unshift(prjPath);
+		$.unique(Config.projectList);
+		localStorage.setItem("project", Config.projectList.join(Config.SPLIT_PROJECT));
+	};
+	Config.deleteProjectPath = function(prjPath) {
+		common.array.remove(prjPath, Config.projectList);
+		localStorage.setItem("project", Config.projectList.join(Config.SPLIT_PROJECT));
 	};
 
 	// Common configuration: ability, item, unit, hero
@@ -100,7 +114,6 @@ app.factory("Config", function($q) {
 							_config._data = initFunc(_config._data);
 						}
 					} catch(err) {
-						console.warn("[" + type + "] Config fetch error:", err);
 						_config._data = {};
 					}
 
