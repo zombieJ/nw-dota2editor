@@ -291,6 +291,12 @@ app.controller('main', function ($scope, $route, $location, $q,
 
 	window.GC = $scope.globalContent = $scope.GC = globalContent;
 
+	var FS = require("fs");
+	var PATH = require('path');
+
+	// 保存时间
+	var _saveBackUpPath;
+
 	NODE && NODE.init(globalContent, $q);
 
 	$scope.navSelected = function (path) {
@@ -349,6 +355,11 @@ app.controller('main', function ($scope, $route, $location, $q,
 			var _globalConfigKey = isHero ? "heroConfig" : "unitConfig";
 			var _filePath = isHero ? Unit.heroFilePath : Unit.filePath;
 
+			// Backup
+			if(_saveBackUpPath && Config.global.saveBackUp) {
+				Config.copyFile(_filePath, _saveBackUpPath + "/" + _filePath.replace(/^.*\/(.*)/, "$1"));
+			}
+
 			// File
 			if (!globalContent[_globalListKey]) {
 				_deferred_file.resolve(4);
@@ -393,6 +404,11 @@ app.controller('main', function ($scope, $route, $location, $q,
 			var _globalListKey = isItem ? "itemList" : "abilityList";
 			var _filePath = isItem ? Ability.exportItemFilePath : Ability.exportFilePath;
 			var _config = Config.fetch(isItem ? "item" : "ability");
+
+			// Backup
+			if(_saveBackUpPath && Config.global.saveBackUp) {
+				Config.copyFile(_filePath, _saveBackUpPath + "/" + _filePath.replace(/^.*\/(.*)/, "$1"));
+			}
 
 			// File
 			if (!globalContent[_globalListKey]) {
@@ -468,10 +484,17 @@ app.controller('main', function ($scope, $route, $location, $q,
 						_ERROR("Language",0, "File not provide origin KV!", language.name, language);
 						return;
 					}
+					var _filePath = Language.folderPath + "/" + language.fileName.replace(/^_/, "").replace(/\.bac/, "");
 					_saveLangCount += 1;
 					_writer.writeContent(language._oriKV.toString());
 
-					_promiseList.push(_writer.save(Language.folderPath + "/" + language.fileName.replace(/^_/, "").replace(/\.bac/, ""), "ucs2"));
+					// Backup
+					if(_saveBackUpPath && Config.global.saveBackUp) {
+						Config.copyFile(_filePath, _saveBackUpPath + "/" + _filePath.replace(/^.*\/(.*)/, "$1"));
+					}
+
+					// File
+					_promiseList.push(_writer.save(_filePath, "ucs2"));
 					$q.all(_promiseList).then(function () {
 						_deferred.resolve();
 					}, function () {
@@ -492,8 +515,26 @@ app.controller('main', function ($scope, $route, $location, $q,
 	// 保存文件
 	// 状态码：0 初始化；1 运行中；2 成功；3 失败；4 未变更
 	$scope.saveFiles = function () {
-		$scope.saveLock = true;
+		var _date = new moment();
 		var _promiseList = [];
+		$scope.saveLock = true;
+
+		// Back
+		if(Config.global.saveBackUp) {
+			// Clean up old backup
+			var folderList = Config.listFiles(".dota2editor/backup");
+			folderList.sort();
+			while(folderList.length >= 10) {
+				var _oldBackUp = folderList.shift();
+				Config.deleteFile(".dota2editor/backup/" + _oldBackUp);
+			}
+
+			// Create folder
+			_saveBackUpPath = ".dota2editor/backup/" + _date.format("YYYYMMDD_HHmmSS");
+			Config.assumeFolder(_saveBackUpPath);
+		} else {
+			_saveBackUpPath = null;
+		}
 
 		$.each($scope.saveFileList, function (i, saveItem) {
 			if (!saveItem.selected || !saveItem.saveFunc) return;

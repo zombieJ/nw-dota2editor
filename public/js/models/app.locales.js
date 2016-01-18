@@ -747,7 +747,8 @@ app.factory("Locale", function() {
 		folderNotEmpty: "文件夹不为空",
 		abilityTreeViewSelect: "按住Ctrl+点击，选择技能",
 		saveSuccess: "保存成功！",
-		languageParseError: "检测到无法解析的语言文件：${file}，保存时将被覆盖。如果你不想被覆盖，请检查该文件格式。"
+		languageParseError: "检测到无法解析的语言文件：${file}，保存时将被覆盖。如果你不想被覆盖，请检查该文件格式。",
+		saveBackUp: "每次保存，自动对原先文件进行备份。最多保留最近10次更改。"
 	};
 
 	return Locale;

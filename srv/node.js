@@ -34,6 +34,7 @@ exports.loadProject = function(projectPath) {
 
 				// Dota2Editor Config
 				exports.assumeFolder(".dota2editor");
+				exports.assumeFolder(".dota2editor/backup");
 			} else {
 				_deferred.reject();
 			}

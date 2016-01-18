@@ -4,6 +4,9 @@
 // =                   Configuration                   =
 // =====================================================
 app.factory("Config", function($q) {
+	var FS = require("fs");
+	var PATH = require('path');
+
 	var _configCache = {};
 	var Config = function () {
 		this._data = {};
@@ -69,6 +72,7 @@ app.factory("Config", function($q) {
 		eventUseText: localStorage.getItem("eventUseText") === "true",
 		operationUseText: localStorage.getItem("operationUseText") === "true",
 		loopCheckFolder: localStorage.getItem("loopCheckFolder") !== "false",
+		saveBackUp: localStorage.getItem("saveBackUp") !== "false",
 	};
 
 	Config.save = function() {
@@ -78,6 +82,7 @@ app.factory("Config", function($q) {
 		localStorage.setItem("eventUseText", Config.global.eventUseText);
 		localStorage.setItem("operationUseText", Config.global.operationUseText);
 		localStorage.setItem("loopCheckFolder", Config.global.loopCheckFolder);
+		localStorage.setItem("saveBackUp", Config.global.saveBackUp);
 	};
 
 	// Project list
@@ -85,6 +90,7 @@ app.factory("Config", function($q) {
 	Config.projectList = _projectList ? _projectList.split(Config.SPLIT_PROJECT) : [];
 
 	Config.addProjectPath = function(prjPath) {
+		Config.projectPath = prjPath;
 		Config.projectList.unshift(prjPath);
 		$.unique(Config.projectList);
 		localStorage.setItem("project", Config.projectList.join(Config.SPLIT_PROJECT));
@@ -103,8 +109,8 @@ app.factory("Config", function($q) {
 			_config = _configCache[type] = new Config();
 			_config.promise = _deferred.promise;
 
-			require("fs").readFile(
-				require('path').normalize(Config.projectPath + "/.dota2editor/" + type + ".conf")
+			FS.readFile(
+				PATH.normalize(Config.projectPath + "/.dota2editor/" + type + ".conf")
 				, "utf8", function (err, data) {
 					_config._pass = true;
 
@@ -128,6 +134,39 @@ app.factory("Config", function($q) {
 				});
 		}
 		return _config;
+	};
+
+	// Assume folder
+	Config.assumeFolder = function(path) {
+		path = PATH.normalize(Config.projectPath + "/" + path);
+		FS.exists(path, function(exist) {
+			if(!exist) {
+				FS.mkdir(path);
+			}
+		});
+	};
+
+	// Copy file
+	Config.copyFile = function(src, tgt) {
+		src = PATH.normalize(Config.projectPath + "/" + src);
+		tgt = PATH.normalize(Config.projectPath + "/" + tgt);
+		FS.exists(src, function(exist) {
+			if(exist) {
+				var readable = FS.createReadStream(src);
+				var writable = FS.createWriteStream(tgt);
+				readable.pipe(writable);
+			}
+		});
+	};
+
+	// List path
+	Config.listFiles = function(path) {
+		return FS.readdirSync(PATH.normalize(Config.projectPath + "/" + path));
+	};
+
+	// Delete
+	Config.deleteFile = function(path) {
+		FS.unlinkSync(PATH.normalize(Config.projectPath + "/" + path));
 	};
 
 	return Config;

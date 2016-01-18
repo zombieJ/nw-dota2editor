@@ -53,6 +53,14 @@
 	</label>
 </div>
 
+<div class="checkbox">
+	<label>
+		<input type="checkbox" ng-checked="Config.global.saveBackUp" ng-click="Config.global.saveBackUp = !Config.global.saveBackUp">
+		Backup when saving
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('saveBackUp')}}"></span>
+	</label>
+</div>
+
 <hr/>
 
 <button class="btn btn-primary" ng-click="saveConfig()">{{::Locale('Save')}}</button>
