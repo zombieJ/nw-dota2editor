@@ -165,8 +165,22 @@ app.factory("Config", function($q) {
 	};
 
 	// Delete
+	function _loopDelete(path) {
+		path = PATH.normalize(path);
+		if(FS.existsSync(path)) {
+			if(FS.statSync(path).isDirectory()) {
+				$.each(FS.readdirSync(path), function (i, file) {
+					_loopDelete(path + "/" + file);
+				});
+				FS.rmdirSync(path);
+			} else {
+				FS.unlinkSync(path);
+			}
+		}
+	}
+
 	Config.deleteFile = function(path) {
-		FS.unlinkSync(PATH.normalize(Config.projectPath + "/" + path));
+		_loopDelete(Config.projectPath + "/" + path);
 	};
 
 	return Config;
