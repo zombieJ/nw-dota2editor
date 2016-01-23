@@ -22,8 +22,10 @@ app.factory("Operation", function(KV, Sound, AppFileSrv) {
 		var _kv = this.kv;
 		if((_kv.key + "").trim() === "") return null;
 
-		if(_kv.key === "AttachEffect" || _kv.key === "FireEffect" || _kv.key === "TrackingProjectile" || _kv.key === "LinearProjectile") {
+		if($.inArray(_kv.key, ["AttachEffect","FireEffect","TrackingProjectile","LinearProjectile"]) !== -1) {
 			return _kv.get("EffectName") ? [new KV("particle", _kv.get("EffectName"))] : null;
+		} else if(_kv.key === "CleaveAttack") {
+			return _kv.get("CleaveEffect") ? [new KV("particle", _kv.get("CleaveEffect"))] : null;
 		} else if(_kv.key === "FireSound") {
 			return _kv.get("EffectName") ? [new KV("soundfile", Sound._nameMap[_kv.get("EffectName")])] : null;
 		} else {
