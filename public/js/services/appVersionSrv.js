@@ -1,8 +1,11 @@
-app.factory("AppVersionSrv", function ($q, $timeout, FS, PATH, Sequence, Sound, KV, Locale) {
+app.factory("AppVersionSrv", function ($q, $http, $timeout, FS, PATH, Sequence, Sound, KV, Locale) {
 	var AppVersionSrv = function () {
 	};
 
-	// Init Environment check
+	// ====================================================
+	// =              Init Environment Check              =
+	// ====================================================
+	// Get current path
 	AppVersionSrv.resPath = "";
 	var FS = require("fs");
 	if(!AppVersionSrv._readyDeferred) {
@@ -18,7 +21,31 @@ app.factory("AppVersionSrv", function ($q, $timeout, FS, PATH, Sequence, Sound, 
 		return AppVersionSrv._readyDeferred.promise;
 	};
 
+	// Check for latest version
+	(function() {
+		AppVersionSrv.version = "DEV";
+		FS.readFile("_VERSION", "utf8", function (err, data) {
+			AppVersionSrv.version = data || "";
+
+			$http.get("https://raw.githubusercontent.com/zombieJ/nw-dota2editor/master/_VERSION").then(function (data) {
+				console.log(AppVersionSrv.version.trim() , data.data.trim(), AppVersionSrv.version.trim()<data.data.trim());
+				if(AppVersionSrv.version.trim() < data.data.trim()) {
+					$.notify({
+						title: "<b>Update Require</b>",
+						content: "KV Editor Version is OUT OF DATE. Please download the latest version.",
+						type: "warning",
+						timeout: 10000,
+						overtimeout: 5000
+					});
+				}
+			});
+		});
+	})();
+
 	// Application check
+	// ====================================================
+	// =                 Application Check                =
+	// ====================================================
 	AppVersionSrv.ready = false;
 	AppVersionSrv.stateMSG = "Loading...";
 
