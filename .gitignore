@@ -1,9 +1,9 @@
 *.nw
 .*
+*.7z
 nw.exe
 dist
 dist/locales
 dist/res
 fake
 vsnd_to_soundname_v2.json
-_VERSION
