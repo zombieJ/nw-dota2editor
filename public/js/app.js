@@ -303,6 +303,12 @@ app.controller('main', function ($scope, $route, $location, $q,
 		return path === $location.path();
 	};
 
+	// 系统版本
+	FS.readFile("_VERSION", "utf8", function (err, data) {
+		$scope._VERSION = data || "DEV";
+		$scope.$apply();
+	});
+
 	// 载入项目
 	$scope.loadProject = function () {
 		var _promise = NODE.loadProject(globalContent.project);

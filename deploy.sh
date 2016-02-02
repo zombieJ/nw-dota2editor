@@ -1,8 +1,14 @@
+date_mark=$(date +%Y%m%d_%H%M%S)
+echo $date_mark > _VERSION
+
+echo "Clean Up"
 rm -f dota2editor.nw
 rm -rf dist/res
+rm -f dist_*.7z
+
+echo "Group"
 cp -r res dist/.
-rm -f dist_*.zip
-zip -r dota2editor.nw *.html *.json public partials srv
+zip -r dota2editor.nw *.html *.json public partials srv _VERSION
 
 echo "Merge"
 cp nw.exe dota2editor.exe
@@ -15,7 +21,7 @@ read answer
 if echo "$answer" | grep -iq "^y" ;then
 	echo "Compress..."
 	#zip -r "dist_$(date +%Y%m%d).zip" dist
-	7za a -t7z -r "dist_$(date +%Y%m%d).7z" dist/*
+	7za a -t7z -r "dist_$date_mark.7z" dist/*
 else
 	echo "Exit"
 fi

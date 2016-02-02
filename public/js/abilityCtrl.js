@@ -538,6 +538,8 @@ var _abilityCtrl = function(isItem) {
 
 				// Language check
 				$.each(globalContent.languageList, function(j, lang) {
+					if(!lang.kv) return;
+
 					// Ability
 					$.each(Language.AbilityLang, function(k, langField) {
 						if(!langField.frequent) return;
