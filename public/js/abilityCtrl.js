@@ -210,9 +210,11 @@ var _abilityCtrl = function(isItem) {
 			}
 
 			// Item
-			_newAbility.kv.set("BaseClass", "item_datadriven");
-			if($scope._newTmplAbility._autoID) {
-				$scope.assignAutoID($scope.ability);
+			if($scope.isItem) {
+				_newAbility.kv.set("BaseClass", "item_datadriven");
+				if ($scope._newTmplAbility._autoID) {
+					$scope.assignAutoID($scope.ability);
+				}
 			}
 
 			setTimeout(function() {
