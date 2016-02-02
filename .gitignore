@@ -1,6 +1,7 @@
 *.nw
 .*
 nw.exe
+dist
 dist/locales
 dist/res
 fake
