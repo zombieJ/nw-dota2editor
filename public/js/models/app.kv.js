@@ -26,17 +26,22 @@ app.factory("KV", function(NODE, $q) {
 		return _kv;
 	};
 
-	_KV.prototype.getValueByPath = function (path, defaultValue) {
+	_KV.prototype.getKVByPath = function(path, caseSensitive) {
 		var _kv = this;
 		var _split = path.split(".");
 
 		$.each(_split, function (i, _key) {
-			_kv = common.array.find(_key, _kv.value, "key", false, false);
+			_kv = common.array.find(_key, _kv.value, "key", false, caseSensitive);
 			if(!_kv) {
 				return false;
 			}
 		});
 
+		return _kv ? _kv : null;
+	};
+
+	_KV.prototype.getValueByPath = function (path, defaultValue) {
+		var _kv = this.getKVByPath(path);
 		return _kv ? _kv.value : defaultValue;
 	};
 
@@ -47,7 +52,7 @@ app.factory("KV", function(NODE, $q) {
 	};
 
 	_KV.prototype.bind = function(key, valueIsList) {
-		var _kv = this.getKV(key);
+		var _kv = this.getKVByPath(key);
 
 		return function(value) {
 			if(arguments.length === 0) {
