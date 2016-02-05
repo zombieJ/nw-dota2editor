@@ -315,6 +315,13 @@ app.factory("Locale", function() {
 
 		"Event Type": "事件类型",
 
+		// 修饰器 - 法球
+		DOTA_ORB_PRIORITY_ABILITY: "技能优先级",
+		DOTA_ORB_PRIORITY_DEFAULT: "默认优先级",
+		DOTA_ORB_PRIORITY_ITEM: "物品优先级",
+		DOTA_ORB_PRIORITY_ITEM_PROC: "触发物品优先级",
+		DOTA_ORB_PRIORITY_NONE: "无优先级",
+
 		// 修饰器 - 属性
 		NewProperty: "新建属性",
 		MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL: "魔法攻击无效",
@@ -658,6 +665,7 @@ app.factory("Locale", function() {
 		RunScript: "执行脚本",
 		Stun: "击晕",
 		TrackingProjectile: "跟踪投射物",
+		SpendMana: "消耗魔法",
 		Random: "随机",
 		SpawnUnit: "召唤单位",
 		ActOnTargets: "让目标行动",

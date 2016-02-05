@@ -73,6 +73,8 @@ app.factory("Operation", function(KV, Sound, AppFileSrv) {
 		["TrackingProjectile", true, ["Target", "EffectName", "Dodgeable", "ProvidesVision", "VisionRadius", "MoveSpeed", "SourceAttachment"]],
 		["Random", true,["Chance", "PseudoRandom", "OnSuccess", "OnFailure"]],
 
+		["SpendMana", false,["Mana"]],
+
 		["SpawnUnit", false, ["UnitName", "UnitCount", "Target", "UnitLimit", "SpawnRadius", "Duration", "GrantsGold", "GrantsXP", "OnSpawn"]],
 		["ActOnTargets", false, ["Target", "Action"]],
 		["LevelUpAbility",false,["Target", "AbilityName"]],
@@ -196,6 +198,7 @@ app.factory("Operation", function(KV, Sound, AppFileSrv) {
 		Type: {type: "single", value: [["DAMAGE_TYPE_MAGICAL"], ["DAMAGE_TYPE_PHYSICAL"], ["DAMAGE_TYPE_PURE"]]},
 		MinDamage: {type: "text", match: _match_AbilitySpecial},
 		MaxDamage: {type: "text", match: _match_AbilitySpecial},
+		Mana: {type: "text", match: _match_AbilitySpecial},
 		Damage: {type: "text", match: _match_AbilitySpecial},
 		CurrentHealthPercentBasedDamage: {type: "text", match: _match_AbilitySpecial},
 		MaxHealthPercentBasedDamage: {type: "text", match: _match_AbilitySpecial},

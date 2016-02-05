@@ -51,6 +51,7 @@ app.factory("Modifier", function(Event) {
 			var _list = [];
 
 			if(kvUnit.get("EffectName")) _list.push(new KV("particle", kvUnit.get("EffectName")));
+			if(kvUnit.getValueByPath("Orb.ProjectileName")) _list.push(new KV("particle", kvUnit.getValueByPath("Orb.ProjectileName")));
 			$.each(_my.getEventList(), function(i, eventKV) {
 				_list = _list.concat(Event(eventKV).getKVPrecacheList());
 			});
@@ -122,7 +123,7 @@ app.factory("Modifier", function(Event) {
 			}},
 			{group: "orb", path: "Orb", attr: "Priority", type: "text", showFunc: _orbFunc},
 			{group: "orb", path: "Orb", attr: "ProjectileName", type: "text", showFunc: _orbFunc},
-			{group: "orb", path: "Orb", attr: "CastAttack", type: "text", showFunc: _orbFunc}
+			{group: "orb", path: "Orb", attr: "CastAttack", type: "boolean", showFunc: _orbFunc}
 		],
 		[
 			{group: "effect", attr: "EffectName", type: "text"},
@@ -189,6 +190,14 @@ app.factory("Modifier", function(Event) {
 		["DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED"],
 		["DOTA_UNIT_TARGET_FLAG_RANGED_ONLY"],
 		["DOTA_UNIT_TARGET_FLAG_PREFER_ENEMIES"]
+	];
+
+	Modifier["Orb.Priority"] = [
+		{value: "DOTA_ORB_PRIORITY_ABILITY"},
+		{value: "DOTA_ORB_PRIORITY_DEFAULT"},
+		{value: "DOTA_ORB_PRIORITY_ITEM"},
+		{value: "DOTA_ORB_PRIORITY_ITEM_PROC"},
+		{value: "DOTA_ORB_PRIORITY_NONE"}
 	];
 
 	Modifier.AllowIllusionDuplicate = Modifier.IsBuff = Modifier.IsDebuff = Modifier.IsHidden = Modifier.IsPurgable = Modifier.Aura_ApplyToCaster = [
