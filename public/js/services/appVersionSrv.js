@@ -28,7 +28,6 @@ app.factory("AppVersionSrv", function ($q, $http, $timeout, FS, PATH, Sequence, 
 			AppVersionSrv.version = data || "";
 
 			$http.get("https://raw.githubusercontent.com/zombieJ/nw-dota2editor/master/_VERSION").then(function (data) {
-				console.log(AppVersionSrv.version.trim() , data.data.trim(), AppVersionSrv.version.trim()<data.data.trim());
 				if(AppVersionSrv.version.trim() < data.data.trim()) {
 					$.notify({
 						title: "<b>Update Require</b>",

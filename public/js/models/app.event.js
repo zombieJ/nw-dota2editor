@@ -92,8 +92,7 @@ app.factory("Event", function(Operation) {
 		{value: "OnOrbFire"},
 		{value: "OnOrbImpact"},
 		{value: "OnSpellTargetReady"},
-		{value: "OnTakeDamage"},
-		{value: "Orb"}
+		{value: "OnTakeDamage"}
 	].concat(Event.EventList);
 
 	return Event;

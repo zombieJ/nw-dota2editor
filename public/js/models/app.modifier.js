@@ -29,6 +29,11 @@ app.factory("Modifier", function(Event) {
 			kvUnit.set("_IsAura", "1");
 		}
 
+		// Orb
+		if(kvUnit.get("Orb")) {
+			kvUnit.set("_Orb", "1");
+		}
+
 		// Event List
 		_my._eventList = [];
 		_my.getEventList = function() {
@@ -71,20 +76,23 @@ app.factory("Modifier", function(Event) {
 	var _auraFunc = function(modifier) {
 		return modifier && modifier.get("_IsAura") === "1";
 	};
+	var _orbFunc = function(modifier) {
+		return modifier && modifier.get("_Orb") === "1";
+	};
 
 	Modifier.AttrList = [
 		[
 			{group: "common", attr: "Attributes", type: "group"},
 			{group: "common", attr: "Duration", type: "text"},
 			{group: "common", attr: "Passive", type: "boolean"},
-			{group: "common", attr: "TextureName", type: "text"},
+			{group: "common", attr: "TextureName", type: "text"}
 		],
 		[
 			{group: "state", attr: "IsBuff", type: "boolean"},
 			{group: "state", attr: "IsDebuff", type: "boolean"},
 			{group: "state", attr: "IsHidden", type: "boolean"},
 			{group: "state", attr: "IsPurgable", type: "boolean"},
-			{group: "state", attr: "AllowIllusionDuplicate", type: "boolean"},
+			{group: "state", attr: "AllowIllusionDuplicate", type: "boolean"}
 		],
 		[
 			{group: "aura", attr: "_IsAura", type: "boolean", change: function(modifier) {
@@ -102,16 +110,28 @@ app.factory("Modifier", function(Event) {
 			{group: "aura", attr: "Aura_Teams", type: "single", showFunc: _auraFunc},
 			{group: "aura", attr: "Aura_Types", type: "group", showFunc: _auraFunc},
 			{group: "aura", attr: "Aura_Flags", type: "group", showFunc: _auraFunc},
-			{group: "aura", attr: "Aura_ApplyToCaster", type: "boolean", showFunc: _auraFunc},
+			{group: "aura", attr: "Aura_ApplyToCaster", type: "boolean", showFunc: _auraFunc}
+		],
+		[
+			{group: "orb", attr: "_Orb", type: "boolean", change: function(modifier) {
+				if(modifier.get("_Orb") !== "1") {
+					modifier.delete("Orb");
+				} else {
+					modifier.assumeKey("Orb", true);
+				}
+			}},
+			{group: "orb", path: "Orb", attr: "Priority", type: "text", showFunc: _orbFunc},
+			{group: "orb", path: "Orb", attr: "ProjectileName", type: "text", showFunc: _orbFunc},
+			{group: "orb", path: "Orb", attr: "CastAttack", type: "text", showFunc: _orbFunc}
 		],
 		[
 			{group: "effect", attr: "EffectName", type: "text"},
-			{group: "effect", attr: "EffectAttachType", type: "single"},
+			{group: "effect", attr: "EffectAttachType", type: "single"}
 		],
 		[
 			{group: "statusEffect", attr: "StatusEffectName", type: "text"},
 			{group: "statusEffect", attr: "StatusEffectPriority", type: "text"},
-			{group: "statusEffect", attr: "OverrideAnimation", type: "single"},
+			{group: "statusEffect", attr: "OverrideAnimation", type: "single"}
 		],
 	];
 
@@ -122,7 +142,7 @@ app.factory("Modifier", function(Event) {
 		["MODIFIER_ATTRIBUTE_NONE"],
 		["MODIFIER_ATTRIBUTE_MULTIPLE"],
 		["MODIFIER_ATTRIBUTE_PERMANENT"],
-		["MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE"],
+		["MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE"]
 	];
 
 	Modifier.Aura_Teams = [
@@ -130,7 +150,7 @@ app.factory("Modifier", function(Event) {
 		["DOTA_UNIT_TARGET_TEAM_ENEMY", true],
 		["DOTA_UNIT_TARGET_TEAM_FRIENDLY", true],
 		["DOTA_UNIT_TARGET_TEAM_CUSTOM"],
-		["DOTA_UNIT_TARGET_TEAM_NONE"],
+		["DOTA_UNIT_TARGET_TEAM_NONE"]
 	];
 
 	Modifier.Aura_Types = [
@@ -144,7 +164,7 @@ app.factory("Modifier", function(Event) {
 		["DOTA_UNIT_TARGET_MECHANICAL"],
 		["DOTA_UNIT_TARGET_NONE"],
 		["DOTA_UNIT_TARGET_OTHER"],
-		["DOTA_UNIT_TARGET_TREE"],
+		["DOTA_UNIT_TARGET_TREE"]
 	];
 
 	Modifier.Aura_Flags = [
@@ -184,7 +204,7 @@ app.factory("Modifier", function(Event) {
 		["follow_chest"],
 		["follow_head"],
 		//["start_at_customorigin","",true],
-		["world_origin"],
+		["world_origin"]
 	];
 
 	Modifier.OverrideAnimation = [
@@ -195,7 +215,7 @@ app.factory("Modifier", function(Event) {
 		["ACT_DOTA_RUN"],
 		["ACT_DOTA_SPAWN"],
 		["ACT_DOTA_TELEPORT"],
-		["ACT_DOTA_VICTORY"],
+		["ACT_DOTA_VICTORY"]
 	];
 
 	Modifier.Properties = [
@@ -301,7 +321,7 @@ app.factory("Modifier", function(Event) {
 		{value: "MODIFIER_PROPERTY_ATTACK_RANGE_BONUS_UNIQUE"},
 		{value: "MODIFIER_PROPERTY_MAX_ATTACK_RANGE"},
 		{value: "MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE_STACKING"},
-		{value: "MODIFIER_PROPERTY_SUPER_ILLUSION_WITH_ULTIMATE"},
+		{value: "MODIFIER_PROPERTY_SUPER_ILLUSION_WITH_ULTIMATE"}
 	];
 
 	Modifier.States = [
@@ -336,12 +356,12 @@ app.factory("Modifier", function(Event) {
 		{value: "MODIFIER_STATE_SOFT_DISARMED"},
 		{value: "MODIFIER_STATE_SPECIALLY_DENIABLE"},
 		{value: "MODIFIER_STATE_STUNNED"},
-		{value: "MODIFIER_STATE_UNSELECTABLE"},
+		{value: "MODIFIER_STATE_UNSELECTABLE"}
 	];
 
 	Modifier.StateValues = [
 		{value: "MODIFIER_STATE_VALUE_ENABLED"},
-	{value: "MODIFIER_STATE_VALUE_DISABLED"},
+	{value: "MODIFIER_STATE_VALUE_DISABLED"}
 	];
 
 	return Modifier;

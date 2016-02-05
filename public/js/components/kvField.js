@@ -24,10 +24,10 @@ components.directive('kvfield', function($compile) {
 			};
 
 			$scope.getAttrPath = function() {
-				if($scope.attrunit.path &&  $scope.attrunit.attr) {
+				if($scope.attrunit.path && $scope.attrunit.attr) {
 					return $scope.attrunit.path + "." +  $scope.attrunit.attr;
 				} else {
-					return $scope.attrunit.path ||  $scope.attrunit.attr;
+					return $scope.attrunit.path || $scope.attrunit.attr;
 				}
 			};
 

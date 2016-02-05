@@ -265,7 +265,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 				return $scope.ability && $scope.ability.get("BaseClass") === "ability_lua";
 			}
 			},
-			{group: "common", attr: "AbilityBehavior", type: "group"},
+			{group: "common", attr: "AbilityBehavior", type: "group"}
 		],
 		[
 			{group: "target", attr: "AbilityUnitTargetType", type: "group"},
@@ -276,18 +276,18 @@ app.factory("Ability", function($q, Event, Modifier) {
 				defaultValue: "DOTA_UNIT_TARGET_TEAM_NONE"
 			},
 			{group: "target", attr: "AbilityUnitTargetFlags", type: "group"},
-			{group: "target", attr: "AbilityUnitDamageType", type: "single"},
+			{group: "target", attr: "AbilityUnitDamageType", type: "single"}
 		],
 		[
 			{group: "skill", attr: "AbilityType", type: "single", defaultValue: "DOTA_ABILITY_TYPE_BASIC"},
 			{group: "skill", attr: "HotKeyOverride", type: "text"},
 			{group: "skill", attr: "MaxLevel", type: "text"},
 			{group: "skill", attr: "RequiredLevel", type: "text"},
-			{group: "skill", attr: "LevelsBetweenUpgrades", type: "text"},
+			{group: "skill", attr: "LevelsBetweenUpgrades", type: "text"}
 		],
 		[
 			{group: "animation", attr: "AbilityCastPoint", type: "text"},
-			{group: "animation", attr: "AbilityCastAnimation", type: "text"},
+			{group: "animation", attr: "AbilityCastAnimation", type: "text"}
 		],
 		[
 			{group: "usage", attr: "AbilityCooldown", type: "text"},
@@ -300,15 +300,15 @@ app.factory("Ability", function($q, Event, Modifier) {
 				group: "usage", attr: "AOERadius", type: "text", showFunc: function ($scope) {
 					return $scope.ability && $scope.ability.has("AbilityBehavior", "DOTA_ABILITY_BEHAVIOR_AOE");
 				}
-			},
-		],
+			}
+		]
 	];
 
 	Ability.ItemAttrList = [
 		[
 			{group: "item", attr: "ID", type: "text"},
 			{group: "item", attr: "ItemQuality", type: "single"},
-			{group: "item", attr: "ItemCastOnPickup", type: "boolean", defaultValue: false},
+			{group: "item", attr: "ItemCastOnPickup", type: "boolean", defaultValue: false}
 		],
 		[
 			{group: "item", attr: "ItemCost", type: "text"},
@@ -324,24 +324,24 @@ app.factory("Ability", function($q, Event, Modifier) {
 		[
 			{group: "item", attr: "ItemRequiresCharges", type: "single"},
 			{group: "item", attr: "ItemInitialCharges", type: "text"},
-			{group: "item", attr: "ItemStackable", type: "boolean", defaultValue: false},
+			{group: "item", attr: "ItemStackable", type: "boolean", defaultValue: false}
 		],
 		[
 			{group: "item", attr: "SideShop", type: "text"},
 			{group: "item", attr: "SecretShop", type: "text"},
 			{group: "item", attr: "ItemShopTags", type: "text"},
-			{group: "item", attr: "ItemAliases", type: "text"},
+			{group: "item", attr: "ItemAliases", type: "text"}
 		],
 
 		[
 			{group: "item", attr: "MaxUpgradeLevel", type: "text"},
-			{group: "item", attr: "ItemBaseLevel", type: "text"},
+			{group: "item", attr: "ItemBaseLevel", type: "text"}
 		],
 		[
 			{group: "item", attr: "ItemRecipe", type: "boolean", defaultValue: false},
 			{group: "item", attr: "ItemResult", type: "text"},
 			{group: "item", attr: "ItemRequirements", type: "blob"},  // TODO: 合成公式！
-			{group: "item", attr: "ItemDisassembleRule", type: "single"},
+			{group: "item", attr: "ItemDisassembleRule", type: "single"}
 		],
 	];
 

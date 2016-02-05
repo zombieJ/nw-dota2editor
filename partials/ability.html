@@ -224,13 +224,13 @@
 												<li ng-repeat="_prop in (currentModifier.get('Properties') || []) track by $index">
 													<a ng-click="common.array.remove(_prop, currentModifier.get('Properties'))">[X]</a>
 													<div class="ability-modifer-item-select">
-														<div class="ability-modifer-item-select-inline">
-															<!--select ng-model="_prop.key">
-																<option ng-repeat="item in Modifier.Properties track by $index" value="{{::item[0]}}">
-																	【{{::Locale(item[0])}}】 {{::item[0].replace("MODIFIER_PROPERTY_", "")}}
+														<div class="ability-modifer-item-select-inline" ng-switch="Config.global.operationUseText">
+															<input tipfield ng-model="_prop.key" data-alternative="Modifier.Properties" ng-switch-when="true" />
+															<select ng-model="_prop.key" ng-switch-default>
+																<option ng-repeat="item in Modifier.Properties track by $index" value="{{::item.value}}">
+																	{{item.value.replace("MODIFIER_PROPERTY_", "")}} 【{{::Locale(item.value)}}】
 																</option>
-															</select-->
-															<input tipfield ng-model="_prop.key" data-alternative="Modifier.Properties" />
+															</select>
 														</div>
 													</div>
 													<input type="text" class="form-control" ng-model="_prop.value" />

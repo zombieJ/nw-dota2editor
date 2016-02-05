@@ -639,7 +639,11 @@ app.factory("Locale", function() {
 		OnOrbImpact: "法球命中",
 		OnTakeDamage: "受到伤害",
 		OnSpellTargetReady: "当技能选定目标",
+		_Orb: "法球",
 		Orb: "法球",
+		"Priority": "优先级",
+		"ProjectileName": "投射物",
+		"CastAttack": "施法攻击",
 
 		// 操作
 		DeleteOnHit: "命中时删除",
