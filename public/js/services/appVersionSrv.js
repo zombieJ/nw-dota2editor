@@ -8,18 +8,9 @@ app.factory("AppVersionSrv", function ($q, $http, $timeout, FS, PATH, Sequence, 
 	// Get current path
 	AppVersionSrv.resPath = "";
 	var FS = require("fs");
-	if(!AppVersionSrv._readyDeferred) {
-		AppVersionSrv._readyDeferred = $q.defer();
-		FS.exists("res", function(exist) {
-			if(!exist) {
-				AppVersionSrv.resPath = process.execPath.replace(/\w+\.exe$/, '');
-			}
-			AppVersionSrv._readyDeferred.resolve(AppVersionSrv.resPath);
-		});
+	if(!FS.existsSync("res")) {
+		AppVersionSrv.resPath = process.execPath.replace(/\w+\.exe$/, '');
 	}
-	AppVersionSrv.pathPromise = function() {
-		return AppVersionSrv._readyDeferred.promise;
-	};
 
 	// Check for latest version
 	(function() {
