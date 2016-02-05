@@ -7,6 +7,9 @@ app.factory("AppFileSrv", function ($interval, $once, globalContent) {
 	AppFileSrv.fileList = [];
 	AppFileSrv.fileMatchList = [];
 
+	// ==========================================================
+	// =                        V Script                        =
+	// ==========================================================
 	// List files
 	function listFiles(path) {
 		FS.readdir(path, function(err, files) {
@@ -70,6 +73,17 @@ app.factory("AppFileSrv", function ($interval, $once, globalContent) {
 		}, 5000);
 
 		return AppFileSrv.prepareFuncMatchCache[path] || [];
+	};
+
+	// ==========================================================
+	// =                       File System                      =
+	// ==========================================================
+	// Assume folder
+	AppFileSrv.assumeFolder = function(path) {
+		path = PATH.normalize(path);
+		if(!FS.existsSync(path)) {
+			FS.mkdirSync(path);
+		}
 	};
 
 	return AppFileSrv;
