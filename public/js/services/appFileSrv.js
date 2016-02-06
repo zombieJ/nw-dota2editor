@@ -82,6 +82,7 @@ app.factory("AppFileSrv", function ($interval, $once, globalContent) {
 	AppFileSrv.assumeFolder = function(path) {
 		path = PATH.normalize(path);
 		if(!FS.existsSync(path)) {
+			AppFileSrv.assumeFolder(PATH.dirname(path));
 			FS.mkdirSync(path);
 		}
 	};
