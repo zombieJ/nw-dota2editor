@@ -16,7 +16,7 @@ hammerControllers.controller('configCtrl', function ($scope, Config, AppImageSrv
 	$scope.syncAll = function() {
 		$scope.syncLock = true;
 		AppImageSrv.load().then(null, null, function(notify) {
-			console.log(">>>", notify);
+			//console.log(">>>", notify);
 			$scope.syncAllMSG = notify.msg;
 		}).finally(function() {
 			$scope.syncLock = false;

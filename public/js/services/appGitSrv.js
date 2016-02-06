@@ -148,19 +148,20 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 	// =                      Download Pool                      =
 	// ===========================================================
 	AppGitSrv.DownloadPool = function(list, thread) {
-		thread = thread || 5;
+		thread = thread || 1;
 		var remain = thread, done = 0;
-		var id;
+		var intervalId, id = 0;
 		var dList = list.slice();
 		var _deferred = $q.defer();
 
-		id = setInterval(function() {
+		intervalId = setInterval(function() {
 			if(remain === 0) return;
 
 			if(dList.length) {
 				var _obj = dList.shift();
+				id += 1;
 				remain -= 1;
-				AppGitSrv.DownloadPool.download(_obj).always(function() {
+				AppGitSrv.DownloadPool.download(_obj, id).always(function() {
 					remain += 1;
 					done += 1;
 					_deferred.notify({
@@ -169,27 +170,46 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 				});
 			} else if(list.length === done) {
 				_deferred.resolve();
-				clearInterval(id);
+				clearInterval(intervalId);
 			}
-		}, 100);
+		}, 10);
 		return _deferred.promise;
 	};
 
-	AppGitSrv.DownloadPool.download = function(unit) {
+	window.aaa = [];
+	AppGitSrv.DownloadPool.download = function(unit, id) {
 		var _dfd = $.Deferred();
-		$.get(unit.url, {client_id: CLIENT_ID, client_secret: CLIENT_SECRET}).then(function(data) {
-			var _content = data.content;
-			var _buff = new Buffer(_content, "base64");
-			FS.writeFile(unit.path, _buff, function (err) {
-				if (err) {
-					_dfd.reject();
-				} else {
+		if(id <= 317) {
+			_dfd.resolve();
+		} else {
+			$.get(unit.url, {client_id: CLIENT_ID, client_secret: CLIENT_SECRET}).then(function (data) {
+				var _content = data.content;
+				data.path = unit.path;
+				/*if(id > 316 && id < 326) {
+				 console.log();
+				 }*/
+				/*if(id > 315 && id < 330) {
+				 window.aaa.push(_content);
+				 }
+				 _dfd.resolve();*/
+				FS.writeFileSync(AppVersionSrv.resPath + "debugFuck.txt", JSON.stringify(data, null, "\t"), "utf8");
+
+				console.log(unit.path);
+				setTimeout(function() {
+					var _buff = new Buffer(_content, "base64");
 					_dfd.resolve();
-				}
+				}, 1000);
+				/*FS.writeFile(unit.path, _buff, function (err) {
+				 if (err) {
+				 _dfd.reject();
+				 } else {
+				 _dfd.resolve();
+				 }
+				 });*/
+			}, function () {
+				_dfd.reject();
 			});
-		}, function() {
-			_dfd.reject();
-		});
+		}
 		return _dfd;
 	};
 
