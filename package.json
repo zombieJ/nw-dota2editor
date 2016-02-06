@@ -6,6 +6,7 @@
   "window": {
     "width": 1024,
     "height": 768,
-    "min_width": 800
+    "min_width": 800,
+    "icon": "icon/favicon.png"
   }
 }

@@ -9,7 +9,7 @@ app.factory("AppVersionSrv", function ($q, $http, $timeout, FS, PATH, Sequence, 
 	AppVersionSrv.resPath = "";
 	var FS = require("fs");
 	if(!FS.existsSync("res")) {
-		AppVersionSrv.resPath = process.execPath.replace(/\w+\.exe$/, '');
+		AppVersionSrv.resPath = process.execPath.replace(/bin[\\\/]\w+\.exe$/, '');
 	}
 
 	// Check for latest version

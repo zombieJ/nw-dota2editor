@@ -7,14 +7,18 @@ rm -rf dist/res
 rm -f dist_*.7z
 
 echo "Group"
-cp -r res dist/.
-zip -r dota2editor.nw *.html *.json public partials srv _VERSION
+mkdir dist/res
+cp -r icon dist/.
+cp -r res/items_game.json dist/res/items_game.json
+cp -r res/vsnd_to_soundname_v2.txt dist/res/vsnd_to_soundname_v2.txt
+zip -r dota2editor.nw *.html *.json public partials srv icon _VERSION
 
-echo "Merge"
-cp nw.exe dota2editor.exe
-cat dota2editor.nw >> dota2editor.exe
+#echo "Merge"
+#cp nw.exe dota2editor.exe
+#cat dota2editor.nw >> dota2editor.exe
 
-mv dota2editor.exe dist/.
+#mv dota2editor.exe dist/.
+mv dota2editor.nw dist/.
 
 echo -n "Compress the dist file (y/n)? "
 read answer

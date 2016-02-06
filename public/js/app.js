@@ -817,6 +817,13 @@ app.controller('main', function ($scope, $route, $location, $q,
 	// ================================================================
 	// =                            初始化                            =
 	// ================================================================
+	try {
+		var gui = require('nw.gui');
+		gui.App.setCrashDumpDir(AppVersionSrv.resPath);
+	} catch (err) {
+		console.error(err);
+	}
+
 	AppVersionSrv.check();
 	Unit.init();
 	//AppImageSrv.load();

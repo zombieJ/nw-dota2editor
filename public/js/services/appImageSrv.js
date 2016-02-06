@@ -5,7 +5,7 @@ app.factory("AppImageSrv", function (AppGitSrv) {
 	var AppImageSrv = function() {};
 
 	AppImageSrv.load = function() {
-		AppGitSrv.downloadGitFolder(REPO, "res/spellicons", PATH_SPELLICONS);
+		return AppGitSrv.downloadGitFolder(REPO, "res/spellicons", PATH_SPELLICONS);
 	};
 
 	return AppImageSrv;

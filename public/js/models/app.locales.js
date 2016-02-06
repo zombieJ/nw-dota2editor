@@ -731,6 +731,9 @@ app.factory("Locale", function() {
 		None: "无",
 		NothingNeedFix: "没有需要修改的建议",
 
+		// 配置
+		SyncAll: "同步全部",
+
 		// 帮助
 		projectFolder: "项目路径，例如：C:\\Steam\\steamapps\\common\\dota 2 beta\\game\\dota_addons\\sampleGame",
 		title: "Dota2 KV编辑器（β测试版）",
@@ -763,7 +766,8 @@ app.factory("Locale", function() {
 		abilityTreeViewSelect: "按住Ctrl+点击，选择技能",
 		saveSuccess: "保存成功！",
 		languageParseError: "检测到无法解析的语言文件：${file}，保存时将被覆盖。如果你不想被覆盖，请检查该文件格式。",
-		saveBackUp: "每次保存，自动对原先文件进行备份。最多保留最近10次更改。"
+		saveBackUp: "每次保存，自动对原先文件进行备份。最多保留最近10次更改。",
+		syncAll: "同步最新数据，包含【技能图标】。"
 	};
 
 	return Locale;
