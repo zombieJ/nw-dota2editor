@@ -8,7 +8,7 @@
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.get('abilities', _ability._name, 'markColor') || '#CCC'}}"></span>
 					<span class="fa fa-cubes sm" ng-if="config.get('abilities', _ability._name, 'markUsage') === 'dummy'"></span>
 					<span class="fa fa-rocket sm" ng-if="config.get('abilities', _ability._name, 'markUsage') === 'test'"></span>
-					{{config.get('abilities', _ability._name, 'editorAliasName') || globalContent.mainLang().kv.get(Language.abilityAttr(_ability._name, '')) || _ability._name}}
+					{{config.get('abilities', _ability._name, 'editorAliasName') || globalContent.mainLang().kv.get(Language.abilityAttr(_ability._name, ''), Config.global.kvCaseSensitive) || _ability._name}}
 					<span class="fa fa-exclamation-triangle text-danger" ng-if="conflictMap[_ability._name]"
 						  uib-tooltip="{{::Locale('conflictName')}}" tooltip-placement="right" tooltip-append-to-body="true"></span>
 				</p>
@@ -49,7 +49,7 @@
 
 				<div class="ability-cntr-header-name ability-form">
 					<h1>
-						{{GC.mainLang().kv.get(Language.abilityAttr(ability._name, "")) || Locale('Unnamed')}}
+						{{GC.mainLang().kv.get(Language.abilityAttr(ability._name, ""), Config.global.kvCaseSensitive) || Locale('Unnamed')}}
 						<small>
 							<a ng-click="UI.modal.rename(ability, renameCheck, renameCallback)">
 								<span class="fa fa-edit"></span>
@@ -505,7 +505,7 @@
 											<button class="btn btn-default fa fa-paint-brush color-picker"></button>
 											<input type="text" ng-model="GC.currentLanguage.kv.bind(Language.abilityAttr(ability._name, langField.attr))"
 											       ng-model-options="{getterSetter: true}" class="form-control" ng-if="langField.type === 'text'"/>
-											<textarea ng-model="GC.currentLanguage.kv.bind(Language.abilityAttr(ability._name, langField.attr))"
+											<textarea ng-model="GC.currentLanguage.kv.bind(Language.abilityAttr(ability._name, langField.attr))" rows="{{langField.rows || 3}}"
 											          ng-model-options="{getterSetter: true}" class="form-control" ng-if="langField.type === 'blob'"></textarea>
 										</td>
 									</tr>

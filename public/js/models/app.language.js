@@ -73,7 +73,7 @@ app.factory("Language", function($q, KV, NODE, Locale) {
 	Language.AbilityPrefix = "DOTA_Tooltip_ability_";
 	Language.AbilityLang = [
 		{attr: "", desc: "名称", title: "Name", type: "text", frequent: true},
-		{attr: "Description", desc: "描述", type: "blob", frequent: true},
+		{attr: "Description", desc: "描述", type: "blob", rows: 8, frequent: true},
 		{attr: "Lore", desc: "传说", type: "blob"},
 		{attr: "Note0", desc: "备注0", type: "blob"},
 		{attr: "Note1", desc: "备注1", type: "blob"},
