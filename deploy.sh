@@ -8,7 +8,6 @@ rm -f dist_*.7z
 
 echo "Group"
 mkdir dist/res
-cp -r icon dist/.
 cp -r res/items_game.json dist/res/items_game.json
 cp -r res/vsnd_to_soundname_v2.txt dist/res/vsnd_to_soundname_v2.txt
 zip -r dota2editor.nw *.html *.json public partials srv icon _VERSION
