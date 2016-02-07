@@ -15,6 +15,13 @@
 		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('saveKeepKV')}}"></span>
 	</label>
 </div>
+<div class="checkbox">
+	<label>
+		<input type="checkbox" ng-checked="Config.global.kvCaseSensitive" ng-click="Config.global.kvCaseSensitive = !Config.global.kvCaseSensitive">
+		KV Case Sensitive
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('kvCaseSensitive')}}"></span>
+	</label>
+</div>
 
 <hr/>
 

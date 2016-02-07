@@ -3,7 +3,7 @@
 // ======================================================
 // =                         KV                         =
 // ======================================================
-app.factory("KV", function(NODE, $q) {
+app.factory("KV", function(NODE, $q, Config) {
 	var _KV = KV;
 
 	_KV.new = function(key, value, comment) {
@@ -52,7 +52,7 @@ app.factory("KV", function(NODE, $q) {
 	};
 
 	_KV.prototype.bind = function(key, valueIsList) {
-		var _kv = this.getKVByPath(key);
+		var _kv = this.getKVByPath(key, Config.global.kvCaseSensitive);
 
 		return function(value) {
 			if(arguments.length === 0) {

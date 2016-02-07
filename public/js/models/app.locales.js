@@ -747,6 +747,7 @@ app.factory("Locale", function() {
 		applyStreamKey: "如果您还没有Stream API Key，可以通过该地址申请（中国部分地区需要通过VPN访问）：",
 		streamKeyNotSet: "未设置Stream API Key，您可能会遇到数据无法显示。于配置页设置/申请Stream API Key。",
 		saveKeepKV: '保存时保持所有的KV。如果不勾选，会忽略未赋值的键。例如"HasInventory" ""，会被忽略。',
+		kvCaseSensitive: "KV大小写敏感。如果您无法保证KV文件的大小写符合标准，请不要勾选此选项",
 		illegalCharacter: '输入不合法',
 		duplicateDefined: '字段被重复定义',
 		emptyList: "列表为空",
