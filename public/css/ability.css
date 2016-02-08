@@ -412,6 +412,31 @@ hr {
 	width: auto;
 }
 
+.ability-cntr-header .ability-cntr-header-img {
+	position: relative;
+}
+
+.ability-cntr-header .ability-cntr-header-img .ability-img-picker {
+	color: #FFFFFF;
+	background: rgba(0,0,0,0.8);
+	padding: 2px 5px;
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+	white-space: nowrap;
+	z-index: 1;
+	text-decoration: none;
+	font-size: 14px;
+}
+.ability-cntr-header .ability-cntr-header-img:hover .ability-img-picker {
+	display: block;
+	opacity: 0.7;
+}
+.ability-cntr-header .ability-cntr-header-img:hover .ability-img-picker:hover {
+	opacity: 1;
+}
+
 .ability-cntr-header .nav li a {
 	padding: 5px 7px;
 	font-size: 20px;
@@ -455,15 +480,6 @@ hr {
 	color: #999;
 	position: relative;
 }
-/*.ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1 small a {
-	font-size: 16px;
-	color: #999;
-	position: absolute;
-	display: none;
-}
-.ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1:hover small a {
-	display: block;
-}*/
 .ability-cntr-header .ability-cntr-header-desc .ability-cntr-header-name h1 small a {
 	color: #FFFFFF;
 	background: rgba(0,0,0,0.8);
@@ -543,4 +559,25 @@ hr {
 .ability-cntr-body .ability-modifer-list.nav.nav-pills li .menu a:hover {
 	text-decoration: none;
 	background: rgba(255,255,255,0.1);
+}
+
+.ability-textureCntr .ability-texture {
+	display: inline;
+	float: left;
+	margin: 0 5px 5px 0;
+}
+.ability-textureCntr .ability-texture img {
+	height: 50px;
+}
+
+.ability-textureCntr-preview {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1100;
+	pointer-events: none;
+}
+.ability-textureCntr-preview.right {
+	left: auto;
+	right: 0;
 }

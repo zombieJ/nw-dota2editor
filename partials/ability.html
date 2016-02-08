@@ -30,6 +30,10 @@
 		<div class="ability-cntr-header clearfix">
 			<div class="ability-cntr-header-img">
 				<img class="ability-img" onerror="iconError();" />
+				<a class="ability-img-picker" ng-click="UI.modal('#texturePickerMDL');texturePickerInit();">
+					<span class="fa fa-edit"></span>
+					{{::Locale('Pick')}}
+				</a>
 			</div>
 			<div class="ability-cntr-header-desc">
 				<ul class="nav nav-pills pull-right">
@@ -778,4 +782,36 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+
+
+
+<!-- Texture Picker View -->
+<div class="modal" id="texturePickerMDL" tabindex="-1">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">
+					{{::Locale('TexturePicker')}}
+				</h4>
+			</div>
+			<div class="modal-body">
+				<p class="text-warning" ng-if="texturePickerList.length === 0">{{::Locale('texturePickerEmpty')}}</p>
+				<div class="ability-textureCntr">
+					<div ng-repeat="img in texturePickerList track by $index" class="ability-texture"
+						 ng-mouseenter="texturePickerPreview($event, AppVersionSrv.resPath + 'res/spellicons/' + img)"
+						 ng-mouseleave="texturePickerPreview($event, '')">
+						<img ng-src="{{AppVersionSrv.resPath + 'res/spellicons/' + img}}">
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="ability-textureCntr-preview" ng-show="texturePickerPreviewPath">
+	<img ng-src="{{texturePickerPreviewPath}}">
 </div>

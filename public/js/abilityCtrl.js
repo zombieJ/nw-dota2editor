@@ -1,7 +1,7 @@
 'use strict';
 
 var _abilityCtrl = function(isItem) {
-	return function ($q, $scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config, Language, AppFileSrv) {
+	return function ($q, $scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config, Language, AppVersionSrv, AppFileSrv) {
 		if (!globalContent.isOpen) return;
 
 		window.scope = $scope;
@@ -111,6 +111,22 @@ var _abilityCtrl = function(isItem) {
 				$(".ability-img").attr("src", _path);
 			} else {
 				$(".ability-img").attr("src", 'public/img/logo.jpg');
+			}
+		};
+
+		// ==========> Ability Texture
+		$scope.texturePickerInit = function() {
+			$scope.texturePickerList = null;
+			$timeout(function() {
+				$scope.texturePickerList = AppFileSrv.listFiles(AppVersionSrv.resPath + "res/spellicons", "file").list;
+			});
+		};
+		$scope.texturePickerPreview = function($event, path) {
+			$scope.texturePickerPreviewPath = path;
+			if($event.pageX < 200 && $event.pageY < 200) {
+				$(".ability-textureCntr-preview").addClass("right");
+			} else {
+				$(".ability-textureCntr-preview").removeClass("right");
 			}
 		};
 

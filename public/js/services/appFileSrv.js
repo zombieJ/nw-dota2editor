@@ -1,4 +1,4 @@
-app.factory("AppFileSrv", function ($interval, $once, globalContent) {
+app.factory("AppFileSrv", function ($interval, $q, $once, globalContent) {
 	var _interval;
 	var FS = require("fs");
 	var PATH = require("path");
@@ -85,6 +85,51 @@ app.factory("AppFileSrv", function ($interval, $once, globalContent) {
 			AppFileSrv.assumeFolder(PATH.dirname(path));
 			FS.mkdirSync(path);
 		}
+	};
+
+	// List path
+	AppFileSrv.listFiles = function(path, filter) {
+		var _deferred = $q.defer();
+		var _list = [];
+
+		path = PATH.normalize(path);
+		if(!FS.existsSync(path)) {
+			return {
+				success: false,
+				msg: "Folder not exist!",
+				list: _list
+			};
+		}
+		if(!FS.statSync(path).isDirectory()) {
+			return {
+				success: false,
+				msg: "Not a folder!",
+				list: _list
+			};
+		}
+
+		_list = FS.readdirSync(path);
+
+		switch (filter) {
+			case "folder":
+			case "directory":
+				_list = $.grep(_list, function(file) {
+					return FS.statSync(PATH.normalize(path + "/" + file)).isDirectory();
+				});
+				break;
+			case "file":
+				_list = $.grep(_list, function(file) {
+					return FS.statSync(PATH.normalize(path + "/" + file)).isFile();
+				});
+				break;
+		}
+
+		return {
+			success: true,
+			list: _list
+		};
+
+		return _deferred.promise;
 	};
 
 	return AppFileSrv;
