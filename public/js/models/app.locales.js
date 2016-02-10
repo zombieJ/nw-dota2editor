@@ -272,7 +272,7 @@ app.factory("Locale", function() {
 		ItemAliases: "物品别名",
 		MaxUpgradeLevel: "物品最大等级",
 		ItemBaseLevel: "物品基础等级",
-		ItemRecipe: "合成菜单",
+		ItemRecipe: "合成卷轴",
 		ItemResult: "合成结果",
 		ItemRequirements: "合成需要",
 		ItemDisassembleRule: "可拆分",

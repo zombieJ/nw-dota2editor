@@ -340,7 +340,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 		[
 			{group: "item", attr: "ItemRecipe", type: "boolean", defaultValue: false},
 			{group: "item", attr: "ItemResult", type: "text"},
-			{group: "item", attr: "ItemRequirements", type: "blob"},  // TODO: 合成公式！
+			{group: "item", attr: "ItemRequirements", type: "tree"},  // TODO: 合成公式！
 			{group: "item", attr: "ItemDisassembleRule", type: "single"}
 		],
 	];
