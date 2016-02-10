@@ -122,6 +122,12 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent) {
 					return FS.statSync(PATH.normalize(path + "/" + file)).isFile();
 				});
 				break;
+			default:
+				if(filter instanceof RegExp) {
+					_list = $.grep(_list, function(file) {
+						return filter.test(file);
+					});
+				}
 		}
 
 		return {

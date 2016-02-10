@@ -15,7 +15,9 @@ hammerControllers.controller('configCtrl', function ($scope, Config, AppImageSrv
 
 	$scope.syncAll = function() {
 		$scope.syncLock = true;
-		AppImageSrv.load().then(null, function() {
+		AppImageSrv.load().then(function() {
+			$scope.syncAllMSG = "Finished!";
+		}, function() {
 			$scope.syncAllMSG = "Load failed. Please check your network!";
 		}, function(notify) {
 			$scope.syncAllMSG = notify.msg;

@@ -52,7 +52,7 @@ app.factory("KV", function(NODE, $q, Config) {
 	};
 
 	_KV.prototype.bind = function(key, valueIsList) {
-		var _kv = this.getKVByPath(key, Config.global.kvCaseSensitive);
+		var _kv = key ? this.getKVByPath(key, Config.global.kvCaseSensitive) : null;
 
 		return function(value) {
 			if(arguments.length === 0) {

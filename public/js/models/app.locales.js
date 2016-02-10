@@ -73,6 +73,8 @@ app.factory("Locale", function() {
 		Rename: "重命名",
 		OldName: "原名称",
 		ForkLang: "复制多语言描述",
+		OriginalModifierName: "原修饰器名称",
+		TargetModifierName: "复制修饰器名称",
 		NoSpecialValue: "无自定义值",
 		NoPrecache: "无预载入值",
 		Modifiers: "修饰器",
@@ -764,6 +766,7 @@ app.factory("Locale", function() {
 		originNoPrecache: "在KV中引用到的特效保存时将被自动添加，不需要手动添加precache。",
 		itemAutoID: "物品自动分配ID",
 		itemAutoIDTip: "会自动寻找1500~5000中未使用过的ID作为物品ID",
+		forkModifierNewName: "如果你不想使复制的技能修饰器绑定同一份语言描述，请修改修饰器名称",
 		loopCheckFolder: "保持检查项目所在文件夹，用于Function的自动补全。关闭后不会持续检查目录变化。",
 		reportLimit: "检测报告在检测到100个问题后会停止继续检测，以避免过多性能消耗",
 		virtualView: "这是虚拟视图，并不会影响真实的文件顺序",
@@ -773,7 +776,8 @@ app.factory("Locale", function() {
 		languageParseError: "检测到无法解析的语言文件：${file}，保存时将被覆盖。如果你不想被覆盖，请检查该文件格式。",
 		saveBackUp: "每次保存，自动对原先文件进行备份。最多保留最近10次更改。",
 		syncAll: "如果你想使用直观的图标选择预览功能，请使用此功能来下载所有图标文件。除非你点击此功能，否则编辑器不会主动下载最新的资源。（使用时请确保网络通顺）",
-		texturePickerEmpty: "图标列表为空，请先进入配置界面点击“同步全部”下载最新的图标列表。"
+		texturePickerEmpty: "图标列表为空，请先进入配置界面点击“同步全部”下载最新的图标列表。",
+		texturePickerCustomizeEmpty: "自定义图标列表为空。"
 	};
 
 	return Locale;

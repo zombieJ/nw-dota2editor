@@ -634,6 +634,23 @@
 						<input type="checkbox" ng-checked="_newAbilityForkLang" ng-click="_newAbilityForkLang = !_newAbilityForkLang"> {{::Locale('ForkLang')}}
 					</label>
 				</div>
+
+				<!-- Modifier List -->
+				<table class="table table-bordered" ng-if="_newAbilityFork">
+					<thead>
+						<tr>
+							<th>{{::Locale('OriginalModifierName')}}</th>
+							<th>{{::Locale('TargetModifierName')}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="_modifier in _newAbilityFork.getModifierList() track by $index">
+							<td style="vertical-align: middle;">{{_modifier.key}}</td>
+							<td><input class="form-control" ng-model="_newAbilityForkModiers[_modifier.key]" /></td>
+						</tr>
+					</tbody>
+				</table>
+				<p class="text-muted" ng-show="_newAbilityFork">* {{::Locale('forkModifierNewName')}}</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -797,12 +814,34 @@
 				</h4>
 			</div>
 			<div class="modal-body">
-				<p class="text-warning" ng-if="texturePickerList.length === 0">{{::Locale('texturePickerEmpty')}}</p>
-				<div class="ability-textureCntr">
-					<div ng-repeat="img in texturePickerList track by $index" class="ability-texture"
-						 ng-mouseenter="texturePickerPreview($event, AppVersionSrv.resPath + 'res/spellicons/' + img)"
-						 ng-mouseleave="texturePickerPreview($event, '')">
-						<img ng-src="{{AppVersionSrv.resPath + 'res/spellicons/' + img}}">
+				<input type="text" class="form-control pull-right" style="width: 250px" placeholder="filter..." ng-model="texturePickerFilter" />
+				<ul id="myTabs" class="nav nav-tabs">
+					<li class="active"><a href="[data-id='texturePickerOfficial']" data-toggle="tab">Official</a></li>
+					<li><a href="[data-id='texturePickerCustomize']" data-toggle="tab">Customize</a></li>
+				</ul>
+
+				<div id="myTabContent" class="tab-content ability-textureCntr" ng-class="{ability: !isItem, item: isItem}">
+					<div class="tab-pane fade in active" data-id="texturePickerOfficial">
+						<p class="text-warning" ng-if="texturePickerList.length === 0">{{::Locale('texturePickerEmpty')}}</p>
+						<div class="clearfix">
+							<div ng-repeat="img in texturePickerList track by $index" class="ability-texture"
+								 ng-mouseenter="texturePickerPreview($event, AppVersionSrv.resPath + 'res/' + texturePath + '/' + img)"
+								 ng-mouseleave="texturePickerPreview($event, '')"
+								 ng-click="selectTexture(img)" ng-show="texturePickerMatch(img)">
+								<img ng-src="{{AppVersionSrv.resPath + 'res/' + texturePath + '/' + img}}">
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" data-id="texturePickerCustomize">
+						<p class="text-warning" ng-if="texturePickerCustomizeList.length === 0">{{::Locale('texturePickerCustomizeEmpty')}}</p>
+						<div class="clearfix">
+							<div ng-repeat="img in texturePickerCustomizeList track by $index" class="ability-texture"
+								 ng-mouseenter="texturePickerPreview($event, Config.projectPath + '/resource/flash3/images/' + texturePath + '/' + img)"
+								 ng-mouseleave="texturePickerPreview($event, '')"
+								 ng-click="selectTexture(img)" ng-show="texturePickerMatch(img)">
+								<img ng-src="{{Config.projectPath + '/resource/flash3/images/' + texturePath + '/' + img}}">
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

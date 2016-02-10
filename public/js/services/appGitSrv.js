@@ -10,19 +10,20 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 
 	var AppGitSrv = function() {};
 
-	AppGitSrv.downloadGitFolder = function(gitRepo, exportPath, folderPath) {
+	AppGitSrv.downloadGitFolder = function(gitRepo, exportPath, folderPath, name) {
 		var _url = URL_GITHUB_TREE.replace("[REPO]", gitRepo);
 		var _rowUrl = URL_GITHUB_ROW.replace("[REPO]", gitRepo);
 		var _deferred = $q.defer();
 
+		name = name ? "[" + name + "]" : "";
 		exportPath = AppVersionSrv.resPath + exportPath;
 
 		setTimeout(function() {
-			_deferred.notify({msg: "Connecting Github..."});
+			_deferred.notify({msg: name + "Connecting Github..."});
 		});
 
 		$.get(_url, {client_id: CLIENT_ID, client_secret: CLIENT_SECRET, recursive: 1}).then(function (data) {
-			_deferred.notify({msg: "Loaded list, parsing..."});
+			_deferred.notify({msg: name + "Loaded list, parsing..."});
 			var list = $.map(data.tree, function(item) {
 				if(item.path.indexOf(folderPath) !== 0 || item.type !== "blob") return;
 
@@ -41,9 +42,9 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 			});
 
 			AppGitSrv.DownloadPool(list).then(null, null, function(notify) {
-				_deferred.notify(notify);
+				_deferred.notify({msg: name + notify.msg});
 			}).finally(function() {
-				_deferred.notify({msg: "Download finished!"});
+				_deferred.notify({msg: name + "Download finished!"});
 				_deferred.resolve(list);
 			});
 		}, function(err) {

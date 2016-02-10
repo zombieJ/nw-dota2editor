@@ -13,6 +13,7 @@ var _abilityCtrl = function(isItem) {
 		$scope.currentModifier = null;
 
 		$scope._newAbilityFork = null;
+		$scope._newAbilityForkModiers = null;
 		$scope._newAbilityForkLang = true;
 		$scope._newAbilityName = "";
 
@@ -98,6 +99,8 @@ var _abilityCtrl = function(isItem) {
 			$(".ability-img").attr("src", _path);
 		});
 		window.iconError = function() {
+			if(!$scope.ability) return;
+
 			if(_iconStep === 0) {
 				_iconStep = 1;
 
@@ -115,10 +118,13 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		// ==========> Ability Texture
+		$scope.texturePickerFilter = "";
+		$scope.texturePickerList = null;
+		$scope.texturePath = isItem ? "items" : "spellicons";
 		$scope.texturePickerInit = function() {
-			$scope.texturePickerList = null;
 			$timeout(function() {
-				$scope.texturePickerList = AppFileSrv.listFiles(AppVersionSrv.resPath + "res/spellicons", "file").list;
+				$scope.texturePickerList = AppFileSrv.listFiles(AppVersionSrv.resPath + "res/" + $scope.texturePath, /\.(png|jpg|gif|bmp)$/i).list;
+				$scope.texturePickerCustomizeList = AppFileSrv.listFiles(Config.projectPath + "/resource/flash3/images/" + $scope.texturePath, /\.(png|jpg|gif|bmp)$/i).list;
 			});
 		};
 		$scope.texturePickerPreview = function($event, path) {
@@ -129,12 +135,26 @@ var _abilityCtrl = function(isItem) {
 				$(".ability-textureCntr-preview").removeClass("right");
 			}
 		};
+		$scope.selectTexture = function(texture) {
+			$scope.ability.kv.set("AbilityTextureName", texture.replace(/\.\w+$/, ""));
+			$("#texturePickerMDL").modal("hide");
+		};
+		$scope.texturePickerMatch = function(imgName) {
+			if(!$scope.texturePickerFilter) return true;
+
+			return imgName.toUpperCase().indexOf($scope.texturePickerFilter.toUpperCase()) !== -1;
+		};
 
 		// ==========> New
 		$scope.newEntity = function(source) {
 			$scope._newAbilityFork = source;
+			$scope._newAbilityForkModiers = {};
 			$scope._newAbilityForkLang = true;
 			$scope._newAbilityName = $scope._newAbilityFork ? $scope._newAbilityFork._name + "_clone" : "Undefined";
+
+			if(source) $.each(source.getModifierList(), function(i, modifier) {
+				$scope._newAbilityForkModiers[modifier.key] = modifier.key;
+			});
 
 			UI.modal("#newAbilityMDL");
 		};
@@ -155,13 +175,37 @@ var _abilityCtrl = function(isItem) {
 				_clone._changed = true;
 
 				if($scope._newAbilityFork) {
+					// Rename modifier
+					var _tgtModifiers = _clone.kv.getKV("Modifiers");
+					$.each($scope._newAbilityForkModiers, function(oriName, tgtName) {
+						_tgtModifiers.getKV(oriName).key = tgtName || oriName;
+					});
+
 					// Clone Language
 					if($scope._newAbilityForkLang) {
 						$.each(globalContent.languageList, function(i, lang) {
+							// Ability Lang field
 							$.each(Language.AbilityLang, function(i, langField) {
 								var _oriKey = Language.abilityAttr($scope._newAbilityFork._name, langField.attr);
 								var _tgtKey = Language.abilityAttr(_clone._name, langField.attr);
 								lang.kv.set(_tgtKey, lang.kv.get(_oriKey));
+							});
+
+							// Ability Special
+							$.each($scope._newAbilityFork.getSpecialList(), function(i, abilitySpecial) {
+								var _oriKey = Language.abilityAttr($scope._newAbilityFork._name, abilitySpecial.value[1].key);
+								var _tgtKey = Language.abilityAttr(_clone._name, abilitySpecial.value[1].key);
+								lang.kv.set(_tgtKey, lang.kv.get(_oriKey));
+							});
+
+							// Modifier list
+							$.each($scope._newAbilityForkModiers, function(oriName, tgtName) {
+								// Modifier Lang field
+								$.each(Language.ModifierLang, function (i, langField) {
+									var _oriKey = Language.modifierAttr(oriName, langField.attr);
+									var _tgtKey = Language.modifierAttr(tgtName || oriName, langField.attr);
+									lang.kv.set(_tgtKey, lang.kv.get(_oriKey));
+								});
 							});
 						});
 					}
@@ -289,7 +333,7 @@ var _abilityCtrl = function(isItem) {
 			});
 		};
 
-		// ==========> Rename
+		// ==========> Rename Modifier
 		$scope.renameModifierCheck = function(newName) {
 			var _matched = false;
 			$.each($scope.abilityList, function(i, _ability) {

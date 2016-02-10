@@ -561,13 +561,26 @@ hr {
 	background: rgba(255,255,255,0.1);
 }
 
+.ability-textureCntr {
+	margin-top: 5px;
+}
+
 .ability-textureCntr .ability-texture {
 	display: inline;
 	float: left;
 	margin: 0 5px 5px 0;
+	overflow-x: hidden;
+	background: #000;
 }
 .ability-textureCntr .ability-texture img {
 	height: 50px;
+}
+
+.ability-textureCntr.ability .ability-texture {
+	width: 50px;
+}
+.ability-textureCntr.item .ability-texture {
+	width: 70px;
 }
 
 .ability-textureCntr-preview {
