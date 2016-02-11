@@ -758,6 +758,7 @@ app.factory("Locale", function() {
 		illegalCharacter: '输入不合法',
 		duplicateDefined: '字段被重复定义',
 		emptyList: "列表为空",
+		unitCheckFail: "无效单位。单位必须保证至少拥有过基类、模型和生命值属性",
 		conflictName: "名称冲突",
 		conflictNameConfirm: "名称冲突，确定复用吗？",
 		noLanguageFile: "没有找到语言文件",

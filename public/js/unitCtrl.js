@@ -147,6 +147,11 @@ var _unitCtrl = function(isHero) {
 			$scope.ability.refreshUnassignedList();
 		};
 
+		// ==========> Check
+		$scope.unitCheck = function(unit) {
+			return (isHero || !!unit.kv.get("BaseClass")) && !!unit.kv.get("Model") && !!unit.kv.get("StatusHealth");
+		};
+
 		// ================================================================
 		// =                        File Operation                        =
 		// ================================================================

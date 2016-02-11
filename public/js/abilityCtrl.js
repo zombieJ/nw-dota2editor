@@ -150,7 +150,7 @@ var _abilityCtrl = function(isItem) {
 			}
 		};
 		$scope.selectTexture = function(texture) {
-			$scope.ability.kv.set("AbilityTextureName", texture.replace(/\.\w+$/, ""));
+			$scope.ability.kv.set("AbilityTextureName", (isItem ? "item_" : "") + texture.replace(/\.\w+$/, ""));
 			$("#texturePickerMDL").modal("hide");
 		};
 		$scope.texturePickerMatch = function(imgName) {

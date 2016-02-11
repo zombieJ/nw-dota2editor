@@ -571,10 +571,18 @@ hr {
 .ability-textureCntr .ability-texture {
 	display: inline;
 	float: left;
-	margin: 0 5px 5px 0;
+	margin: 0 3px 3px 0;
 	overflow-x: hidden;
 	background: #000;
+	cursor: pointer;
+	border: 3px solid #FFFFFF;
 }
+.ability-textureCntr .ability-texture:hover {
+	border-color: #6666FF;
+	background: #FFF;
+	opacity: 0.8;
+}
+
 .ability-textureCntr .ability-texture img {
 	height: 50px;
 }
