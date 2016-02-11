@@ -84,6 +84,20 @@ var _abilityCtrl = function(isItem) {
 			]));
 		};
 
+		// ==========> Ability Special
+		$scope._abilitySpecialMatch = function(match) {
+			match = (match || "").toUpperCase();
+			if(!match.match(/^%/) || !$scope.ability) return [];
+
+			match = match.slice(1);
+			var _list =  $.map($scope.ability.getSpecialList(), function(kv) {
+				if((kv.value[1].key || "").toUpperCase().indexOf(match) !== -1) {
+					return {value: "%" + kv.value[1].key};
+				}
+			});
+			return _list;
+		};
+
 		// ==========> Ability Icon
 		var _iconStep = 0;
 		$scope.$watch('ability.get("AbilityTextureName")', function() {

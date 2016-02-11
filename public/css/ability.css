@@ -372,16 +372,19 @@ hr {
 .ability-modifer-prop-list ul li > .ability-modifer-item-select input {
 	background: rgba(0,0,0,0.05);
 }
-.ability-modifer-prop-list ul li > input {
+.ability-modifer-prop-list ul li > .ability-modifer-item-value {
+	display: table-cell;
+	position: relative;
+}
+.ability-modifer-prop-list ul li > .ability-modifer-item-value input {
 	background: transparent;
 	height: auto!important;
 	width: 150px;
-	padding: 1px 0 2px 5px!important;
+	padding: 4px 0 5px 5px!important;
 	text-decoration: underline;
-	display: table-cell;
 	outline: none;
 }
-.ability-modifer-prop-list ul li > input:focus {
+.ability-modifer-prop-list ul li > .ability-modifer-item-value input:focus {
 	box-shadow: none;
 }
 

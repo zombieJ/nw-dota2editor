@@ -74,6 +74,7 @@ app.factory("Operation", function(KV, Sound, AppFileSrv) {
 		["Random", true,["Chance", "PseudoRandom", "OnSuccess", "OnFailure"]],
 
 		["SpendMana", false,["Mana"]],
+		["CreateBonusAttack", false,["Target"]],
 
 		["SpawnUnit", false, ["UnitName", "UnitCount", "Target", "UnitLimit", "SpawnRadius", "Duration", "GrantsGold", "GrantsXP", "OnSpawn"]],
 		["ActOnTargets", false, ["Target", "Action"]],

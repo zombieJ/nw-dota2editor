@@ -672,6 +672,7 @@ app.factory("Locale", function() {
 		Stun: "击晕",
 		TrackingProjectile: "跟踪投射物",
 		SpendMana: "消耗魔法",
+		CreateBonusAttack: "额外攻击",
 		Random: "随机",
 		SpawnUnit: "召唤单位",
 		ActOnTargets: "让目标行动",

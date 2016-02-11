@@ -237,7 +237,9 @@
 															</select>
 														</div>
 													</div>
-													<input type="text" class="form-control" ng-model="_prop.value" />
+													<div class="ability-modifer-item-value">
+														<input tipfield type="text" class="form-control" ng-model="_prop.value" data-matchfuc="_abilitySpecialMatch" />
+													</div>
 												</li>
 											</ul>
 											<a class="add-link" ng-click="currentModifier.assumeKey('Properties', true).value.push(KV.new('', ''))">

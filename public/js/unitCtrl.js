@@ -84,6 +84,10 @@ var _unitCtrl = function(isHero) {
 				}
 				$scope.setAbility(_clone);
 
+				if(isHero) {
+					_clone.kv.delete("BaseClass");
+				}
+
 				$("#newUnitMDL").modal('hide');
 			}
 		};
