@@ -576,6 +576,7 @@ hr {
 	background: #000;
 	cursor: pointer;
 	border: 3px solid #FFFFFF;
+	box-sizing: content-box;
 }
 .ability-textureCntr .ability-texture:hover {
 	border-color: #6666FF;
@@ -591,7 +592,7 @@ hr {
 	width: 50px;
 }
 .ability-textureCntr.item .ability-texture {
-	width: 70px;
+	width: 68px;
 }
 
 .ability-textureCntr-preview {

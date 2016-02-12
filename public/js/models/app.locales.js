@@ -779,7 +779,10 @@ app.factory("Locale", function() {
 		saveBackUp: "每次保存，自动对原先文件进行备份。最多保留最近10次更改。",
 		syncAll: "如果你想使用直观的图标选择预览功能，请使用此功能来下载所有图标文件。除非你点击此功能，否则编辑器不会主动下载最新的资源。（使用时请确保网络通顺）",
 		texturePickerEmpty: "图标列表为空，请先进入配置界面点击“同步全部”下载最新的图标列表。",
-		texturePickerCustomizeEmpty: "自定义图标列表为空。"
+		texturePickerCustomizeEmpty: "自定义图标列表为空。",
+		updating: "正在更新。如果在更新过程中关闭程序，可下次打开重新更新。",
+		updateFinish: "更新完成，重启以应用更新。",
+		updateFailed: "更新失败，请检查你的网络。"
 	};
 
 	return Locale;

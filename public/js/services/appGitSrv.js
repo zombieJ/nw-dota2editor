@@ -1,6 +1,6 @@
-app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
-	var URL_GITHUB_TREE = "https://api.github.com/repos/[REPO]/git/trees/master";
-	var URL_GITHUB_ROW = "https://raw.githubusercontent.com/[REPO]/master/[FILE_PATH]";
+app.factory("AppGitSrv", function ($http, $q, AppFileSrv) {
+	var URL_GITHUB_TREE = "https://api.github.com/repos/[REPO]/git/trees/[BRANCH]";
+	var URL_GITHUB_ROW = "https://raw.githubusercontent.com/[REPO]/[BRANCH]/[FILE_PATH]";
 	var CLIENT_ID = "2b50552c9de85d95b3a3";
 	var CLIENT_SECRET = "15e52b63208e06d4e1ccd12098d72f81bccd12c6";
 
@@ -10,20 +10,20 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 
 	var AppGitSrv = function() {};
 
-	AppGitSrv.downloadGitFolder = function(gitRepo, exportPath, folderPath, name) {
-		var _url = URL_GITHUB_TREE.replace("[REPO]", gitRepo);
-		var _rowUrl = URL_GITHUB_ROW.replace("[REPO]", gitRepo);
+	AppGitSrv.downloadGitFolder = function(gitConfig, exportPath, folderPath, config) {
+		var _url = URL_GITHUB_TREE.replace("[REPO]", gitConfig.repo).replace("[BRANCH]", gitConfig.branch || "master");
+		var _rowUrl = URL_GITHUB_ROW.replace("[REPO]", gitConfig.repo).replace("[BRANCH]", gitConfig.branch || "master");
 		var _deferred = $q.defer();
 
-		name = name ? "[" + name + "]" : "";
-		exportPath = AppVersionSrv.resPath + exportPath;
+		config = config || {};
+		if(typeof config === "string") config = {name: config};
+		var name = config.name ? "[" + config.name + "]" : "";
 
 		setTimeout(function() {
 			_deferred.notify({msg: name + "Connecting Github..."});
 		});
 
 		$.get(_url, {client_id: CLIENT_ID, client_secret: CLIENT_SECRET, recursive: 1}).then(function (data) {
-			_deferred.notify({msg: name + "Loaded list, parsing..."});
 			var list = $.map(data.tree, function(item) {
 				if(item.path.indexOf(folderPath) !== 0 || item.type !== "blob") return;
 
@@ -40,8 +40,9 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 					url: _rowUrl.replace("[FILE_PATH]", item.path)
 				};
 			});
+			_deferred.notify({msg: name + "Start download..."});
 
-			AppGitSrv.DownloadPool(list).then(null, null, function(notify) {
+			AppGitSrv.DownloadPool(list, config).then(null, null, function(notify) {
 				_deferred.notify({msg: name + notify.msg});
 			}).finally(function() {
 				_deferred.notify({msg: name + "Download finished!"});
@@ -57,8 +58,10 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 	// ===========================================================
 	// =                      Download Pool                      =
 	// ===========================================================
-	AppGitSrv.DownloadPool = function(list, thread) {
-		thread = thread || 10;
+	AppGitSrv.DownloadPool = function(list, config) {
+		config = config || {};
+
+		var thread = config.thread || 10;
 		var remain = thread, prepare = 0, done = 0;
 		var dList = list.slice();
 		var _deferred = $q.defer();
@@ -69,7 +72,7 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 			if(dList.length && remain > 0) {
 				remain -= 1;
 				prepare += 1;
-				AppGitSrv.DownloadPool.download(dList.shift()).finally(function() {
+				AppGitSrv.DownloadPool.download(dList.shift(), config).finally(function() {
 					done += 1;
 					remain += 1;
 					_deferred.notify({msg: "Downloading..." + done + "/" + prepare + "/" + list.length});
@@ -88,7 +91,9 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 		return _deferred.promise;
 	};
 
-	function _download(url, targetPath) {
+	function _download(url, targetPath, config) {
+		config = config || {};
+
 		var file = FS.createWriteStream(targetPath);
 		var _deferred = $q.defer();
 		var _timeoutId, _cancel = false;
@@ -100,7 +105,7 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 				file.close(function () {
 					_deferred.reject("[_DOWN] Timout!|", targetPath, "|", url);
 				});
-			}, 20000);
+			}, config.timeout || 20000);
 		}
 		_timeoutCheck("Outer");
 
@@ -149,9 +154,10 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 		});
 	};
 
-	AppGitSrv.DownloadPool.download = function(unit, retry) {
+	AppGitSrv.DownloadPool.download = function(unit, config) {
+		config = config || {};
 		console.log("[START]|", unit.path);
-		retry = retry || 5;
+		var retry = config.retry || 5;
 		var _deferred = $q.defer();
 		git[unit.path] = true;
 		gitTime[unit.path] = +new Date();
@@ -162,7 +168,7 @@ app.factory("AppGitSrv", function ($http, $q, AppVersionSrv, AppFileSrv) {
 		function _doLoad() {
 			if(retry > 0) {
 				window.git[unit.path] = "do load:" + retry;
-				_download(unit.url + "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET, unit.targetPath).then(function() {
+				_download(unit.url + "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET, unit.targetPath, config).then(function() {
 					delete git[unit.path];
 					delete gitTime[unit.path];
 					console.log("[DONE]|", unit.path);

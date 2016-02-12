@@ -1,6 +1,15 @@
-app.factory("AppVersionSrv", function ($q, $http, $timeout, FS, PATH, Sequence, Sound, KV, Locale) {
+app.factory("AppVersionSrv", function ($q, $http, $timeout, $compile, $rootScope, FS, PATH, Sequence, Sound, KV, Locale, AppGitSrv) {
+	var REPO = "zombieJ/nw-dota2editor";
+	var BRANCH = "dist";
+	var PATH_NW = "dist";
+
 	var AppVersionSrv = function () {
 	};
+
+	AppVersionSrv.UPDATE_STATUS_NONE = 0;
+	AppVersionSrv.UPDATE_STATUS_UPDATING = 1;
+	AppVersionSrv.UPDATE_STATUS_FINISHED = 2;
+	AppVersionSrv.UPDATE_STATUS_FAILED = 3;
 
 	// ====================================================
 	// =              Init Environment Check              =
@@ -15,18 +24,38 @@ app.factory("AppVersionSrv", function ($q, $http, $timeout, FS, PATH, Sequence, 
 	// Check for latest version
 	(function() {
 		AppVersionSrv.version = "DEV";
-		FS.readFile("_VERSION", "utf8", function (err, data) {
+		FS.readFile(AppVersionSrv.resPath + "_VERSION", "utf8", function (err, data) {
 			AppVersionSrv.version = data || "";
 
-			$http.get("https://raw.githubusercontent.com/zombieJ/nw-dota2editor/master/_VERSION").then(function (data) {
+			$http.get("https://raw.githubusercontent.com/zombieJ/nw-dota2editor/dist/_VERSION").then(function (data) {
 				if(AppVersionSrv.version.trim() < data.data.trim()) {
-					$.notify({
-						title: "<b>Update Require</b>",
-						content: "KV Editor Version is OUT OF DATE. Please download the latest version.",
+					// Require update
+					var $updateNotify = $.notify({
+						title: "<b>New Version Detected</b>",
+						content: "Detected new version of KV Editor." +
+								 " Click <a ng-click='update()'>HERE</a> for update.",
 						type: "warning",
 						timeout: 10000,
 						overtimeout: 5000
 					});
+
+					// Update Logic
+					var $scope = $rootScope.$new();
+					$compile($updateNotify)($scope);
+					$scope.update = function() {
+						$updateNotify.remove();
+						AppVersionSrv.updateState = AppVersionSrv.UPDATE_STATUS_UPDATING;
+
+						// Download latest version
+						AppVersionSrv.updatePromise = AppGitSrv.downloadGitFolder({repo: REPO, branch: BRANCH}, "tmp", PATH_NW, {name: "Update", timeout: 1000 * 60 * 10});
+						AppVersionSrv.updatePromise.then(function() {
+							AppVersionSrv.updateState = AppVersionSrv.UPDATE_STATUS_FINISHED;
+						}, function() {
+							AppVersionSrv.updateState = AppVersionSrv.UPDATE_STATUS_FAILED;
+						}, function(notify) {
+							AppVersionSrv.undateMSG = notify.msg;
+						});
+					};
 				}
 			});
 		});
