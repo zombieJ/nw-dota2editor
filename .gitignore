@@ -3,6 +3,7 @@
 *.7z
 nw.exe
 _VERSION
+tmp/
 dist
 dist/locales
 dist/res
