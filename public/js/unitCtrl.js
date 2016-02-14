@@ -149,7 +149,16 @@ var _unitCtrl = function(isHero) {
 
 		// ==========> Check
 		$scope.unitCheck = function(unit) {
-			return (isHero || !!unit.kv.get("BaseClass")) && !!unit.kv.get("Model") && !!unit.kv.get("StatusHealth");
+			var _baseClass = unit.kv.get("BaseClass") || "";
+			var _statusHealth = unit.kv.get("StatusHealth") || "";
+
+			if(Number(_statusHealth) < 0) return false;
+			if(!isHero) {
+				if(!_baseClass || !unit.kv.get("Model")) return false;
+			} else {
+				if(!unit.kv.get("override_hero")) return false;
+			}
+			return true;
 		};
 
 		// ================================================================

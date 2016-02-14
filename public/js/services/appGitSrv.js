@@ -10,6 +10,7 @@ app.factory("AppGitSrv", function ($http, $q, AppFileSrv) {
 
 	var AppGitSrv = function() {};
 
+
 	AppGitSrv.downloadGitFolder = function(gitConfig, exportPath, folderPath, config) {
 		var _url = URL_GITHUB_TREE.replace("[REPO]", gitConfig.repo).replace("[BRANCH]", gitConfig.branch || "master");
 		var _rowUrl = URL_GITHUB_ROW.replace("[REPO]", gitConfig.repo).replace("[BRANCH]", gitConfig.branch || "master");
@@ -19,27 +20,48 @@ app.factory("AppGitSrv", function ($http, $q, AppFileSrv) {
 		if(typeof config === "string") config = {name: config};
 		var name = config.name ? "[" + config.name + "]" : "";
 
+		if(!$.isArray(folderPath)) folderPath = [folderPath];
+
 		setTimeout(function() {
 			_deferred.notify({msg: name + "Connecting Github..."});
 		});
 
 		$.get(_url, {client_id: CLIENT_ID, client_secret: CLIENT_SECRET, recursive: 1}).then(function (data) {
-			var list = $.map(data.tree, function(item) {
-				if(item.path.indexOf(folderPath) !== 0 || item.type !== "blob") return;
+			var list = [];
+			$.each(folderPath, function(i, folderPath) {
+				var _item = common.array.find(folderPath, data.tree, "path");
 
-				var _path = item.path.replace(folderPath + "/", "");
-				var _targetPath = PATH.normalize(exportPath + "/" + _path);
-				var _exist = FS.existsSync(_targetPath);
-				var _state = _exist ? FS.statSync(_targetPath) : null;
+				if(_item && _item.type === "blob") {
+					// File mapping
+					var _path = _item.path.replace(/^.*\//, "");
+					list.push({
+						path: _path,
+						targetPath: PATH.normalize(exportPath + "/" + _path),
+						url: _rowUrl.replace("[FILE_PATH]", _item.path),
+						size: _item.size
+					});
+				} else {
+					// Folder mapping
+					$.each(data.tree, function(j, item) {
+						if(item.path.indexOf(folderPath) !== 0 || item.type !== "blob") return;
 
-				if(_exist && _state.size === item.size) return;
+						var _path = item.path.replace(folderPath + "/", "");
+						var _targetPath = PATH.normalize(exportPath + "/" + _path);
+						var _exist = FS.existsSync(_targetPath);
+						var _state = _exist ? FS.statSync(_targetPath) : null;
 
-				return {
-					path: _path,
-					targetPath: _targetPath,
-					url: _rowUrl.replace("[FILE_PATH]", item.path)
-				};
+						if(_exist && _state.size === item.size) return;
+
+						list.push({
+							path: _path,
+							targetPath: _targetPath,
+							url: _rowUrl.replace("[FILE_PATH]", item.path),
+							size: item.size
+						});
+					});
+				}
 			});
+
 			_deferred.notify({msg: name + "Start download..."});
 
 			AppGitSrv.DownloadPool(list, config).then(null, null, function(notify) {
@@ -91,9 +113,7 @@ app.factory("AppGitSrv", function ($http, $q, AppFileSrv) {
 		return _deferred.promise;
 	};
 
-	function _download(url, targetPath, config) {
-		config = config || {};
-
+	function _download(url, targetPath, size, timeout) {
 		var file = FS.createWriteStream(targetPath);
 		var _deferred = $q.defer();
 		var _timeoutId, _cancel = false;
@@ -105,13 +125,11 @@ app.factory("AppGitSrv", function ($http, $q, AppFileSrv) {
 				file.close(function () {
 					_deferred.reject("[_DOWN] Timout!|", targetPath, "|", url);
 				});
-			}, config.timeout || 20000);
+			}, timeout || 20000);
 		}
 		_timeoutCheck("Outer");
 
-		console.log("[_DOWN 0]|", targetPath, "|", url);
 		try {
-			console.log("[_DOWN 1]|", targetPath, "|", url, "|", +new Date());
 			var request = HTTPS.get(url, function (response) {
 				if(_cancel) return;
 				clearTimeout(_timeoutId);
@@ -122,7 +140,11 @@ app.factory("AppGitSrv", function ($http, $q, AppFileSrv) {
 				file.on('finish', function () {
 					clearTimeout(_timeoutId);
 					file.close(function () {
-						_deferred.resolve();
+						if(FS.statSync(targetPath).size === size) {
+							_deferred.resolve();
+						} else {
+							_deferred.reject();
+						}
 					});
 				});
 			});
@@ -168,10 +190,14 @@ app.factory("AppGitSrv", function ($http, $q, AppFileSrv) {
 		function _doLoad() {
 			if(retry > 0) {
 				window.git[unit.path] = "do load:" + retry;
-				_download(unit.url + "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET, unit.targetPath, config).then(function() {
+				_download(unit.url + "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET,
+					unit.targetPath,
+					unit.size,
+					config.timeout || Math.max(unit.size / 2, 20000)
+				).then(function() {
 					delete git[unit.path];
 					delete gitTime[unit.path];
-					console.log("[DONE]|", unit.path);
+					console.log("[DONE]|", unit.path, unit.targetPath);
 					_deferred.resolve();
 				}, function(err) {
 					window.git[unit.path] = retry;

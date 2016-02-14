@@ -68,6 +68,14 @@
 	</label>
 </div>
 
+<div class="checkbox">
+	<label>
+		<input type="checkbox" ng-checked="Config.global.typeaheadFuncPrefix" ng-click="Config.global.typeaheadFuncPrefix = !Config.global.typeaheadFuncPrefix">
+		Typeahead: Function with prefix route
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('typeaheadFuncPrefix')}}"></span>
+	</label>
+</div>
+
 <hr/>
 
 <button class="btn btn-primary" ng-click="saveConfig()">{{::Locale('Save')}}</button>

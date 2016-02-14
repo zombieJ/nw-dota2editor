@@ -1,7 +1,6 @@
-app.factory("AppVersionSrv", function ($q, $http, $timeout, $compile, $rootScope, FS, PATH, Sequence, Sound, KV, Locale, AppGitSrv) {
-	var REPO = "zombieJ/nw-dota2editor";
-	var BRANCH = "dist";
-	var PATH_NW = "dist";
+app.factory("AppVersionSrv", function ($q, $http, $timeout, $compile, $rootScope, FS, PATH, Sequence, Sound, KV, Locale, AppGitSrv, AppFileSrv) {
+	var REPO = "zombieJ/nw-dota2editor-dist";
+	var BRANCH = "master";
 
 	var AppVersionSrv = function () {
 	};
@@ -27,7 +26,7 @@ app.factory("AppVersionSrv", function ($q, $http, $timeout, $compile, $rootScope
 		FS.readFile(AppVersionSrv.resPath + "_VERSION", "utf8", function (err, data) {
 			AppVersionSrv.version = data || "";
 
-			$http.get("https://raw.githubusercontent.com/zombieJ/nw-dota2editor/dist/_VERSION").then(function (data) {
+			$http.get("https://raw.githubusercontent.com/zombieJ/nw-dota2editor-dist/master/dist/_VERSION").then(function (data) {
 				if(AppVersionSrv.version.trim() < data.data.trim()) {
 					// Require update
 					var $updateNotify = $.notify({
@@ -47,9 +46,14 @@ app.factory("AppVersionSrv", function ($q, $http, $timeout, $compile, $rootScope
 						AppVersionSrv.updateState = AppVersionSrv.UPDATE_STATUS_UPDATING;
 
 						// Download latest version
-						AppVersionSrv.updatePromise = AppGitSrv.downloadGitFolder({repo: REPO, branch: BRANCH}, "tmp", PATH_NW, {name: "Update", timeout: 1000 * 60 * 10});
+						AppVersionSrv.updatePromise = AppGitSrv.downloadGitFolder({repo: REPO, branch: BRANCH}, AppVersionSrv.resPath + "tmp", [
+							"dist/_VERSION",
+							"dist/dota2editor.nw"
+						], {name: "Update"});
 						AppVersionSrv.updatePromise.then(function() {
 							AppVersionSrv.updateState = AppVersionSrv.UPDATE_STATUS_FINISHED;
+
+							AppFileSrv.writeFile(AppVersionSrv.resPath + "tmp/_DONE", "done");
 						}, function() {
 							AppVersionSrv.updateState = AppVersionSrv.UPDATE_STATUS_FAILED;
 						}, function(notify) {

@@ -1,10 +1,11 @@
-app.factory("AppFileSrv", function ($interval, $q, $once, globalContent) {
+app.factory("AppFileSrv", function ($interval, $q, $once, globalContent, Config) {
+	var PREFIX = "scripts/vscripts";
+
 	var _interval;
 	var FS = require("fs");
 	var PATH = require("path");
 	var AppFileSrv = function () {
 	};
-	AppFileSrv.fileList = [];
 	AppFileSrv.fileMatchList = [];
 
 	// ==========================================================
@@ -24,7 +25,11 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent) {
 				} else {
 					var _purePath = tmpPath.replace(globalContent.project, "").slice(1);
 					_purePath = _purePath.replace(/\\/g, "/");
-					AppFileSrv.fileList.push(_purePath);
+
+					if(!Config.global.typeaheadFuncPrefix) {
+						_purePath = _purePath.replace(PREFIX + "/", "");
+					}
+
 					AppFileSrv.fileMatchList.push({
 						value: _purePath
 					});
@@ -34,8 +39,7 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent) {
 	}
 
 	AppFileSrv.check = function() {
-		var _path = PATH.normalize(globalContent.project + "/scripts/vscripts");
-		AppFileSrv.fileList = [];
+		var _path = PATH.normalize(globalContent.project + "/" + PREFIX);
 		AppFileSrv.fileMatchList = [];
 		listFiles(_path);
 	};
@@ -57,7 +61,11 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent) {
 	// Prepare function list
 	AppFileSrv.prepareFuncMatchCache = {};
 	AppFileSrv.prepareFuncMatchList = function(path) {
-		var _path = PATH.normalize(globalContent.project + "/" + path);
+		var _path = globalContent.project + "/";
+		if(!Config.global.typeaheadFuncPrefix) {
+			_path = _path + PREFIX + "/";
+		}
+		_path = PATH.normalize(_path + path);
 
 		$once("fileFuncQuery_" + path, function() {
 			FS.readFile(_path, "utf8", function (err, data) {
@@ -134,6 +142,26 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent) {
 			success: true,
 			list: _list
 		};
+
+		return _deferred.promise;
+	};
+
+	// Write file
+	AppFileSrv.writeFile = function(path, data, encoding) {
+		var _deferred = $q.defer();
+
+		path = PATH.normalize(path);
+		encoding = encoding || "utf8";
+		if(encoding === "ucs2") {
+			data = "\ufeff" + data;
+		}
+		FS.writeFile(path, data, encoding, function (err) {
+			if(err) {
+				_deferred.reject(err);
+			} else {
+				_deferred.resolve();
+			}
+		});
 
 		return _deferred.promise;
 	};

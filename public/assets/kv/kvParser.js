@@ -103,7 +103,9 @@
 		}
 
 		// Key - Value
-		if(typeof this.value === "string") {
+		if(this.value === null || this.value === undefined) {
+			// Do nothing
+		} else if(typeof this.value === "string") {
 			_write('"' + this.key + '"	"'
 			+ this.value.replace(/\\"/g, '"').replace(/"/g, '\\"').replace(/\r\n/g, "\\n").replace(/\n/g, "\\n").replace(/\r/g, "\\n")
 			+ '"');

@@ -8,7 +8,7 @@
 					<span class="fa sm" ng-class="{'fa-asterisk': _ability._changed, 'fa-circle': !_ability._changed}" style="color: {{config.abilities[_ability._name].markColor || '#CCC'}}"></span>
 					<span class="fa fa-cubes sm" ng-if="config.abilities[_ability._name].markUsage === 'dummy'"></span>
 					{{config.abilities[_ability._name].editorAliasName || globalContent.mainLang().kv.get(Language.unitAttr(_ability, "")) || _ability._name}}
-					<span class="fa fa-exclamation-triangle text-danger" ng-if="!unitCheck(_ability)"
+					<span class="fa fa-exclamation-triangle text-warning" ng-if="!unitCheck(_ability)"
 					      uib-tooltip="{{::Locale('unitCheckFail')}}" tooltip-placement="right" tooltip-append-to-body="true"></span>
 				</p>
 				<p class="desc">{{_ability._comment}}</p>

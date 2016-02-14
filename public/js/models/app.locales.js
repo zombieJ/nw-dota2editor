@@ -758,7 +758,7 @@ app.factory("Locale", function() {
 		illegalCharacter: '输入不合法',
 		duplicateDefined: '字段被重复定义',
 		emptyList: "列表为空",
-		unitCheckFail: "无效单位。单位必须保证至少拥有过基类、模型和生命值属性",
+		unitCheckFail: "无效单位。普通单位必须保证至少拥有基类、模型和生命值属性，英雄单位必须保证拥有替换英雄属性",
 		conflictName: "名称冲突",
 		conflictNameConfirm: "名称冲突，确定复用吗？",
 		noLanguageFile: "没有找到语言文件",
@@ -782,7 +782,8 @@ app.factory("Locale", function() {
 		texturePickerCustomizeEmpty: "自定义图标列表为空。",
 		updating: "正在更新。如果在更新过程中关闭程序，可下次打开重新更新。",
 		updateFinish: "更新完成，重启以应用更新。",
-		updateFailed: "更新失败，请检查你的网络。"
+		updateFailed: "更新失败，请检查你的网络。",
+		typeaheadFuncPrefix: "去掉勾选会使得RunScript自动提示不携带scripts/vscripts/前缀"
 	};
 
 	return Locale;
