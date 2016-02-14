@@ -26,15 +26,20 @@ else
 fi
 
 
+
+
+cp dist/_VERSION ../nw-dota2editor-dist/dist/.
+cp dist/dota2editor.nw ../nw-dota2editor-dist/dist/.
+cp dist/Dota2KVEditor.exe ../nw-dota2editor-dist/dist/.
+
+cd ../nw-dota2editor-dist
+rm dist/vsnd_to_soundname_v2.json
+git st
+
 echo -n "Deploy latest version (y/n)? "
 read answer
 if echo "$answer" | grep -iq "^y" ;then
-	echo "Deploy..."
-	cp dist/_VERSION ../nw-dota2editor-dist/dist/.
-	cp dist/dota2editor.nw ../nw-dota2editor-dist/dist/.
-	cp dist/Dota2KVEditor.exe ../nw-dota2editor-dist/dist/.
-
-	cd ../nw-dota2editor-dist
+	
 	git add .
 	git commit -m "update latest version"
 	git push
