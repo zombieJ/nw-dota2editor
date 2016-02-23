@@ -208,12 +208,25 @@ app.factory("Modifier", function(Event) {
 
 	Modifier.EffectAttachType = [
 		["attach_hitloc"],
+		["attach_origin"],
+		["attach_attack"],
+		["attach_attack1"],
+		["attach_attack2"],
 		["follow_origin"],
+		["follow_hitloc"],
 		["follow_overhead"],
 		["follow_chest"],
 		["follow_head"],
-		//["start_at_customorigin","",true],
-		["world_origin"]
+		["follow_customorigin"],
+		["follow_attachment"],
+		["follow_eyes"],
+		["follow_attachment_substepped"],
+		["follow_renderorigin"],
+		["follow_rootbone"],
+		["world_origin"],
+		["start_at_customorigin"],
+		["start_at_origin"],
+		["start_at_attachment"]
 	];
 
 	Modifier.OverrideAnimation = [

@@ -192,7 +192,28 @@ app.factory("Operation", function(KV, Sound, AppFileSrv) {
 		EffectName: {type: "text", match: _match_EffectName},
 		EffectAttachType: {
 			type: "single",
-			value: [["attach_hitloc"], ["follow_origin"], ["follow_overhead"], ["start_at_customorigin"], ["world_origin"], ["follow_chest"], ["follow_head"]]
+			value: [
+				["attach_hitloc"],
+				["attach_origin"],
+				["attach_attack"],
+				["attach_attack1"],
+				["attach_attack2"],
+				["follow_origin"],
+				["follow_hitloc"],
+				["follow_overhead"],
+				["follow_chest"],
+				["follow_head"],
+				["follow_customorigin"],
+				["follow_attachment"],
+				["follow_eyes"],
+				["follow_attachment_substepped"],
+				["follow_renderorigin"],
+				["follow_rootbone"],
+				["world_origin"],
+				["start_at_customorigin"],
+				["start_at_origin"],
+				["start_at_attachment"]
+			]
 		},
 		ControlPoints: {type: "tree"},
 		ControlPointEntities: {type: "tree"},

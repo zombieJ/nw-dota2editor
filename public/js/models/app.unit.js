@@ -338,6 +338,10 @@ app.factory("Unit", function($q, $http, FS, Locale, KV, AppVersionSrv, PATH) {
 		],
 
 		[
+			{group: "Behavior", attr: "UseNeutralCreepBehavior", type: "boolean"},
+		],
+
+		[
 			{group: "others", attr: "IsAncient", type: "boolean"},
 			{group: "others", attr: "IsNeutralUnitType", type: "boolean"},
 			{group: "others", attr: "CanBeDominated", type: "single"},
