@@ -74,7 +74,8 @@ app.factory("Config", function($q) {
 		loopCheckFolder: localStorage.getItem("loopCheckFolder") !== "false",
 		saveBackUp: localStorage.getItem("saveBackUp") !== "false",
 		kvCaseSensitive: localStorage.getItem("kvCaseSensitive") === "true",
-		typeaheadFuncPrefix: localStorage.getItem("typeaheadFuncPrefix") !== "false"
+		typeaheadFuncPrefix: localStorage.getItem("typeaheadFuncPrefix") !== "false",
+		abilityTreeView: localStorage.getItem("abilityTreeView") !== "false"
 	};
 
 	Config.save = function() {
@@ -87,6 +88,7 @@ app.factory("Config", function($q) {
 		localStorage.setItem("saveBackUp", Config.global.saveBackUp);
 		localStorage.setItem("kvCaseSensitive", Config.global.kvCaseSensitive);
 		localStorage.setItem("typeaheadFuncPrefix", Config.global.typeaheadFuncPrefix);
+		localStorage.setItem("abilityTreeView", Config.global.abilityTreeView);
 	};
 
 	// Project list

@@ -75,7 +75,16 @@
 		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('typeaheadFuncPrefix')}}"></span>
 	</label>
 </div>
+<hr/>
 
+<label>UI</label>
+<div class="checkbox">
+	<label>
+		<input type="checkbox" ng-checked="Config.global.abilityTreeView" ng-click="Config.global.abilityTreeView = !Config.global.abilityTreeView">
+		Ability/Item using virtual tree view
+		<span class="fa fa-question-circle" tooltip-placement="right" uib-tooltip="{{::Locale('abilityTreeView')}}"></span>
+	</label>
+</div>
 <hr/>
 
 <button class="btn btn-primary" ng-click="saveConfig()">{{::Locale('Save')}}</button>

@@ -797,7 +797,8 @@ app.factory("Locale", function() {
 		updating: "正在更新。如果在更新过程中关闭程序，可下次打开重新更新。",
 		updateFinish: "更新完成，重启以应用更新。",
 		updateFailed: "更新失败，请检查你的网络。",
-		typeaheadFuncPrefix: "去掉勾选会使得RunScript自动提示不携带scripts/vscripts/前缀"
+		typeaheadFuncPrefix: "去掉勾选会使得RunScript自动提示不携带scripts/vscripts/前缀",
+		abilityTreeView: "技能/物品使用虚拟树状视图，该功能不会影响实际的技能/物品文件KV结构"
 	};
 
 	return Locale;

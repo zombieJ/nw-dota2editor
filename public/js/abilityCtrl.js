@@ -99,37 +99,28 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		// ==========> Ability Icon
-		var _iconStep = 0;
-		$scope.$watch('ability.get("AbilityTextureName")', function() {
-			if(!$scope.ability) return "";
+		$scope.iconSrcList = [];
 
-			_iconStep = 0;
-			var _path = "";
+		$scope.$watch('ability.get("AbilityTextureName")', function(newValue, oldValue) {
+			if(!$scope.ability) {
+				$scope.iconSrcList = [];
+				return;
+			}
+
 			if(isItem) {
-				_path = globalContent.project + "/resource/flash3/images/items/" + ($scope.ability.get("AbilityTextureName") || "").replace(/^item_/, "") + ".png";
+				$scope.iconSrcList = [
+					globalContent.project + "/resource/flash3/images/items/" + ($scope.ability.get("AbilityTextureName") || "").replace(/^item_/, "") + ".png",
+					"https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/items/" + ($scope.ability.get("AbilityTextureName") || "").replace(/^item_/, "") + ".png",
+					'public/img/logo.jpg'
+				];
 			} else {
-				_path = globalContent.project + "/resource/flash3/images/spellicons/" + ($scope.ability.get("AbilityTextureName") || "") + ".png";
+				$scope.iconSrcList = [
+					globalContent.project + "/resource/flash3/images/spellicons/" + ($scope.ability.get("AbilityTextureName") || "") + ".png",
+					"https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/spellicons/" + ($scope.ability.get("AbilityTextureName") || "") + ".png",
+					'public/img/logo.jpg'
+				];
 			}
-			$(".ability-img").attr("src", _path);
 		});
-		window.iconError = function() {
-			if(!$scope.ability) return;
-
-			if(_iconStep === 0) {
-				_iconStep = 1;
-
-				var _path = "";
-				if(isItem) {
-					_path = "https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/items/" + ($scope.ability.get("AbilityTextureName") || "").replace(/^item_/, "") + ".png";
-				} else {
-					_path = "https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/spellicons/" + ($scope.ability.get("AbilityTextureName") || "") + ".png";
-				}
-
-				$(".ability-img").attr("src", _path);
-			} else {
-				$(".ability-img").attr("src", 'public/img/logo.jpg');
-			}
-		};
 
 		// ==========> Ability Texture
 		$scope.texturePickerFilter = "";
@@ -758,6 +749,8 @@ var _abilityCtrl = function(isItem) {
 					$scope.treeView.name = $scope.treeView.name || "root";
 					$scope.treeView.list = $scope.treeView.list || [];
 					$scope.treeView._id = +new Date();
+					$scope.treeView.noHead = true;
+					$scope.treeView.open = true;
 				}
 
 				// Loop abilities

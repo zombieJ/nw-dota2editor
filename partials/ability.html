@@ -29,7 +29,8 @@
 		<!-- ================================================================== -->
 		<div class="ability-cntr-header clearfix">
 			<div class="ability-cntr-header-img">
-				<img class="ability-img" onerror="iconError();" />
+				<!--img class="ability-img" onerror="iconError();" /-->
+				<img image class="ability-img" data-src-list="iconSrcList">
 				<a class="ability-img-picker" ng-click="UI.modal('#texturePickerMDL');texturePickerInit();">
 					<span class="fa fa-edit"></span>
 					{{::Locale('Pick')}}
@@ -793,9 +794,9 @@
 					<small>{{::Locale('virtualView')}}</small>
 				</h4>
 			</div>
-			<div class="modal-body">
-				<p class="text-danger pull-right">* {{::Locale('abilityTreeViewSelect')}}</p>
-				<div tree-view="treeView" data-click="treeItemClick"></div>
+			<div class="modal-body" style="background: #333; width: 350px; overflow-x: hidden;">
+				<!--p class="text-danger pull-right">* {{::Locale('abilityTreeViewSelect')}}</p-->
+				<div image-tree-view="treeView" data-click="treeItemClick"></div>
 			</div>
 			<div class="modal-footer">
 			</div>

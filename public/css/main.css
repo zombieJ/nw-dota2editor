@@ -378,6 +378,55 @@ label.checkbox input[type="checkbox"] {
 	pointer-events: auto;
 }
 
+
+
+.image-tree-view .tree-head {
+	background: #444;
+	color: #FFF;
+	font-size: 30px;
+	display: block;
+	padding: 5px 30px 5px 10px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	position: relative;
+}
+.image-tree-view .tree-head:hover {
+	text-decoration: none;
+	background: #555;
+}
+
+.image-tree-view .tree-head .img-cntr {
+	display: inline-block;
+	position: relative;
+	float: left;
+	height: 40px;
+	width: 40px;
+	overflow: hidden;
+	line-height: 100%;
+	margin-right: 5px;
+}
+
+.image-tree-view .tree-head img {
+	height: 40px;
+	width: 40px;
+}
+
+.image-tree-view .tree-head .number {
+	position: absolute;
+	right: 3px;
+	bottom: -5px;
+	text-shadow: 0 0 2px #000;
+	font-size: 16px;
+	text-decoration: none;
+}
+
+.image-tree-view .tree-head .fa {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+
 	/**************** Version Check ****************/
 #versionCheck {
 	background: rgba(0,0,0,0.8);
