@@ -4,7 +4,7 @@ components.directive('menu', function($compile) {
 	return {
 		restrict: 'AE',
 		scope: {
-			menu: "=",		// Menu Object
+			menu: "="		// Menu Object
 		},
 		controller: function ($scope, $element) {
 			$element.on("contextmenu.menuDirective", function (e) {
@@ -12,7 +12,9 @@ components.directive('menu', function($compile) {
 				var menu = new gui.Menu();
 
 				$.each($scope.menu, function(i, entity) {
-					menu.append(new gui.MenuItem(entity));
+					var _menuItem = new gui.MenuItem(entity);
+					_menuItem._item = $scope.menu.get();
+					menu.append(_menuItem);
 				});
 
 				menu.popup(e.originalEvent.x, e.originalEvent.y);

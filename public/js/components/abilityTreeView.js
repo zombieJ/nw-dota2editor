@@ -1,13 +1,15 @@
 'use strict';
 
-components.directive('imageTreeView', function($compile) {
+components.directive('abilityTreeView', function($compile) {
 	return {
 		restrict: 'AE',
 		scope: {
-			treeView: "=imageTreeView",
+			treeView: "=abilityTreeView",
 			parentNode: "=",
 			click: "=?click",
-			imageFunc: "=?imageFunc"
+			imageFunc: "=?imageFunc",
+			activeFunc: "=?activeFunc",
+			fileMenu: "=?fileMenu"
 		},
 		controller: function($scope, $element, UI, Locale) {
 			$scope.sortableOptions = {
@@ -17,16 +19,10 @@ components.directive('imageTreeView', function($compile) {
 			// ==================================================================
 			// =                            Function                            =
 			// ==================================================================
-			$scope.getIconClass = function() {
-				if(!$scope.treeView || !$scope.treeView.list) {
-					return "fa-file-o";
-				} else {
-					if($scope.treeView.lock) {
-						return $scope.treeView.open ? "fa-folder-open-o" : "fa-folder-o";
-					} else {
-						return $scope.treeView.open ? "fa-caret-down" : "fa-caret-left";
-					}
-				}
+			$scope.getIconList = function() {
+				if(!$scope.imageFunc || !$scope.treeView || !$scope.treeView.ability) return null;
+
+				return $scope.imageFunc($scope.treeView.ability);
 			};
 
 			$scope.folderTrigger = function() {
@@ -93,6 +89,9 @@ components.directive('imageTreeView', function($compile) {
 				$scope.$apply();
 			}};
 			$scope.menu = function() {
+				_menu.get = function() {
+					return $scope.treeView;
+				};
 				_menu.splice(0);
 				if($scope.treeView && $scope.treeView.list) {
 					if(!$scope.treeView.lock) {
@@ -101,9 +100,14 @@ components.directive('imageTreeView', function($compile) {
 						_menu.push({type: 'separator'});
 						_menu.push(_menu_delFolder);
 					} else if($scope.treeView.list.length === 0) {
+						_menu.push(_menu_newFolder);
 						_menu.push(_menu_markAsItem);
 					}
 				} else if($scope.treeView && !$scope.treeView.list) {
+					if($scope.fileMenu) {
+						_menu.push.apply(_menu, $scope.fileMenu);
+						_menu.push({type: 'separator'});
+					}
 					_menu.push(_menu_markAsFolder);
 				}
 				return _menu;
@@ -136,17 +140,20 @@ components.directive('imageTreeView', function($compile) {
 		},
 		template:
 		'<div class="image-tree-view">'+
-			'<a menu="menu()" class="tree-head noSelect" ng-class="{\'tree-folder\': treeView.list}" ng-hide="treeView.noHead">'+
+			'<a menu="menu()" class="tree-head noSelect" ng-class="{active: activeFunc(treeView.ability)}" ng-hide="treeView.noHead">'+
 				'<div class="img-cntr">'+
-					'<img />'+
-					'<span class="number" ng-if="treeView.list">{{treeView.list.length}}</span> '+
+					'<img image data-src-list="getIconList()" ng-if="getIconList().length" />'+
+					'<span class="fa fa-folder" ng-if="!getIconList().length"></span>'+
+					'<span class="number" ng-if="treeView.list">{{treeView.list.length}}</span>'+
 				'</div>' +
-				'<span>{{treeView.name}}</span>'+
+				'<span class="title">{{treeView.name}}</span>'+
 				'<span class="fa fa-{{treeView.open ? \'caret-down\' : \'caret-left\'}}" ng-if="treeView.list"></span>'+
 			'</a>'+
 			'<div ui-sortable="sortableOptions" class="tree-list" ng-class="{open: treeView.open}" ng-model="treeView.list" ng-if="treeView.list">'+
 				'<div ng-repeat="item in treeView.list track by item._id">' +
-					'<div image-tree-view="item" ng-if="treeView.open" data-parent-node="treeView" data-click="click"></div>'+
+					'<div ability-tree-view="item" ng-if="treeView.open" data-parent-node="treeView" ' +
+					'data-file-menu="fileMenu" ' +
+					'data-click="click" data-image-func="imageFunc" data-active-func="activeFunc"></div>'+
 				'</div>'+
 			'</div>'+
 		'</div>',

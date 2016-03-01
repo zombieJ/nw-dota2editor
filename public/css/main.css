@@ -49,10 +49,21 @@ h1, h2, h3, h4, h5 {
 	height: 20px;
 }
 
+#btnGroup ,
 #newItem {
 	position: fixed;
 	bottom: 5px;
 	left: 5px;
+}
+
+#btnGroup table {
+	width: 100%;
+}
+
+#btnGroup .btn {
+	padding-left: 0;
+	padding-right: 0;
+	width: 100%;
 }
 
 /* Color picker */
@@ -106,6 +117,23 @@ h1, h2, h3, h4, h5 {
 
 	overflow-y: scroll;
 	overflow-x: hidden;
+}
+#listCntr.dark {
+	z-index: 1;
+	background: #222;
+}
+#listCntr.dark:hover {
+	min-width: 250px;
+}
+#listCntr.dark .image-tree-view.top-view > .tree-list {
+	margin-top: 0;
+}
+
+#listCntr.dark .overflow-view {
+	height: 100%;
+	background: #222;
+	padding: 1px 2px 1px 1px;
+	box-sizing: content-box;
 }
 
 .listCntr .listItem {
@@ -380,12 +408,16 @@ label.checkbox input[type="checkbox"] {
 
 
 
+.image-tree-view {
+	margin-bottom: 2px;
+}
+
 .image-tree-view .tree-head {
 	background: #444;
 	color: #FFF;
-	font-size: 30px;
+	font-size: 18px;
 	display: block;
-	padding: 5px 30px 5px 10px;
+	padding: 5px 20px 2px 2px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -396,36 +428,90 @@ label.checkbox input[type="checkbox"] {
 	background: #555;
 }
 
+.image-tree-view .tree-head.active {
+	box-shadow: inset 0 0 5px green, inset 0 0 5px green, inset 0 0 5px green;
+}
+
 .image-tree-view .tree-head .img-cntr {
 	display: inline-block;
 	position: relative;
 	float: left;
-	height: 40px;
-	width: 40px;
+	height: 30px;
+	width: 30px;
 	overflow: hidden;
 	line-height: 100%;
-	margin-right: 5px;
+	margin: -3px 8px 0 0;
+	background: #222;
 }
-
-.image-tree-view .tree-head img {
-	height: 40px;
+.image-tree-view.item .tree-head .img-cntr {
 	width: 40px;
 }
 
-.image-tree-view .tree-head .number {
+.image-tree-view .tree-head .img-cntr img {
+	height: 30px;
+}
+
+.image-tree-view .tree-head .img-cntr .fa {
+	color: #999;
+	left: 6px;
+	top: 7px;
+	font-size: 20px;
+}
+
+.image-tree-view .tree-head .img-cntr .number {
 	position: absolute;
 	right: 3px;
-	bottom: -5px;
-	text-shadow: 0 0 2px #000;
-	font-size: 16px;
+	bottom: 0px;
+	text-shadow: 0 0 2px #000,0 0 2px #000,0 0 2px #000;
+	font-size: 12px;
 	text-decoration: none;
 }
 
 .image-tree-view .tree-head .fa {
 	position: absolute;
-	right: 10px;
-	top: 10px;
+	right: 8px;
+	top: 6px;
+	font-size: 20px;
 }
+
+.image-tree-view .tree-list {
+	position: relative;
+	margin-top: -52px;
+	margin-left: 0;
+	min-height: 52px;
+	pointer-events: none;
+}
+
+.image-tree-view .tree-list.open {
+	margin-top: 2px;
+	min-height: 15px;
+	pointer-events: auto;
+}
+.image-tree-view .image-tree-view .tree-list.open {
+	border-left: 3px solid rgb(50, 30, 150);
+	margin-left: 0px;
+	padding-left: 10px;
+}
+
+.image-tree-view .image-tree-view .image-tree-view .tree-list.open {
+	border-left-color: rgb(100,50,50);
+}
+.image-tree-view .image-tree-view .image-tree-view .image-tree-view .tree-list.open {
+	border-left-color: rgb(50,100,50);
+}
+.image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .tree-list.open {
+	border-left-color: rgb(50,50,100);
+}
+.image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .tree-list.open {
+	border-left-color: rgb(100,100,50);
+}
+.image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .tree-list.open {
+	border-left-color: rgb(50,100,100);
+}
+.image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .image-tree-view .tree-list.open {
+	border-left-color: rgb(100,50,100);
+}
+
 
 	/**************** Version Check ****************/
 #versionCheck {

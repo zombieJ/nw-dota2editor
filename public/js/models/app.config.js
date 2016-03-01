@@ -122,12 +122,13 @@ app.factory("Config", function($q) {
 
 					try {
 						_config._data = JSON.parse(data);
-						if(initFunc) {
-							_config._data = initFunc(_config._data);
-						}
 					} catch(err) {
 						_config._data = {};
 					}
+
+					try {
+						if(initFunc) _config._data = initFunc(_config._data);
+					} catch(err) {}
 
 					// Fill cache list
 					$.each(_config._cacheList, function(i, cacheUnit) {

@@ -50,6 +50,10 @@ var _abilityCtrl = function(isItem) {
 			$scope.currentModifier = modifier;
 		};
 
+		$scope.isCurrentAbility = function(ability) {
+			return ability === $scope.ability;
+		};
+
 		$scope.addEvent = function(entity) {
 			var _kv = new KV("", []);
 			_kv._isEvent = true;
@@ -100,26 +104,33 @@ var _abilityCtrl = function(isItem) {
 
 		// ==========> Ability Icon
 		$scope.iconSrcList = [];
+		var _iconCache = {};
+		var _iconEmpty = ['public/img/logo.jpg'];
+
+		$scope.getIconList = function(ability) {
+			var textureName = ability && ability.get("AbilityTextureName");
+			if(!textureName) return _iconEmpty;
+
+			if(!_iconCache[textureName]) {
+				if (isItem) {
+					_iconCache[textureName] = [
+						globalContent.project + "/resource/flash3/images/items/" + textureName.replace(/^item_/, "") + ".png",
+						"https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/items/" + textureName.replace(/^item_/, "") + ".png",
+						'public/img/none_item.png'
+					];
+				} else {
+					_iconCache[textureName] = [
+						globalContent.project + "/resource/flash3/images/spellicons/" + textureName + ".png",
+						"https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/spellicons/" + textureName + ".png",
+						'public/img/logo.jpg'
+					];
+				}
+			}
+			return _iconCache[textureName];
+		};
 
 		$scope.$watch('ability.get("AbilityTextureName")', function(newValue, oldValue) {
-			if(!$scope.ability) {
-				$scope.iconSrcList = [];
-				return;
-			}
-
-			if(isItem) {
-				$scope.iconSrcList = [
-					globalContent.project + "/resource/flash3/images/items/" + ($scope.ability.get("AbilityTextureName") || "").replace(/^item_/, "") + ".png",
-					"https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/items/" + ($scope.ability.get("AbilityTextureName") || "").replace(/^item_/, "") + ".png",
-					'public/img/logo.jpg'
-				];
-			} else {
-				$scope.iconSrcList = [
-					globalContent.project + "/resource/flash3/images/spellicons/" + ($scope.ability.get("AbilityTextureName") || "") + ".png",
-					"https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/flash3/images/spellicons/" + ($scope.ability.get("AbilityTextureName") || "") + ".png",
-					'public/img/logo.jpg'
-				];
-			}
+			$scope.iconSrcList = $scope.getIconList($scope.ability);
 		});
 
 		// ==========> Ability Texture
@@ -229,6 +240,13 @@ var _abilityCtrl = function(isItem) {
 				$scope.setAbility(_clone);
 				$scope.assignAutoID(_clone);
 
+				$scope.treeView.list.push(
+					_registerAbilityTreeItem({_id: +new Date()}, _clone)
+				);
+
+				setTimeout(function() {
+					$("#listCntr").scrollTop(9999999);
+				}, 100);
 				$("#newAbilityMDL").modal('hide');
 			}
 		};
@@ -258,6 +276,10 @@ var _abilityCtrl = function(isItem) {
 			$scope.abilityList.push(_newAbility);
 			$scope.setAbility(_newAbility);
 
+			$scope.treeView.list.push(
+				_registerAbilityTreeItem({_id: +new Date()}, _newAbility)
+			);
+
 			// Type
 			$scope.ability._name = $scope._newTmplAbility._name;
 			$scope.ability.kv.set("AbilityBehavior", $scope._newTmplAbility._type);
@@ -284,7 +306,7 @@ var _abilityCtrl = function(isItem) {
 
 			setTimeout(function() {
 				$("#listCntr").scrollTop(9999999);
-			}, 10);
+			}, 100);
 			$("#newTmplMDL").modal('hide');
 		};
 		$scope._newTmplAbility.type = [
@@ -313,6 +335,18 @@ var _abilityCtrl = function(isItem) {
 					break;
 				}
 			}
+		};
+
+		// ==========> New Group
+		$scope.newGroup = function() {
+			UI.modal.input(Locale('New'), Locale('FolderName'), "New Folder", function(grpName) {
+
+				$scope.treeView.list.push({
+					_id : +new Date(),
+					name: grpName,
+					list: []
+				});
+			});
 		};
 
 		// ==========> Rename
@@ -391,15 +425,84 @@ var _abilityCtrl = function(isItem) {
 			$scope.ability.refreshUnassignedList();
 		};
 
+		// ==========> Tree View
+		$scope.fileMenu = [
+			{label: Locale('Duplicate'), click: function() {
+				_menuAbility = this._item.ability;
+				$scope.copyAbility();
+				$scope.$apply();
+			}},
+			{label: Locale('Delete'), click: function() {
+				_menuAbility = this._item.ability;
+				$scope.deleteAbility();
+				$scope.$apply();
+			}},
+		];
+
+		function treeViewInit() {
+			// =============== Tree View Initialization ===============
+			// Initialize tree view
+			if(!$scope.treeView) {
+				$scope.treeView = $scope.config.assumeObject("treeView");
+				$scope.treeView.name = $scope.treeView.name || "root";
+				$scope.treeView.list = $scope.treeView.list || [];
+				$scope.treeView._id = +new Date();
+				$scope.treeView.noHead = true;
+				$scope.treeView.open = true;
+			}
+
+			// Loop abilities
+			var _list = [];
+			function _loopAbilities(item) {
+				// Loop folder
+				if(item.list) {
+					$.each(item.list.slice(), function(i, _item) {
+						if(_item.list) {
+							// ============== Folder ==============
+							if(!_item.ability || common.array.find(_item.ability, $scope.abilityList)) {
+								_loopAbilities(_item);
+							} else {
+								common.array.remove(_item, item.list);
+							}
+						} else {
+							// ============= Ability =============
+							if(common.array.find(_item.ability, $scope.abilityList)) {
+								_loopAbilities(_item);
+							} else {
+								common.array.remove(_item, item.list);
+							}
+						}
+					});
+				}
+				// Check item
+				if(item.ability) {
+					_list.push(item);
+				}
+			}
+			_loopAbilities($scope.treeView);
+
+			// Fill rest abilities
+			var _id = 0;
+			$.each($scope.abilityList, function (i, _ability) {
+				if(!common.array.find(_ability, _list, "ability")) {
+					var _item = {
+						_id : +new Date() + "_" + (_id++)
+					};
+					_registerAbilityTreeItem(_item, _ability);
+					$scope.treeView.list.push(_item);
+				}
+			});
+		}
+
 		// ================================================================
 		// =                        Config Function                       =
 		// ================================================================
+		// Register ability tree item properties
 		function _registerAbilityTreeItem(item, ability) {
 			Object.defineProperties(item, {
 				name: {
 					get: function() {
-						var _desc = globalContent.mainLang().kv.get(Language.abilityAttr(ability._name, ''));
-						return ability._name + (_desc ? " [" + _desc + "]" : "");
+						return globalContent.mainLang().kv.get(Language.abilityAttr(ability._name, '')) || ability._name;
 					}
 				},
 				ability: {
@@ -430,11 +533,14 @@ var _abilityCtrl = function(isItem) {
 
 		function configInitFunc(configData) {
 			// Tree View
-			if(configData.treeView) {
-				_abilityListDeferred.promise.then(function() {
+			_abilityListDeferred.promise.then(function() {
+				if(configData.treeView) {
 					_configInitTreeView(configData.treeView);
-				});
-			}
+				}
+
+				treeViewInit();
+				globalContent[_globalListKey]._treeView = $scope.treeView;
+			});
 			return configData;
 		}
 
@@ -479,6 +585,7 @@ var _abilityCtrl = function(isItem) {
 			});
 		} else {
 			$scope.abilityList = globalContent[_globalListKey];
+			$scope.treeView = globalContent[_globalListKey]._treeView;
 			$scope.setAbility($scope.abilityList[0]);
 			$scope.ready = true;
 			_abilityListDeferred.resolve();
@@ -544,6 +651,8 @@ var _abilityCtrl = function(isItem) {
 				if(_isCurrent) {
 					$scope.setAbility($scope.abilityList[0]);
 				}
+
+				treeViewInit();
 				$scope.$apply();
 			});
 		};
@@ -587,6 +696,7 @@ var _abilityCtrl = function(isItem) {
 				$scope.searchBox = false;
 			}
 		});
+
 
 		// ================================================================
 		// =                        Ability Check                         =
@@ -670,11 +780,6 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                              UI                              =
 		// ================================================================
-		// Select ability
-		$scope.setAbilityMouseDown = function (ability) {
-			$scope.setAbility(ability);
-		};
-
 		// List Container layout
 		var winWidth;
 		$(window).on("resize.abilityList", function () {
@@ -685,7 +790,7 @@ var _abilityCtrl = function(isItem) {
 				if (_winWidth !== winWidth && $abilityCntr.length) {
 					var _left = $abilityCntr.offset().left;
 					$("#listCntr").outerWidth(_left - 15);
-					$("#newItem").outerWidth(_left - 15);
+					$("#btnGroup").outerWidth(_left - 15);
 					winWidth = _winWidth;
 				}
 			}, 100);
@@ -741,65 +846,7 @@ var _abilityCtrl = function(isItem) {
 			L: function() {
 				$("#descriptionTab").click();
 			},
-			_L: "Switch to Tab [Language]",
-			T: function() {
-				// Initialize tree view
-				if(!$scope.treeView) {
-					$scope.treeView = $scope.config.assumeObject("treeView");
-					$scope.treeView.name = $scope.treeView.name || "root";
-					$scope.treeView.list = $scope.treeView.list || [];
-					$scope.treeView._id = +new Date();
-					$scope.treeView.noHead = true;
-					$scope.treeView.open = true;
-				}
-
-				// Loop abilities
-				var _list = [];
-				function _loopAbilities(item) {
-					// Loop folder
-					if(item.list) {
-						$.each(item.list.slice(), function(i, _item) {
-							if(_item.list) {
-								// ============== Folder ==============
-								if(!_item.ability || common.array.find(_item.ability, $scope.abilityList)) {
-									_loopAbilities(_item);
-								} else {
-									common.array.remove(_item, item.list);
-								}
-							} else {
-								// ============= Ability =============
-								if(common.array.find(_item.ability, $scope.abilityList)) {
-									_loopAbilities(_item);
-								} else {
-									common.array.remove(_item, item.list);
-								}
-							}
-						});
-					}
-					// Check item
-					if(item.ability) {
-						_list.push(item);
-					}
-				}
-				_loopAbilities($scope.treeView);
-
-				// Fill rest abilities
-				var _id = 0;
-				$.each($scope.abilityList, function (i, _ability) {
-					if(!common.array.find(_ability, _list, "ability")) {
-						var _item = {
-							_id : +new Date() + "_" + (_id++)
-						};
-						_registerAbilityTreeItem(_item, _ability);
-						$scope.treeView.list.push(_item);
-					}
-				});
-
-				setTimeout(function() {
-					$("#treeViewMDL").modal();
-				}, 100);
-			},
-			_T: "Display tree view"
+			_L: "Switch to Tab [Language]"
 		};
 
 		// Fast Tab
@@ -819,10 +866,9 @@ var _abilityCtrl = function(isItem) {
 
 		// Tree View
 		$scope.treeItemClick = function(e, item) {
-			if(e.ctrlKey && item.ability) {
-				$scope.ability = item.ability;
-				$("#treeViewMDL").modal('hide');
-				return false;
+			if(item.ability) {
+				$scope.setAbility(item.ability);
+				if(e.ctrlKey) return false;
 			}
 		};
 

@@ -1,6 +1,6 @@
 ﻿<div class="row">
 	<div class="col-sm-3 col-md-2">
-		<div id="listCntr" class="listCntr noSelect" ui-sortable ng-model="abilityList">
+		<!--div id="listCntr" class="listCntr noSelect" ui-sortable ng-model="abilityList">
 			<div ng-repeat="_ability in abilityList track by $index" class="listItem"
 			     ng-class="{active: ability == _ability}"
 				 ng-mousedown="setAbilityMouseDown(_ability);">
@@ -14,8 +14,28 @@
 				</p>
 				<p class="desc">{{_ability._comment}}</p>
 			</div>
+		</div-->
+		<div id="listCntr" class="dark">
+			<div class="overflow-view">
+				<div ability-tree-view="treeView" data-click="treeItemClick" class="top-view"
+					 data-file-menu="fileMenu" ng-class="{item: isItem}"
+					 data-image-func="getIconList" data-active-func="isCurrentAbility"></div>
+			</div>
 		</div>
-		<button id="newItem" class="btn btn-primary" ng-click="newTmplAbility()">+ {{::Locale('New')}}</button>
+
+		<div id="btnGroup">
+			<table>
+				<tr>
+					<td>
+						<button class="btn btn-primary" ng-click="newTmplAbility()">+ {{::Locale('Ability')}}</button>
+					</td>
+					<td style="width: 5px;"></td>
+					<td>
+						<button class="btn btn-primary" ng-click="newGroup()">+ {{::Locale('Group')}}</button>
+					</td>
+				</tr>
+			</table>
+		</div>
 	</div>
 	<div class="col-sm-9 col-md-10" ng-show="!ready">
 		<h1>{{::Locale('Loading')}}...</h1>
@@ -25,7 +45,7 @@
 	</div>
 	<div class="col-sm-9 col-md-10" ng-class="{abilityCntr: ability}" ng-show="ability">
 		<!-- ================================================================== -->
-		<!-- =                           技能  引领                           = -->
+		<!-- =                            技能  引领                            = -->
 		<!-- ================================================================== -->
 		<div class="ability-cntr-header clearfix">
 			<div class="ability-cntr-header-img">
@@ -781,31 +801,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-<!-- Tree View -->
-<div class="modal" id="treeViewMDL" tabindex="-1">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">
-					{{::Locale('TreeView')}}
-					<small>{{::Locale('virtualView')}}</small>
-				</h4>
-			</div>
-			<div class="modal-body" style="background: #333; width: 350px; overflow-x: hidden;">
-				<!--p class="text-danger pull-right">* {{::Locale('abilityTreeViewSelect')}}</p-->
-				<div image-tree-view="treeView" data-click="treeItemClick"></div>
-			</div>
-			<div class="modal-footer">
-			</div>
-		</div>
-	</div>
-</div>
-
-
-
 
 <!-- Texture Picker View -->
 <div class="modal" id="texturePickerMDL" tabindex="-1">

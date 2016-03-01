@@ -28,6 +28,8 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 * 技能树状视图
 
 ### TODO list
+* 复制Modifier事件
+* 文字全选改色BUG
 * Search able of modifier attrs/states
 * XavierCHN：基类 模型 生命值 貌似就这三个是必定必须要有的
 * link each other
