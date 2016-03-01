@@ -141,13 +141,14 @@ components.directive('abilityTreeView', function($compile) {
 		template:
 		'<div class="image-tree-view">'+
 			'<a menu="menu()" class="tree-head noSelect" ng-class="{active: activeFunc(treeView.ability)}" ng-hide="treeView.noHead">'+
-				'<div class="img-cntr">'+
+				'<div class="img-cntr" style="border-color: {{treeView.color}}">'+
 					'<img image data-src-list="getIconList()" ng-if="getIconList().length" />'+
 					'<span class="fa fa-folder" ng-if="!getIconList().length"></span>'+
 					'<span class="number" ng-if="treeView.list">{{treeView.list.length}}</span>'+
 				'</div>' +
+				'<span class="fa fa-{{treeView.icon}} icon-mark"></span>'+
 				'<span class="title">{{treeView.name}}</span>'+
-				'<span class="fa fa-{{treeView.open ? \'caret-down\' : \'caret-left\'}}" ng-if="treeView.list"></span>'+
+				'<span class="folder-mark fa fa-{{treeView.open ? \'caret-down\' : \'caret-left\'}}" ng-if="treeView.list"></span>'+
 			'</a>'+
 			'<div ui-sortable="sortableOptions" class="tree-list" ng-class="{open: treeView.open}" ng-model="treeView.list" ng-if="treeView.list">'+
 				'<div ng-repeat="item in treeView.list track by item._id">' +

@@ -417,7 +417,7 @@ label.checkbox input[type="checkbox"] {
 	color: #FFF;
 	font-size: 18px;
 	display: block;
-	padding: 5px 20px 2px 2px;
+	padding: 4px 20px 1px 1px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -442,6 +442,8 @@ label.checkbox input[type="checkbox"] {
 	line-height: 100%;
 	margin: -3px 8px 0 0;
 	background: #222;
+	border: 1px solid #333;
+	box-sizing: content-box;
 }
 .image-tree-view.item .tree-head .img-cntr {
 	width: 40px;
@@ -467,7 +469,14 @@ label.checkbox input[type="checkbox"] {
 	text-decoration: none;
 }
 
-.image-tree-view .tree-head .fa {
+.image-tree-view .tree-head .icon-mark {
+	vertical-align: top;
+	margin-right: 2px;
+	margin-top: 7px;
+	font-size: 12px;
+}
+
+.image-tree-view .tree-head .folder-mark {
 	position: absolute;
 	right: 8px;
 	top: 6px;

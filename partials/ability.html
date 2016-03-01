@@ -99,6 +99,29 @@
 		<!-- ================================================================== -->
 		<div class="tab-content ability-cntr-body">
 			<div data-id="ability" class="tab-pane fade in active">
+				<ul class="nav nav-pills pull-right">
+					<li ng-class="{active: !config.get('abilities', ability._name, 'markColor')}">
+						<a ng-click="setAbilityMarkColor()"><span class="fa fa-circle" style="color: #CCC;"></span></a>
+					</li>
+					<li ng-repeat="color in abilityMarkColorList" ng-class="{active: config.get('abilities', ability._name, 'markColor') === color}">
+						<a ng-click="setAbilityMarkColor(color)"><span class="fa fa-circle" style="color: {{::color}};"></span></a>
+					</li>
+				</ul>
+				<ul class="nav nav-pills pull-right" style="border-right: 1px solid #666; padding-right: 5px; margin-right: 5px;">
+					<li ng-class="{active: !config.get('abilities', ability._name, 'markUsage')}">
+						<a uib-tooltip="{{::Locale('NoMark')}}" tooltip-placement="top" tooltip-append-to-body="true"
+						   ng-click="setAbilityMarkUsage()">
+							<span class="fa fa-ban"></span>
+						</a>
+					</li>
+					<li ng-repeat="item in abilityMarkUsageList" ng-class="{active: config.get('abilities', ability._name, 'markUsage') === item[0]}">
+						<a uib-tooltip="{{::Locale(common.text.capitalize(item[0]))}}" tooltip-placement="top" tooltip-append-to-body="true"
+						   ng-click="setAbilityMarkUsage(item[0])">
+							<span class="fa fa-{{::item[1]}}"></span>
+						</a>
+					</li>
+				</ul>
+
 				<ul class="nav nav-pills">
 					<li ng-class="{active: currentTab === 'common'}"><a ng-click="currentTab = 'common'">{{::Locale('Common')}}</a></li>
 					<li ng-class="{active: currentTab === 'item'}" ng-show="isItem"><a ng-click="currentTab = 'item'">{{::Locale('Item')}}</a></li>

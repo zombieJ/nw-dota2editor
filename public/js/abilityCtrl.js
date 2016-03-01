@@ -501,12 +501,21 @@ var _abilityCtrl = function(isItem) {
 		function _registerAbilityTreeItem(item, ability) {
 			Object.defineProperties(item, {
 				name: {
-					get: function() {
-						return globalContent.mainLang().kv.get(Language.abilityAttr(ability._name, '')) || ability._name;
-					}
+					get: function() {return globalContent.mainLang().kv.get(Language.abilityAttr(ability._name, '')) || ability._name;}
 				},
 				ability: {
 					get: function() {return ability;}
+				},
+				icon: {
+					get: function() {
+						var mark = $scope.config.get('abilities', ability._name, 'markUsage');
+						if(mark === "dummy") return "cubes";
+						if(mark === "test") return "rocket";
+						return "";
+					}
+				},
+				color: {
+					get: function() {return $scope.config.get('abilities', ability._name, 'markColor');}
 				}
 			});
 			return item;
@@ -600,8 +609,11 @@ var _abilityCtrl = function(isItem) {
 		// ================================================================
 		// =                     List Item Operation                      =
 		// ================================================================
+		$scope.abilityMarkUsageList = [['dummy', 'cubes'], ['test', 'rocket']];
+		$scope.abilityMarkColorList = ['#00a65a','#00c0ef','#dd4b39','#f39c12','#666666'];
+
 		$scope.setAbilityMarkUsage = function(usage) {
-			var _ability = $scope.config.assumeObject("abilities", _menuAbility._name);
+			var _ability = $scope.config.assumeObject("abilities", $scope.ability._name);
 			if(usage) {
 				_ability.markUsage = usage;
 			} else {
@@ -610,7 +622,7 @@ var _abilityCtrl = function(isItem) {
 		};
 
 		$scope.setAbilityMarkColor = function(color) {
-			var _ability = $scope.config.assumeObject("abilities", _menuAbility._name);
+			var _ability = $scope.config.assumeObject("abilities", $scope.ability._name);
 			if(color) {
 				_ability.markColor = color;
 			} else {

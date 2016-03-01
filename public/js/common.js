@@ -139,6 +139,10 @@ common.text.contains = function(oriStr, subStr) {
 	return oriStr.indexOf(subStr) !== -1;
 };
 
+common.text.capitalize = function(str) {
+	return str.replace(/(^|\s+)\w/g,function(s){ return s.toUpperCase();});
+};
+
 // ====================== Array =======================
 common.array = {};
 
