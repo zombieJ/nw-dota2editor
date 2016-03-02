@@ -393,12 +393,21 @@ app.factory("Ability", function($q, Event, Modifier) {
 		["common"],
 		["consumable"],
 		["secret_shop"],
-		["artifact"],
+		["artifact"]
 	];
+	Ability.ItemQuality.color = {
+		"component": "#FFFFFF",
+		"rare": "#00C0EF",
+		"epic": "#CC33FF",
+		"common": "#33FF00",
+		"consumable": "#FFFFFF",
+		"secret_shop": "#00CCCC",
+		"artifact": "#FF9900"
+	};
 
 	Ability.ItemDisassembleRule = [
 		["DOTA_ITEM_DISASSEMBLE_ALWAYS"],
-		["DOTA_ITEM_DISASSEMBLE_NEVER"],
+		["DOTA_ITEM_DISASSEMBLE_NEVER"]
 	];
 
 	Ability.ItemPurchasable = Ability.ItemPermanent = Ability.ItemRequiresCharges = [

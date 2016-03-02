@@ -516,6 +516,12 @@ var _abilityCtrl = function(isItem) {
 				},
 				color: {
 					get: function() {return $scope.config.get('abilities', ability._name, 'markColor');}
+				},
+				qualityColor: {
+					get: function() {
+						if(!isItem) return "";
+						return Ability.ItemQuality.color[ability.get("ItemQuality")];
+					}
 				}
 			});
 			return item;
