@@ -460,6 +460,9 @@ label.checkbox input[type="checkbox"] {
 	top: 5px;
 	font-size: 23px;
 }
+.image-tree-view.item .tree-head .img-cntr .fa-folder {
+	left: 8px;
+}
 
 .image-tree-view .tree-head .img-cntr .quality {
 	position: absolute;
