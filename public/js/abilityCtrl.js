@@ -501,7 +501,7 @@ var _abilityCtrl = function(isItem) {
 		function _registerAbilityTreeItem(item, ability) {
 			Object.defineProperties(item, {
 				name: {
-					get: function() {return globalContent.mainLang().kv.get(Language.abilityAttr(ability._name, '')) || ability._name;}
+					get: function() {return globalContent.mainLang().kv.get(Language.abilityAttr(ability._name, ''), Config.global.kvCaseSensitive) || ability._name;}
 				},
 				ability: {
 					get: function() {return ability;}
