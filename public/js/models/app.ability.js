@@ -238,7 +238,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 
 		// ==========> Write
 		writer.writeContent(this.kv.toString(_keepKV ? null : function(kv) {
-			if(kv.value === "" || kv.key.match(/^_/)) return false;
+			if(kv.key === "" || kv.value === "" || kv.key.match(/^_/)) return false;
 		}));
 
 		// ==========> Clean Up
