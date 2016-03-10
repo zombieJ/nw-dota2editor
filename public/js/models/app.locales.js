@@ -755,10 +755,10 @@ app.factory("Locale", function() {
 
 		// 帮助
 		projectFolder: "项目路径，例如：C:\\Steam\\steamapps\\common\\dota 2 beta\\game\\dota_addons\\sampleGame",
-		title: "Dota2 KV编辑器（β测试版）",
-		description: "欢迎使用Dota2 KV编辑器。这是由AMHC论坛提供的可视化Dota2 KV文件编辑器。支持单位、英雄、技能、物品以及多语言编辑功能。由于目前处于β测试版本，请使用时备份您的数据。",
+		title: "矩阵编辑器（β测试版）",
+		description: "欢迎使用矩阵编辑器，这是由AMHC论坛提供的可视化Dota2 KV文件编辑器。支持单位、英雄、技能、物品以及多语言编辑功能。由于目前处于β测试版本，请使用时备份您的数据。",
 		feedback: "如果您发现了问题，欢迎通过以下方式进行反馈，我们会进行修正：",
-		bbs: "论坛：AMHC BBS Url: http://www.dota2rpg.com/",
+		bbs: "论坛：AMHC BBS Url: http://www.dota2rpg.com/forum.php?mod=forumdisplay&fid=134",
 		qqGroup: "QQ群：346172518",
 		mainLanguage: "主语言设置会帮助你在编辑界面自动显示主语言对应的名称描述。",
 		connectionError: "网络连接错误，请重试",

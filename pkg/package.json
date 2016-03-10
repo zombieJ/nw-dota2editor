@@ -4,6 +4,7 @@
   "node-main": "srv/node.js",
 
   "window": {
+    "toolbar": false,
     "width": 1024,
     "height": 768,
     "min_width": 800,

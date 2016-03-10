@@ -13,7 +13,7 @@ components.directive('menu', function($compile) {
 
 				$.each($scope.menu, function(i, entity) {
 					var _menuItem = new gui.MenuItem(entity);
-					_menuItem._item = $scope.menu.get();
+					if($scope.menu.get) _menuItem._item = $scope.menu.get();
 					menu.append(_menuItem);
 				});
 
