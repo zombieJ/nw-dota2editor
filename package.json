@@ -2,6 +2,7 @@
   "name": "dota2editor",
   "main": "index.html",
   "node-main": "srv/node.js",
+  "single-instance": false,
 
   "window": {
     "width": 1024,
