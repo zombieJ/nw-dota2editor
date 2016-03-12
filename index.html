@@ -96,6 +96,17 @@
 				<span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand" href="#/">{{Locale('title')}}</a>
+			<div class="header-tool clearfix">
+				<h5>{{::Locale('DeveloperTool')}}:</h5>
+				<button class="btn btn-warning" ng-click="devReload()">
+					<span class="fa fa-refresh"></span>
+					{{::Locale('Reload')}}
+				</button>
+				<button class="btn btn-warning" ng-click="devShowConsole()">
+					<span class="fa fa-bars"></span>
+					{{::Locale('Console')}}
+				</button>
+			</div>
 		</div>
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">

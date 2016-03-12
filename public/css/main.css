@@ -40,6 +40,34 @@ h1, h2, h3, h4, h5 {
 	text-decoration: underline;
 }
 
+/* Navigation */
+.navbar .navbar-header .header-tool {
+	position: absolute;
+	top: 50px;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+	color: #FFF;
+	padding: 10px 10px;
+	border-radius: 0 0 5px 0;
+	display: none;
+}
+.navbar .navbar-header:hover .header-tool {
+	display: block;
+}
+
+.navbar .navbar-header .header-tool h5 {
+	margin: 0 0 10px 0;
+	padding: 0;
+}
+
+.navbar .navbar-header .header-tool button {
+	float: left;
+	margin-right: 10px;
+}
+.navbar .navbar-header .header-tool button:last-child {
+	margin-right: 0;
+}
+
 /* Main */
 #content {
 	padding-top: 60px;

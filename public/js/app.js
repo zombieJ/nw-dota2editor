@@ -510,7 +510,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 			}
 			return _deferred.promise;
 		}
-		},
+		}
 	];
 
 
@@ -659,7 +659,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 		var _content = {
 			first: null,
 			text: "",
-			last: null,
+			last: null
 		};
 
 		var _start = _selection.start;
@@ -811,6 +811,21 @@ app.controller('main', function ($scope, $route, $location, $q,
 				_my.close(true);
 			});
 		});
+	} catch (err) {
+	}
+
+	// ================================================================
+	// =                        Developer Tool                        =
+	// ================================================================
+	try {
+		var gui = require('nw.gui');
+		var win = gui.Window.get();
+		$scope.devReload = function() {
+			win.reloadDev();
+		};
+		$scope.devShowConsole = function() {
+			win.showDevTools();
+		};
 	} catch (err) {
 	}
 
