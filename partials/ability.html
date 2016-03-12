@@ -213,6 +213,11 @@
 					<!-- ===================== 修饰器 ===================== -->
 					<div ng-show="currentTab === 'modifiers'">
 						<ul class="ability-modifer-list nav nav-pills">
+							<li class="active" ng-class="{disabled: !_copyModifier}">
+								<a ng-click="pasteModifier()">
+									<span class='fa fa-clipboard'></span>
+								</a>
+							</li>
 							<li class="active">
 								<a ng-click="addModifier()">
 									+ <span ng-show="!currentModifier">{{::Locale('NewModifier')}}</span>
@@ -222,6 +227,7 @@
 								<a ng-click="setModifier(modifier)">{{modifier.key}}</a>
 								<div class="menu">
 									<a ng-click="UI.modal.rename(Modifier(modifier), renameModifierCheck, renameModifierCallback)"><span class="fa fa-pencil"></span> | Rename</a>
+									<a ng-click="copyModifier(modifier)"><span class="fa fa-files-o"></span> | Copy</a>
 									<a ng-click="UI.arrayDelete(modifier, ability.getModifierList(), delModifierCallback)"><span class="fa fa-trash"></span> | Delete</a>
 								</div>
 							</li>

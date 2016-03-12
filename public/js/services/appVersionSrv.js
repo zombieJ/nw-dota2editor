@@ -35,7 +35,8 @@ app.factory("AppVersionSrv", function ($q, $http, $timeout, $compile, $rootScope
 								 " Click <a ng-click='update()'>HERE</a> for update.",
 						type: "warning",
 						timeout: 10000,
-						overtimeout: 5000
+						overtimeout: 5000,
+						region: "system"
 					});
 
 					// Update Logic

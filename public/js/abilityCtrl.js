@@ -19,6 +19,8 @@ var _abilityCtrl = function(isItem) {
 
 		$scope._newTmplAbility = {};
 
+		$scope._copyModifier = null;
+
 		$scope._newUnassignedKey = "";
 		$scope._newUnassignedValue = "";
 
@@ -60,7 +62,7 @@ var _abilityCtrl = function(isItem) {
 			entity.value.push(_kv);
 		};
 
-		$scope.addModifier = function() {
+		function getNoConflictModifierName() {
 			var _modifierList = $scope.ability.kv.assumeKey("Modifiers", true);
 			var _oriName = "modifier_" + $scope.ability._name;
 			var _tgtName = _oriName;
@@ -69,7 +71,13 @@ var _abilityCtrl = function(isItem) {
 				_tgtName = _oriName + "_" + _index;
 				_index += 1;
 			}
-			var _modifier = new KV(_tgtName, []);
+
+			return _tgtName;
+		}
+
+		$scope.addModifier = function() {
+			var _modifierList = $scope.ability.kv.assumeKey("Modifiers", true);
+			var _modifier = new KV(getNoConflictModifierName(), []);
 			_modifierList.value.push(_modifier);
 
 			$scope.currentModifier = _modifier;
@@ -86,6 +94,33 @@ var _abilityCtrl = function(isItem) {
 				new KV("var_type", "FIELD_INTEGER"),
 				new KV()
 			]));
+		};
+
+		$scope.copyModifier = function(modifier) {
+			$scope._copyModifier = modifier.clone();
+			$.notify({
+				title: "<b>Copy Success</b>",
+				content: "Click 【<span class='fa fa-clipboard'></span>】 to paste.",
+				type: "success",
+				timeout: 5000,
+				region: "system"
+			});
+			$(".ability-modifer-list .menu").addClass('hide');
+			setTimeout(function() {
+				$(".ability-modifer-list .menu").removeClass('hide');
+			}, 1);
+		};
+
+		$scope.pasteModifier = function() {
+			if(!$scope._copyModifier) return;
+
+			UI.modal.input(Locale('New'), Locale('Modifiers'), getNoConflictModifierName(), function(key) {
+				var _modifier = $scope._copyModifier.clone();
+				_modifier.key = key;
+				var _modifierList = $scope.ability.kv.assumeKey("Modifiers", true);
+				_modifierList.value.push(_modifier);
+				$scope.currentModifier = _modifier;
+			});
 		};
 
 		// ==========> Ability Special

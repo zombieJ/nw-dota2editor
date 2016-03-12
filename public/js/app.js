@@ -564,6 +564,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 						type: "success",
 						title: Locale('Done'),
 						content: Locale('saveSuccess'),
+						region: "system"
 					});
 				}, 500);
 			}, 100);
