@@ -19,7 +19,15 @@ var _abilityCtrl = function(isItem) {
 
 		$scope._newTmplAbility = {};
 
-		$scope._copyModifier = null;
+		var gui;
+		var clipboard;
+		try {
+			gui = require('nw.gui');
+			clipboard = gui.Clipboard.get();
+		} catch (error) {}
+		var _canCopyModifierID = null;
+		var _canCopyModifierPrevStatus = false;
+		$scope._canCopyModifier = false;
 
 		$scope._newUnassignedKey = "";
 		$scope._newUnassignedValue = "";
@@ -96,8 +104,21 @@ var _abilityCtrl = function(isItem) {
 			]));
 		};
 
+		// Copy / paste modifier
+		function _canCopyModifierCheck() {
+			var _content = clipboard.get() + "";
+			$scope._canCopyModifier = /^__MODIFIER__/.test(_content);
+
+			if(_canCopyModifierPrevStatus !== $scope._canCopyModifier) {
+				_canCopyModifierPrevStatus = $scope._canCopyModifier;
+				$scope.$apply();
+			}
+		}
+
+		_canCopyModifierID = setInterval(_canCopyModifierCheck, 1000);
+
 		$scope.copyModifier = function(modifier) {
-			$scope._copyModifier = modifier.clone();
+			clipboard.set("__MODIFIER__" + modifier.toString(), 'text');
 			$.notify({
 				title: "<b>Copy Success</b>",
 				content: "Click 【<span class='fa fa-clipboard'></span>】 to paste.",
@@ -109,13 +130,15 @@ var _abilityCtrl = function(isItem) {
 			setTimeout(function() {
 				$(".ability-modifer-list .menu").removeClass('hide');
 			}, 1);
+			_canCopyModifierCheck();
 		};
 
 		$scope.pasteModifier = function() {
-			if(!$scope._copyModifier) return;
+			_canCopyModifierCheck();
+			if(!$scope._canCopyModifier) return;
+			var _modifier = KV.parse(clipboard.get().replace('__MODIFIER__', ''));
 
 			UI.modal.input(Locale('New'), Locale('Modifiers'), getNoConflictModifierName(), function(key) {
-				var _modifier = $scope._copyModifier.clone();
 				_modifier.key = key;
 				var _modifierList = $scope.ability.kv.assumeKey("Modifiers", true);
 				_modifierList.value.push(_modifier);
@@ -938,6 +961,7 @@ var _abilityCtrl = function(isItem) {
 			$(document).off("contextmenu.abilityList");
 			$("#search").off("selected.search");
 			AppFileSrv.stopWatch();
+			clearInterval(_canCopyModifierID);
 		});
 	};
 };
