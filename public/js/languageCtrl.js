@@ -62,8 +62,13 @@ hammerControllers.controller('languageCtrl', function ($scope, Locale, globalCon
 		return common.array.num(Math.ceil($scope.filteredList.length / $scope.pageSize));
 	};
 
-	$scope.refresh = function() {
+	$scope.refresh = function(ignorePageNum) {
+		var _pageNum = $scope.pageNumber;
 		$scope.search(_lastSearchEmptyValue);
+
+		if(ignorePageNum !== true) {
+			$scope.updateCurrentList(Math.min(_pageNum, $scope.navPages().length - 1));
+		}
 	};
 
 	// ================================================================

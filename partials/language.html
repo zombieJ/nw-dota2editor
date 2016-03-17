@@ -2,7 +2,7 @@
 	<div class="col-sm-3 col-md-2">
 		<div class="listCntr noSelect">
 			<div ng-repeat="_lang in GC.languageList track by $index" class="listItem"
-			     ng-class="{active: GC.currentLanguage == _lang}" ng-click="GC.currentLanguage = _lang;refresh();">
+			     ng-class="{active: GC.currentLanguage == _lang}" ng-click="GC.currentLanguage = _lang;refresh(true);">
 				<p class="title">
 					{{_lang.name}}
 				</p>
