@@ -229,7 +229,7 @@ app.factory("Locale", function() {
 		DOTA_UNIT_TARGET_FLAG_NOT_SUMMONED: "非召唤的",
 		DOTA_UNIT_TARGET_FLAG_OUT_OF_WORLD: "被放逐出世界的",
 		DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED: "玩家控制的",
-		DOTA_UNIT_TARGET_FLAG_RANGED_ONLY: "范围唯一的",
+		DOTA_UNIT_TARGET_FLAG_RANGED_ONLY: "远程单位",
 		DOTA_UNIT_TARGET_FLAG_PREFER_ENEMIES: "更倾向敌人",
 
 		DAMAGE_TYPE_MAGICAL: "魔法伤害",
@@ -494,7 +494,7 @@ app.factory("Locale", function() {
 		ArmorPhysical: "物理护甲",
 		AutoAttacksByDefault: "自动攻击",
 		AttachWearables: "穿戴物",
-		AttackAcquisitionRange: "攻击接受范围",
+		AttackAcquisitionRange: "攻击接受范围(警戒范围)",
 		AttackAnimationPoint: "攻击动画点",
 		AttackCapabilities: "攻击能力",
 		AttackDamageMax: "攻击最大值",
