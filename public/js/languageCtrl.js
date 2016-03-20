@@ -33,11 +33,11 @@ hammerControllers.controller('languageCtrl', function ($scope, Locale, globalCon
 		if(!GC.currentLanguage) return;
 		_lastSearchEmptyValue = emptyValue;
 
-		var _key = $scope.searchKey;
+		var _key = ($scope.searchKey || "").toUpperCase();
 		if(!emptyValue) {
 			$scope.filteredList = $.map(GC.currentLanguage.kv.value, function (kv) {
-				var key = kv.key;
-				var value = kv.value;
+				var key = (kv.key || "").toUpperCase();
+				var value = (kv.value || "").toUpperCase();
 				if (key.indexOf(_key) !== -1 || (value || "").indexOf(_key) !== -1) {
 					return kv;
 				}

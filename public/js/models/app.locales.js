@@ -58,6 +58,8 @@ app.factory("Locale", function() {
 		Reload: '重载',
 		Console: '控制台',
 		DeveloperTool: '开发者工具',
+		DeleteAbility: "是否要删除",
+		DeleteWithModifier: "同时删除技能修饰器相关的多语言描述",
 
 		VersionCheck: "版本检测",
 		versionCheckError: "版本检测失败，部分功能将无法使用。请将以下错误信息发送与我，以帮助修复该错误：",

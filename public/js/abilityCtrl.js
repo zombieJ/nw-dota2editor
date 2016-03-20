@@ -728,16 +728,45 @@ var _abilityCtrl = function(isItem) {
 
 			$.dialog({
 				title: "Delete Confirm",
-				content: "Do you want to delete '"+_menuAbility._name+"'",
+				content: $("<div>").html("<p class='lead text-danger'>" + Locale("DeleteAbility") + " '"+_menuAbility._name+"'?</p>")
+					.append($("<label>")
+						.append("<input type='checkbox' checked> ")
+						.append(Locale("DeleteWithModifier"))
+					),
 				confirm: true
 			}, function(ret) {
 				if(!ret) return;
 
+				// Delete Ability
 				var _isCurrent = $scope.ability === _menuAbility;
 				common.array.remove(_menuAbility, $scope.abilityList);
 				if(_isCurrent) {
 					$scope.setAbility($scope.abilityList[0]);
 				}
+
+				// Delete Language
+				var deleteModifierLang = $(this).find("input").prop("checked");
+				$.each(globalContent.languageList, function(i, lang) {
+					// Regular attributes
+					$.each(Language.AbilityLang, function(i, langField) {
+						lang.kv.delete(Language.abilityAttr(_menuAbility._name, langField.attr));
+					});
+
+					// Special Abilities
+					$.each(_menuAbility.getSpecialList(), function(i, special) {
+						lang.kv.delete(Language.abilityAttr(_menuAbility._name, special.value[1].key));
+					});
+
+					// Modifiers
+					if(deleteModifierLang) {
+						$.each(_menuAbility.getModifierList(), function(i, modifier) {
+							$.each(Language.ModifierLang, function(i, langField) {
+								lang.kv.delete(Language.modifierAttr(modifier.key, langField.attr));
+							});
+						});
+					}
+				});
+
 
 				treeViewInit();
 				$scope.$apply();
