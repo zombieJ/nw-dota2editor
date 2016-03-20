@@ -419,13 +419,24 @@ var _abilityCtrl = function(isItem) {
 
 		$scope.renameCallback = function(newName, oldName) {
 			$.each(globalContent.languageList, function(i, lang) {
+				// Regular attributes
 				$.each(Language.AbilityLang, function(i, langField) {
 					var _oldKey = Language.abilityAttr(oldName, langField.attr);
 					var _newKey = Language.abilityAttr(newName, langField.attr);
 					if(lang.kv.get(_oldKey)) {
 						lang.kv.set(_newKey, lang.kv.get(_oldKey));
 					}
-					lang.kv.delete(_oldKey);
+					if(_newKey.toUpperCase() !== _oldKey.toUpperCase()) lang.kv.delete(_oldKey);
+				});
+
+				// Special Abilities
+				$.each($scope.ability.getSpecialList(), function(i, special) {
+					var _oldKey = Language.abilityAttr(oldName, special.value[1].key);
+					var _newKey = Language.abilityAttr(newName, special.value[1].key);
+					if(lang.kv.get(_oldKey)) {
+						lang.kv.set(_newKey, lang.kv.get(_oldKey));
+					}
+					if(_newKey.toUpperCase() !== _oldKey.toUpperCase()) lang.kv.delete(_oldKey);
 				});
 			});
 		};
