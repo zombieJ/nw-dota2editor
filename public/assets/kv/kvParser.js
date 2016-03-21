@@ -143,7 +143,7 @@
 	var STATE_VALUE_END = KV.STATE_VALUE_END = 5;
 	var STATE_VALUE_LIST = KV.STATE_VALUE_LIST = 6;
 
-	KV.parse = function(text, startLoc) {
+	KV.parse = function(text, startLoc, infoObj) {
 		if(!text) {
 			console.error("KV Parser can't process empty text!");
 			throw "Text can't be empty";
@@ -159,13 +159,18 @@
 		var _key = "";
 		var _value = null;
 
-		if(typeof startLoc === "boolean") {
-			_startLoc = undefined;
-		} else {
+		if(typeof startLoc === "number") {
 			_startLoc = startLoc;
+		} else {
+			_startLoc = undefined;
 		}
+		if(typeof startLoc === "object") {
+			infoObj = startLoc;
+		}
+		infoObj = infoObj || {};
+		infoObj.warn = infoObj.warn || [];
 
-		function _setState(state) {
+			function _setState(state) {
 			if(_state === state) return;
 
 			_preState = _state;
@@ -200,6 +205,7 @@
 					_breakFor = true;
 				} else {
 					console.warn("[STATE_NORMAL] Not match:'" + _c + "', index:", _i);
+					infoObj.warn.push("[STATE_NORMAL] Not match:'" + _c + "', index:" + _i);
 				}
 				break;
 
@@ -242,6 +248,7 @@
 					_setState(STATE_VALUE_LIST);
 				} else {
 					console.warn("[STATE_KEY_END] Not match:'" + _c + "', index:", _i);
+					infoObj.warn.push("[STATE_KEY_END] Not match:'" + _c + "', index:" + _i);
 				}
 				break;
 
@@ -262,7 +269,7 @@
 					_setState(STATE_VALUE_END);
 					_endLoc = _i;
 				} else {
-					_subKV = KV.parse(text, _i + 1);
+					_subKV = KV.parse(text, _i + 1, infoObj);
 					if (_subKV.kv) {
 						_value.push(_subKV.kv);
 					} else {

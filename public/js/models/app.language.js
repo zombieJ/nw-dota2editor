@@ -15,11 +15,20 @@ app.factory("Language", function($q, KV, NODE, Locale) {
 
 		NODE.loadFile(Language.folderPath + "/" + fileName, "ucs2").then(function(data) {
 			try {
-				var _kv = KV.parse(data.substr(1));
+				var _infoObj = {};
+				var _kv = KV.parse(data.substr(1), _infoObj);
 
 				_my.name = _kv.get("Language", false);
 				_my.kv = _kv.getKV("Tokens", false);
 				_my._oriKV = _kv;
+
+				if(_infoObj.warn.length) {
+					$.dialog({
+						title: Locale('Warning'),
+						content: $("<div>").text(Locale('languageParseWarn'))
+							.append($("<pre>").text(_infoObj.warn.join("\n")))
+					});
+				}
 			} catch (err) {
 				$.dialog({
 					title: Locale('Warning'),

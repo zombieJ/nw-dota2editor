@@ -791,6 +791,7 @@ app.factory("Locale", function() {
 		virtualView: "这是虚拟视图，并不会影响真实的文件顺序",
 		folderNotEmpty: "文件夹不为空",
 		saveSuccess: "保存成功！",
+		languageParseWarn: "解析语言文件存在错误，请检查：",
 		languageParseError: "检测到无法解析的语言文件：${file}，保存时将被覆盖。如果你不想被覆盖，请检查该文件格式。",
 		saveBackUp: "每次保存，自动对原先文件进行备份。最多保留最近10次更改。",
 		syncAll: "如果你想使用直观的图标选择预览功能，请使用此功能来下载所有图标文件。除非你点击此功能，否则编辑器不会主动下载最新的资源。（使用时请确保网络通顺）",
