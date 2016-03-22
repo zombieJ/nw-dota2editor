@@ -3,7 +3,7 @@
 // ======================================================
 // =                        语言                        =
 // ======================================================
-app.factory("Unit", function($q, $http, FS, Locale, KV, AppVersionSrv, PATH) {
+app.factory("Unit", function($q, $http, FS, Locale, Language, Config, KV, AppVersionSrv, PATH, globalContent) {
 	var Unit = function(kv) {
 		var _my = this;
 		_my.kv = kv || new KV("undefined", []);
@@ -257,6 +257,24 @@ app.factory("Unit", function($q, $http, FS, Locale, KV, AppVersionSrv, PATH) {
 		],
 	];
 
+	var _match_ability = function() {
+		return _match_abilityFunc;
+	};
+	var _match_abilityFunc = function(match) {
+		if(!globalContent.abilityList) return [];
+		var lang = globalContent.mainLang();
+		if(!lang || !lang.kv) return [];
+		match = (match || "").toUpperCase();
+		return $.map(globalContent.abilityList, function(kv) {
+			if((kv._name || "").toUpperCase().indexOf(match) !== -1) {
+				return {
+					_key: lang.kv.get(Language.abilityAttr(kv._name, ""), Config.global.kvCaseSensitive),
+					value: kv._name
+				};
+			}
+		});
+	};
+
 	Unit.AttrSoundAbilityList = [
 		[
 			{group: "sound", attr: "SoundSet", type: "text"},
@@ -266,22 +284,22 @@ app.factory("Unit", function($q, $http, FS, Locale, KV, AppVersionSrv, PATH) {
 
 		[
 			{group: "ability", attr: "AbilityLayout", type: "text"},
-			{group: "ability", attr: "Ability1", type: "text"},
-			{group: "ability", attr: "Ability2", type: "text"},
-			{group: "ability", attr: "Ability3", type: "text"},
-			{group: "ability", attr: "Ability4", type: "text"},
-			{group: "ability", attr: "Ability5", type: "text"},
-			{group: "ability", attr: "Ability6", type: "text"},
-			{group: "ability", attr: "Ability7", type: "text"},
-			{group: "ability", attr: "Ability8", type: "text"},
-			{group: "ability", attr: "Ability9", type: "text"},
-			{group: "ability", attr: "Ability10", type: "text"},
-			{group: "ability", attr: "Ability11", type: "text"},
-			{group: "ability", attr: "Ability12", type: "text"},
-			{group: "ability", attr: "Ability13", type: "text"},
-			{group: "ability", attr: "Ability14", type: "text"},
-			{group: "ability", attr: "Ability15", type: "text"},
-			{group: "ability", attr: "Ability16", type: "text"},
+			{group: "ability", attr: "Ability1", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability2", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability3", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability4", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability5", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability6", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability7", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability8", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability9", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability10", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability11", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability12", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability13", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability14", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability15", type: "text", match: _match_ability},
+			{group: "ability", attr: "Ability16", type: "text", match: _match_ability},
 		],
 	];
 

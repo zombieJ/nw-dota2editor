@@ -26,20 +26,21 @@ Dota2 KV Editor is a easy tool for dota2 developer to edit KV ability & multi la
 * 操作、属性数值自动填充支持
 * 技能快速搜索
 * 技能树状视图
+* 单位/英雄技能提供自动提示
 
 ### TODO list
-* 复制Modifier事件
+* 自动生成多语言、单位、技能文件
+* 添加事件、操作，自动高亮输入框
+* 拖拽事件、操作
+* 单位属性快捷键操作
 * 文字全选改色BUG
 * Search able of modifier attrs/states
-* XavierCHN：基类 模型 生命值 貌似就这三个是必定必须要有的
 * link each other
 * item compound formula auto generate
 * Auto generate english language version
 * Auto create empty modifier
-* unit edit provide ability tips
 * Custom sound support:http://www.dota2rpg.com/thread-2491-1-1.html
 * ability_lua & RunScript auto generate lua file
-* Create new file if file not exist
 * SpellLibrary as template
 * Win10 smartScreen will block program
 * Auto detect file change to reload in UI
