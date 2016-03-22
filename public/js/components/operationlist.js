@@ -52,6 +52,11 @@ components.directive('operationlist', function($compile) {
 					}
 				});
 			};
+
+			$scope.addOperation = function() {
+				$scope.operationlist.push(new KV("", []));
+				UI.highlight($element, ".ability-operation:last");
+			};
 		},
 		template:
 		'<div class="ability-operation-list">'+
@@ -68,7 +73,7 @@ components.directive('operationlist', function($compile) {
 				'</div>'+
 				'<div operation="operation" data-ability="ability"></div>'+
 			'</div>'+
-			'<a ng-click="operationlist.push(KV.new(\'\', []))">+ {{Locale(\'NewOperation\')}}</a>'+
+			'<a ng-click="addOperation()">+ {{Locale(\'NewOperation\')}}</a>'+
 		'</div>',
 		replace: true
 	};

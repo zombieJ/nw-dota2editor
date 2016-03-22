@@ -152,7 +152,7 @@
 					</div>
 
 					<!-- ====================== 事件 ====================== -->
-					<div ng-if="currentTab === 'events'">
+					<div ng-if="currentTab === 'events'" data-id="event">
 						<table class="ability-table">
 							<tbody ng-repeat="event in ability.getEventList() track by $index">
 							<!-- 事件类型 -->
@@ -329,7 +329,7 @@
 										<span class="ability-tip">Events</span>
 										{{::Locale('Events')}}
 									</th>
-									<td style="padding: 5px">
+									<td style="padding: 5px" data-id="event">
 										<table class="ability-table">
 											<tbody ng-repeat="event in Modifier(currentModifier).getEventList() track by $index">
 											<!-- Event Type -->

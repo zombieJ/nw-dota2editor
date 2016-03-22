@@ -68,6 +68,8 @@ var _abilityCtrl = function(isItem) {
 			var _kv = new KV("", []);
 			_kv._isEvent = true;
 			entity.value.push(_kv);
+
+			UI.highlight("[data-id='event']:visible tbody:last");
 		};
 
 		function getNoConflictModifierName() {

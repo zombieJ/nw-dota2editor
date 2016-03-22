@@ -156,6 +156,31 @@ app.factory("UI", function ($rootScope, Locale) {
 	var UI = function () {
 	};
 
+	UI.highlight = function(element, path) {
+		setTimeout(function () {
+			element = $(element);
+			if(path) element = element.find(path);
+			element = element.find('input,textarea,select').filter(':visible:first').focus();
+			UI.moveTo(element);
+		}, 100);
+		return element;
+	};
+
+	UI.moveTo = function(element) {
+		var _winTop = $(window).scrollTop();
+		var _winHeight = $(window).height();
+		var _winBottom = _winTop + _winHeight;
+		var _top = $(element).offset().top;
+		var _height = $(element).height();
+		var _bottom = _top + _height;
+
+		if(_top < _winTop + 50) {
+			$(window).scrollTop(_top + 50);
+		} else if(_bottom > _winBottom) {
+			$(window).scrollTop(_top - _winHeight + _height);
+		}
+	};
+
 	// Delete item from an array
 	UI.arrayDelete = function (item, array, callback) {
 		$.dialog({
