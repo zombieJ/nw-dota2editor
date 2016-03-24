@@ -96,9 +96,11 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent, Config)
 	};
 
 	// List path
-	AppFileSrv.listFiles = function(path, filter) {
+	AppFileSrv.listFiles = function(path, filter, recv) {
 		var _deferred = $q.defer();
 		var _list = [];
+		var _recv = recv !== false && recv !== undefined;
+		var _deepPath = typeof recv === "string" ? recv : "";
 
 		path = PATH.normalize(path);
 		if(!FS.existsSync(path)) {
@@ -121,19 +123,28 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent, Config)
 		switch (filter) {
 			case "folder":
 			case "directory":
-				_list = $.grep(_list, function(file) {
-					return FS.statSync(PATH.normalize(path + "/" + file)).isDirectory();
+				_list = $.map(_list, function(file) {
+					if(FS.statSync(PATH.normalize(path + "/" + file)).isDirectory()) {
+						return PATH.normalize(_deepPath + file);
+					}
 				});
 				break;
 			case "file":
-				_list = $.grep(_list, function(file) {
-					return FS.statSync(PATH.normalize(path + "/" + file)).isFile();
+				_list = $.map(_list, function(file) {
+					if(FS.statSync(PATH.normalize(path + "/" + file)).isFile()) {
+						return PATH.normalize(_deepPath + file);
+					} else if(_recv) {
+						var _subList = AppFileSrv.listFiles(path + "/" + file, filter, file + "/");
+						if(_subList.success && _subList.list.length) return _subList.list;
+					}
 				});
 				break;
 			default:
 				if(filter instanceof RegExp) {
-					_list = $.grep(_list, function(file) {
-						return filter.test(file);
+					_list = $.map(_list, function(file) {
+						if(filter.test(file)) {
+							return PATH.normalize(_deepPath + file);
+						}
 					});
 				}
 		}
@@ -142,6 +153,19 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent, Config)
 			success: true,
 			list: _list
 		};
+	};
+
+	// Write file
+	AppFileSrv.readFile = function(path, encoding) {
+		var _deferred = $q.defer();
+
+		FS.readFile(path, encoding || "utf8", function (err, data) {
+			if(err) {
+				_deferred.reject(err);
+			} else {
+				_deferred.resolve(data);
+			}
+		});
 
 		return _deferred.promise;
 	};

@@ -1,7 +1,8 @@
 'use strict';
 
 var _abilityCtrl = function(isItem) {
-	return function ($q, $scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config, Language, AppVersionSrv, AppFileSrv) {
+	return function ($q, $scope, $timeout, globalContent, NODE, Ability, Modifier, UI, KV, Locale, Config, Language,
+					 AppVersionSrv, AppFileSrv, AppSpellLibSrv) {
 		if (!globalContent.isOpen) return;
 
 		window.scope = $scope;
@@ -396,6 +397,43 @@ var _abilityCtrl = function(isItem) {
 				}
 			}
 		};
+
+		// ==========> New Spell Library
+		$scope.spellLibItem = [];
+		$scope.spellLibCache = {};
+		$scope.spellLibList = AppSpellLibSrv.getAbilityList();
+		$scope.spellLibEnabled = function () {
+			return $scope.spellLibItem.length === 1;
+		};
+		$scope.updateSpellLib = function () {
+			var _spell = $scope.spellLibItem[0];
+			if(!_spell) return;
+
+			var cache = $scope.spellLibCache[_spell];
+			if(!cache) {
+				cache = {
+					ready: false
+				};
+
+				AppFileSrv.readFile(AppVersionSrv.resPath + "res/spellLib/kv/abilities/" + _spell).then(function (data) {
+					cache.ready = true;
+					cache.data = data;
+					//var kv = KV.parse(data);
+					var match = data.match(/"ScriptFile"\s+.*"/ig) || [];
+
+					cache.scripts = {};
+					$.each(match, function (i, script) {
+						var _script = script.match(/"([^"]*)"$/)[1];
+						cache.scripts[_script] = _script;
+					});
+				}, function () {
+					cache.ready = "failed";
+				});
+
+				$scope.spellLibCache[_spell] = cache;
+			}
+		};
+
 
 		// ==========> New Group
 		$scope.newGroup = function() {

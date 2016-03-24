@@ -79,5 +79,6 @@
 
 <button class="btn btn-primary" ng-click="saveConfig()">{{::Locale('Save')}}</button>
 
-<button class="btn btn-warning pull-right" ng-disabled="syncLock" tooltip-placement="left" uib-tooltip="{{::Locale('syncAll')}}" ng-click="syncAll()">{{::Locale('SyncAll')}}</button>
+<button class="btn btn-warning pull-right" ng-disabled="syncLock" tooltip-placement="top" uib-tooltip="{{::Locale('syncSpellLibrary')}}" ng-click="syncSpellLibrary()">{{::Locale('SyncSpellLibrary')}}</button>
+<button class="btn btn-warning pull-right" ng-disabled="syncLock" tooltip-placement="top" uib-tooltip="{{::Locale('syncIcon')}}" ng-click="syncIcon()">{{::Locale('SyncIcon')}}</button>
 <span class="pull-right">{{syncAllMSG}}</span>

@@ -1,8 +1,10 @@
 'use strict';
 
-hammerControllers.controller('configCtrl', function ($scope, Config, AppImageSrv) {
+hammerControllers.controller('configCtrl', function ($scope, Config, Locale, AppImageSrv, AppSpellLibSrv) {
 	$scope.syncLock = false;
-	$scope.syncAllMSG = "";
+	$scope.syncAllMSG = Locale('repeatSync');
+
+	$scope.syncInfo = [];
 
 	$scope.saveConfig = function() {
 		Config.save();
@@ -13,7 +15,8 @@ hammerControllers.controller('configCtrl', function ($scope, Config, AppImageSrv
 		});
 	};
 
-	$scope.syncAll = function() {
+	$scope.syncIcon = function() {
+		$scope.syncInfo = [];
 		$scope.syncLock = true;
 		AppImageSrv.load().then(function() {
 			$scope.syncAllMSG = "Finished!";
@@ -21,6 +24,22 @@ hammerControllers.controller('configCtrl', function ($scope, Config, AppImageSrv
 			$scope.syncAllMSG = "Load failed. Please check your network!";
 		}, function(notify) {
 			$scope.syncAllMSG = notify.msg;
+			$scope.syncInfo.push(notify.msg);
+		}).finally(function() {
+			$scope.syncLock = false;
+		});
+	};
+
+	$scope.syncSpellLibrary = function() {
+		$scope.syncInfo = [];
+		$scope.syncLock = true;
+		AppSpellLibSrv.load().then(function() {
+			$scope.syncAllMSG = "Finished!";
+		}, function() {
+			$scope.syncAllMSG = "Load failed. Please check your network!";
+		}, function(notify) {
+			$scope.syncAllMSG = notify.msg;
+			$scope.syncInfo.push(notify.msg);
 		}).finally(function() {
 			$scope.syncLock = false;
 		});

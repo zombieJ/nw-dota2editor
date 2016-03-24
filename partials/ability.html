@@ -696,38 +696,88 @@
 	</div>
 </div>
 <div class="modal fade" id="newTmplMDL" tabindex="-1">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title">{{::Locale('New')}}</h4>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
-					<label>{{::Locale('Name')}}</label>
-						<input type="text" class="form-control" ng-model="_newTmplAbility._name" />
-				</div>
-				<div class="form-group">
-					<label>{{::Locale('Type')}}</label>
-					<select class="form-control" ng-model="_newTmplAbility._type">
-						<option ng-repeat="_type in _newTmplAbility.type" value="{{::_type}}">{{::Locale(_type)}} 【{{::_type}}】</option>
-					</select>
-				</div>
-				<div class="form-group" ng-show="_newTmplAbility._type !== 'Passive'">
-					<label>{{::Locale('Target')}}</label>
-					<select class="form-control" ng-model="_newTmplAbility._target">
-						<option ng-repeat="_target in _newTmplAbility.target" value="{{::_target}}">{{::Locale(_target)}} 【{{::_target}}】</option>
-					</select>
-				</div>
-				<div class="checkbox" ng-show="_newTmplAbility._type !== 'Passive'">
-					<label>
-						<input type="checkbox" ng-checked="_newTmplAbility._channelled" ng-click="_newTmplAbility._channelled = !_newTmplAbility._channelled;"> {{::Locale('Channelled')}}
-					</label>
-				</div>
-				<div class="checkbox" ng-show="isItem">
-					<label uib-tooltip="{{::Locale('itemAutoIDTip')}}" tooltip-placement="right" tooltip-append-to-body="true">
-						<input type="checkbox" ng-checked="_newTmplAbility._autoID" ng-click="_newTmplAbility._autoID = !_newTmplAbility._autoID;">
-						{{::Locale('itemAutoID')}}
-					</label>
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="[data-id='tmplAbility']" data-toggle="tab">Template</a></li>
+					<li><a href="[data-id='spellLib']" data-toggle="tab">Spell Library</a></li>
+				</ul>
+				<br/>
+
+				<div class="tab-content">
+					<div class="tab-pane fade in active" data-id="tmplAbility">
+						<!-- Template Ability -->
+						<div class="form-group">
+							<label>{{::Locale('Name')}}</label>
+							<input type="text" class="form-control" ng-model="_newTmplAbility._name" />
+						</div>
+						<div class="form-group">
+							<label>{{::Locale('Type')}}</label>
+							<select class="form-control" ng-model="_newTmplAbility._type">
+								<option ng-repeat="_type in _newTmplAbility.type" value="{{::_type}}">{{::Locale(_type)}} 【{{::_type}}】</option>
+							</select>
+						</div>
+						<div class="form-group" ng-show="_newTmplAbility._type !== 'Passive'">
+							<label>{{::Locale('Target')}}</label>
+							<select class="form-control" ng-model="_newTmplAbility._target">
+								<option ng-repeat="_target in _newTmplAbility.target" value="{{::_target}}">{{::Locale(_target)}} 【{{::_target}}】</option>
+							</select>
+						</div>
+						<div class="checkbox" ng-show="_newTmplAbility._type !== 'Passive'">
+							<label>
+								<input type="checkbox" ng-checked="_newTmplAbility._channelled" ng-click="_newTmplAbility._channelled = !_newTmplAbility._channelled;"> {{::Locale('Channelled')}}
+							</label>
+						</div>
+						<div class="checkbox" ng-show="isItem">
+							<label uib-tooltip="{{::Locale('itemAutoIDTip')}}" tooltip-placement="right" tooltip-append-to-body="true">
+								<input type="checkbox" ng-checked="_newTmplAbility._autoID" ng-click="_newTmplAbility._autoID = !_newTmplAbility._autoID;">
+								{{::Locale('itemAutoID')}}
+							</label>
+						</div>
+					</div>
+
+					<div class="tab-pane fade" data-id="spellLib">
+						<!-- Spell Library Ability -->
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<input type="text" class="form-control" ng-model="spellLibFilter" placeholder="{{::Locale('Filter')}}" />
+								</div>
+								<select multiple class="form-control" ng-model="spellLibItem" ng-change="updateSpellLib()"
+										style="min-height: 450px;">
+									<option ng-repeat="spell in spellLibList | filter:spellLibFilter track by $index" value="{{spell}}">
+										{{spell.replace("_datadriven.txt", "")}}
+									</option>
+								</select>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>{{::Locale('Template')}}</label>
+									<input type="text" class="form-control" ng-model="spellLibItem[0]" readonly />
+								</div>
+
+								<div class="form-group">
+									<label>{{::Locale('Name')}}</label>
+									<input type="text" class="form-control" ng-model="_newTmplAbility._name" />
+								</div>
+
+								<p ng-if="spellLibItem[0] && !spellLibCache[spellLibItem[0]].ready">
+									<span class="fa fa-spin fa-refresh"></span>
+									{{::Locale('Loading')}}...
+								</p>
+								<div ng-if="spellLibItem[0] && spellLibCache[spellLibItem[0]].ready">
+									<div class="form-group" ng-repeat="(key, value) in spellLibCache[spellLibItem[0]].scripts track by $index">
+										<label>{{key}}</label>
+										<input type="text" class="form-control" ng-model="value" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -826,7 +876,7 @@
 			</div>
 			<div class="modal-body">
 				<input type="text" class="form-control pull-right" style="width: 250px" placeholder="filter..." ng-model="texturePickerFilter" />
-				<ul id="myTabs" class="nav nav-tabs">
+				<ul class="nav nav-tabs">
 					<li class="active"><a href="[data-id='texturePickerOfficial']" data-toggle="tab">Official</a></li>
 					<li><a href="[data-id='texturePickerCustomize']" data-toggle="tab">Customize</a></li>
 				</ul>

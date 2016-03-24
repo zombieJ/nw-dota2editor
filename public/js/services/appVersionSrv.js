@@ -20,7 +20,9 @@ app.factory("AppVersionSrv", function ($q, $http, $timeout, $compile, $rootScope
 		AppVersionSrv.resPath = process.execPath.replace(/bin[\\\/]\w+\.exe$/, '');
 	}
 
-	// Check for latest version
+	// ===========================================
+	// =              Version Check              =
+	// ===========================================
 	(function() {
 		AppVersionSrv.version = "DEV";
 		FS.readFile(AppVersionSrv.resPath + "_VERSION", "utf8", function (err, data) {
@@ -66,10 +68,9 @@ app.factory("AppVersionSrv", function ($q, $http, $timeout, $compile, $rootScope
 		});
 	})();
 
-	// Application check
-	// ====================================================
-	// =                 Application Check                =
-	// ====================================================
+	// ==============================================================
+	// =                      Application Check                     =
+	// ==============================================================
 	AppVersionSrv.ready = false;
 	AppVersionSrv.stateMSG = "Loading...";
 

@@ -60,6 +60,7 @@ app.factory("Locale", function() {
 		DeveloperTool: '开发者工具',
 		DeleteAbility: "是否要删除",
 		DeleteWithModifier: "同时删除技能修饰器相关的多语言描述",
+		Template: "模板",
 
 		VersionCheck: "版本检测",
 		versionCheckError: "版本检测失败，部分功能将无法使用。请将以下错误信息发送与我，以帮助修复该错误：",
@@ -756,7 +757,8 @@ app.factory("Locale", function() {
 		NothingNeedFix: "没有需要修改的建议",
 
 		// 配置
-		SyncAll: "同步全部",
+		SyncIcon: "同步图标",
+		SyncSpellLibrary: "同步SpellLibrary",
 
 		// 帮助
 		projectFolder: "项目路径，例如：C:\\Steam\\steamapps\\common\\dota 2 beta\\game\\dota_addons\\sampleGame",
@@ -794,7 +796,9 @@ app.factory("Locale", function() {
 		languageParseWarn: "解析语言文件存在错误，请检查：",
 		languageParseError: "检测到无法解析的语言文件：${file}，保存时将被覆盖。如果你不想被覆盖，请检查该文件格式。",
 		saveBackUp: "每次保存，自动对原先文件进行备份。最多保留最近10次更改。",
-		syncAll: "如果你想使用直观的图标选择预览功能，请使用此功能来下载所有图标文件。除非你点击此功能，否则编辑器不会主动下载最新的资源。（使用时请确保网络通顺）",
+		syncIcon: "如果你想使用直观的图标选择预览功能，请使用此功能来下载所有图标文件。除非你点击此功能，否则编辑器不会主动下载最新的资源。（使用时请确保网络通顺）",
+		syncSpellLibrary: "同步最新的SpellLibrary库，使得你可以在制作过程中直接复用这些技能。github@Pizzalol",
+		repeatSync: "如果你的网络不好，建议同步多次以保证资源下载=>",
 		texturePickerEmpty: "图标列表为空，请先进入配置界面点击“同步全部”下载最新的图标列表。",
 		texturePickerCustomizeEmpty: "自定义图标列表为空。",
 		updating: "正在更新。如果在更新过程中关闭程序，可下次打开重新更新。",

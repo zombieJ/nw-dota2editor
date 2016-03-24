@@ -295,7 +295,7 @@ app.factory("UI", function ($rootScope, Locale) {
 
 app.controller('main', function ($scope, $route, $location, $q,
 	UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config, Sequence,
-	AppVersionSrv, AppFileSrv, AppImageSrv) {
+	AppVersionSrv, AppFileSrv, AppImageSrv, AppSpellLibSrv) {
 	window._DEBUG = false;
 	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
@@ -312,6 +312,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 	window.AppVersionSrv = $scope.AppVersionSrv = AppVersionSrv;
 	window.AppFileSrv = $scope.AppFileSrv = AppFileSrv;
 	window.AppImageSrv = $scope.AppImageSrv = AppImageSrv;
+	window.AppSpellLibSrv = $scope.AppSpellLibSrv = AppSpellLibSrv;
 	window._NODE = $scope.NODE = NODE;
 	$scope.common = common;
 	$scope.jQuery = $;
