@@ -702,9 +702,9 @@
 				<h4 class="modal-title">{{::Locale('New')}}</h4>
 			</div>
 			<div class="modal-body">
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="[data-id='tmplAbility']" data-toggle="tab">Template</a></li>
-					<li><a href="[data-id='spellLib']" data-toggle="tab">Spell Library</a></li>
+				<ul id="newTmplNav" class="nav nav-tabs">
+					<li data-type="template" class="active"><a href="[data-id='tmplAbility']" data-toggle="tab">Template</a></li>
+					<li data-type="spellLib"><a href="[data-id='spellLib']" data-toggle="tab">Spell Library</a></li>
 				</ul>
 				<br/>
 
@@ -742,13 +742,14 @@
 
 					<div class="tab-pane fade" data-id="spellLib">
 						<!-- Spell Library Ability -->
-						<div class="row">
+						<p ng-if="spellLibList.length === 0" class="text-warning">{{::Locale('spellLibraryEmpty')}}</p>
+						<div class="row" ng-show="spellLibList.length">
 							<div class="col-md-6">
 								<div class="form-group">
 									<input type="text" class="form-control" ng-model="spellLibFilter" placeholder="{{::Locale('Filter')}}" />
 								</div>
 								<select multiple class="form-control" ng-model="spellLibItem" ng-change="updateSpellLib()"
-										style="min-height: 450px;">
+										style="min-height: 400px;">
 									<option ng-repeat="spell in spellLibList | filter:spellLibFilter track by $index" value="{{spell}}">
 										{{spell.replace("_datadriven.txt", "")}}
 									</option>
@@ -769,11 +770,19 @@
 									<span class="fa fa-spin fa-refresh"></span>
 									{{::Locale('Loading')}}...
 								</p>
-								<div ng-if="spellLibItem[0] && spellLibCache[spellLibItem[0]].ready">
+								<div ng-if="spellLibItem[0] && spellLibCache[spellLibItem[0]].requireScript">
+									<hr/>
+									<label>{{::Locale('AdditionalDependency')}}</label>
 									<div class="form-group" ng-repeat="(key, value) in spellLibCache[spellLibItem[0]].scripts track by $index">
 										<label>{{key}}</label>
 										<input type="text" class="form-control" ng-model="value" />
 									</div>
+									<p class="text-warning">
+										* {{::Locale('spellLibraryScripts')}}
+										<a href="https://github.com/Pizzalol/SpellLibrary/blob/master/game/scripts/vscripts/addon_game_mode.lua" target="_blank">
+											Spell Library - addon_game_mode.lua
+										</a>
+									</p>
 								</div>
 							</div>
 						</div>

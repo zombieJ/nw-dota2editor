@@ -297,6 +297,7 @@ app.controller('main', function ($scope, $route, $location, $q,
 	UI, Locale, Ability, Event, Operation, Modifier, Unit, Language, KV, Sound, globalContent, NODE, Config, Sequence,
 	AppVersionSrv, AppFileSrv, AppImageSrv, AppSpellLibSrv) {
 	window._DEBUG = false;
+	window.globalContent = $scope.globalContent = globalContent;
 	window.Locale = $scope.Locale = Locale;
 	window.Ability = $scope.Ability = Ability;
 	window.Event = $scope.Event = Event;

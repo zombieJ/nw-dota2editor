@@ -332,6 +332,15 @@ var _abilityCtrl = function(isItem) {
 			$scope._newTmplAbility._name = _tgtName;
 		};
 		$scope.newTmplAbility.confirm = function() {
+			var type = $("#newTmplNav li.active").attr("data-type");
+			if(type === "spellLib") {
+				$scope.newTmplAbility_SpellLibConfirm();
+			} else {
+				$scope.newTmplAbility_TemplateConfirm();
+			}
+		};
+
+		$scope.newTmplAbility_TemplateConfirm = function() {
 			var _newAbility = new Ability();
 			_newAbility._changed = true;
 			$scope.abilityList.push(_newAbility);
@@ -412,7 +421,9 @@ var _abilityCtrl = function(isItem) {
 			var cache = $scope.spellLibCache[_spell];
 			if(!cache) {
 				cache = {
-					ready: false
+					ready: false,
+					scripts: {},
+					requireScript: false
 				};
 
 				AppFileSrv.readFile(AppVersionSrv.resPath + "res/spellLib/kv/abilities/" + _spell).then(function (data) {
@@ -421,12 +432,13 @@ var _abilityCtrl = function(isItem) {
 					//var kv = KV.parse(data);
 					var match = data.match(/"ScriptFile"\s+.*"/ig) || [];
 
-					cache.scripts = {};
 					$.each(match, function (i, script) {
 						var _script = script.match(/"([^"]*)"$/)[1];
 						cache.scripts[_script] = _script;
+						cache.requireScript = true;
 					});
 				}, function () {
+					// TODO: Process do retry or something
 					cache.ready = "failed";
 				});
 
@@ -434,6 +446,48 @@ var _abilityCtrl = function(isItem) {
 			}
 		};
 
+		$scope.newTmplAbility_SpellLibConfirm = function () {
+			var _spell = $scope.spellLibItem[0];
+			if(!_spell) return;
+			var cache = $scope.spellLibCache[_spell];
+			if(!cache || cache.ready !== true) return;
+
+			var _data = cache.data;
+
+			// Copy files
+			$.each(cache.scripts, function (src, tgt) {
+				var _srcPath = AppVersionSrv.resPath + "res/spellLib/lua/" + src;
+				var _tgtPath = globalContent.project + "/scripts/vscripts/" + tgt;
+				if(!AppFileSrv.fileExist(_srcPath)) {
+					$.notify({
+						title: "<b>File Not Found</b>",
+						content: "File: " + src + " not exist. Please check...",
+						type: "warning",
+						region: "system"
+					});
+				} else if(!AppFileSrv.fileExist(_tgtPath)) {
+					AppFileSrv.copyFile(_srcPath, _tgtPath);
+				}
+			});
+
+			// Copy ability
+			var kv = KV.parse(_data);
+			var _newAbility = Ability.parse(kv);
+			_newAbility.kv.key = $scope._newTmplAbility._name;
+			_newAbility._changed = true;
+
+			$scope.abilityList.push(_newAbility);
+			$scope.setAbility(_newAbility);
+			$scope.treeView.list.push(
+				_registerAbilityTreeItem({_id: +new Date()}, _newAbility)
+			);
+
+
+			setTimeout(function() {
+				$("#listCntr").scrollTop(9999999);
+			}, 100);
+			$("#newTmplMDL").modal('hide');
+		};
 
 		// ==========> New Group
 		$scope.newGroup = function() {

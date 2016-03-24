@@ -1,7 +1,7 @@
 app.factory("AppSpellLibSrv", function ($q, AppGitSrv, AppVersionSrv, AppFileSrv, Sequence) {
 	var REPO = "Pizzalol/SpellLibrary";
 	var PATH_ABILITY = "game/scripts/npc/abilities";
-	var PATH_HEROS = "game/scripts/vscripts/heroes";
+	var PATH_HEROES = "game/scripts/vscripts/heroes";
 
 	var AppSpellLibSrv = function() {};
 
@@ -21,7 +21,7 @@ app.factory("AppSpellLibSrv", function ($q, AppGitSrv, AppVersionSrv, AppFileSrv
 		new Sequence(function (defer) {
 			_reg(AppGitSrv.downloadGitFolder({repo: REPO}, AppVersionSrv.resPath + "res/spellLib/kv/abilities", PATH_ABILITY, "Ability"), defer);
 		}).next(function(defer) {
-			_reg(AppGitSrv.downloadGitFolder({repo: REPO}, AppVersionSrv.resPath + "res/spellLib/lua/items", PATH_HEROS, "Hero"), defer);
+			_reg(AppGitSrv.downloadGitFolder({repo: REPO}, AppVersionSrv.resPath + "res/spellLib/lua/heroes", PATH_HEROES, "Hero"), defer);
 		}).start().then(function() {
 			_deferred.resolve();
 		});

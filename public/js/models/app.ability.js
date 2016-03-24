@@ -276,7 +276,9 @@ app.factory("Ability", function($q, Event, Modifier) {
 				defaultValue: "DOTA_UNIT_TARGET_TEAM_NONE"
 			},
 			{group: "target", attr: "AbilityUnitTargetFlags", type: "group"},
-			{group: "target", attr: "AbilityUnitDamageType", type: "single"}
+			{group: "target", attr: "AbilityUnitDamageType", type: "single"},
+			{group: "target", attr: "SpellImmunityType", type: "single"},
+			{group: "target", attr: "FightRecapLevel", type: "text"}
 		],
 		[
 			{group: "skill", attr: "AbilityType", type: "single", defaultValue: "DOTA_ABILITY_TYPE_BASIC"},
@@ -498,6 +500,14 @@ app.factory("Ability", function($q, Event, Modifier) {
 		["DAMAGE_TYPE_MAGICAL",true],
 		["DAMAGE_TYPE_PHYSICAL",true],
 		["DAMAGE_TYPE_PURE",true],
+	];
+
+	Ability.SpellImmunityType = [
+		["SPELL_IMMUNITY_NONE",true],
+		["SPELL_IMMUNITY_ALLIES_YES",false],
+		["SPELL_IMMUNITY_ALLIES_NO",false],
+		["SPELL_IMMUNITY_ENEMIES_YES",false],
+		["SPELL_IMMUNITY_ENEMIES_NO",false]
 	];
 
 	Ability.AbilityType = [

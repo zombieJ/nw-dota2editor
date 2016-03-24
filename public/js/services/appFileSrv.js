@@ -86,6 +86,12 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent, Config)
 	// ==========================================================
 	// =                       File System                      =
 	// ==========================================================
+	// File exist
+	AppFileSrv.fileExist = function(path) {
+		path = PATH.normalize(path);
+		return FS.existsSync(path);
+	};
+
 	// Assume folder
 	AppFileSrv.assumeFolder = function(path) {
 		path = PATH.normalize(path);
@@ -186,6 +192,33 @@ app.factory("AppFileSrv", function ($interval, $q, $once, globalContent, Config)
 				_deferred.resolve();
 			}
 		});
+
+		return _deferred.promise;
+	};
+
+	// Copy file
+	AppFileSrv.copyFile = function (src, tgt) {
+		var srcFile, tgtFile;
+		var FS = require("fs");
+		var _deferred = $q.defer();
+
+		var _folder = tgt.match(/(.*)[\\\/].*/)[1];
+		AppFileSrv.assumeFolder(_folder);
+
+		srcFile = FS.createReadStream(src);
+		tgtFile = FS.createWriteStream(tgt);
+
+		srcFile.on("error", function(err) {
+			_deferred.reject(err);
+		});
+		tgtFile.on("error", function(err) {
+			_deferred.reject(err);
+		});
+		tgtFile.on("close", function() {
+			_deferred.resolve(tgt);
+		});
+
+		srcFile.pipe(tgtFile);
 
 		return _deferred.promise;
 	};

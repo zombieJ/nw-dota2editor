@@ -61,6 +61,7 @@ app.factory("Locale", function() {
 		DeleteAbility: "是否要删除",
 		DeleteWithModifier: "同时删除技能修饰器相关的多语言描述",
 		Template: "模板",
+		AdditionalDependency: "额外依赖",
 
 		VersionCheck: "版本检测",
 		versionCheckError: "版本检测失败，部分功能将无法使用。请将以下错误信息发送与我，以帮助修复该错误：",
@@ -100,6 +101,8 @@ app.factory("Locale", function() {
 		AbilityUnitTargetTeam: "目标队伍",
 		AbilityUnitTargetFlags: "目标标记",
 		AbilityUnitDamageType: "伤害类型",
+		SpellImmunityType: "技能免疫类型",
+		FightRecapLevel: "战斗回放等级",
 
 		AbilityType: "技能类型",
 		HotKeyOverride: "热键",
@@ -238,6 +241,12 @@ app.factory("Locale", function() {
 		DAMAGE_TYPE_MAGICAL: "魔法伤害",
 		DAMAGE_TYPE_PHYSICAL: "物理伤害",
 		DAMAGE_TYPE_PURE: "纯粹伤害",
+
+		SPELL_IMMUNITY_NONE: "无",
+		SPELL_IMMUNITY_ALLIES_YES: "可以用于技能免疫的友方",
+		SPELL_IMMUNITY_ALLIES_NO: "不能用于技能免疫的友方",
+		SPELL_IMMUNITY_ENEMIES_YES: "可以用于技能免疫的敌方",
+		SPELL_IMMUNITY_ENEMIES_NO: "不能用于技能免疫的敌方",
 
 		DOTA_ABILITY_TYPE_BASIC: "普通技能",
 		DOTA_ABILITY_TYPE_ULTIMATE: "终极技能",
@@ -799,7 +808,9 @@ app.factory("Locale", function() {
 		syncIcon: "如果你想使用直观的图标选择预览功能，请使用此功能来下载所有图标文件。除非你点击此功能，否则编辑器不会主动下载最新的资源。（使用时请确保网络通顺）",
 		syncSpellLibrary: "同步最新的SpellLibrary库，使得你可以在制作过程中直接复用这些技能。github@Pizzalol",
 		repeatSync: "如果你的网络不好，建议同步多次以保证资源下载=>",
-		texturePickerEmpty: "图标列表为空，请先进入配置界面点击“同步全部”下载最新的图标列表。",
+		texturePickerEmpty: "图标列表为空，请先进入配置界面点击“同步图标”下载最新的图标列表。",
+		spellLibraryEmpty: "SpellLibrary库列表为空，请先进入配置界面点击“同步SpellLibrary”下载最新的SpellLibrary库。",
+		spellLibraryScripts: "该技能需要使用额外的Script文件，点击创建后将自动为您创建这些文件。当然，你也可以自定义文件的导出路径（如果文件已经存在则不会覆盖）。使用前请确保你已经引用了SpellLibrary的通用组件库 (util, timer, physics, barebones):",
 		texturePickerCustomizeEmpty: "自定义图标列表为空。",
 		updating: "正在更新。如果在更新过程中关闭程序，可下次打开重新更新。",
 		updateFinish: "更新完成，重启以应用更新。",
