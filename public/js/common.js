@@ -143,6 +143,15 @@ common.text.capitalize = function(str) {
 	return str.replace(/(^|\s+)\w/g,function(s){ return s.toUpperCase();});
 };
 
+common.text.replaceAll = function(str, src, tgt) {
+	if(src === tgt) return str;
+	for(var i = 0 ; i < 1000 ; i += 1) {
+		str = str.replace(src, tgt);
+		if(str.indexOf(src) === -1) break;
+	}
+	return str;
+};
+
 // ====================== Array =======================
 common.array = {};
 

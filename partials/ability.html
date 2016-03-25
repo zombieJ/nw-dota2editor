@@ -744,7 +744,7 @@
 						<!-- Spell Library Ability -->
 						<p ng-if="spellLibList.length === 0" class="text-warning">{{::Locale('spellLibraryEmpty')}}</p>
 						<div class="row" ng-show="spellLibList.length">
-							<div class="col-md-6">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<input type="text" class="form-control" ng-model="spellLibFilter" placeholder="{{::Locale('Filter')}}" />
 								</div>
@@ -755,7 +755,7 @@
 									</option>
 								</select>
 							</div>
-							<div class="col-md-6">
+							<div class="col-sm-6">
 								<div class="form-group">
 									<label>{{::Locale('Template')}}</label>
 									<input type="text" class="form-control" ng-model="spellLibItem[0]" readonly />
@@ -775,7 +775,7 @@
 									<label>{{::Locale('AdditionalDependency')}}</label>
 									<div class="form-group" ng-repeat="(key, value) in spellLibCache[spellLibItem[0]].scripts track by $index">
 										<label>{{key}}</label>
-										<input type="text" class="form-control" ng-model="value" />
+										<input type="text" class="form-control" ng-model="spellLibCache[spellLibItem[0]].scripts[key]" />
 									</div>
 									<p class="text-warning">
 										* {{::Locale('spellLibraryScripts')}}

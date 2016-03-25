@@ -456,6 +456,7 @@ var _abilityCtrl = function(isItem) {
 
 			// Copy files
 			$.each(cache.scripts, function (src, tgt) {
+				_data = common.text.replaceAll(_data, src, tgt);
 				var _srcPath = AppVersionSrv.resPath + "res/spellLib/lua/" + src;
 				var _tgtPath = globalContent.project + "/scripts/vscripts/" + tgt;
 				if(!AppFileSrv.fileExist(_srcPath)) {
@@ -466,6 +467,7 @@ var _abilityCtrl = function(isItem) {
 						region: "system"
 					});
 				} else if(!AppFileSrv.fileExist(_tgtPath)) {
+					console.log("Fuck you:", _srcPath, _tgtPath);
 					AppFileSrv.copyFile(_srcPath, _tgtPath);
 				}
 			});
