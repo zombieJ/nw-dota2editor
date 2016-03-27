@@ -410,10 +410,22 @@ var _abilityCtrl = function(isItem) {
 		// ==========> New Spell Library
 		$scope.spellLibItem = [];
 		$scope.spellLibCache = {};
-		$scope.spellLibList = AppSpellLibSrv.getAbilityList();
-		$scope.spellLibEnabled = function () {
-			return $scope.spellLibItem.length === 1;
+		$scope.spellLibList = [];
+		setTimeout(function () {
+			$scope.spellLibList = AppSpellLibSrv.getAbilityList();
+			$scope.$apply();
+		}, 1000);
+
+		$scope.spellLibPreview = function (_spell) {
+			if(!_spell) return;
+
+			$.dialog({
+				title: _spell,
+				content: $("<textarea class='form-control' readonly rows='25'>").text($scope.spellLibCache[_spell].data),
+				size: "large"
+			});
 		};
+
 		$scope.updateSpellLib = function () {
 			var _spell = $scope.spellLibItem[0];
 			if(!_spell) return;
@@ -478,12 +490,20 @@ var _abilityCtrl = function(isItem) {
 			_newAbility.kv.key = $scope._newTmplAbility._name;
 			_newAbility._changed = true;
 
+			// Item
+			if($scope.isItem) {
+				_newAbility.kv.set("BaseClass", "item_datadriven");
+				$scope.assignAutoID($scope.ability);
+			} else {
+				_newAbility.kv.set("BaseClass", "ability_datadriven");
+			}
+
+			// Insert
 			$scope.abilityList.push(_newAbility);
 			$scope.setAbility(_newAbility);
 			$scope.treeView.list.push(
 				_registerAbilityTreeItem({_id: +new Date()}, _newAbility)
 			);
-
 
 			setTimeout(function() {
 				$("#listCntr").scrollTop(9999999);
