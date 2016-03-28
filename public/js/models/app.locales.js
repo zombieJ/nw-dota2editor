@@ -112,6 +112,7 @@ app.factory("Locale", function() {
 
 		AbilityCastPoint: "施法前摇",
 		AbilityCastAnimation: "施法动作",
+		AnimationPlaybackRate: "动画播放速率",
 
 		AbilityCooldown: "冷却时间",
 		AbilityManaCost: "魔法消耗",
@@ -433,7 +434,7 @@ app.factory("Locale", function() {
 		MODIFIER_PROPERTY_TOOLTIP: "可被用于任何提示， 比如臂章的血量移除",
 		MODIFIER_PROPERTY_TOTAL_CONSTANT_BLOCK: "减免所有来源的伤害",
 		MODIFIER_PROPERTY_TOTAL_CONSTANT_BLOCK_UNAVOIDABLE_PRE_ARMOR: "对于自动攻击的伤害减免",
-		MODIFIER_PROPERTY_TOTALDAMAGEOUTGOING_PERCENTAGE: "（无效）",
+		MODIFIER_PROPERTY_TOTALDAMAGEOUTGOING_PERCENTAGE: "百分比所有伤害输出",
 		MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS: "动作修改？",
 		MODIFIER_PROPERTY_TRANSLATE_ATTACK_SOUND: "攻击音效修改？",
 		MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE: "百分比修改转向速度",

@@ -55,6 +55,8 @@ var _abilityCtrl = function(isItem) {
 		$scope.setAbility = function (ability) {
 			$scope.ability = ability;
 			$scope.currentModifier = $scope.ability ? $scope.ability.getModifierList()[0] : null;
+
+			window._currentAbility = $scope.ability._name;
 		};
 
 		$scope.setModifier = function(modifier) {
@@ -756,40 +758,45 @@ var _abilityCtrl = function(isItem) {
 		// =                        File Operation                        =
 		// ================================================================
 		// Read Ability file
-		if (!globalContent[_globalListKey]) {
-			NODE.loadFile(_filePath, "utf8").then(function (data) {
-				var _kv = KV.parse(data);
-				$.each(_kv.value, function (i, unit) {
-					if (typeof  unit.value !== "string") {
-						var _unit = Ability.parse(unit);
-						_LOG("Ability", 0, "实体：", _unit._name, _unit);
+		(function () {
+			if (!globalContent[_globalListKey]) {
+				NODE.loadFile(_filePath, "utf8").then(function (data) {
+					var _kv = KV.parse(data);
+					$.each(_kv.value, function (i, unit) {
+						if (typeof  unit.value !== "string") {
+							var _unit = Ability.parse(unit);
+							_LOG("Ability", 0, "实体：", _unit._name, _unit);
 
-						$scope.abilityList.push(_unit);
-					}
+							$scope.abilityList.push(_unit);
+						}
+					});
+
+					globalContent[_globalListKey] = $scope.abilityList;
+					$scope.setAbility($scope.abilityList[0]);
+
+					setTimeout(function () {
+						$(window).resize();
+					}, 100);
+				}, function () {
+					$.dialog({
+						title: "OPS!",
+						content: "Can't find " + _filePath + " <br/> 【打开" + _filePath + "失败】"
+					});
+				}).finally(function () {
+					$scope.ready = true;
+					_abilityListDeferred.resolve();
 				});
+			} else {
+				$scope.abilityList = globalContent[_globalListKey];
+				$scope.treeView = globalContent[_globalListKey]._treeView;
 
-				globalContent[_globalListKey] = $scope.abilityList;
-				$scope.setAbility($scope.abilityList[0]);
+				var _currentAbility = common.array.find(window._currentAbility, $scope.abilityList, "_name");
 
-				setTimeout(function () {
-					$(window).resize();
-				}, 100);
-			}, function () {
-				$.dialog({
-					title: "OPS!",
-					content: "Can't find "+_filePath+" <br/> 【打开"+_filePath+"失败】"
-				});
-			}).finally(function () {
+				$scope.setAbility(_currentAbility ? _currentAbility : $scope.abilityList[0]);
 				$scope.ready = true;
 				_abilityListDeferred.resolve();
-			});
-		} else {
-			$scope.abilityList = globalContent[_globalListKey];
-			$scope.treeView = globalContent[_globalListKey]._treeView;
-			$scope.setAbility($scope.abilityList[0]);
-			$scope.ready = true;
-			_abilityListDeferred.resolve();
-		}
+			}
+		})();
 
 		// 多语言支持
 		$scope.languageList = globalContent.languageList;

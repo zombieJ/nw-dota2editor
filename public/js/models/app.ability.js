@@ -289,7 +289,8 @@ app.factory("Ability", function($q, Event, Modifier) {
 		],
 		[
 			{group: "animation", attr: "AbilityCastPoint", type: "text"},
-			{group: "animation", attr: "AbilityCastAnimation", type: "text"}
+			{group: "animation", attr: "AbilityCastAnimation", type: "text"},
+			{group: "animation", attr: "AnimationPlaybackRate", type: "text"}
 		],
 		[
 			{group: "usage", attr: "AbilityCooldown", type: "text"},
