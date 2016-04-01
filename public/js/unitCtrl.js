@@ -106,11 +106,11 @@ var _unitCtrl = function(isHero) {
 			if(entity.kv.get("override_hero", false)) return;
 
 			$.each(globalContent.languageList, function(i, lang) {
-				if(!lang.kv.get(oldName)) lang.kv.set(newName, lang.kv.get(oldName));
-				lang.map.kv.delete(oldName);
+				if(lang.kv.get(oldName)) lang.kv.set(newName, lang.kv.get(oldName));
+				lang.kv.delete(oldName);
 
-				if(!lang.kv.get(oldName + "_bio")) lang.kv.set(newName + "_bio", lang.kv.get(oldName + "_bio"));
-				lang.map.kv.delete(oldName + "_bio");
+				if(lang.kv.get(oldName + "_bio")) lang.kv.set(newName + "_bio", lang.kv.get(oldName + "_bio"));
+				lang.kv.delete(oldName + "_bio");
 			});
 		};
 

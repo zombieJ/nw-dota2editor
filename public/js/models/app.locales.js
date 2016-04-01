@@ -610,6 +610,16 @@ app.factory("Locale", function() {
 		DOTA_NPC_UNIT_RELATIONSHIP_TYPE_SIEGE: "主城",
 		DOTA_NPC_UNIT_RELATIONSHIP_TYPE_WARD: "眼",
 
+		DOTA_HULL_SIZE_SMALL: "小型",
+		DOTA_HULL_SIZE_REGULAR: "常规",
+		DOTA_HULL_SIZE_SIEGE: "Siege",
+		DOTA_HULL_SIZE_HERO: "英雄",
+		DOTA_HULL_SIZE_HUGE: "大型",
+		DOTA_HULL_SIZE_BUILDING: "建筑",
+		DOTA_HULL_SIZE_FILLER: "填充",
+		DOTA_HULL_SIZE_BARRACKS: "兵营",
+		DOTA_HULL_SIZE_TOWER: "建筑",
+
 		// 检测
 		CheckReport: "检测报告",
 		Filter: "过滤",

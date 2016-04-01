@@ -56,7 +56,13 @@ var _abilityCtrl = function(isItem) {
 			$scope.ability = ability;
 			$scope.currentModifier = $scope.ability ? $scope.ability.getModifierList()[0] : null;
 
-			window._currentAbility = $scope.ability._name;
+			if($scope.ability) {
+				if(isItem) {
+					window._currentItem = $scope.ability._name;
+				} else {
+					window._currentAbility = $scope.ability._name;
+				}
+			}
 		};
 
 		$scope.setModifier = function(modifier) {
@@ -790,7 +796,7 @@ var _abilityCtrl = function(isItem) {
 				$scope.abilityList = globalContent[_globalListKey];
 				$scope.treeView = globalContent[_globalListKey]._treeView;
 
-				var _currentAbility = common.array.find(window._currentAbility, $scope.abilityList, "_name");
+				var _currentAbility = common.array.find(isItem ? window._currentItem : window._currentAbility, $scope.abilityList, "_name");
 
 				$scope.setAbility(_currentAbility ? _currentAbility : $scope.abilityList[0]);
 				$scope.ready = true;
