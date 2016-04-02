@@ -102,6 +102,7 @@ app.factory("Locale", function() {
 		AbilityUnitTargetFlags: "目标标记",
 		AbilityUnitDamageType: "伤害类型",
 		SpellImmunityType: "技能免疫类型",
+		CastFilterRejectCaster: "对释放者无效",
 		FightRecapLevel: "战斗回放等级",
 
 		AbilityType: "技能类型",

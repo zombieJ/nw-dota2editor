@@ -278,6 +278,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 			{group: "target", attr: "AbilityUnitTargetFlags", type: "group"},
 			{group: "target", attr: "AbilityUnitDamageType", type: "single"},
 			{group: "target", attr: "SpellImmunityType", type: "single"},
+			{group: "target", attr: "CastFilterRejectCaster", type: "boolean"},
 			{group: "target", attr: "FightRecapLevel", type: "text"}
 		],
 		[
