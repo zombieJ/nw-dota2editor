@@ -137,6 +137,10 @@ app.factory("Config", function($q) {
 					// Promise finished
 					_deferred.resolve();
 				});
+		} else {
+			try {
+				if(initFunc) _config._data = initFunc(_config._data);
+			} catch(err) {}
 		}
 		return _config;
 	};

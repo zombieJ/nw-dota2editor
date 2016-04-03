@@ -33,13 +33,13 @@ var _abilityCtrl = function(isItem) {
 		$scope._newUnassignedKey = "";
 		$scope._newUnassignedValue = "";
 
+		var _abilityListDeferred = $q.defer();
+
 		$scope.config = Config.fetch(isItem ? "item" : "ability", configInitFunc);
 		$scope.config.exportFunction = configExportFunc;
 
 		var _globalListKey = isItem ? "itemList" : "abilityList";
 		var _filePath = isItem ? Ability.itemFilePath : Ability.filePath;
-
-		var _abilityListDeferred = $q.defer();
 
 
 		$scope.currentTab = "common";
@@ -487,7 +487,6 @@ var _abilityCtrl = function(isItem) {
 						region: "system"
 					});
 				} else if(!AppFileSrv.fileExist(_tgtPath)) {
-					console.log("Fuck you:", _srcPath, _tgtPath);
 					AppFileSrv.copyFile(_srcPath, _tgtPath);
 				}
 			});
@@ -694,12 +693,15 @@ var _abilityCtrl = function(isItem) {
 		function _registerAbilityTreeItem(item, ability) {
 			Object.defineProperties(item, {
 				name: {
+					configurable: true,
 					get: function() {return globalContent.mainLang().kv.get(Language.abilityAttr(ability._name, ''), Config.global.kvCaseSensitive) || ability._name;}
 				},
 				ability: {
+					configurable: true,
 					get: function() {return ability;}
 				},
 				icon: {
+					configurable: true,
 					get: function() {
 						var mark = $scope.config.get('abilities', ability._name, 'markUsage');
 						if(mark === "dummy") return "cubes";
@@ -708,9 +710,11 @@ var _abilityCtrl = function(isItem) {
 					}
 				},
 				color: {
+					configurable: true,
 					get: function() {return $scope.config.get('abilities', ability._name, 'markColor');}
 				},
 				qualityColor: {
+					configurable: true,
 					get: function() {
 						if(!isItem) return "";
 						return Ability.ItemQuality.color[ability.get("ItemQuality")];
@@ -795,10 +799,6 @@ var _abilityCtrl = function(isItem) {
 			} else {
 				$scope.abilityList = globalContent[_globalListKey];
 				$scope.treeView = globalContent[_globalListKey]._treeView;
-				if(!$scope.treeView) {
-					treeViewInit();
-					globalContent[_globalListKey]._treeView = $scope.treeView;
-				}
 
 				var _currentAbility = common.array.find(isItem ? window._currentItem : window._currentAbility, $scope.abilityList, "_name");
 
