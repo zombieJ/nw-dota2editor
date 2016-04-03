@@ -382,6 +382,7 @@ label.checkbox input[type="checkbox"] {
 	padding: 10px 15px;
 	border-bottom: 1px solid #999;
 	box-shadow: 0 5px 5px rgba(0,0,0,0.3);
+	z-index: 1;
 }
 
 .top-box .app-menu {

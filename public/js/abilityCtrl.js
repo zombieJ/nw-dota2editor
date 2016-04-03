@@ -174,7 +174,7 @@ var _abilityCtrl = function(isItem) {
 		// ==========> Ability Icon
 		$scope.iconSrcList = [];
 		var _iconCache = {};
-		var _iconEmpty = ['public/img/logo.jpg'];
+		var _iconEmpty = [isItem ? 'public/img/none_item.png' : 'public/img/logo.jpg'];
 
 		$scope.getIconList = function(ability) {
 			var textureName = ability && ability.get("AbilityTextureName");
@@ -795,6 +795,10 @@ var _abilityCtrl = function(isItem) {
 			} else {
 				$scope.abilityList = globalContent[_globalListKey];
 				$scope.treeView = globalContent[_globalListKey]._treeView;
+				if(!$scope.treeView) {
+					treeViewInit();
+					globalContent[_globalListKey]._treeView = $scope.treeView;
+				}
 
 				var _currentAbility = common.array.find(isItem ? window._currentItem : window._currentAbility, $scope.abilityList, "_name");
 

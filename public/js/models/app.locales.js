@@ -541,6 +541,7 @@ app.factory("Locale", function() {
 		MinimapIcon: "小地图图标",
 		MinimapIconSize: "小地图图标尺寸",
 		Model: "模型",
+		Effect: "特效",
 		ModelScale: "模型比例",
 		MovementCapabilities: "移动能力",
 		MovementSpeed: "移动速度",

@@ -315,6 +315,10 @@ app.factory("Ability", function($q, Event, Modifier) {
 			{group: "item", attr: "ItemCastOnPickup", type: "boolean", defaultValue: false}
 		],
 		[
+			{group: "item", attr: "Model", type: "text"},
+			{group: "item", attr: "Effect", type: "text"}
+		],
+		[
 			{group: "item", attr: "ItemCost", type: "text"},
 			{group: "item", attr: "ItemDroppable", type: "boolean", defaultValue: true},
 			{group: "item", attr: "ItemSellable", type: "boolean", defaultValue: true},
@@ -323,7 +327,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 			{group: "item", attr: "ItemDeclarations", type: "single"},
 			{group: "item", attr: "ItemKillable", type: "boolean", defaultValue: true},
 			{group: "item", attr: "ItemAlertable", type: "boolean", defaultValue: false},
-			{group: "item", attr: "ItemPermanent", type: "single"},
+			{group: "item", attr: "ItemPermanent", type: "single"}
 		],
 		[
 			{group: "item", attr: "ItemRequiresCharges", type: "single"},
