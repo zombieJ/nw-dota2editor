@@ -611,6 +611,12 @@ app.controller('main', function ($scope, $route, $location, $q,
 		});
 	};
 
+	$(document).keydown(function (e) {
+		if(e.which === 13 && $("#saveMDL").is(':visible')) {
+			$("#saveAllConfirm").click();
+		}
+	});
+
 	// Color picker
 	$scope.colorList = [
 		'#777777', '#337ab7', '#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f'
