@@ -13,6 +13,7 @@ components.directive('operationlist', function($compile) {
 			$scope.Config = Config;
 			$scope.UI = UI;
 			$scope.KV = KV;
+			$scope.common = common;
 
 			$scope.getOperationlist = function() {
 				return $.grep($scope.operationlist || [], function(operation) {
@@ -70,6 +71,8 @@ components.directive('operationlist', function($compile) {
 						'</select>'+
 					'</div>'+
 					'<a class="fa fa-plus" ng-show="operation.key" ng-click="addCustomizeKV(operation)"></a>' +
+					'<a class="fa fa-chevron-up" ng-click="common.array.moveOffset(operation, operationlist, -1)"></a>' +
+					'<a class="fa fa-chevron-down" ng-click="common.array.moveOffset(operation, operationlist, 1)"></a>' +
 				'</div>'+
 				'<div operation="operation" data-ability="ability"></div>'+
 			'</div>'+

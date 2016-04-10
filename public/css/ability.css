@@ -231,8 +231,7 @@ hr {
 }
 
 .ability-operation-list .ability-operation .ability-operation-header .fa {
-	//float: left;
-	margin: 5px 8px 0 8px;
+	margin: 5px 0px 0 5px;
 	font-size: 20px;
 }
 
