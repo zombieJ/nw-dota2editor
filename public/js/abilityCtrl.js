@@ -644,6 +644,7 @@ var _abilityCtrl = function(isItem) {
 			}
 
 			// Loop abilities
+			var _cacheSet = new Set();
 			var _list = [];
 			function _loopAbilities(item) {
 				// Loop folder
@@ -659,7 +660,12 @@ var _abilityCtrl = function(isItem) {
 						} else {
 							// ============= Ability =============
 							if(common.array.find(_item.ability, $scope.abilityList)) {
-								_loopAbilities(_item);
+								if(!_cacheSet.has(_item._name)) {
+									_cacheSet.add(_item._name);
+									_loopAbilities(_item);
+								} else {
+									common.array.remove(_item, item.list);
+								}
 							} else {
 								common.array.remove(_item, item.list);
 							}
