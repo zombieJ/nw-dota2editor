@@ -81,6 +81,22 @@ var _abilityCtrl = function(isItem) {
 			UI.highlight("[data-id='event']:visible tbody:last");
 		};
 
+		$scope.switchEvent = function(event, eventList, oriKVList, offset) {
+			var _oriIndex = $.inArray(event, eventList);
+			var _tgtIndex = _oriIndex + offset;
+			if(Math.min(_oriIndex, _tgtIndex) < 0) return;
+			if(Math.max(_oriIndex, _tgtIndex) >= eventList.length) return;
+
+			var _oriEvent = event;
+			var _tgtEvent = eventList[_tgtIndex];
+
+			var _oriKVIndex = $.inArray(_oriEvent, oriKVList);
+			var _tgtKVIndex = $.inArray(_tgtEvent, oriKVList);
+
+			oriKVList[_tgtKVIndex] = _oriEvent;
+			oriKVList[_oriKVIndex] = _tgtEvent;
+		};
+
 		function getNoConflictModifierName() {
 			var _modifierList = $scope.ability.kv.assumeKey("Modifiers", true);
 			var _oriName = "modifier_" + $scope.ability._name;

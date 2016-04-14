@@ -167,6 +167,10 @@
 										<option ng-repeat="_event in Event.EventList track by $index" value="{{::_event.value}}">{{::_event.value}} 【{{::Locale(_event.value)}}】</option>
 									</select>
 								</td>
+								<td width="50" class="text-center">
+									<a class="fa fa-chevron-up" ng-click="switchEvent(event, ability.getEventList(), ability.kv.value, -1)"></a>
+									<a class="fa fa-chevron-down" ng-click="switchEvent(event, ability.getEventList(), ability.kv.value, 1)"></a>
+								</td>
 								<td width="60" class="text-center">
 									<a ng-click="UI.arrayDelete(event, ability.kv.value)">
 										Delete
@@ -179,7 +183,7 @@
 									<span class="ability-tip">Comment</span>
 									{{::Locale('Comment')}}
 								</th>
-								<td class="ability-form" colspan="2">
+								<td class="ability-form" colspan="3">
 									<textarea ng-model="event.comment" rows="3" placeholder="{{::Locale('Comment')}}"></textarea>
 								</td>
 							</tr>
@@ -189,7 +193,7 @@
 									<span class="ability-tip">Operation</span>
 									{{::Locale('Operation')}}
 								</th>
-								<td class="ability-form" colspan="2" style="background: #FFF">
+								<td class="ability-form" colspan="3" style="background: #FFF">
 									<div ng-if="event.key === 'OnProjectileHitUnit'" class="checkbox">
 										<span>{{::Locale('DeleteOnHit')}}</span>
 										<span checkbox data-target="event" data-target-path="DeleteOnHit"></span>
@@ -344,6 +348,10 @@
 														<option ng-repeat="_event in Event.ModifierEventList track by $index" value="{{::_event.value}}">{{::_event.value}} 【{{::Locale(_event.value)}}】</option>
 													</select>
 												</td>
+												<td width="50" class="text-center">
+													<a class="fa fa-chevron-up" ng-click="switchEvent(event, Modifier(currentModifier).getEventList(), currentModifier.value, -1)"></a>
+													<a class="fa fa-chevron-down" ng-click="switchEvent(event, Modifier(currentModifier).getEventList(), currentModifier.value, 1)"></a>
+												</td>
 												<td width="60" class="text-center">
 													<a href="javascript:void(0)" ng-click="UI.arrayDelete(event, currentModifier.value)">
 														Delete
@@ -357,7 +365,7 @@
 													<span class="ability-tip">ThinkInterval</span>
 													{{::Locale('ThinkInterval')}}
 												</th>
-												<td class="ability-form" colspan="2">
+												<td class="ability-form" colspan="3">
 													<input ng-model="currentModifier.bind('ThinkInterval')" ng-model-options="{getterSetter: true}" />
 												</td>
 											</tr>
@@ -368,7 +376,7 @@
 													<span class="ability-tip">Comment</span>
 													{{::Locale('_comment')}}
 												</th>
-												<td class="ability-form" colspan="2">
+												<td class="ability-form" colspan="3">
 													<textarea ng-model="event.comment" rows="3" placeholder="{{::Locale('_comment')}}"></textarea>
 												</td>
 											</tr>
@@ -379,7 +387,7 @@
 													<span class="ability-tip">Operation</span>
 													{{::Locale('Operation')}}
 												</th>
-												<td class="ability-form" colspan="2" style="background: #FFF">
+												<td class="ability-form" colspan="3" style="background: #FFF">
 													<div ng-if="event.key === 'OnProjectileHitUnit'" class="checkbox">
 														<span>{{::Locale('DeleteOnHit')}}</span>
 														<span checkbox data-target="event" data-target-path="DeleteOnHit"></span>
