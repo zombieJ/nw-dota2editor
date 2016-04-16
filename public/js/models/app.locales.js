@@ -282,7 +282,7 @@ app.factory("Locale", function() {
 		ItemInitialCharges: "初始数量",
 		ItemRequiresCharges: "需要数量才能使用",
 		ItemStackable: "可叠加",
-		SideShop: "基地商店",
+		SideShop: "路边商店",
 		SecretShop: "神秘商店",
 		ItemCastOnPickup: "拾起使用",
 		ItemQuality: "物品质量",
