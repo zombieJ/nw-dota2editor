@@ -6,6 +6,7 @@
 		this.value = value || "";
 		this.comment = comment || "";
 		this.keep = false;
+		this.embedList = null;
 
 		return this;
 	};
@@ -125,6 +126,21 @@
 		return _data.replace(/\n$/, "");
 	};
 
+	KV.prototype.equals = function (targetKV) {
+		if(!targetKV) return false;
+
+		if(this.key === targetKV.key && this.value === targetKV.value) return true;
+		if(this.value instanceof Array && targetKV.value instanceof Array) {
+			if(this.value.length !== targetKV.value.length) return false;
+
+			for(var i = 0 ; i < this.value.length ; i += 1) {
+				if(!this.value[i].equals(targetKV.value[i])) return false;
+			}
+			return true;
+		}
+		return false;
+	};
+
 	KV.inArray = function(value, array) {
 		var i = array.length;
 		while (i--) {
@@ -151,13 +167,15 @@
 
 		var _preState = STATE_NORMAL;
 		var _state = STATE_NORMAL;
-		var _len = text.length;
 		var _i, _c, _subKV, _breakFor = false;
+		var _len = text.length;
 		var _startLoc;
 		var _endLoc;
 		var _comment = "";
 		var _key = "";
 		var _value = null;
+		var _embedList = [];
+		var _returnKVOnly;
 
 		if(typeof startLoc === "number") {
 			_startLoc = startLoc;
@@ -177,6 +195,37 @@
 			_state = state;
 		}
 
+		_returnKVOnly = _startLoc === undefined;
+		_startLoc = _startLoc || 0;
+
+		// Parse Include Resource
+		(function () {
+			if(_startLoc === 0) {
+				var _contentStart = text.search(/(^|\n)\s*"/g);
+
+				if (_contentStart > 0) {
+					var _match;
+					var _preContent = text.substr(0, _contentStart);
+
+					// Match #base
+					var _baseRegex = /(^|\n)\s*#base\s+"([^"]*)"/g;
+					while ((_match = _baseRegex.exec(_preContent)) != null) {
+						_embedList.push(_match[2]);
+					}
+
+					// Match comment
+					var _commentRegex = /(^|\n)\s*\/\/ ?([^\r\n]*)/g;
+					var _commentList = [];
+					while ((_match = _commentRegex.exec(_preContent)) != null) {
+						_commentList.push(_match[2]);
+					}
+					_comment = _commentList.join("\n");
+
+					_startLoc = _contentStart;
+				}
+			}
+		})();
+
 		function _matchComment() {
 			if(text[_i] === '/' && text[_i + 1] === '/') {
 				_i += 1;
@@ -186,7 +235,7 @@
 			return false;
 		}
 
-		for(_i = _startLoc || 0 ; _i < _len ; _i += 1) {
+		for(_i = _startLoc; _i < _len ; _i += 1) {
 			_c = text[_i];
 
 			switch(_state) {
@@ -297,7 +346,11 @@
 
 		var _kv = new KV(_key, _value, _comment.replace(/[\r\n]+$/, ""));
 
-		if(_startLoc === undefined) {
+		if(_embedList.length) {
+			_kv.embedList = _embedList;
+		}
+
+		if(_returnKVOnly) {
 			return _kv;
 		} else {
 			return {

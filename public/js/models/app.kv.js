@@ -3,7 +3,7 @@
 // ======================================================
 // =                         KV                         =
 // ======================================================
-app.factory("KV", function(NODE, $q, Config) {
+app.factory("KV", function(NODE, $q, Config, AppFileSrv) {
 	var _KV = KV;
 
 	_KV.new = function(key, value, comment) {
@@ -85,6 +85,41 @@ app.factory("KV", function(NODE, $q, Config) {
 	};
 
 	// ================================================
+	// =                     Read                     =
+	// ================================================
+	_KV.read = function (path) {
+		var _deferred = $q.defer();
+		var _kv;
+
+		AppFileSrv.readFile(path).then(function (data) {
+			_kv = _KV.parse(data);
+
+			if(_kv.embedList && _kv.embedList.length) {
+				var _folderPath = require('path').dirname(path);
+				var _subPromiseList = $.map(_kv.embedList, function (subPath) {
+					return _KV.read(_folderPath + "/" + subPath).then(function (subKV) {
+						subKV._filePath = subPath;
+						return subKV;
+					});
+				});
+
+				$q.all(_subPromiseList).then(function (subKVList) {
+					_kv.subKVList = subKVList;
+					_deferred.resolve(_kv);
+				}, function (err) {
+					_deferred.reject(err);
+				});
+			} else {
+				_deferred.resolve(_kv);
+			}
+		}, function (err) {
+			_deferred.reject(err);
+		});
+
+		return _deferred.promise;
+	};
+
+	// ================================================
 	// =                    Writer                    =
 	// ================================================
 	_KV.Writer = function() {
@@ -159,7 +194,7 @@ app.factory("KV", function(NODE, $q, Config) {
 		});
 
 		if(text.trim() === "{") this._writeTabIndex += 1;
-	}
+	};
 
 	_KV.Writer.prototype.writeComment = function(text) {
 		var _my = this;

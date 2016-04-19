@@ -792,7 +792,7 @@ var _abilityCtrl = function(isItem) {
 		// Read Ability file
 		(function () {
 			if (!globalContent[_globalListKey]) {
-				NODE.loadFile(_filePath, "utf8").then(function (data) {
+				/*NODE.loadFile(_filePath, "utf8").then(function (data) {
 					var _kv = KV.parse(data);
 					$.each(_kv.value, function (i, unit) {
 						if (typeof  unit.value !== "string") {
@@ -817,6 +817,9 @@ var _abilityCtrl = function(isItem) {
 				}).finally(function () {
 					$scope.ready = true;
 					_abilityListDeferred.resolve();
+				});*/
+				KV.read(globalContent.projectFolder + "/" + _filePath).then(function (kv) {
+					
 				});
 			} else {
 				$scope.abilityList = globalContent[_globalListKey];
