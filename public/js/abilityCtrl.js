@@ -20,6 +20,8 @@ var _abilityCtrl = function(isItem) {
 
 		$scope._newTmplAbility = {};
 
+		$scope._nest = false;// 检测是否支持nest结构技能列表
+
 		var gui;
 		var clipboard;
 		try {
@@ -754,7 +756,7 @@ var _abilityCtrl = function(isItem) {
 			$.each(item.list || [], function(i, subItem) {
 				_configInitTreeView(subItem);
 			});
-		};
+		}
 
 		function _configExportTreeView(item) {
 			if(item.ability) {
@@ -763,7 +765,7 @@ var _abilityCtrl = function(isItem) {
 			$.each(item.list || [], function(i, subItem) {
 				_configExportTreeView(subItem);
 			});
-		};
+		}
 
 		function configInitFunc(configData) {
 			// Tree View
@@ -772,7 +774,7 @@ var _abilityCtrl = function(isItem) {
 					_configInitTreeView(configData.treeView);
 				}
 
-				treeViewInit();
+				if(!$scope._nest) treeViewInit();
 				globalContent[_globalListKey]._treeView = $scope.treeView;
 			});
 			return configData;
@@ -792,34 +794,63 @@ var _abilityCtrl = function(isItem) {
 		// Read Ability file
 		(function () {
 			if (!globalContent[_globalListKey]) {
-				/*NODE.loadFile(_filePath, "utf8").then(function (data) {
-					var _kv = KV.parse(data);
-					$.each(_kv.value, function (i, unit) {
-						if (typeof  unit.value !== "string") {
-							var _unit = Ability.parse(unit);
-							_LOG("Ability", 0, "实体：", _unit._name, _unit);
+				KV.read(globalContent.project + "/" + _filePath).then(function (kv) {
+					var _treeId = 0;
+					function _kvToList(kv, treeView) {
+						$.each(kv.value, function (i, unit) {
+							if(typeof unit.value !== "string") {
+								var _unit = Ability.parse(unit);
+								$scope.abilityList.push(_unit);
 
-							$scope.abilityList.push(_unit);
+								if(treeView) {
+									treeView.list.push(
+										_registerAbilityTreeItem({_id: +new Date() + "_" + _treeId++}, _unit)
+									);
+								}
+							}
+						});
+
+						var _embedList = $.map(kv.subKVList || [], function (subKV) {
+							var _subTree = {
+								name: subKV._filePath,
+								oriBase: subKV._filePath,
+								list: [],
+								_id: +new Date() + "_" + _treeId++
+							};
+							_kvToList(subKV, _subTree);
+							return _subTree;
+						});
+
+						if(treeView) {
+							treeView.list = _embedList.concat(treeView.list);
 						}
-					});
+					}
 
+					$scope._nest = !!kv.embedList && !!kv.embedList.length;
+					if($scope._nest) {
+						$scope.treeView = $scope.config.assumeObject("treeView");
+						$scope.treeView.name = "root";
+						$scope.treeView.list = [];
+						$scope.treeView._id = +new Date();
+						$scope.treeView.noHead = true;
+						$scope.treeView.open = true;
+					}
+
+					_kvToList(kv, $scope.treeView);
 					globalContent[_globalListKey] = $scope.abilityList;
 					$scope.setAbility($scope.abilityList[0]);
 
 					setTimeout(function () {
 						$(window).resize();
 					}, 100);
-				}, function () {
+				}, function (err) {
 					$.dialog({
 						title: "OPS!",
-						content: "Can't find " + _filePath + " <br/> 【打开" + _filePath + "失败】"
+						content: $("<pre>").text(JSON.stringify(err, null, "\t"))
 					});
 				}).finally(function () {
 					$scope.ready = true;
 					_abilityListDeferred.resolve();
-				});*/
-				KV.read(globalContent.projectFolder + "/" + _filePath).then(function (kv) {
-					
 				});
 			} else {
 				$scope.abilityList = globalContent[_globalListKey];

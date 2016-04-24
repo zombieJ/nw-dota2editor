@@ -820,6 +820,7 @@ app.factory("Locale", function() {
 		reportLimit: "检测报告在检测到100个问题后会停止继续检测，以避免过多性能消耗",
 		virtualView: "这是虚拟视图，并不会影响真实的文件顺序",
 		folderNotEmpty: "文件夹不为空",
+		baseNotDeleteFile: "#Base引用已删除，对应文件会被保留",
 		saveSuccess: "保存成功！",
 		languageParseWarn: "解析语言文件存在错误，请检查：",
 		languageParseError: "检测到无法解析的语言文件：${file}，保存时将被覆盖。如果你不想被覆盖，请检查该文件格式。",

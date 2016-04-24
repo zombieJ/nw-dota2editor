@@ -9,7 +9,8 @@ components.directive('abilityTreeView', function($compile) {
 			click: "=?click",
 			imageFunc: "=?imageFunc",
 			activeFunc: "=?activeFunc",
-			fileMenu: "=?fileMenu"
+			fileMenu: "=?fileMenu",
+			isBaseMode: "=?isBaseMode",
 		},
 		controller: function($scope, $element, UI, Locale) {
 			$scope.sortableOptions = {
@@ -76,6 +77,15 @@ components.directive('abilityTreeView', function($compile) {
 				} else {
 					common.array.remove($scope.treeView, $scope.parentNode.list);
 					$scope.$apply();
+
+					console.log(">>>", $scope.isBaseMode);
+					if($scope.isBaseMode) {
+						$.notify({
+							title: Locale('Done'),
+							content: Locale('baseNotDeleteFile'),
+							type: "info",
+						});
+					}
 				}
 			}};
 			var _menu_markAsFolder = {label: "Convert to Folder", click: function() {
@@ -140,7 +150,7 @@ components.directive('abilityTreeView', function($compile) {
 		},
 		template:
 		'<div class="image-tree-view">'+
-			'<a menu="menu()" class="tree-head noSelect" ng-class="{active: activeFunc(treeView.ability)}" ng-hide="treeView.noHead">'+
+			'<a menu="menu()" class="tree-head noSelect" ng-class="{active: activeFunc(treeView.ability)}" ng-hide="treeView.noHead" title="{{treeView.name}}">'+
 				'<div class="img-cntr" ng-style="{\'border-color\': treeView.color}">'+
 					'<img image data-src-list="getIconList()" ng-if="getIconList().length" />'+
 					'<span class="fa fa-folder" ng-if="!getIconList().length"></span>'+
@@ -154,7 +164,7 @@ components.directive('abilityTreeView', function($compile) {
 			'<div ui-sortable="sortableOptions" class="tree-list" ng-class="{open: treeView.open}" ng-model="treeView.list" ng-if="treeView.list">'+
 				'<div ng-repeat="item in treeView.list track by item._id">' +
 					'<div ability-tree-view="item" ng-if="treeView.open" data-parent-node="treeView" ' +
-					'data-file-menu="fileMenu" ' +
+					'data-file-menu="fileMenu" data-is-base-mode="isBaseMode" ' +
 					'data-click="click" data-image-func="imageFunc" data-active-func="activeFunc"></div>'+
 				'</div>'+
 			'</div>'+
