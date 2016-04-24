@@ -90,7 +90,8 @@ app.factory("Operation", function(KV, Sound, AppFileSrv) {
 		["CreateThinker", false, ["Target", "ModifierName"]],
 		["LinearProjectile", false, ["Target","EffectName","MoveSpeed","StartRadius","EndRadius","FixedDistance","StartPosition",
 			"TargetTeams","TargetTypes","TargetFlags","HasFrontalCone","ProvidesVision","VisionRadius"]],
-		["ApplyMotionController", false, ["Target","ScriptFile","HorizontalControlFunction","VerticalControlFunction","Duration"]]
+		["ApplyMotionController", false, ["Target","ScriptFile","HorizontalControlFunction","VerticalControlFunction","Duration"]],
+		["GrantXPGold", false, ["Target","SplitEvenly","XPAmount","GoldAmount","ReliableGold"]],
 	];
 
 	Operation.EventItemOperation = [
@@ -337,6 +338,10 @@ app.factory("Operation", function(KV, Sound, AppFileSrv) {
 		HorizontalControlFunction: {type: "text"},
 		VerticalControlFunction: {type: "text"},
 		DeleteOnHit: {type: "boolean"},
+		SplitEvenly: {type: "boolean"},
+		XPAmount: {type: "text"},
+		GoldAmount: {type: "text"},
+		ReliableGold: {type: "boolean"}
 	};
 
 	$.each(Operation.OperationAttrMap, function(key, opAttr) {

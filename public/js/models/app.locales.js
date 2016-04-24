@@ -717,6 +717,11 @@ app.factory("Locale", function() {
 		LinearProjectile: "线性投射物",
 		SpendCharge: "消耗物品",
 		ApplyMotionController: "运动控制",
+		SplitEvenly: "均分",
+		XPAmount: "XP数值",
+		GoldAmount: "金币数值",
+		ReliableGold: "可靠金币",
+		GrantXPGold: "获取金币经验",
 
 		CASTER: "施法者",
 		TARGET: "目标",
