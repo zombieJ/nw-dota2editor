@@ -3,7 +3,7 @@
 // ======================================================
 // =                        操作                        =
 // ======================================================
-app.factory("Operation", function(KV, Sound, AppFileSrv) {
+app.factory("Operation", function(KV, Sound, AppFileSrv, globalContent) {
 	var Operation = function(kvUnit) {
 		return new Op(kvUnit);
 	};
@@ -234,7 +234,10 @@ app.factory("Operation", function(KV, Sound, AppFileSrv) {
 		Height: {type: "text", match: _match_AbilitySpecial},
 		IsFixedDistance: {type: "boolean"},
 		ShouldStun: {type: "boolean"},
-		ScriptFile: {type: "text", match: function() {return _match_ScriptFile;}},
+		ScriptFile: {type: "text", match: function() {return _match_ScriptFile;}, link: function (value, operation, ability) {
+			var path = globalContent.project + "/scripts/vscripts/" + value.replace(/scripts[\\\/]vscripts[\\\/]/, "");
+			require('nw.gui').Shell.openItem(path);
+		}},
 		Function: {type: "text", match: function(operation, ability) {
 			operation._match_function_entity = operation._match_function_entity || new _match_Function_Entity(operation);
 			return operation._match_function_entity.matchFunc;

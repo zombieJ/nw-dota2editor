@@ -9,6 +9,7 @@ components.directive('operation', function($compile) {
 		},
 		controller: function($scope, $element, $attrs, Operation, UI) {
 			$scope.Operation = Operation;
+			$scope.OAM = Operation.OperationAttrMap;
 			$scope.UI = UI;
 
 			var _customizeKV = [];
@@ -26,15 +27,21 @@ components.directive('operation', function($compile) {
 				});
 				return _customizeKV;
 			};
+
+			$scope.doLink = function (opAttr) {
+				var linkFunc = $scope.OAM[opAttr].link;
+				linkFunc($scope.operation.get(opAttr), $scope.operation, $scope.ability);
+			}
 		},
 		template:
 		'<ul class="ability-operation-body">'+
 			'<li ng-repeat="opAttr in Operation.EventOperationMap[operation.key][2] track by $index">'+
 				'<span class="text-muted">{{opAttr}}:</span>'+
+				'<a class="fa fa-share-alt" ng-if="OAM[opAttr].link" ng-click="doLink(opAttr)"></a>'+
 				// TODO: Link '<a class="fa fa-link" ng-if="getOpColLink(_index)" ng-click="getOpColLink(_index)()"></a>'+
 
 				// Operation Attribute
-				'<div kvfield data-ability="ability" data-attrunit="Operation.OperationAttrMap[opAttr]" data-srcunit="operation" data-srctmpl="Operation.OperationAttrMap"></div>' +
+				'<div kvfield data-ability="ability" data-attrunit="OAM[opAttr]" data-srcunit="operation" data-srctmpl="OAM"></div>' +
 			'</li>'+
 
 			'<li ng-repeat="customizeKV in getCustomizeKV() track by $index">' +
