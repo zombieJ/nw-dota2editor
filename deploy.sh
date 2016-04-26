@@ -12,6 +12,8 @@ mkdir dist/res
 cp _VERSION dist/_VERSION
 cp -r res/items_game.json dist/res/items_game.json
 cp -r res/vsnd_to_soundname_v2.txt dist/res/vsnd_to_soundname_v2.txt
+rm dist/res/vsnd_to_soundname_v2.json
+rm -rf dist/tmp
 zip -r dota2editor.nw *.html public partials srv icon
 zip -j dota2editor.nw pkg/*.json
 
