@@ -129,12 +129,6 @@ app.factory("Operation", function(KV, Sound, AppFileSrv, globalContent) {
 		return _list;
 	};
 
-	var _link_ModifierName = function() {
-		var $scope = angular.element("#listCntr").scope();
-		$scope.currentTab = "modifiers";
-		$scope.currentModifier = _link_ModifierName.modifier;
-	};
-
 	// Ability Special
 	var _match_AbilitySpecial = function(operation, ability) {
 		_match_AbilitySpecial.ability = ability;
@@ -182,12 +176,13 @@ app.factory("Operation", function(KV, Sound, AppFileSrv, globalContent) {
 				_match_ModifierName.ability = ability;
 				return _match_ModifierName;
 			}, link: function (value, operation, ability) {
-				var _modifier = common.array.find(value, ability._modifierList, "_name");
-				if (_modifier) {
-					_link_ModifierName.modifier = _modifier;
-					return _link_ModifierName;
+				var _modifier = common.array.find(value, ability.getModifierList(), "key");
+
+				if(_modifier) {
+					var $scope = angular.element("#listCntr").scope();
+					$scope.currentTab = "modifiers";
+					$scope.currentModifier = _modifier;
 				}
-				return null;
 			}
 		},
 		EffectName: {type: "text", match: _match_EffectName},
