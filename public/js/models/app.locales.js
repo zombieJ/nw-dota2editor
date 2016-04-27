@@ -449,6 +449,15 @@ app.factory("Locale", function() {
 		MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE_STACKING: "冷却时间百分比堆叠?",
 		MODIFIER_PROPERTY_SUPER_ILLUSION_WITH_ULTIMATE: "终极幻象-VS大招",
 
+		MODIFIER_PROPERTY_IGNORE_COOLDOWN: "忽视冷却时间",
+		MODIFIER_PROPERTY_ALWAYS_ALLOW_ATTACK: "总是允许攻击",
+		MODIFIER_PROPERTY_MAGICAL_CONSTANT_BLOCK: "法伤数值阻挡",
+		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE_UNIQUE_2: "独立百分比增加移动速度2，不叠加",
+		MODIFIER_PROPERTY_MOVESPEED_BONUS_UNIQUE_2: "增加移动速度数值2，不叠加",
+		MODIFIER_PROPERTY_PHYSICAL_CONSTANT_BLOCK_SPECIAL: "物伤数值阻挡（特殊的）",
+		MODIFIER_PROPERTY_PREATTACK_TARGET_CRITICALSTRIKE: "受攻击时总是被致命一击",
+		MODIFIER_PROPERTY_SPELL_AMPLIFY_PERCENTAGE: "施法增强比例",
+
 		// 修饰器 - 状态
 		NewStates: "新建状态",
 		MODIFIER_STATE_ATTACK_IMMUNE:"攻击免疫",
@@ -644,6 +653,7 @@ app.factory("Locale", function() {
 		OnAttacked: "被攻击",
 		OnAttackAllied: "攻击队友",
 		OnAttackFailed: "攻击失败",
+		OnAttackFinished: "攻击完成",
 		OnChannelFinish: "持续施法结束",
 		OnChannelInterrupted: "持续施法中断",
 		OnChannelSucceeded: "持续施法成功",
@@ -722,6 +732,7 @@ app.factory("Locale", function() {
 		GoldAmount: "金币数值",
 		ReliableGold: "可靠金币",
 		GrantXPGold: "获取金币经验",
+		PitchYawRoll: "俯仰 自旋 翻转",
 
 		CASTER: "施法者",
 		TARGET: "目标",
@@ -834,7 +845,8 @@ app.factory("Locale", function() {
 		updating: "正在更新。如果在更新过程中关闭程序，可下次打开重新更新。",
 		updateFinish: "更新完成，重启以应用更新。",
 		updateFailed: "更新失败，请检查你的网络。",
-		typeaheadFuncPrefix: "去掉勾选会使得RunScript自动提示不携带scripts/vscripts/前缀"
+		typeaheadFuncPrefix: "去掉勾选会使得RunScript自动提示不携带scripts/vscripts/前缀",
+		backupError: "备份失败！本次保存无法产生备份。在保存完毕后，请点击左上角的控制台，将错误信息发送至论坛，我会为你修复这个BUG。"
 	};
 
 	return Locale;

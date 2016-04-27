@@ -53,6 +53,7 @@ app.factory("Event", function(Operation) {
 		{value: "OnAttacked"},
 		{value: "OnAttackAllied"},
 		{value: "OnAttackFailed"},
+		{value: "OnAttackFinished"},
 		{value: "OnAttackStart"},
 		{value: "OnChannelFinish"},
 		{value: "OnChannelInterrupted"},

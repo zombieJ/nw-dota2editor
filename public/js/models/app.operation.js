@@ -92,6 +92,7 @@ app.factory("Operation", function(KV, Sound, AppFileSrv, globalContent) {
 			"TargetTeams","TargetTypes","TargetFlags","HasFrontalCone","ProvidesVision","VisionRadius"]],
 		["ApplyMotionController", false, ["Target","ScriptFile","HorizontalControlFunction","VerticalControlFunction","Duration"]],
 		["GrantXPGold", false, ["Target","SplitEvenly","XPAmount","GoldAmount","ReliableGold"]],
+		["Rotate", false, ["Target","PitchYawRoll"]],
 	];
 
 	Operation.EventItemOperation = [
@@ -339,7 +340,8 @@ app.factory("Operation", function(KV, Sound, AppFileSrv, globalContent) {
 		SplitEvenly: {type: "boolean"},
 		XPAmount: {type: "text"},
 		GoldAmount: {type: "text"},
-		ReliableGold: {type: "boolean"}
+		ReliableGold: {type: "boolean"},
+		PitchYawRoll: {type: "text"}
 	};
 
 	$.each(Operation.OperationAttrMap, function(key, opAttr) {

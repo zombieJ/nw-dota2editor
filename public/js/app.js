@@ -548,23 +548,34 @@ app.controller('main', function ($scope, $route, $location, $q,
 		var _promiseList = [];
 		$scope.saveLock = true;
 
-		// Back
-		if(Config.global.saveBackUp) {
-			// Clean up old backup
-			var folderList = Config.listFiles(".dota2editor/backup");
-			folderList.sort();
-			while(folderList.length >= 10) {
-				var _oldBackUp = folderList.shift();
-				Config.deleteFile(".dota2editor/backup/" + _oldBackUp);
-			}
+		console.log("Do Save...");
+		// Back Up
+		try {
+			if (Config.global.saveBackUp) {
+				// Clean up old backup
+				console.log("BackUp clean...");
+				var folderList = Config.listFiles(".dota2editor/backup");
+				folderList.sort();
+				while (folderList.length >= 10) {
+					var _oldBackUp = folderList.shift();
+					Config.deleteFile(".dota2editor/backup/" + _oldBackUp);
+				}
 
-			// Create folder
-			_saveBackUpPath = ".dota2editor/backup/" + _date.format("YYYYMMDD_HHmmSS");
-			Config.assumeFolder(_saveBackUpPath);
-		} else {
-			_saveBackUpPath = null;
+				// Create folder
+				console.log("Create Backup Folder...");
+				_saveBackUpPath = ".dota2editor/backup/" + _date.format("YYYYMMDD_HHmmSS");
+				Config.assumeFolder(_saveBackUpPath);
+			} else {
+				_saveBackUpPath = null;
+			}
+		} catch(err) {
+			$.Dialog({
+				title: Locale('Error'),
+				content: Locale('backupError')
+			});
 		}
 
+		console.log("Do Save Order...");
 		$.each($scope.saveFileList, function (i, saveItem) {
 			if (!saveItem.selected || !saveItem.saveFunc) return;
 
