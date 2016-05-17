@@ -46,11 +46,9 @@ exports.loadProject = function(projectPath) {
 
 exports.assumeFolder = function(path) {
 	path = PATH.normalize(content.project + "/" + path);
-	FS.exists(path, function(exist) {
-		if(!exist) {
-			FS.mkdir(path);
-		}
-	});
+	if(!FS.existsSync(path)) {
+		FS.mkdirSync(path);
+	}
 };
 
 exports.loadFile = function(path, encoding) {

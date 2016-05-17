@@ -569,10 +569,11 @@ app.controller('main', function ($scope, $route, $location, $q,
 				_saveBackUpPath = null;
 			}
 		} catch(err) {
-			$.Dialog({
+			$.dialog({
 				title: Locale('Error'),
 				content: Locale('backupError')
 			});
+			console.error(err);
 		}
 
 		console.log("Do Save Order...");
