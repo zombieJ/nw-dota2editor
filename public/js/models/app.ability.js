@@ -340,6 +340,11 @@ app.factory("Ability", function($q, Event, Modifier) {
 			{group: "item", attr: "ItemShopTags", type: "text"},
 			{group: "item", attr: "ItemAliases", type: "text"}
 		],
+		[
+			{group: "item", attr: "ItemStockMax", type: "text"},
+			{group: "item", attr: "ItemStockTime", type: "text"},
+			{group: "item", attr: "ItemStockInitial", type: "text"},
+		],
 
 		[
 			{group: "item", attr: "MaxUpgradeLevel", type: "text"},
