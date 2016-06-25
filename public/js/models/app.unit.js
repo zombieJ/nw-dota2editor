@@ -279,6 +279,7 @@ app.factory("Unit", function($q, $http, FS, Locale, Language, Config, KV, AppVer
 		[
 			{group: "sound", attr: "SoundSet", type: "text"},
 			{group: "sound", attr: "GameSoundsFile", type: "text"},
+			{group: "sound", attr: "VoiceFile", type: "text"},
 			{group: "sound", attr: "IdleSoundLoop", type: "text"},
 		],
 
