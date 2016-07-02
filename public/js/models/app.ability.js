@@ -531,6 +531,7 @@ app.factory("Ability", function($q, Event, Modifier) {
 	Ability.AbilityCastAnimation = [
 		{value: "ACT_DOTA_ATTACK", suggest: true},
 		{value: "ACT_DOTA_CAST_ABILITY_1", suggest: true},
+		{value: "ACT_DOTA_CAST_ABILITY_1_END"},
 		{value: "ACT_DOTA_CHANNEL_ABILITY_1"},
 		{value: "ACT_DOTA_DISABLED"},
 		{value: "ACT_DOTA_RUN"},

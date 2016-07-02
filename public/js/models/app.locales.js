@@ -257,6 +257,7 @@ app.factory("Locale", function() {
 
 		ACT_DOTA_ATTACK: "攻击",
 		ACT_DOTA_CAST_ABILITY_1: "施法",
+		ACT_DOTA_CAST_ABILITY_1_END: "施法结束",
 		ACT_DOTA_CHANNEL_ABILITY_1: "持续施法",
 		ACT_DOTA_DISABLED: "伤残",
 		ACT_DOTA_RUN: "奔跑",

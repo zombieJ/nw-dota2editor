@@ -232,6 +232,7 @@ app.factory("Modifier", function(Event) {
 	Modifier.OverrideAnimation = [
 		["ACT_DOTA_ATTACK"],
 		["ACT_DOTA_CAST_ABILITY_1"],
+		["ACT_DOTA_CAST_ABILITY_1_END"],
 		["ACT_DOTA_CHANNEL_ABILITY_1"],
 		["ACT_DOTA_DISABLED"],
 		["ACT_DOTA_RUN"],
