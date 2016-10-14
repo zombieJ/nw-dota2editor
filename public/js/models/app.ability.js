@@ -262,7 +262,8 @@ app.factory("Ability", function($q, Event, Modifier) {
 			{group: "common", attr: "AbilityTextureName", type: "text"},
 			{
 				group: "common", attr: "ScriptFile", type: "text", showFunc: function ($scope) {
-				return $scope.ability && $scope.ability.get("BaseClass") === "ability_lua";
+				var baseClass = $scope.ability.get("BaseClass");
+				return $scope.ability && (baseClass === "ability_lua" || baseClass === "item_lua");
 			}
 			},
 			{group: "common", attr: "AbilityBehavior", type: "group"}

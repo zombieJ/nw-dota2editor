@@ -231,6 +231,7 @@ app.factory("Operation", function(KV, Sound, AppFileSrv, globalContent) {
 		IsFixedDistance: {type: "boolean"},
 		ShouldStun: {type: "boolean"},
 		ScriptFile: {type: "text", match: function() {return _match_ScriptFile;}, link: function (value, operation, ability) {
+			if(!value) return;
 			var path = globalContent.project + "/scripts/vscripts/" + value.replace(/scripts[\\\/]vscripts[\\\/]/, "");
 			require('nw.gui').Shell.openItem(path);
 		}},
